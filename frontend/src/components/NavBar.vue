@@ -148,7 +148,7 @@ export default {
 .logo-container {
   display: flex;
   align-items: center;
-  width: 12%;
+  width: 10%;
 }
 .dropdown-content {
   position: absolute;
