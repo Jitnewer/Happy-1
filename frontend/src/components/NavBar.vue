@@ -3,21 +3,21 @@
     <div class="logo-container">
       <img id="logo" src="../assets/img/happy-hospitality-collective.png"  alt="logo"/>
     </div>
-      <div class="hamburger" @click="toggleNav">
-        <div class="bar"></div>
-        <div class="bar"></div>
-        <div class="bar"></div>
-      </div>
-      <transition>
+    <div class="hamburger" @click="toggleNav">
+      <div class="bar"></div>
+      <div class="bar"></div>
+      <div class="bar"></div>
+    </div>
+    <transition>
       <div class="nav" v-if="showNav">
         <div  class="left-nav">
           <router-link to="/home">
-          Home
+            Home
           </router-link>
           <div class="dropdown">
-          <a class="dropBtn" @click="toggleDropdown">
-            News {{ this.newsArrow }}
-          </a>
+            <a class="dropBtn" @click="toggleDropdown">
+              News {{ this.newsArrow }}
+            </a>
             <transition name="dropdown">
               <div v-if="showDropdown" class="dropdown-content">
                 <router-link class="router-link" to="/news/challenges">
@@ -30,25 +30,25 @@
                   Network
                 </router-link>
               </div>
-          </transition>
+            </transition>
           </div>
-        <router-link to="/events">
-          Events
-        </router-link>
-        <router-link to="/about-us">
-          About Us
-        </router-link>
+          <router-link to="/events">
+            Events
+          </router-link>
+          <router-link to="/about-us">
+            About Us
+          </router-link>
         </div>
-    <div class="right-nav">
-    <router-link to="/sign-up">
-      Sign Up
-    </router-link>
-    <router-link to="/sign-in">
-      Login
-    </router-link>
-    </div>
-    </div>
-      </transition>
+        <div class="right-nav">
+          <router-link :to="{ name: 'register' }">
+            Sign Up
+          </router-link>
+          <router-link to="/sign-in">
+            Login
+          </router-link>
+        </div>
+      </div>
+    </transition>
   </nav>
 </template>
 
