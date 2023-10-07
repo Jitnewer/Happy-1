@@ -1,14 +1,10 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
-import Welcome from '@/components/Welcome.vue'
+import WelcomePage from '@/components/Welcome.vue'
 const routes = [
-  {
-    path: '/',
-    redirect: '/home'
-  },
   {
     path: '/home',
     name: 'welcome',
-    component: Welcome
+    component: WelcomePage
   }
 ]
 
