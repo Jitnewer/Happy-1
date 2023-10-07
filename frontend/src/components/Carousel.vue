@@ -10,7 +10,7 @@
         <i @click="nextSlide" class="fa-solid fa-arrow-left fa-rotate-180" style="color: #000000;"></i>
       </div>
       <div class="pagination">
-      <span v-for="(slide, index) in getSlideCount"
+      <span @click="goToSlide(index)" v-for="(slide, index) in getSlideCount"
             :key="index"
             :class="{active : index + 1 === currentSlide}">
 
@@ -37,16 +37,19 @@ export default {
     }
     const prevSlide = () => {
       if (currentSlide.value === 1) {
-        currentSlide.value = 1
+        currentSlide.value = getSlideCount.value
         return
       }
       currentSlide.value -= 1
+    }
+    const goToSlide = (index) => {
+      currentSlide.value = index + 1
     }
     onMounted(() => {
       getSlideCount.value = document.querySelectorAll('.slide').length
     })
 
-    return { currentSlide, nextSlide, prevSlide, getSlideCount }
+    return { currentSlide, nextSlide, prevSlide, getSlideCount, goToSlide }
   }
 }
 </script>
@@ -97,5 +100,8 @@ i {
    border-radius: 50%;
    background-color: black;
    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+ }
+ .active {
+   background-color: blue;
  }
 </style>

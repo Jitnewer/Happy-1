@@ -30,7 +30,7 @@ export default {
   max-height: 600px;
   max-width: 600px;
 }
-.slide-info {
+.slide {
   position: absolute;
   top: 0;
   left: 0;
