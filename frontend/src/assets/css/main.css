@@ -35,7 +35,6 @@ nav a {
 }
 
 
-
 nav a:hover {
     font-size: 16px;
     background-color: #FECC32;
@@ -72,9 +71,11 @@ nav a.router-link-active {
         width: 80%;
         margin: auto
     }
+
     table, button {
         font-size: 12px
     }
+
     td, th {
         padding: 7px !important;
     }
@@ -86,10 +87,11 @@ nav a.router-link-active {
         margin: auto
     }
 
-, table, button {
-    font-size: 10px;
-    padding: 6px;
-}
+    table, button {
+        font-size: 10px;
+        padding: 6px;
+    }
+
     td, th {
         padding: 6px !important;
     }
@@ -99,10 +101,13 @@ nav a.router-link-active {
     .container {
         width: 80%;
         margin: auto
-    },
-table, button {
-    font-size: 8px;
-}
+    }
+
+
+    table, button {
+        font-size: 8px;
+    }
+
     td, th {
         padding: 4px !important;
     }
@@ -114,6 +119,7 @@ table, button {
         display: flex;
         flex-direction: column;
     }
+
     .left-nav-children {
         display: flex;
         flex-direction: column;
@@ -128,10 +134,12 @@ table, button {
         display: flex;
         flex-direction: column;
     }
+
     nav a {
         padding: 10px 12px;
         font-size: 13px;
     }
+
     nav a:hover {
         padding: 10px 12px;
         font-size: 13px;
