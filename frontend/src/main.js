@@ -18,7 +18,9 @@ const store = createStore({
     }
   },
   getters: {
-    isLoggedIn: state => state.loggedIn > 0
+    isLoggedIn: state => state.loggedIn > 1,
+    isAdmin: state => state.loggedIn > 2,
+    isSuperUser: state => state.loggedIn > 3
   },
   plugins: [createPersistedState({
     storage: {

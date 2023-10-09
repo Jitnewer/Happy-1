@@ -19,7 +19,7 @@
         </router-link>
         </div>
     <div class="right-nav">
-      <router-link to="/sign-up">
+      <router-link to="/sign-up" @click="loginAdmin">
         Sign Up
       </router-link>
       <router-link to="/sign-in" @click="login">
@@ -49,6 +49,9 @@ export default {
     ...mapMutations(['setLoggedIn']),
     login () {
       this.setLoggedIn(1) // Log in as a user
+    },
+    loginAdmin () {
+      this.setLoggedIn(2) // Log in as a admin
     },
     /**
      * Toggles the visibility of the navigation menu.

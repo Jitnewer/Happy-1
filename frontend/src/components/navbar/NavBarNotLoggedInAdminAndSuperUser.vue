@@ -3,62 +3,44 @@
     <div class="logo-container">
       <img id="logo" src="../../assets/img/happy-hospitality-collective.png" alt="logo"/>
     </div>
-      <div class="hamburger" @click="toggleNav">
-        <div class="bar"></div>
-        <div class="bar"></div>
-        <div class="bar"></div>
-      </div>
-      <transition name="loggedIn">
+    <div class="hamburger" @click="toggleNav">
+      <div class="bar"></div>
+      <div class="bar"></div>
+      <div class="bar"></div>
+    </div>
+    <transition name="loggedInAdmin">
       <div class="nav" v-if="showNav">
         <div  class="left-nav">
-          <router-link to="/home">
-          Home
+          <router-link to="/admin/users">
+            Users
           </router-link>
-          <div class="dropdown">
-          <a class="dropBtn" @click="toggleDropdown">
-            News
-          </a>
-            <transition name="dropdown">
-              <div v-if="showDropdown" class="dropdown-content">
-                <router-link class="router-link" to="/news/challenges">
-                  Challenges
-                </router-link>
-                <router-link to="/news/research">
-                  Research
-                </router-link>
-                <router-link to="/news/network">
-                  Network
-                </router-link>
-              </div>
-          </transition>
-          </div>
-        <router-link to="/events">
-          Events
-        </router-link>
-        <router-link to="/about-us">
-          About Us
-        </router-link>
+          <router-link to="/admin/stastistics">
+            Statistics
+          </router-link>
+          <router-link to="/admin/events">
+            Events
+          </router-link>
         </div>
-    <div class="right-nav">
-      <div class="dropdown-profile">
-        <canvas ref="profileCanvas" class="profile" width="40" height="40" @click="toggleProfile"></canvas>
-        <transition name="dropdownProfile">
-          <div v-show="showProfile" class="dropdown-profile-content">
-            <router-link to="/profile">
-              Your Profile
-            </router-link>
-            <router-link to="/profile/settings">
-              Settings
-            </router-link>
-            <a class="clickable" @click="logout">
-              Logout
-            </a>
+        <div class="right-nav">
+          <div class="dropdown-profile">
+            <canvas ref="profileCanvas" class="profile" width="40" height="40" @click="toggleProfile"></canvas>
+            <transition name="dropdownProfile">
+              <div v-show="showProfile" class="dropdown-profile-content">
+                <router-link to="/profile">
+                  Your Profile
+                </router-link>
+                <router-link to="/profile/settings">
+                  Settings
+                </router-link>
+                <a class="clickable" @click="logout">
+                  Logout
+                </a>
+              </div>
+            </transition>
           </div>
-        </transition>
+        </div>
       </div>
-    </div>
-    </div>
-      </transition>
+    </transition>
   </nav>
 </template>
 
@@ -151,7 +133,7 @@ export default {
     },
 
     updateProfilePicture () {
-      const name = 'Rick Veerman' // Replace this with your name
+      const name = 'Admin' // Replace this with your name
       let initials = ''
       const words = name.split(' ')
       if (words.length === 1) {
@@ -174,7 +156,7 @@ export default {
     }
   },
   created () {
-    const name = 'Rick Veerman' // Replace this with your name
+    const name = 'Admin' // Replace this with your name
 
     let initials = ''
     const words = name.split(' ')

@@ -7,12 +7,14 @@
 import { mapState } from 'vuex'
 import NavBarNotLoggedIn from '@/components/navbar/NavBarNotLoggedIn.vue'
 import NavBarLoggedIn from '@/components/navbar/NavBarLoggedIn.vue'
+import NavBarNotLoggedInAdminAndSuperUser from '@/components/navbar/NavBarNotLoggedInAdminAndSuperUser.vue'
 
 export default {
   name: 'App',
   components: {
     NavBarNotLoggedIn,
-    NavBarLoggedIn
+    NavBarLoggedIn,
+    NavBarNotLoggedInAdminAndSuperUser
   },
   computed: {
     ...mapState(['loggedIn']), // Map the 'loggedIn' state from Vuex
@@ -21,6 +23,8 @@ export default {
         return 'NavBarNotLoggedIn'
       } else if (this.loggedIn === 1) {
         return 'NavBarLoggedIn'
+      } else if (this.loggedIn === 2 || this.loggedIn === 3) {
+        return 'NavBarNotLoggedInAdminAndSuperUser'
       }
       return this.loggedIn
     }

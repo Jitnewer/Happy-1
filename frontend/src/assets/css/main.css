@@ -430,6 +430,18 @@ table, button {
     height: 0px;
 }
 
+.loggedInAdmin-enter-active,
+.loggedInAdmin-leave-active {
+    transition: all 0.5s;
+    height: 172px
+}
+
+.loggedInAdmin-enter-from,
+.loggedInAdmin-leave-to {
+    opacity: 0;
+    height: 0px;
+}
+
 .v-enter-active,
 .v-leave-active {
     transition: all 0.5s;
