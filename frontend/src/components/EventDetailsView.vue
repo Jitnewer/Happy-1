@@ -12,13 +12,19 @@ export default {
   },
   methods: {
     closeEventDetail () {
-      this.$emit('deselect-event', this.selectedEvent)
+      if (confirm('Are you sure you don\'t want to save changes?')) {
+        this.$emit('deselect-event', this.selectedEvent)
+      }
     },
     saveEventDetail () {
-      this.$emit('save-event', this.selectedCopy)
+      if (confirm('Are you sure you want to save changes to event?')) {
+        this.$emit('save-event', this.selectedCopy)
+      }
     },
     deleteEventDetail () {
-      this.$emit('delete-event', this.selectedEvent)
+      if (confirm('Are you sure you want to delete this event?')) {
+        this.$emit('delete-event', this.selectedEvent)
+      }
     },
     handleImageUpload (event) {
       const file = event.target.files[0]
@@ -41,20 +47,6 @@ export default {
   },
   computed: {
     isSaveButtonDisabled () {
-      // Compare the selectedCopy data with the selectedEvent data
-      // Check if any of the required fields are empty
-      if (
-        !this.selectedCopy.name ||
-        !this.selectedCopy.location ||
-        !this.selectedCopy.date ||
-        !this.selectedCopy.timeBegin ||
-        !this.selectedCopy.timeEnd ||
-        !this.selectedCopy.price ||
-        !this.selectedCopy.info
-      ) {
-        return true // Disable the "Save" button if any of the fields is empty
-      }
-
       // Compare the selectedCopy data with the selectedEvent data
       return (
         this.selectedCopy.image === this.selectedEvent.image &&
