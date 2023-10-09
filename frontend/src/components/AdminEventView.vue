@@ -125,9 +125,9 @@ export default {
     }
   },
   created () {
-    do {
-      this.events.push(Event.createSampleEvents())
-    } while (this.events.length !== 4)
+    for (let i = 0; i < 4; i++) {
+      this.events.push(Event.createSampleEvents(i))
+    }
     for (let i = 0; i < this.events.length; i++) {
       this.usedIds.push(this.events[i].id)
     }
@@ -158,7 +158,7 @@ export default {
           <div class="event-info">
             <div class="name-price">
               <h2 class="event-name">{{ event.name }}</h2>
-              <h2 class="event-price">&#x20AC; {{ event.price }}</h2>
+              <h2 class="event-price" v-if="event.price">&#x20AC; {{ event.price }}</h2>
             </div>
             <div>
               <h3><i class="fa-regular fa-calendar-days"></i>{{ event.date }}</h3>
