@@ -16,7 +16,7 @@ export class Event {
     const id = Math.floor(Math.random() * 100) + 1
     const imageIndex = Math.floor(Math.random() * 2)
     const nameSuffix = ['Amsterdam', 'Rotterdam', 'Arnhem', 'Zaandam'][index]
-    const date = '2023-10-09'
+    const date = ['2023-10-09', '2023-10-09', '2023-12-09', '2024-01-09'][index]
     const timeBegin = '12:00'
     const timeEnd = '15:00'
     const price = [null, null, null, 50][index]
