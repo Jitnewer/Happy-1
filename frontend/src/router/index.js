@@ -4,7 +4,7 @@ import AdminUserDetail from '@/components/AdminUserDetail.vue'
 
 const routes = [
   {
-    path: '/AdminUsersView',
+    path: '/admin/users',
     component: AdminUsersView,
     children: [
       { path: ':id', component: AdminUserDetail }

@@ -6,6 +6,12 @@ export class User {
     SuperUser: 'SUPERUSER'
   };
 
+  static status = {
+    Active: 'ACTIVE',
+    Inactive: 'INACTIVE',
+    Banned: 'BANNED'
+  }
+
   constructor (id, profilePic, name, mail, gender, age, companyType, tag, status, userType, postalCode) {
     this.id = id
     this.profilePic = profilePic
@@ -62,7 +68,7 @@ export class User {
     }
 
     const randomStatusNumb = Math.random()
-    const status = randomStatusNumb < 0.5 ? 'active' : 'inactive'
+    const status = randomStatusNumb < 0.5 ? 'ACTIVE' : 'INACTIVE'
     const age = Math.floor((Math.random() * 50) + 50)
     const companyType = 'Catering'
     const postalCode = '1242 DA'

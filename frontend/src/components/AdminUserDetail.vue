@@ -82,8 +82,10 @@ export default {
         <span class="error-message">{{ nameError }}</span>
         <input v-if="create" type="email" id="email" v-model="selectedCopy.mail" placeholder="Email" :style="{ borderColor: mailError ? 'red' : '' }">
         <span class="error-message">{{ mailError }}</span>
-        <select class="edit-usertype" v-model="selectedCopy.userType" :style="{ borderColor: userTypeError ? 'red' : '' }">
+        <select id="select" class="edit-usertype" v-model="selectedCopy.userType" :style="{ borderColor: userTypeError ? 'red' : '' }">
           <option value="ADMIN">Admin</option>
+          <option value="ENTREPRENEUR">Entrepreneur</option>
+          <option value="PARTNER">Partner</option>
           <option value="SUPERUSER">Superuser</option>
         </select>
         <span class="error-message">{{ userTypeError }}</span>
@@ -98,96 +100,7 @@ export default {
 </template>
 
 <style scoped>
-.detail-container {
-  position: fixed;
-  top: 0;
-  width: 100vw;
-  height: 100vh;
-}
-
-.black {
-  background-color: black;
-  opacity: 0.5;
-  height: 100%;
-  width: 100%;
-}
-
-.user {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  width: 500px;
-  height: min-content;
-  margin: auto;
-  border-radius: 5px;
-  background-color: white;
-  border: 1px solid black;
-  display: flex;
-  flex-direction: column;
-}
-
-h2, h3, input {
-  margin: 10px 0 0 20px;
-}
-
-.user-info {
-  display: flex;
-  flex-direction: row;
-  padding: 10px;
-  gap: 20px;
-}
-
-.user-info img {
-  height: 150px;
-  width: 150px;
-  margin-left: 20px;
-}
-
-.inputInfo {
-  display: flex;
-  flex-direction: column;
-}
-
-.edit-usertype {
-  width: 200px;
-  height: 40px;
-  margin-left: 20px;
-  margin-top: 10px;
-}
-
-.edit-user-btn {
-  display: flex;
-  flex-direction: row;
-  gap: 20px;
-  justify-content: right;
-  padding: 10px 10px 10px 0;
-}
-
-.edit-user-btn button {
-  background-color: #FECC32;
-  color: white;
-  padding: 12px 16px;
-  font-size: 16px;
-  border: none;
-  border-radius: 5px;
-}
-
-button:hover {
-  background-color: #E8B003;
-}
-
-input {
-  height: 30px;
-  width: 200px;
-  border-radius: 5px;
-}
-
-.error-message {
-  color: red;
-  font-size: 12px;
-  margin-left: 20px;
-  margin-top: 4px;
+h1, h2, h3, h4, h5, h6, p {
+  color: black;
 }
 </style>

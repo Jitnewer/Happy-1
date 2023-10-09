@@ -1,10 +1,8 @@
 <script>
 import { User } from '@/models/user'
-// import AdminUserDetail from '@/components/AdminUserDetail.vue'
 
 export default {
   name: 'AdminUsersView',
-  // components: { AdminUserDetail },
   data () {
     return {
       filter: {
@@ -20,13 +18,12 @@ export default {
   },
   methods: {
     setByUrl () {
-      for (let i = 0; i < this.users.length; i++) {
-        if (parseInt(this.$route.params.id) === this.users[i].id) {
-          this.selectedUser = this.users[i]
-          this.isSelected = true
-          document.body.style.overflow = 'hidden'
-          break
-        }
+      const routeId = parseInt(this.$route.params.id)
+      const foundUser = this.users.find(user => user.id === routeId)
+      if (foundUser) {
+        this.selectedUser = foundUser
+        this.isSelected = true
+        document.body.style.overflow = 'hidden'
       }
     },
     createUser () {
@@ -34,29 +31,31 @@ export default {
       const id = User.generateId(this.usedIds)
       this.selectedUser = new User(id, require('../assets/img/profilepic.png'), null, null, null, null, 'N/A', 'N/A', 'Inactive', null, null)
       this.usedIds.push(id)
-      this.isSelected = true
-      this.$router.push(this.$route.matched[0] + '/' + id)
+      this.isSelected = !this.isSelected
+      this.$router.push(this.$route.matched[0].path + '/' + id)
     },
-    deleteUser (userToDelete) {
-      if (confirm('Are you sure you want to delete this event?')) {
-        const indexToDelete = this.users.findIndex(user => user.id === userToDelete.id)
-        if (indexToDelete !== -1) {
-          this.users.splice(indexToDelete, 1)
+    unblockUser (user) {
+      if (confirm('Are you sure you want to unblock this user')) {
+        user.status = User.status.Active
+      }
+    },
+    blockUser (userToBlock) {
+      if (confirm('Are you sure you want to block this user?')) {
+        const indexToBlock = this.users.findIndex(user => user.id === userToBlock.id)
+        if (indexToBlock !== -1) {
+          this.users[indexToBlock].status = User.status.Banned
         }
-        this.selectedUser = null // Clear the selected event
-        this.isSelected = false // Update the isSelected flag
-        this.$router.push(this.$route.matched[0])
+        this.selectedUser = null
+        this.isSelected = !this.isSelected
       }
     },
     editUser (user) {
-      this.selectedUser = user
-      this.isSelected = true
       document.body.style.overflow = 'hidden'
-      this.$router.push(this.$route.matched[0] + '/' + user.id)
+      this.$router.push(this.$route.matched[0].path + '/' + user.id)
     },
     cancel () {
       this.selectedUser = null
-      this.isSelected = false
+      this.isSelected = !this.isSelected
       this.create = false
       document.body.style.overflow = 'auto'
       this.$router.push(this.$route.matched[0])
@@ -71,12 +70,15 @@ export default {
         this.users.push(user)
       }
       this.selectedUser = null
-      this.isSelected = false
+      this.isSelected = !this.isSelected
       this.create = false
       this.$router.push(this.$route.matched[0])
     },
     viewUser () {
       // TODO redirect to profile of user
+    },
+    isBanned (user) {
+      return user.status === User.status.Banned
     }
   },
   computed: {
@@ -113,14 +115,14 @@ export default {
 </script>
 
 <template>
-  <div class="container">
+  <div class="user-container">
     <div class="title">
       <h2>Users</h2>
     </div>
     <div class="filters">
       <input type="text" class="search-filter" id="nameFilter" placeholder="Search for Users.." title="Type in a name"
              v-model="filter.search">
-      <select class="select-usertype" v-model="filter.tag">
+      <select id="select-master" class="select-usertype" v-model="filter.tag">
         <option value=""></option>
         <option value="ADMIN">Admin</option>
         <option value="ENTREPRENEUR">Entrepreneur</option>
@@ -152,8 +154,9 @@ export default {
           <td> {{ user.status }}</td>
           <td class="buttons">
             <button class="view-button">View</button>
-            <button class="edit-button" @click="editUser(user)">edit</button>
-            <button class="delete-button" @click="deleteUser(user)">delete</button>
+            <button class="edit-button" @click="editUser(user)">Edit</button>
+            <button v-if="!isBanned(user)" class="block-button" @click="blockUser(user)">Block</button>
+            <button v-if="isBanned(user)" class="block-button" @click="unblockUser(user)">Unblock</button>
           </td>
         </tr>
         </tbody>
@@ -165,7 +168,7 @@ export default {
 
 <style scoped>
 /* Needs to be removed later on styling already exist in the AdminEventView that should be transfered to main.css*/
-.container {
+.user-container {
   font-family: Poppins, serif;
   color: #000000;
   margin: 0 60px;
@@ -173,9 +176,14 @@ export default {
   overflow: hidden;
 }
 
+h1, h2, h3, h4, h5, h6, p {
+  color: black;
+}
+
 .title {
   height: 30px;
   margin-bottom: 20px;
+  text-align: left;
 }
 
 .filters {
@@ -207,67 +215,5 @@ export default {
 .create-btn:hover {
   background-color: #E8B003;
   cursor: pointer;
-}
-
-/* don't remove the following styling this should be transfered to main.css*/
-.select-usertype {
-  width: 120px;
-  border-radius: 5px;
-}
-
-.users-list {
-  margin-top: 40px;
-}
-
-.users-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.users-table th, .users-table td {
-  border: 1px solid #000000;
-  padding: 8px;
-  text-align: left;
-}
-
-.buttons button {
-  padding: 10px 16px;
-  border-radius: 5px;
-  border: none;
-  color: white;
-  font-size: 14px;
-}
-
-.buttons {
-  gap: 12px;
-  display: flex;
-}
-
-button:hover {
-  cursor: pointer;
-}
-
-.view-button {
-  background-color: #1F93A5;
-}
-
-.view-button:hover {
-  background-color: #18737e;
-}
-
-.edit-button {
-  background-color: #FECC32;
-}
-
-.edit-button:hover {
-  background-color: #E8B003;
-}
-
-.delete-button {
-  background-color: red;
-}
-
-.delete-button:hover {
-  background-color: #be0000;
 }
 </style>
