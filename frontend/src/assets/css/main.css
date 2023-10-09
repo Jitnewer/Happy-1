@@ -22,7 +22,19 @@ h1, h2, h3, h4, h5, h6, p {
 body {
     margin: 0px;
 }
+/* NavBar */
+.profile {
+    border-radius: 50%;
+    border-color: black;
+    border-style: solid;
+    border-width: 2px;
+    cursor: pointer;
+    margin-right: 14px;
+}
 
+.profile:hover {
+    border-color: whitesmoke;
+}
 nav {
     overflow: hidden;
     background-color: #0992A4;
@@ -59,6 +71,10 @@ nav a:hover {
     display: flex;
     align-items: center;
 
+}
+
+.clickable {
+    cursor: pointer;
 }
 
 .container {
@@ -399,5 +415,244 @@ table, button {
 
     .date-filter {
         width: 150px;
+    }
+}
+/* NavBar */
+.loggedIn-enter-active,
+.loggedIn-leave-active {
+    transition: all 0.5s;
+    height: 212px
+}
+
+.loggedIn-enter-from,
+.loggedIn-leave-to {
+    opacity: 0;
+    height: 0px;
+}
+
+.v-enter-active,
+.v-leave-active {
+    transition: all 0.5s;
+    height: 240px
+}
+
+.v-enter-from,
+.v-leave-to {
+    opacity: 0;
+    height: 0px;
+}
+
+.dropdown-enter-active,
+.dropdown-leave-active {
+    transition: all 0.5s;
+    height: 120px
+}
+
+.dropdown-enter-from,
+.dropdown-leave-to {
+    opacity: 0;
+    height: 0px;
+}
+
+.dropdownProfile-enter-active,
+.dropdownProfile-leave-active {
+    transition: all 0.5s;
+    height: 120px
+}
+
+.dropdownProfile-enter-from,
+.dropdownProfile-leave-to {
+    opacity: 0;
+    height: 0px;
+}
+
+
+
+#logo {
+    width: 100%
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    width: 10%;
+}
+.dropdown-content {
+    position: absolute;
+    background-color: #333;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    margin-top: 73px;
+}
+
+.dropdown-profile-content {
+    position: absolute;
+    background-color: #333;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    margin-top: 58px;
+}
+
+.hamburger {
+    display: none;
+    cursor: pointer;
+}
+
+.bar {
+    width: 25px;
+    height: 3px;
+    background-color: white;
+    margin: 4px auto;
+    transition: 0.4s;
+}
+
+.nav {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.dropdown-content a {
+    float: none;
+    color: white;
+    background-color:#0992a4;
+    padding: 14px 16px;
+    text-decoration: none;
+    display: block;
+    text-align: left;
+    font-size: 16px;
+}
+
+.dropdown-content a:hover {
+    background-color: #FECC32;
+    transition: 0.2s;
+    padding: 14px 16px;
+    text-align: left;
+    font-size: 16px;
+}
+
+.dropdown-profile-content a {
+    float: none;
+    color: white;
+    background-color:#0992a4;
+    padding: 14px 16px;
+    text-decoration: none;
+    display: block;
+    text-align: left;
+    font-size: 16px;
+}
+
+.dropdown-profile-content a:hover {
+    background-color: #FECC32;
+    transition: 0.2s;
+    padding: 14px 16px;
+    text-align: left;
+    font-size: 16px;
+}
+.dropdown {
+    cursor: pointer;
+    overflow: hidden;
+    float: left;
+}
+
+.dropdown-profile {
+    cursor: pointer;
+    overflow: hidden;
+    display: flex;
+    width: 188px;
+    justify-content: flex-end;
+}
+.dropBtn {
+    user-select: none;
+}
+
+@media only screen and (max-width: 800px) {
+    nav a {
+        font-size: 13px;
+        padding: 10px 12px;
+    }
+    .nav {
+        display: flex;
+        flex-direction: column;
+    }
+    .dropdown {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        width: 100%
+    }
+    .dropdown-content {
+        position: revert;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 0px;
+        box-shadow: none;
+        background-color: #0992A4;
+    }
+    .dropdownProfile-enter-active,
+    .dropdownProfile-leave-active {
+        transition: all 0.5s;
+        height: 140px
+    }
+
+    .dropdownProfile-enter-from,
+    .dropdownProfile-leave-to {
+        opacity: 0;
+        height: 0px;
+    }
+    .dropdown-profile-content {
+        position: revert;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 0px;
+        box-shadow: none;
+        background-color: #0992A4;
+    }
+    .dropBtn {
+        padding: 10px 13px;
+        font-size: 13px;
+        width: 25%;
+        margin: auto;
+    }
+    .dropdown-content a {
+        float: none;
+        color: white;
+        padding: 10px 13px;
+        text-decoration: none;
+        display: block;
+        text-align: center;
+        font-size: 13px;
+        width: 25%;
+    }
+    .dropdown-profile {
+        display: flex;
+        flex-direction: column;
+    }
+    .profile {
+        width: 40px;
+        margin: auto auto 0.5rem;
+    }
+    .dropdown-profile-content a {
+        float: none;
+        color: white;
+        padding: 10px 13px;
+        text-decoration: none;
+        display: block;
+        text-align: center;
+        font-size: 13px;
+        width: 25%;
+    }
+    .hamburger {
+        display: block;
+        padding: 10px 12px;
+    }
+    nav a {
+        width: 25%;
+    }
+    .logo-container {
+        width: 33%;
+        margin: auto;
     }
 }
