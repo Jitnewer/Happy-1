@@ -5,7 +5,6 @@ import EventDetailsView from '@/components/EventDetailsView.vue'
 const router = createRouter({
   history: createWebHashHistory(),
   routes: [
-    { path: '/', redirect: '/adminEventView' },
     {
       path: '/adminEventView',
       component: AdminEventView,
