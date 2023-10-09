@@ -1,17 +1,13 @@
 <template>
-  <AdminEventView/>
+  <router-view></router-view>
 </template>
 
 <style>
 
 </style>
 <script>
-import AdminEventView from './components/AdminEventView.vue'
 
 export default {
-  name: 'App',
-  components: {
-    AdminEventView
-  }
+  name: 'App'
 }
 </script>
