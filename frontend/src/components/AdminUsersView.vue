@@ -1,10 +1,10 @@
 <script>
 import { User } from '@/models/user'
-import AdminUserDetail from '@/components/AdminUserDetail.vue'
+// import AdminUserDetail from '@/components/AdminUserDetail.vue'
 
 export default {
   name: 'AdminUsersView',
-  components: { AdminUserDetail },
+  // components: { AdminUserDetail },
   data () {
     return {
       filter: {
@@ -19,12 +19,23 @@ export default {
     }
   },
   methods: {
+    setByUrl () {
+      for (let i = 0; i < this.users.length; i++) {
+        if (parseInt(this.$route.params.id) === this.users[i].id) {
+          this.selectedUser = this.users[i]
+          this.isSelected = true
+          document.body.style.overflow = 'hidden'
+          break
+        }
+      }
+    },
     createUser () {
       this.create = true
       const id = User.generateId(this.usedIds)
       this.selectedUser = new User(id, require('../assets/img/profilepic.png'), null, null, null, null, 'N/A', 'N/A', 'Inactive', null, null)
       this.usedIds.push(id)
       this.isSelected = true
+      this.$router.push(this.$route.matched[0] + '/' + id)
     },
     deleteUser (userToDelete) {
       if (confirm('Are you sure you want to delete this event?')) {
@@ -34,18 +45,21 @@ export default {
         }
         this.selectedUser = null // Clear the selected event
         this.isSelected = false // Update the isSelected flag
+        this.$router.push(this.$route.matched[0])
       }
     },
     editUser (user) {
       this.selectedUser = user
       this.isSelected = true
       document.body.style.overflow = 'hidden'
+      this.$router.push(this.$route.matched[0] + '/' + user.id)
     },
     cancel () {
       this.selectedUser = null
       this.isSelected = false
       this.create = false
       document.body.style.overflow = 'auto'
+      this.$router.push(this.$route.matched[0])
     },
     save (user) {
       const selectedIndex = this.users.findIndex(oldUser => oldUser.id === user.id)
@@ -59,6 +73,7 @@ export default {
       this.selectedUser = null
       this.isSelected = false
       this.create = false
+      this.$router.push(this.$route.matched[0])
     },
     viewUser () {
       // TODO redirect to profile of user
@@ -87,6 +102,11 @@ export default {
       const user = User.createSampleUser()
       this.users.push(user)
       this.usedIds.push(user.id)
+    }
+  },
+  watch: {
+    '$route' () {
+      this.setByUrl()
     }
   }
 }
@@ -140,7 +160,7 @@ export default {
       </table>
     </div>
   </div>
-  <AdminUserDetail v-if="isSelected" :selectedUser="selectedUser" @cancel-edit="cancel" @save-edit="save" :create="create"/>
+  <router-view v-if="isSelected" :selectedUser="selectedUser" @cancel-edit="cancel" @save-edit="save" :create="create"/>
 </template>
 
 <style scoped>

@@ -84,8 +84,6 @@ export default {
         <span class="error-message">{{ mailError }}</span>
         <select class="edit-usertype" v-model="selectedCopy.userType" :style="{ borderColor: userTypeError ? 'red' : '' }">
           <option value="ADMIN">Admin</option>
-<!--          <option value="ENTREPRENEUR">Entrepreneur</option>-->
-<!--          <option value="PARTNER">Partner</option>-->
           <option value="SUPERUSER">Superuser</option>
         </select>
         <span class="error-message">{{ userTypeError }}</span>
