@@ -21,7 +21,7 @@ export default {
       for (let i = 0; i < this.events.length; i++) {
         if (parseInt(this.$route.params.id) === this.events[i].id) {
           this.selectedEvent = this.events[i]
-          this.isSelected = true
+          this.isSelected = !this.isSelected
           document.body.style.overflow = 'hidden'
           break
         }
@@ -31,63 +31,52 @@ export default {
       this.$router.push(this.$route.matched[0].path + '/' + event.id)
     },
     deleteEvent (eventToDelete) {
-      if (confirm('Are you sure you want to delete this event?')) {
-        const indexToDelete = this.events.findIndex(event => event.id === eventToDelete.id)
-        if (indexToDelete !== -1) {
-          this.events.splice(indexToDelete, 1)
-        }
-        // eslint-disable-next-line no-unreachable-loop
-        for (let i = 0; i < this.usedIds.length; i++) {
-          if (this.usedIds[i] === eventToDelete.id) this.usedIds.splice(this.usedIds[i], 1)
-          break
-        }
-        this.selectedEvent = null // Clear the selected event
-        this.isSelected = false // Update the isSelected flag
-        document.body.style.overflow = 'auto'
-        this.$router.push(this.$route.matched[0])
+      const indexToDelete = this.events.findIndex(event => event.id === eventToDelete.id)
+      if (indexToDelete !== -1) {
+        this.events.splice(indexToDelete, 1)
       }
+
+      this.selectedEvent = null // Clear the selected event
+      this.isSelected = !this.isSelected // Update the isSelected flag
+      document.body.style.overflow = 'auto'
+      this.$router.push(this.$route.matched[0])
     },
     closeEvent () {
-      if (confirm('Are you sure you don\'t want to save changes?')) {
-        this.selectedEvent = null
-        this.create = false
-        this.isSelected = false
-        document.body.style.overflow = 'auto'
-
-        this.$router.push(this.$route.matched[0])
-      }
+      this.selectedEvent = null
+      this.create = false
+      this.isSelected = !this.isSelected
+      document.body.style.overflow = 'auto'
+      this.$router.push(this.$route.matched[0])
     },
     activateCreateEvent () {
       this.selectedEvent = new Event()
       this.selectedEvent.id = this.generateId()
       this.selectedEvent.image = require('../assets/images/imagePlaceholder.jpg')
       this.create = true
-      this.isSelected = true
+      this.isSelected = !this.isSelected
       document.body.overflow = 'hidden'
       this.$router.push(this.$route.matched[0].path + '/' + this.selectedEvent.id)
     },
     saveEvent (event) {
-      if (confirm('Are you sure you want to save changes to event?')) {
-        if (!this.create) {
-          // Find the index of the selected item in the array
-          const selectedIndex = this.events.findIndex(oldEvent => oldEvent.id === event.id)
-
-          if (selectedIndex !== -1) {
-            // Replace the selected item with the new item
-            this.events.splice(selectedIndex, 1, event)
-          }
-
-          // Reset selected item and clear isSelected
-          this.selectedEvent = null
-          this.isSelected = false
-        } else {
-          this.events.push(event)
-          this.usedIds.push(event.id)
-          this.isSelected = false
-          this.selectedEvent = null
-          this.create = false
+      if (!this.create) {
+        // Find the index of the selected item in the array
+        const selectedIndex = this.events.findIndex(oldEvent => oldEvent.id === event.id)
+        if (selectedIndex !== -1) {
+          // Replace the selected item with the new item
+          this.events.splice(selectedIndex, 1, event)
         }
+
+        // Reset selected item and clear isSelected
+        this.selectedEvent = null
+        this.isSelected = !this.isSelected
+      } else {
+        this.events.push(event)
+        this.usedIds.push(event.id)
+        this.isSelected = !this.isSelected
+        this.selectedEvent = null
+        this.create = false
       }
+
       document.body.style.overflow = 'auto'
       this.$router.push(this.$route.matched[0])
     },
@@ -96,10 +85,7 @@ export default {
       do {
         // Generate a new ID (you can use any method you prefer)
         newId = Math.floor((Math.random() * 100) + 1) // Replace with your preferred method to generate IDs
-
-        // If the newId is in usedIds, repeat the loop to generate a new one
       } while (this.usedIds.includes(newId))
-
       // Once a unique ID is generated, return it
       return newId
     }
@@ -158,12 +144,12 @@ export default {
           <div class="event-info-master">
             <div class="name-price">
               <h2 class="event-name">{{ event.name }}</h2>
-              <h2 class="event-price" v-if="event.price">&#x20AC; {{ event.price }}</h2>
+              <h3 class="event-price" v-if="event.price">&#x20AC; {{ event.price }}</h3>
             </div>
             <div>
-              <h3><i class="fa-regular fa-calendar-days"></i>{{ event.date }}</h3>
-              <h3><i class="fa-regular fa-clock"></i>{{ event.timeBegin }} - {{ event.timeEnd }}</h3>
-              <h3><i class="fa-regular fa-location-dot"></i>{{ event.location }}</h3>
+              <h4><i class="fa-regular fa-calendar-days"></i>{{ event.date }}</h4>
+              <h4><i class="fa-regular fa-clock"></i>{{ event.timeBegin }} - {{ event.timeEnd }}</h4>
+              <h4><i class="fa-regular fa-location-dot"></i>{{ event.location }}</h4>
             </div>
             <p> {{ event.info }}</p>
           </div>
