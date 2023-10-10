@@ -26,7 +26,7 @@ export default {
       } else if (this.loggedIn === 1) {
         return 'NavBarLoggedIn'
       } else if (this.loggedIn === 2 || this.loggedIn === 3) {
-        return 'NavBarNotLoggedInAdminAndSuperUser'
+        return 'NavBarLoggedInAdminAndSuperUser'
       }
       return this.loggedIn
     }
