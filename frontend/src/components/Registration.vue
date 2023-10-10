@@ -1,6 +1,3 @@
-<script setup>
-</script>
-
 <template>
   <!--  <div class="sign-up-specific">-->
   <!--    <h1 class="h1-sign-up">Sign Up</h1>-->
@@ -127,7 +124,7 @@
 
             <div class="field-btn">
               <button class="prev-3">Previous</button>
-              <button class="submit">Submit</button>
+              <button class="submit" @click="loginAdmin">Submit</button>
             </div>
           </div>
         </form>
@@ -556,3 +553,26 @@ form .button input:hover {
   background: black;
 }
 </style>
+
+<script>
+import { mapGetters, mapMutations } from 'vuex'
+
+export default {
+  name: 'NavBar.vue',
+  data () {
+    return {
+      showDropdown: false,
+      showNav: window.innerWidth > 800
+    }
+  },
+  computed: {
+    ...mapGetters(['isLoggedIn'])
+  },
+  methods: {
+    ...mapMutations(['setLoggedIn']),
+    loginAdmin () {
+      this.setLoggedIn(2) // Log in as a admin
+    }
+  }
+}
+</script>

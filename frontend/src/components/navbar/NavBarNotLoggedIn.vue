@@ -19,7 +19,7 @@
         </router-link>
         </div>
     <div class="right-nav">
-      <router-link to="/sign-up" @click="loginAdmin">
+      <router-link to="/sign-up">
         Sign Up
       </router-link>
       <router-link to="/sign-in" @click="login">
