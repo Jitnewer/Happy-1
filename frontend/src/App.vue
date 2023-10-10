@@ -8,14 +8,14 @@
 import { mapState } from 'vuex'
 import NavBarNotLoggedIn from '@/components/navbar/NavBarNotLoggedIn.vue'
 import NavBarLoggedIn from '@/components/navbar/NavBarLoggedIn.vue'
-import NavBarNotLoggedInAdminAndSuperUser from '@/components/navbar/NavBarNotLoggedInAdminAndSuperUser.vue'
+import NavBarLoggedInAdminAndSuperUser from '@/components/navbar/NavBarLoggedInAdminAndSuperUser.vue'
 import Footer from '@/components/Footer.vue'
 export default {
   name: 'App',
   components: {
     NavBarNotLoggedIn,
     NavBarLoggedIn,
-    NavBarNotLoggedInAdminAndSuperUser,
+    NavBarLoggedInAdminAndSuperUser,
     Footer
   },
   computed: {
