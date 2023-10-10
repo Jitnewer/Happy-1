@@ -6,16 +6,20 @@ import WelcomePage from '@/components/Welcome.vue'
 
 const routes = [
   {
-    path: '/admin/events',
-    component: AdminEventView,
-    children: [
-      { path: ':id', component: EventDetailsView }
-    ]
+    path: '/',
+    redirect: '/home'
   },
   {
     path: '/home',
     name: 'welcome',
     component: WelcomePage
+  },
+  {
+    path: '/admin/events',
+    component: AdminEventView,
+    children: [
+      { path: ':id', component: EventDetailsView }
+    ]
   }
 ]
 
