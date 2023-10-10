@@ -4,6 +4,7 @@ import AdminEventView from '@/components/AdminEventView.vue'
 import EventDetailsView from '@/components/EventDetailsView.vue'
 import WelcomePage from '@/components/Welcome.vue'
 import AboutUs from '@/components/AboutUs.vue'
+import Registration from '@/components/Registration.vue'
 
 const routes = [
   {
@@ -26,6 +27,11 @@ const routes = [
     path: '/about-us',
     name: 'AboutUs',
     component: AboutUs
+  },
+  {
+    path: '/sign-up',
+    name: 'register',
+    component: Registration
   }
 ]
 
