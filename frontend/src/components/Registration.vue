@@ -195,7 +195,6 @@
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  background-color: indianred;
 }
 
 .container-sign-up {
@@ -204,6 +203,8 @@
   border-radius: 5px;
   text-align: center;
   padding: 50px 35px 10px 35px;
+  box-shadow: 0px 3px 40px #000;
+  margin-top: 60px;
 }
 
 .header-sign-up {
@@ -346,7 +347,7 @@
   background: #262626;
 }
 .step .bullet-sign-up-form:after{
-  background: #d43f8d;
+  background: #0992A4;
   transform: scaleX(0);
   transform-origin: left;
   animation: animate 0.3s linear forwards;
