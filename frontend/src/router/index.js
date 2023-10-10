@@ -2,8 +2,8 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 import Vuex from 'vuex'
 import AdminEventView from '@/components/AdminEventView.vue'
 import EventDetailsView from '@/components/EventDetailsView.vue'
-
 import WelcomePage from '@/components/Welcome.vue'
+
 const routes = [
   {
     path: '/admin/events',
