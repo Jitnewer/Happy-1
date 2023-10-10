@@ -24,7 +24,6 @@ export default {
   align-items: center;
   justify-content: center;
   background-color: #1F93A5;
-  width: 100%;
   height: 30px;
   padding: 15px;
 }
