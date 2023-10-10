@@ -453,7 +453,7 @@ nav a.router-link-active {
 .v-enter-active,
 .v-leave-active {
     transition: all 0.5s;
-    height: 240px
+    height: 160px
 }
 
 .v-enter-from,
