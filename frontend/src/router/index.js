@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import AdminEventView from '@/components/AdminEventView.vue'
 import EventDetailsView from '@/components/EventDetailsView.vue'
 import WelcomePage from '@/components/Welcome.vue'
+import AboutUs from '@/components/AboutUs.vue'
 
 const routes = [
   {
@@ -20,6 +21,11 @@ const routes = [
     children: [
       { path: ':id', component: EventDetailsView }
     ]
+  },
+  {
+    path: '/about-us',
+    name: 'AboutUs',
+    component: AboutUs
   }
 ]
 

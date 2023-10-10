@@ -1,6 +1,6 @@
 <template>
   <div class="aboutUsContent">
-    <div class="aboutUsTitle"><h1>OVER HAPPY HOSPITALITY & ONS</h1></div>
+    <div class="aboutUsTitle"><h1>OVER HAPPY HOSPITALITY <span class="yellow-text">&</span> ONS</h1></div>
     <div><h2>Duurzaamheid</h2></div>
     <div class="aboutUsRow">
       <div class="aboutUsText">
@@ -94,5 +94,12 @@ h2 {
   margin:auto;
   max-width: 40%;
 //height: 200px;
+}
+
+.yellow-text {
+  color: #FECC32;
+}
+.blue-text {
+  color: #1F93A5;
 }
 </style>
