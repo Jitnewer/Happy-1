@@ -77,7 +77,7 @@ nav a:hover {
 }
 
 .container {
-    width: 80%;
+    width: 90%;
     margin: auto
 }
 
@@ -203,7 +203,6 @@ nav a.router-link-active {
 .edit-image {
     height: 320px;
     width: 260px;
-
 }
 
 .edit-inputs {
@@ -219,7 +218,6 @@ nav a.router-link-active {
 .edit-inputs input {
     padding: 14px 16px;
     width: 80%;
-    /*font-size: 18px;*/
     border-radius: 5px;
     margin-left: 30px;
     margin-top: 10px;
@@ -251,7 +249,6 @@ nav a.router-link-active {
 
 .edit-btn {
     padding: 12px 16px;
-    /*font-size: 14px;*/
     background-color: #FECC32;
     border-radius: 5px;
     border: none;
@@ -267,6 +264,31 @@ nav a.router-link-active {
     background-color: #E8B003;
 }
 
+@media (max-width: 1100px) {
+    .event-container {
+        height: 400px;
+        width: 450px;
+    }
+
+    .edit-image {
+        height: 250px;
+        width: 180px;
+    }
+
+    .edit-inputs input {
+        padding: 8px 12px;
+        width: 85%;
+        margin-left: 10px;
+    }
+
+    #edit-event-summary {
+        height: 110px;
+    }
+
+    .edit-btn {
+        padding: 8px 12px;
+    }
+}
 
 /*  AdminEventView */
 .event-detail{
@@ -281,6 +303,7 @@ nav a.router-link-active {
 .title {
     height: 30px;
     margin-bottom: 20px;
+    text-align: left;
 }
 
 /* Events list */
@@ -297,6 +320,7 @@ nav a.router-link-active {
 .event-price {
     display: flex;
     align-content: center;;
+    margin-top: 0;
 }
 
 .events-list ul {
@@ -319,7 +343,7 @@ nav a.router-link-active {
 
 .event-image {
     width: 200px;
-    height: 270px;
+    height: 90%;
     margin: 15px 0 15px 16px;
     object-fit: cover;
 }
@@ -337,7 +361,7 @@ nav a.router-link-active {
     align-content: center;
 }
 
-.event-info-master h3 {
+.event-info-master h2 {
     margin-top: 0;
 }
 
@@ -352,6 +376,7 @@ nav a.router-link-active {
     padding: 0 30px;
     max-height: 100%;
     overflow-y: auto;
+    text-align: left;
 }
 
 /* Filters */
@@ -375,14 +400,12 @@ nav a.router-link-active {
 .date-filter {
     border-radius: 5px;
     width: 200px;
-    /*font-size: 16px;*/
     border: 1px solid black;
 }
 
 /* Create button */
 .create-btn {
     padding: 12px 20px;
-    /*font-size: 16px;*/
     border-radius: 5px;
     border: none;
     background-color: #FECC32;
@@ -399,9 +422,13 @@ nav a.router-link-active {
     box-sizing: border-box;
 }
 
-@media (max-width: 1400px) {
+@media (max-width: 1100px) {
     .events-list {
         max-height: 500px;
+    }
+
+    .container {
+        height: min-content;
     }
 
     .events-list ul {
@@ -413,6 +440,21 @@ nav a.router-link-active {
     .events-list li {
         margin-bottom: 15px;
         width: 95%;
+        height: 200px;
+    }
+
+    .event-image {
+        width: 130px;
+        object-fit: fill;
+        margin: auto 0 auto 10px;
+    }
+
+    .event-info-master h4 {
+        margin: 0;
+    }
+
+    .search-filter {
+        width: 150px;
     }
 }
 
