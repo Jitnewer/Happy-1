@@ -2,7 +2,7 @@
   <div class="container">
     <div>
       <h1>
-        <span class="yellow-text">Sustance</span> <span class="blue-text">For Good</span>
+        <span class="yellow-text">SUSTANCE</span> <span class="blue-text">FOR GOOD</span>
       </h1>
       <p>
         Happy Hospitality is a collective that sets the market in motion around sustainability within hospitality through
@@ -23,8 +23,8 @@
 
     <div class="aboutUs">
       <h1>
-        <span class="blue-text">Over happy hospitality</span> <span class="yellow-text">& </span><span
-        class="blue-text">Ons</span>
+        <span class="blue-text">OVER HAPPY HOSPITALITY</span> <span class="yellow-text">& </span><span
+        class="blue-text">ONS</span>
       </h1>
       <p>
         We have all heard the bell tolling; one talks about sustainability, the other about circular business models or a
