@@ -49,6 +49,7 @@ export default {
     ...mapMutations(['setLoggedIn']),
     login () {
       this.setLoggedIn(1) // Log in as a user
+      this.$router.push({ name: 'welcome' })
     },
     loginAdmin () {
       this.setLoggedIn(2) // Log in as a admin
