@@ -1,16 +1,9 @@
 <template>
   <nav>
     <div class="logo-container">
-      <img id="logo" src="../../assets/img/happy-hospitality-collective.png" alt="logo"/>
+      <img id="logo" src="../../assets/images/HH_logo_portrait_20230314-removebg-preview.png" alt="logo"/>
     </div>
-    <div class="hamburger" @click="toggleNav">
-      <div class="bar"></div>
-      <div class="bar"></div>
-      <div class="bar"></div>
-    </div>
-    <transition name="loggedInAdmin">
       <div class="nav" v-if="showNav">
-        <div  class="left-nav">
           <router-link to="/admin/users">
             Users
           </router-link>
@@ -20,12 +13,10 @@
           <router-link to="/admin/events">
             Events
           </router-link>
-        </div>
-        <div class="right-nav">
-          <div class="dropdown-profile">
-            <canvas ref="profileCanvas" class="profile" width="40" height="40" @click="toggleProfile"></canvas>
-            <transition name="dropdownProfile">
-              <div v-show="showProfile" class="dropdown-profile-content">
+          <div class="dropdown-profile-admin">
+            <canvas ref="profileCanvas" class="profile-admin" width="40" height="40" @click="toggleProfile"></canvas>
+            <transition name="dropdownProfileAdmin">
+              <div v-show="showProfile" class="dropdown-profile-content-admin">
                 <router-link to="/profile">
                   Your Profile
                 </router-link>
@@ -39,8 +30,6 @@
             </transition>
           </div>
         </div>
-      </div>
-    </transition>
   </nav>
 </template>
 
@@ -180,3 +169,67 @@ export default {
   }
 }
 </script>
+
+<style>
+nav {
+  background-color: #004d57 !important;
+  flex-direction: column !important;
+  width: 10%;
+  height: 100vh;
+}
+.logo-container{
+  width: 80% !important;
+}
+
+.dropdown-profile-admin {
+  margin-top: 1rem;
+  font-size: 16px;
+  color: white;
+  text-decoration: none;
+}
+.nav {
+  flex-direction: column-reverse !important;}
+.dropdown-profile-content-admin {
+  position: relative;
+}
+.dropdown-profile-content-admin a {
+  color: white;
+  padding: 24px 0px;
+  text-decoration: none;
+  display: block;
+  font-size: 16px;
+  float: none;
+}
+.dropdown-profile-content-admin a:hover {
+  background-color: #FECC32;
+  transition: 0.2s;
+  color: white;
+  padding: 24px 0px;
+  text-decoration: none;
+  display: block;
+  font-size: 16px;
+  float: none;
+}
+.dropdownProfileAdmin-enter-active,
+.dropdownProfileAdmin-leave-active {
+  transition: all 0.5s;
+  height: 219px
+}
+
+.dropdownProfileAdmin-enter-from,
+.dropdownProfileAdmin-leave-to {
+  opacity: 0;
+  height: 0px;
+}
+.profile-admin {
+  border-radius: 50%;
+  border-color: #ffffff;
+  border-style: solid;
+  border-width: 2px;
+  cursor: pointer;
+}
+
+.profile-admin:hover {
+  border-color: #fcca32;
+}
+</style>
