@@ -45,15 +45,18 @@ export default {
         if (indexToBlock !== -1) {
           this.users[indexToBlock].status = User.status.Banned
         }
-        this.selectedUser = null
-        this.isSelected = !this.isSelected
       }
     },
     editUser (user) {
       document.body.style.overflow = 'hidden'
       this.$router.push(this.$route.matched[0].path + '/' + user.id)
     },
-    cancel () {
+    cancel (cancelEdit) {
+      if (this.create) {
+        const foundUser = this.usedIds.findIndex(usedId => usedId === cancelEdit.id)
+        this.usedIds.splice(foundUser, 1)
+      }
+
       this.selectedUser = null
       this.isSelected = !this.isSelected
       this.create = false
@@ -130,6 +133,7 @@ export default {
         <option value="SUPERUSER">Superuser</option>
       </select>
       <button class="create-btn" @click="createUser">Create</button>
+      <button class="notification"><i class="fa-regular fa-bell"></i></button>
     </div>
     <div class="users-list">
       <table class="users-table">
@@ -145,7 +149,7 @@ export default {
         </tr>
         </thead>
         <tbody>
-        <tr v-for="user in filterdUsers" :key="user.id">
+        <tr v-bind:class="{ 'banned': isBanned(user) }" v-for="user in filterdUsers" :key="user.id">
           <td> {{ user.id }}</td>
           <td> {{ user.name }}</td>
           <td> {{ user.mail }}</td>

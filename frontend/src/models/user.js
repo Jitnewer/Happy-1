@@ -9,7 +9,8 @@ export class User {
   static status = {
     Active: 'ACTIVE',
     Inactive: 'INACTIVE',
-    Banned: 'BANNED'
+    Banned: 'BANNED',
+    Unbanned: 'UNBANNED' // Adding the opposite status
   }
 
   constructor (id, profilePic, name, mail, gender, age, companyType, tag, status, userType, postalCode) {

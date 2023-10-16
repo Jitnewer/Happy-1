@@ -23,7 +23,7 @@ export default {
           this.$emit('cancel-edit')
         }
       } else {
-        this.$emit('cancel-edit')
+        this.$emit('cancel-edit', this.selectedUser)
       }
     },
     save () {
@@ -58,7 +58,6 @@ export default {
 
       return isValid
     }
-
   },
   computed: {
     changedData () {
@@ -76,8 +75,8 @@ export default {
     <div class="user-info">
       <img :src="selectedUser.profilePic" alt="user image"/>
       <div class="inputInfo">
-        <h2> {{ selectedUser.name }} </h2>
-        <h3> {{ selectedUser.mail }} </h3>
+        <h2 v-if="!create"> {{ selectedUser.name }} </h2>
+        <h3 v-if="!create"> {{ selectedUser.mail }} </h3>
         <input v-if="create" type="text" id="name" v-model="selectedCopy.name" placeholder="Username" :style="{ borderColor: nameError ? 'red' : '' }">
         <span class="error-message">{{ nameError }}</span>
         <input v-if="create" type="email" id="email" v-model="selectedCopy.mail" placeholder="Email" :style="{ borderColor: mailError ? 'red' : '' }">
