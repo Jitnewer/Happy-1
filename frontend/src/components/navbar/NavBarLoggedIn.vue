@@ -40,8 +40,16 @@
         </router-link>
         </div>
     <div class="right-nav">
-      <div class="dropdown-profile">
-        <canvas ref="profileCanvas" class="profile" width="40" height="40" @click="toggleProfile"></canvas>
+      <div class="dropdown-profile" @click="toggleProfile">
+        <canvas ref="profileCanvas" class="profile" width="33" height="33"></canvas>
+        <div>
+          <div class="profile-name">
+            <p>Rick Veerman</p>
+          </div>
+          <div class="caret">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Pro 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M182.6 137.4c-12.5-12.5-32.8-12.5-45.3 0l-128 128c-9.2 9.2-11.9 22.9-6.9 34.9s16.6 19.8 29.6 19.8H288c12.9 0 24.6-7.8 29.6-19.8s2.2-25.7-6.9-34.9l-128-128z"/></svg>
+          </div>
+        </div>
         <transition name="dropdownProfile">
           <div v-show="showProfile" class="dropdown-profile-content">
             <router-link to="/profile">
@@ -72,7 +80,8 @@ export default {
       showDropdown: false,
       showProfile: false,
       showNav: window.innerWidth > 800,
-      randomColor: ''
+      randomColor: '',
+      showName: true
     }
   },
   methods: {
@@ -85,7 +94,7 @@ export default {
           const ctx = canvas.getContext('2d')
           const centerX = canvas.width / 2
           const centerY = canvas.height / 2
-          const fontSize = 20
+          const fontSize = 15
           const fontFamily = 'Poppins, sans-serif'
 
           ctx.fillStyle = bgColor // Random background color
@@ -187,6 +196,7 @@ export default {
     this.randomColor = this.getRandomColor()
 
     this.drawProfilePicture(initials, this.randomColor)
+    this.showName = window.innerWidth < 800
   },
   mounted () {
     window.addEventListener('click', this.handleOutsideClick)
@@ -195,6 +205,9 @@ export default {
   beforeUnmount () {
     window.removeEventListener('click', this.handleOutsideClick)
     window.removeEventListener('resize', this.updateShowNav)
+  },
+  watch () {
+    this.showName = window.innerWidth < 800
   }
 }
 </script>

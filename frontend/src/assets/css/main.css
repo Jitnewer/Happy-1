@@ -1,15 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
 
-#app {
-    font-family: 'Poppins', sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-align: center;
-    color: #2c3e50;
-    margin: 0;
-    box-sizing: border-box;
-    padding: 0;
-}
+
 
 input {
     font-family: 'Poppins', sans-serif;
@@ -29,12 +20,9 @@ body {
     border-style: solid;
     border-width: 2px;
     cursor: pointer;
-    margin-right: 14px;
+    margin-right: 7px;
 }
 
-.profile:hover {
-    border-color: #fcca32;
-}
 nav {
     overflow: hidden;
     background-color: #0992A4;
@@ -469,7 +457,7 @@ table, button {
 .dropdownProfile-enter-active,
 .dropdownProfile-leave-active {
     transition: all 0.5s;
-    height: 120px
+    height: 159px
 }
 
 .dropdownProfile-enter-from,
@@ -502,7 +490,8 @@ table, button {
     background-color: #333;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     z-index: 1;
-    margin-top: 58px;
+    margin-top: 244px;
+    width: 175px;
 }
 
 .hamburger {
@@ -573,6 +562,8 @@ table, button {
     display: flex;
     width: 188px;
     justify-content: flex-end;
+    align-items: center;
+    padding: 24px 16px;
 }
 .dropBtn {
     user-select: none;
@@ -667,4 +658,18 @@ table, button {
         width: 33%;
         margin: auto;
     }
+}
+
+.profile-name {
+}
+
+.profile-name p {
+  margin: 0;
+}
+
+.caret {
+    width: 10px;
+    display: flex;
+    margin-left: 0.5rem;
+    fill: white;
 }

@@ -28,7 +28,34 @@ export default {
       }
       return this.loggedIn
     }
+  },
+  watch: {
+    navBar (newValue) {
+      if (newValue === 'NavBarNotLoggedInAdminAndSuperUser') {
+        document.getElementById('app').style.display = 'flex'
+      } else {
+        document.getElementById('app').style.display = 'block' // Or any other default value
+      }
+    }
+  },
+  mounted () {
+    if (this.navBar === 'NavBarNotLoggedInAdminAndSuperUser') {
+      document.getElementById('app').style.display = 'flex'
+    }
   }
 }
 
 </script>
+
+<style>
+#app {
+  font-family: 'Poppins', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+  margin: 0;
+  box-sizing: border-box;
+  padding: 0;
+}
+</style>

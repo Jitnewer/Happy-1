@@ -1,9 +1,9 @@
 <template>
-  <nav>
-    <div class="logo-container">
+  <nav id="admin">
+    <div class="logo-container-admin">
       <img id="logo" src="../../assets/images/HH_logo_portrait_20230314-removebg-preview.png" alt="logo"/>
     </div>
-      <div class="nav" v-if="showNav">
+      <div class="nav-admin">
           <router-link to="/admin/users">
             Users
           </router-link>
@@ -14,7 +14,9 @@
             Events
           </router-link>
           <div class="dropdown-profile-admin">
+            <div id="profileDiv">
             <canvas ref="profileCanvas" class="profile-admin" width="40" height="40" @click="toggleProfile"></canvas>
+            </div>
             <transition name="dropdownProfileAdmin">
               <div v-show="showProfile" class="dropdown-profile-content-admin">
                 <router-link to="/profile">
@@ -42,7 +44,6 @@ export default {
     return {
       showDropdown: false,
       showProfile: false,
-      showNav: window.innerWidth > 800,
       randomColor: ''
     }
   },
@@ -98,19 +99,6 @@ export default {
     toggleProfile (event) {
       event.stopPropagation()
       this.showProfile = !this.showProfile
-    },
-    /**
-     * Toggles the visibility of the navigation menu.
-     * @param {Event} event - The click event.
-     */
-    toggleNav (event) {
-      event.stopPropagation()
-      this.showNav = !this.showNav // Toggle navWidth
-      if (this.showNav) {
-        this.$nextTick(() => {
-          this.updateProfilePicture()
-        })
-      }
     },
     /**
      * Handles clicks outside of dropdown and hamburger elements.
@@ -171,44 +159,64 @@ export default {
 </script>
 
 <style>
-nav {
+#admin {
   background-color: #004d57 !important;
   flex-direction: column !important;
-  width: 10%;
+  width: 7%;
   height: 100vh;
 }
-.logo-container{
-  width: 80% !important;
+nav a.router-link-active {
+  background-color: #7a672b !important;
+  font-weight: bold;
+}
+#admin a {
+  font-size: 16px;
+  color: white;
+  text-align: left !important;
+  padding: 24px 16px;
+  text-decoration: none;
+  width: 100% !important;
 }
 
+#admin a:hover {
+  background-color: #7a672b;
+}
+.logo-container-admin {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.nav-admin {
+  display: flex;
+  width: 100%;
+  flex-direction: column-reverse !important;
+  align-items: flex-start;
+}
 .dropdown-profile-admin {
-  margin-top: 1rem;
+  display: flex;
   font-size: 16px;
   color: white;
   text-decoration: none;
-}
-.nav {
-  flex-direction: column-reverse !important;}
-.dropdown-profile-content-admin {
-  position: relative;
+  flex-direction: column;
+  align-items: flex-start;
 }
 .dropdown-profile-content-admin a {
   color: white;
-  padding: 24px 0px;
   text-decoration: none;
   display: block;
   font-size: 16px;
   float: none;
+  padding: 24px 16px;
 }
 .dropdown-profile-content-admin a:hover {
-  background-color: #FECC32;
+  background-color: #7a672b;
   transition: 0.2s;
   color: white;
-  padding: 24px 0px;
+  padding: 24px 16px;
   text-decoration: none;
   display: block;
   font-size: 16px;
-  float: none;
 }
 .dropdownProfileAdmin-enter-active,
 .dropdownProfileAdmin-leave-active {
@@ -230,6 +238,111 @@ nav {
 }
 
 .profile-admin:hover {
-  border-color: #fcca32;
+  border-color: #7a672b;
+}
+#profileDiv {
+  padding: 0px 16px;
+  margin-top: 1rem;
+}
+
+.dropdown-profile-content-admin {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+@media only screen and (max-width: 1200px) {
+  #admin a {
+    padding: 24px 7px;
+    font-size: 14px;
+  }
+  #admin a:hover {
+    padding: 24px 7px;
+    font-size: 14px;
+  }
+  .dropdown-profile-content-admin a {
+    padding: 24px 7px;
+    font-size: 14px;
+  }
+  .dropdown-profile-content-admin a:hover {
+    padding: 24px 7px;
+    font-size: 14px;
+  }
+  #profileDiv {
+    padding: 0px 7px;
+    margin-top: 1rem;
+  }
+}
+
+@media only screen and (max-width: 980px) {
+  #admin a {
+    padding: 22px 6px;
+    font-size: 13px;
+  }
+  #admin a:hover {
+    padding: 22px 6px;
+    font-size: 13px;
+  }
+  .dropdown-profile-content-admin a {
+    padding: 22px 6px;
+    font-size: 14px;
+  }
+  .dropdown-profile-content-admin a:hover {
+    padding: 22px 6px;
+    font-size: 14px;
+  }
+  #profileDiv {
+    padding: 0px 6px;
+    margin-top: 1rem;
+  }
+  #logo {
+    width: 120%;
+  }
+}
+
+@media only screen and (max-width: 700px) {
+  #admin a {
+    padding: 22px 6px;
+    font-size: 13px;
+  }
+  #admin a:hover {
+    padding: 22px 6px;
+    font-size: 13px;
+  }
+  .dropdown-profile-content-admin a {
+    padding: 22px 6px;
+    font-size: 14px;
+  }
+  .dropdown-profile-content-admin a:hover {
+    padding: 22px 6px;
+    font-size: 14px;
+  }
+  #profileDiv {
+    padding: 0px 6px;
+    margin-top: 1rem;
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  #admin a {
+    padding: 22px 6px;
+    font-size: 13px;
+  }
+  #admin a:hover {
+    padding: 22px 6px;
+    font-size: 13px;
+  }
+  .dropdown-profile-content-admin a {
+    padding: 22px 6px;
+    font-size: 14px;
+  }
+  .dropdown-profile-content-admin a:hover {
+    padding: 22px 6px;
+    font-size: 14px;
+  }
+  #profileDiv {
+    padding: 0px 6px;
+    margin-top: 1rem;
+  }
 }
 </style>
