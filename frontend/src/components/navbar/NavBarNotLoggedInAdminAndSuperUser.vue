@@ -1,42 +1,74 @@
 <template>
   <nav id="admin">
-    <div class="logo-container-admin">
-      <img id="logo" src="../../assets/images/HH_logo_portrait_20230314-removebg-preview.png" alt="logo"/>
-    </div>
-      <div class="nav-admin">
-          <router-link to="/admin/users">
-            Users
-          </router-link>
-          <router-link to="/admin/stastistics">
-            Statistics
-          </router-link>
-          <router-link to="/admin/events">
-            Events
-          </router-link>
-          <div class="dropdown-profile-admin">
-            <div id="profileDiv">
-            <canvas ref="profileCanvas" class="profile-admin" width="40" height="40" @click="toggleProfile"></canvas>
-            </div>
-            <transition name="dropdownProfileAdmin">
-              <div v-show="showProfile" class="dropdown-profile-content-admin">
-                <router-link to="/profile">
-                  Your Profile
+    <img id="logo" src="../../assets/images/happy-hospitality-collective.png" height="119" width="310" alt=""/>
+      <div class="nav-links-admin">
+        <div class="nav-links-left-admin">
+          <svg @click="toggleDasboard" id="hamburger-admin" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Pro 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg>
+        </div>
+        <div class="nav-links-right-admin">
+          <div class="dropdown-profile" @click="toggleProfile">
+            <canvas ref="profileCanvas" class="profile" width="33" height="33"></canvas>
+            <p id="profile-name"> {{ this.user.name }}</p>
+            <div class="caret">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512"><!--! Font Awesome Pro 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M246.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-128-128c-9.2-9.2-22.9-11.9-34.9-6.9s-19.8 16.6-19.8 29.6l0 256c0 12.9 7.8 24.6 19.8 29.6s25.7 2.2 34.9-6.9l128-128z"/></svg>            </div>
+            <transition name="dropdownProfile">
+              <div class="dropdown-profile-content" v-show="showProfile">
+                <router-link  to="/profile">
+                  Profile
                 </router-link>
                 <router-link to="/profile/settings">
                   Settings
                 </router-link>
-                <a class="clickable" @click="logout">
+                <a @click="logout">
                   Logout
                 </a>
               </div>
             </transition>
           </div>
         </div>
+      </div>
   </nav>
+  <transition name="dashboard-big">
+  <div class="dashboard" v-show="showDashboard && !smallVersionDasboard">
+    <div class="profile-dashboard" >
+      <canvas ref="profileCanvasDashboard" class="profile-photo-dashboard" width="45" height="45"></canvas>
+      <p id="profile-dashboard-name">{{this.user.name}}</p>
+      <p id="profile-dashboard-role">{{this.user.role}}</p>
+    </div>
+    <div class="dashboard-links">
+      <router-link  to="/admin/users">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Pro 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"/></svg>        Users
+      </router-link>
+      <router-link  to="/admin/statistics">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Pro 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M160 80c0-26.5 21.5-48 48-48h32c26.5 0 48 21.5 48 48V432c0 26.5-21.5 48-48 48H208c-26.5 0-48-21.5-48-48V80zM0 272c0-26.5 21.5-48 48-48H80c26.5 0 48 21.5 48 48V432c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V272zM368 96h32c26.5 0 48 21.5 48 48V432c0 26.5-21.5 48-48 48H368c-26.5 0-48-21.5-48-48V144c0-26.5 21.5-48 48-48z"/></svg>
+        Statistics
+      </router-link>
+      <router-link  to="/admin/events">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Pro 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M128 0c17.7 0 32 14.3 32 32V64H288V32c0-17.7 14.3-32 32-32s32 14.3 32 32V64h48c26.5 0 48 21.5 48 48v48H0V112C0 85.5 21.5 64 48 64H96V32c0-17.7 14.3-32 32-32zM0 192H448V464c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V192zm64 80v32c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16V272c0-8.8-7.2-16-16-16H80c-8.8 0-16 7.2-16 16zm128 0v32c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16V272c0-8.8-7.2-16-16-16H208c-8.8 0-16 7.2-16 16zm144-16c-8.8 0-16 7.2-16 16v32c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16V272c0-8.8-7.2-16-16-16H336zM64 400v32c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16V400c0-8.8-7.2-16-16-16H80c-8.8 0-16 7.2-16 16zm144-16c-8.8 0-16 7.2-16 16v32c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16V400c0-8.8-7.2-16-16-16H208zm112 16v32c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16V400c0-8.8-7.2-16-16-16H336c-8.8 0-16 7.2-16 16z"/></svg>
+        Events
+      </router-link>
+    </div>
+  </div>
+  </transition>
+  <transition name="dashboard-small">
+  <div class="dashboard" v-show="smallVersionDasboard">
+    <div class="dashboard-links-small">
+      <router-link  to="/admin/users">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Pro 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"/></svg>
+      </router-link>
+      <router-link  to="/admin/statistics">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Pro 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M160 80c0-26.5 21.5-48 48-48h32c26.5 0 48 21.5 48 48V432c0 26.5-21.5 48-48 48H208c-26.5 0-48-21.5-48-48V80zM0 272c0-26.5 21.5-48 48-48H80c26.5 0 48 21.5 48 48V432c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V272zM368 96h32c26.5 0 48 21.5 48 48V432c0 26.5-21.5 48-48 48H368c-26.5 0-48-21.5-48-48V144c0-26.5 21.5-48 48-48z"/></svg>
+      </router-link>
+      <router-link  to="/admin/events">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Pro 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M128 0c17.7 0 32 14.3 32 32V64H288V32c0-17.7 14.3-32 32-32s32 14.3 32 32V64h48c26.5 0 48 21.5 48 48v48H0V112C0 85.5 21.5 64 48 64H96V32c0-17.7 14.3-32 32-32zM0 192H448V464c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V192zm64 80v32c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16V272c0-8.8-7.2-16-16-16H80c-8.8 0-16 7.2-16 16zm128 0v32c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16V272c0-8.8-7.2-16-16-16H208c-8.8 0-16 7.2-16 16zm144-16c-8.8 0-16 7.2-16 16v32c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16V272c0-8.8-7.2-16-16-16H336zM64 400v32c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16V400c0-8.8-7.2-16-16-16H80c-8.8 0-16 7.2-16 16zm144-16c-8.8 0-16 7.2-16 16v32c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16V400c0-8.8-7.2-16-16-16H208zm112 16v32c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16V400c0-8.8-7.2-16-16-16H336c-8.8 0-16 7.2-16 16z"/></svg>
+      </router-link>
+    </div>
+  </div>
+  </transition>
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 
 export default {
   name: 'NavBar.vue',
@@ -44,12 +76,62 @@ export default {
     return {
       showDropdown: false,
       showProfile: false,
-      randomColor: ''
+      smallVersionDasboard: false,
+      showDashboard: true,
+      randomColor: '',
+      user: {
+        name: 'Rick Veerman',
+        role: 'Admin'
+      }
     }
+  },
+  computed: {
+    ...mapGetters(['isLoggedIn'])
   },
   methods: {
     ...mapMutations(['setLoggedIn']),
-
+    login () {
+      this.setLoggedIn(1) // Log in as a user
+    },
+    loginAdmin () {
+      this.setLoggedIn(2) // Log in as a admin
+    },
+    logout () {
+      this.setLoggedIn(0)
+    },
+    toggleDropdown (event) {
+      event.stopPropagation()
+      this.showDropdown = !this.showDropdown
+    },
+    toggleProfile (event) {
+      event.stopPropagation()
+      this.showProfile = !this.showProfile
+    },
+    toggleDasboard (event) {
+      event.stopPropagation()
+      if (window.innerWidth > 860) {
+        this.showDashboard = true
+        this.smallVersionDasboard = !this.smallVersionDasboard
+      } else if (window.innerWidth <= 860) {
+        this.smallVersionDasboard = false
+        this.showDashboard = !this.showDashboard
+      }
+    },
+    checkDashboard () {
+      if (window.innerWidth > 860) {
+        this.showDashboard = true
+        this.smallVersionDasboard = false
+      } else if (window.innerWidth <= 860) {
+        this.smallVersionDasboard = false
+        this.showDashboard = false
+      }
+    },
+    updateShowNav () {
+      this.showNav = window.innerWidth >= 860
+    },
+    showDropdownContent () {
+      this.$refs.dropdownContent.style.visibility = 'visible'
+    },
     drawProfilePicture (initials, bgColor) {
       this.$nextTick(() => {
         const canvas = this.$refs.profileCanvas
@@ -57,7 +139,7 @@ export default {
           const ctx = canvas.getContext('2d')
           const centerX = canvas.width / 2
           const centerY = canvas.height / 2
-          const fontSize = 20
+          const fontSize = 15
           const fontFamily = 'Poppins, sans-serif'
 
           ctx.fillStyle = bgColor // Random background color
@@ -72,7 +154,36 @@ export default {
         }
       })
     },
+    drawProfilePictureDashboard (initials, bgColor) {
+      this.$nextTick(() => {
+        const canvas = this.$refs.profileCanvasDashboard
+        if (canvas != null) {
+          const ctx = canvas.getContext('2d')
+          const centerX = canvas.width / 2
+          const centerY = canvas.height / 2
+          const fontSize = 15
+          const fontFamily = 'Poppins, sans-serif'
 
+          ctx.fillStyle = bgColor // Random background color
+          ctx.fillRect(0, 0, canvas.width, canvas.height)
+
+          ctx.fillStyle = '#ffffff' // Text color
+          ctx.font = `${fontSize}px ${fontFamily}`
+          ctx.textAlign = 'center'
+          ctx.textBaseline = 'middle'
+
+          ctx.fillText(initials, centerX, centerY)
+        }
+      })
+    },
+    handleOutsideClick (event) {
+      if (!event.target.matches('.dropdown')) {
+        this.showDropdown = false
+      }
+      if (!event.target.matches('.dropdown-profile')) {
+        this.showDropdown = false
+      }
+    },
     getRandomColor () {
       const letters = '0123456789ABCDEF'
       let color = '#'
@@ -80,269 +191,31 @@ export default {
         color += letters[Math.floor(Math.random() * 16)]
       }
       return color
-    },
-
-    /**
-     * Logs out of the application
-     */
-    logout () {
-      this.setLoggedIn(0)
-    },
-    /**
-     * Toggles the visibility of the navigation menu.
-     * @param {Event} event - The click event.
-     */
-    toggleDropdown (event) {
-      event.stopPropagation()
-      this.showDropdown = !this.showDropdown
-    },
-    toggleProfile (event) {
-      event.stopPropagation()
-      this.showProfile = !this.showProfile
-    },
-    /**
-     * Handles clicks outside of dropdown and hamburger elements.
-     */
-    handleOutsideClick (event) {
-      if (!event.target.matches('.dropdown')) {
-        this.showDropdown = false
-      }
-    },
-
-    updateProfilePicture () {
-      const name = 'Admin' // Replace this with your name
-      let initials = ''
-      const words = name.split(' ')
-      if (words.length === 1) {
-        initials = name.charAt(0).toUpperCase()
-      } else {
-        initials = words[0].charAt(0).toUpperCase() + words[1].charAt(0).toUpperCase()
-      }
-      this.drawProfilePicture(initials, this.randomColor)
-    },
-    updateShowNav () {
-      const newShowNav = window.innerWidth >= 800
-      if (newShowNav !== this.showNav) {
-        this.showNav = newShowNav
-        if (this.showNav) {
-          this.$nextTick(() => {
-            this.updateProfilePicture()
-          })
-        }
-      }
     }
   },
   created () {
-    const name = 'Admin' // Replace this with your name
-
     let initials = ''
-    const words = name.split(' ')
+    const words = this.user.name.split(' ')
     if (words.length === 1) {
-      initials = name.charAt(0).toUpperCase()
+      initials = this.user.name.charAt(0).toUpperCase()
     } else {
       initials = words[0].charAt(0).toUpperCase() + words[1].charAt(0).toUpperCase()
     }
-
     this.randomColor = this.getRandomColor()
 
     this.drawProfilePicture(initials, this.randomColor)
+    this.drawProfilePictureDashboard(initials, this.randomColor)
+    this.updateShowNav()
   },
   mounted () {
     window.addEventListener('click', this.handleOutsideClick)
     window.addEventListener('resize', this.updateShowNav)
+    window.addEventListener('resize', this.checkDashboard)
   },
   beforeUnmount () {
     window.removeEventListener('click', this.handleOutsideClick)
     window.removeEventListener('resize', this.updateShowNav)
+    window.removeEventListener('resize', this.checkDashboard)
   }
 }
 </script>
-
-<style>
-#admin {
-  background-color: #004d57 !important;
-  flex-direction: column !important;
-  width: 7%;
-  height: 100vh;
-}
-nav a.router-link-active {
-  background-color: #7a672b !important;
-  font-weight: bold;
-}
-#admin a {
-  font-size: 16px;
-  color: white;
-  text-align: left !important;
-  padding: 24px 16px;
-  text-decoration: none;
-  width: 100% !important;
-}
-
-#admin a:hover {
-  background-color: #7a672b;
-}
-.logo-container-admin {
-  display: flex;
-  align-items: center;
-  width: 100%;
-}
-
-.nav-admin {
-  display: flex;
-  width: 100%;
-  flex-direction: column-reverse !important;
-  align-items: flex-start;
-}
-.dropdown-profile-admin {
-  display: flex;
-  font-size: 16px;
-  color: white;
-  text-decoration: none;
-  flex-direction: column;
-  align-items: flex-start;
-}
-.dropdown-profile-content-admin a {
-  color: white;
-  text-decoration: none;
-  display: block;
-  font-size: 16px;
-  float: none;
-  padding: 24px 16px;
-}
-.dropdown-profile-content-admin a:hover {
-  background-color: #7a672b;
-  transition: 0.2s;
-  color: white;
-  padding: 24px 16px;
-  text-decoration: none;
-  display: block;
-  font-size: 16px;
-}
-.dropdownProfileAdmin-enter-active,
-.dropdownProfileAdmin-leave-active {
-  transition: all 0.5s;
-  height: 219px
-}
-
-.dropdownProfileAdmin-enter-from,
-.dropdownProfileAdmin-leave-to {
-  opacity: 0;
-  height: 0px;
-}
-.profile-admin {
-  border-radius: 50%;
-  border-color: #ffffff;
-  border-style: solid;
-  border-width: 2px;
-  cursor: pointer;
-}
-
-.profile-admin:hover {
-  border-color: #7a672b;
-}
-#profileDiv {
-  padding: 0px 16px;
-  margin-top: 1rem;
-}
-
-.dropdown-profile-content-admin {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-}
-
-@media only screen and (max-width: 1200px) {
-  #admin a {
-    padding: 24px 7px;
-    font-size: 14px;
-  }
-  #admin a:hover {
-    padding: 24px 7px;
-    font-size: 14px;
-  }
-  .dropdown-profile-content-admin a {
-    padding: 24px 7px;
-    font-size: 14px;
-  }
-  .dropdown-profile-content-admin a:hover {
-    padding: 24px 7px;
-    font-size: 14px;
-  }
-  #profileDiv {
-    padding: 0px 7px;
-    margin-top: 1rem;
-  }
-}
-
-@media only screen and (max-width: 980px) {
-  #admin a {
-    padding: 22px 6px;
-    font-size: 13px;
-  }
-  #admin a:hover {
-    padding: 22px 6px;
-    font-size: 13px;
-  }
-  .dropdown-profile-content-admin a {
-    padding: 22px 6px;
-    font-size: 14px;
-  }
-  .dropdown-profile-content-admin a:hover {
-    padding: 22px 6px;
-    font-size: 14px;
-  }
-  #profileDiv {
-    padding: 0px 6px;
-    margin-top: 1rem;
-  }
-  #logo {
-    width: 120%;
-  }
-}
-
-@media only screen and (max-width: 700px) {
-  #admin a {
-    padding: 22px 6px;
-    font-size: 13px;
-  }
-  #admin a:hover {
-    padding: 22px 6px;
-    font-size: 13px;
-  }
-  .dropdown-profile-content-admin a {
-    padding: 22px 6px;
-    font-size: 14px;
-  }
-  .dropdown-profile-content-admin a:hover {
-    padding: 22px 6px;
-    font-size: 14px;
-  }
-  #profileDiv {
-    padding: 0px 6px;
-    margin-top: 1rem;
-  }
-}
-
-@media only screen and (max-width: 500px) {
-  #admin a {
-    padding: 22px 6px;
-    font-size: 13px;
-  }
-  #admin a:hover {
-    padding: 22px 6px;
-    font-size: 13px;
-  }
-  .dropdown-profile-content-admin a {
-    padding: 22px 6px;
-    font-size: 14px;
-  }
-  .dropdown-profile-content-admin a:hover {
-    padding: 22px 6px;
-    font-size: 14px;
-  }
-  #profileDiv {
-    padding: 0px 6px;
-    margin-top: 1rem;
-  }
-}
-</style>
