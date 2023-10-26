@@ -15,12 +15,12 @@ export class Event {
   static createSampleEvents (index) {
     const id = Math.floor(Math.random() * 100) + 1
     const imageIndex = Math.floor(Math.random() * 2)
-    const nameSuffix = ['Amsterdam', 'Rotterdam', 'Arnhem', 'Zaandam'][index]
-    const date = ['2023-10-09', '2023-10-09', '2023-12-09', '2024-01-09'][index]
+    const nameSuffix = ['Amsterdam', 'Rotterdam', 'Arnhem', 'Zaandam', 'Utrecht', 'Edam', 'Purmerend', 'Brabant', 'Assen', 'Den Haag', 'Haarlem', 'Hilversum'][index]
+    const date = ['2023-10-09', '2023-10-09', '2023-12-09', '2024-01-09', '2024-01-25', '2024-01-25', '2024-01-25', '2024-08-20', '2024-04-06', '2024-03-29', '2024-10-7'][index]
     const timeBegin = '12:00'
     const timeEnd = '15:00'
-    const price = [null, null, null, 50][index]
-    const location = ['Amsterdam Dam', 'Rotterdam Ahoy', 'Villa Sansbeek', 'Zaandam'][index]
+    const price = [null, null, null, 50, null, null, null, 50, null, null, null, 50, null, null, null, 50][index]
+    const location = ['Amsterdam Dam', 'Rotterdam Ahoy', 'Villa Sansbeek', 'Zaandam', 'Utrecht', 'Edam', 'Purmerend', 'Brabant', 'Assen', 'Den Haag', 'Haarlem', 'Hilversum'][index]
     const info = [
       'Are you a supporter of sustainability and a good time? Then we warmly invite you to the Green Gathering in Amsterdam! Alongside experts like Sarah Groenewoud from EcoEats, the Municipality of Utrecht, and various other businesses in the food sector and events industry, we will engage in discussions about how sustainability plays a pivotal role in their endeavors. Together, we will explore innovative solutions to comply with the latest environmental regulations and combat plastic pollution.',
       "Do you share a passion for both sustainability and a good time? If so, we invite you to the Eco-Friendly Hangout in Rotterdam! Join us alongside environmental enthusiasts, including local eco-leaders, the City of Amsterdam, and fellow businesses in the hospitality and events sectors, as we delve into the importance of sustainability in our endeavors. Together, we'll embark on a quest to find innovative solutions to meet the latest Single Use Plastics regulations that came into force this year.",
