@@ -59,6 +59,13 @@ nav a.router-link-active {
 
 }
 
+.dashboard-links-small a.router-link-active {
+    font-weight: bold;
+    background-color: var(--main-color-hover-admin)
+
+
+}
+
 nav a {
     text-decoration: none;
     color: var(--main-text-color);
@@ -348,8 +355,12 @@ nav a:hover {
 
 .dashboard {
     display: flex;
-    width: fit-content;
     flex-direction: column;
+    width: 313px;
+}
+
+.small {
+    width: 88px !important;
 }
 
 
@@ -387,7 +398,7 @@ nav a:hover {
     display: flex;
     flex-direction: column;
     padding: 18px 45px;
-    height: 65.6vh;
+    height: 69.6vh;
 }
 
 .dashboard-links-small {
@@ -396,7 +407,7 @@ nav a:hover {
     display: flex;
     flex-direction: column;
     padding: 18px 14px;
-    height: 83.2vh;
+    height: 85.2vh;
 }
 
 .dashboard-links a {
@@ -462,38 +473,29 @@ nav a:hover {
 
 .dashboard-big-enter-active,
 .dashboard-big-leave-active {
-    /*.profile-dashboard {*/
-    /*    background-color: var(--main-color-admin);*/
-    /*}*/
-    /*.dashboard-links a {*/
-    /*    visibility: hidden;*/
-    /*    display: none;*/
-    /*}*/
-    /*.profile-dashboard canvas, .profile-dashboard p {*/
-    /*    visibility: hidden;*/
-    /*    display: none;*/
-    /*}*/
-    /*.dashboard-links-small a {*/
-    /*    display: none;*/
-    /*    visibility: hidden;*/
-    /*}*/
+    .profile-dashboard {
+        background-color: var(--main-color-admin)
+    }
+    .profile-dashboard canvas, .profile-dashboard p {
+        visibility: hidden;
+    }
+    .dashboard-links a {
+        display: none
+    }
     transition: all 0.5s;
     width: 313px;
 }
 
 .dashboard-big-enter-from,
 .dashboard-big-leave-to {
-    .dashboard-links a {
-        opacity: 0 !important;
+    .profile-dashboard {
+        background-color: var(--main-color-admin)
     }
     .profile-dashboard canvas, .profile-dashboard p {
-        opacity: 0 !important;
+        visibility: hidden;
     }
-    .dashboard-links-small a {
-        opacity: 0;
-    }
-    .profile-dashboard {
-        background-color: var(--main-color-admin);
+    .dashboard-links a {
+        display: none
     }
     width: 88px;
     overflow: hidden;
@@ -501,9 +503,8 @@ nav a:hover {
 
 .dashboard-small-enter-active,
 .dashboard-small-leave-active {
-    .dashboard-links-small a {
-        display: none;
-        visibility: hidden;
+    .dashboard-links-small {
+        display: none
     }
     transition: all 0.5s;
     width: 88px
@@ -512,11 +513,10 @@ nav a:hover {
 
 .dashboard-small-enter-from,
 .dashboard-small-leave-to {
-    .dashboard-links-small a {
-        display: none;
-        visibility: hidden;
+    .dashboard-links-small {
+        display: none
     }
-    width: 313px
+    width: 0px
 }
 
 
