@@ -21,7 +21,10 @@ body {
     margin: 0;
 }
 
-
+.container {
+    width: 80%;
+    margin: auto;
+}
 
 input {
     font-family: 'Poppins', sans-serif;
@@ -48,6 +51,12 @@ nav {
 nav a.router-link-active {
     font-weight: bold;
     background-color: var(--main-color-hover)
+}
+.dashboard-links a.router-link-active {
+    font-weight: bold;
+    background-color: var(--main-color-hover-admin)
+
+
 }
 
 nav a {
@@ -309,6 +318,9 @@ nav a:hover {
 
 
 /* NavBar - Admin */
+.dashboard-container {
+    display: flex;
+}
 #admin {
     background-color: var(--main-color-admin)
 }

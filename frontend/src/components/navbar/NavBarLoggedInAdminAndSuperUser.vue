@@ -29,6 +29,7 @@
       </div>
   </nav>
   <transition name="dashboard-big">
+    <div class="dashboard-container">
   <div class="dashboard" v-show="showDashboard && !smallVersionDasboard">
     <div class="profile-dashboard" >
       <canvas ref="profileCanvasDashboard" class="profile-photo-dashboard" width="45" height="45"></canvas>
@@ -49,6 +50,8 @@
       </router-link>
     </div>
   </div>
+      <router-view></router-view>
+    </div>
   </transition>
   <transition name="dashboard-small">
   <div class="dashboard" v-show="smallVersionDasboard">

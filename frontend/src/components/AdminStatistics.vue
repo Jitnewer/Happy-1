@@ -78,11 +78,6 @@ export default {
 </script>
 
 <style scoped>
-.container {
-  text-align: left;
-  display: flex;
-  justify-content: center;
-}
 
 .users-amount-container {
   height: 80%;
