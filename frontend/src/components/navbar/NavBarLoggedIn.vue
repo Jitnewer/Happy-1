@@ -98,7 +98,7 @@ export default {
       this.showProfile = !this.showProfile
     },
     updateShowNav () {
-      this.showNav = window.innerWidth >= 860
+      this.showNav = window.innerWidth >= 1050
     },
     showDropdownContent () {
       this.$refs.dropdownContent.style.visibility = 'visible'

@@ -86,6 +86,7 @@ nav a:hover {
     width: 100%;
     justify-content: space-between;
     padding: 0px 35px;
+    z-index: 1;
 }
 
 .nav-links-left {
@@ -202,10 +203,7 @@ nav a:hover {
 @media only screen and (max-width: 1280px) {
 }
 
-@media only screen and (max-width: 1024px) {
-}
-
-@media only screen and (max-width: 860px) {
+@media only screen and (max-width: 1050px) {
     .nav-links {
         position: absolute;
         top: 99%;
@@ -271,9 +269,12 @@ nav a:hover {
         .profile {
             opacity: 0;
         }
+        .profile-d {
+            opacity: 0;
+        }
         transition: all 0.5s ease-in-out;
         transition-delay: 0.1s;
-        height: 212px;
+        height: 299px;
     }
 
 
@@ -298,9 +299,22 @@ nav a:hover {
         .nav-links-right a {
             opacity: 0;
         }
+        .profile {
+            opacity: 0;
+        }
+        .profile-d {
+            opacity: 0;
+        }
         opacity: 0;
         height: 0px;
     }
+}
+
+@media only screen and (max-width: 1024px) {
+}
+
+@media only screen and (max-width: 860px) {
+
 }
 
 @media only screen and (max-width: 768px) {
@@ -866,6 +880,7 @@ nav a:hover {
 .events-main {
     display: flex;
     justify-content: space-between;
+    position: relative;
 }
 
 .events-main h1 {
@@ -879,6 +894,8 @@ nav a:hover {
     padding: 1rem 1.5rem;
     font-size: 18px;
     box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+    cursor: pointer;
+    transition: 0.5s;
 }
 
 .events-main input {
@@ -905,9 +922,9 @@ nav a:hover {
 }
 
 .events {
-    grid-template-columns: repeat(3, 497px);
+    grid-template-columns: repeat(3, 470px);
     display: grid;
-    gap: 1rem;
+    gap: 3.5rem;
     margin-block: 3rem;
 }
 
@@ -921,6 +938,8 @@ nav a:hover {
     padding: 0.5rem;
     display: flex;
     gap: 0.5rem;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .event {
@@ -930,11 +949,12 @@ nav a:hover {
 }
 
 .event img {
-    width: 200px;
+    width: 180px;
     height: 100%;
     -o-object-fit: cover;
     object-fit: cover;
     box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+    aspect-ratio: 16/18;
 }
 .event-right-left {
     display: flex;
@@ -949,6 +969,7 @@ nav a:hover {
     width: 100%;
     margin-top: 2rem;
     align-items: flex-end;
+    height: max-content;
 }
 
 .event h1 , .event h3, .event p {
@@ -969,4 +990,390 @@ nav a:hover {
     margin: 0
 }
 
+
+.event button {
+    background-color: var(--main-color-hover);
+    color: var(--main-text-color);
+    border-style: none;
+    padding: 0.5rem 1.25rem;
+    font-size: 18px;
+    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+    cursor: pointer;
+    transition: 0.5s;
+
+}
+
+.event button:hover {
+    background-color: var(--main-color-hover-admin);
+
+}
+.events-main button:hover {
+    background-color: var(--main-color-hover-admin);
+}
+
+
+.event-right-main {
+    display: flex;
+}
+
+.event-right-bottom {
+    display: flex;
+    justify-content: space-between;
+}
+
+.event-filter {
+    position: absolute;
+    display: flex;
+    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+    padding: 2rem;
+    z-index: 15;
+    top: 78px;
+    left: 111px;
+    gap: 2rem;
+    background-color: white;
+}
+
+.event-filter input {
+    box-shadow: none;
+    padding: 0;
+    width: 23px;
+
+}
+
+
+.event-filter p {
+    color: black
+}
+
+.filter-desc {
+    display: flex;
+    align-items: center;
+}
+
+.filter-asc {
+    display: flex;
+    align-items: center;
+}
+
+.event-filter input {
+
+}
+
+.filter-enter-active,
+.filter-leave-active {
+    .filter-asc {
+        opacity: 0;
+    }
+    .filter-desc {
+        opacity: 0;
+    }
+    transition: all 0.5s ease-in-out;
+    height: 57px
+}
+
+.filter-enter-from,
+.filter-leave-to {
+    .filter-asc {
+        opacity: 0;
+    }
+    .filter-desc {
+        opacity: 0;
+    }
+    height: 0;
+    opacity: 0;
+}
+
+@media only screen and (max-width: 1730px) {
+    .events {
+        grid-template-columns: repeat(2, 511px);
+        display: grid;
+        gap: 3.5rem;
+        margin-block: 3rem;
+        justify-content: space-around;
+    }
+}
+
+@media only screen and (max-width: 1280px) {
+    .events {
+        grid-template-columns: repeat(2, 462px);
+        display: grid;
+        gap: 3.5rem;
+        margin-block: 3rem;
+        justify-content: space-around;
+    }
+    .events-main input {
+        width: 400px;
+    }
+    .event-filter input {
+        width: 23px;
+    }
+}
+
+@media only screen and (max-width: 1024px) {
+    .events {
+        grid-template-columns: repeat(1, 570px);
+        display: grid;
+        margin-block: 3rem;
+        justify-content: center;
+    }
+    .events-main input {
+        width: 280px;
+    }
+    .event-filter input {
+        width: 23px;
+    }
+}
+
+@media only screen and (max-width: 860px) {
+    .events {
+        grid-template-columns: repeat(1, 570px);
+        display: grid;
+        margin-block: 3rem;
+        justify-content: center;
+    }
+    .events-main input {
+        width: 230px;
+    }
+    .events-main button{
+        padding: 0.75rem 1.25rem;
+    }
+    .event-filter input {
+        width: 23px;
+    }
+
+
+}
+
+@media only screen and (max-width: 768px) {
+    .container {
+        width: 90%;
+        margin: 1rem auto auto;
+    }
+    .events {
+        grid-template-columns: repeat(1, 500px);
+        display: grid;
+        margin-block: 3rem;
+        justify-content: center;
+    }
+    .events-main input {
+        width: 150px;
+        padding: 0.35rem 1.25rem;
+    }
+    .events-main {
+        flex-wrap: wrap;
+    }
+    .events-main button{
+        padding: 0.50rem 1.25rem;
+    }
+    .event h1 {
+        font-size: 20px
+    }
+
+    .event h3 {
+        font-size: 16px;
+        margin: 0;
+        width: max-content;
+    }
+
+    .event p {
+        margin: 0;
+        font-size: 14px
+    }
+    .events-main input::placeholder {
+        font-size: 10px
+    }
+    .event-filter input {
+        width: 23px;
+    }
+    .event-filter {
+        padding: 1rem;
+    }
+    .event-filter p {
+        font-size: 14px
+    }
+
+    .filter-enter-active,
+    .filter-leave-active {
+        .filter-asc {
+            opacity: 0;
+        }
+        .filter-desc {
+            opacity: 0;
+        }
+        transition: all 0.5s ease-in-out;
+        height: 49px
+    }
+
+}
+
+@media only screen and (max-width: 640px) {
+    .events {
+        grid-template-columns: repeat(1, 450px);
+        display: grid;
+        margin-block: 3rem;
+        justify-content: center;
+    }
+    .events-main button{
+        padding: 0.5rem 0.5rem;
+    }
+
+    .filter-enter-active,
+    .filter-leave-active {
+        .filter-asc {
+            opacity: 0;
+        }
+        .filter-desc {
+            opacity: 0;
+        }
+        transition: all 0.5s ease-in-out;
+        height: 49px
+    }
+    .filter-enter-from,
+    .filter-leave-to {
+        .filter-asc {
+            opacity: 0;
+        }
+        .filter-desc {
+            opacity: 0;
+        }
+        height: 0;
+        opacity: 0;
+    }
+}
+
+@media only screen and (max-width: 520px) {
+    .events {
+        grid-template-columns: repeat(1, 380px);
+        display: grid;
+        margin-block: 3rem;
+        justify-content: center;
+    }
+
+    .events-main button{
+        padding: 0.5rem 0.5rem;
+        font-size: 14px;
+
+    }
+    .event h1 {
+        font-size: 16px
+    }
+
+    .event h3 {
+        font-size: 12px;
+        margin: 0;
+        width: max-content;
+    }
+
+    .event p {
+        margin: 0;
+        font-size: 10px
+    }
+    .event button {
+        padding: 0.35rem 0.75rem;
+        font-size: 12px;
+    }
+    .events-main button{
+        padding: 0.35rem 0.75rem;
+        font-size: 12px
+    }
+    .event-filter p {
+        font-size: 10px
+    }
+    .event-filter {
+        padding: 0.75rem;
+    }
+
+    .filter-enter-active,
+    .filter-leave-active {
+        .filter-asc {
+            opacity: 0;
+        }
+        .filter-desc {
+            opacity: 0;
+        }
+        transition: all 0.5s ease-in-out;
+        height: 36px
+    }
+    .filter-enter-from,
+    .filter-leave-to {
+        .filter-asc {
+            opacity: 0;
+        }
+        .filter-desc {
+            opacity: 0;
+        }
+        height: 0;
+        opacity: 0;
+    }
+}
+
+@media only screen and (max-width: 420px) {
+    .events {
+        grid-template-columns: repeat(1, 350px);
+        display: grid;
+        margin-block: 3rem;
+        justify-content: center;
+    }
+
+    .events-main button{
+        padding: 0.5rem 0.5rem;
+        font-size: 12px;
+
+    }
+    .event h1 {
+        font-size: 14px
+    }
+
+    .event h3 {
+        font-size: 10px;
+        margin: 0;
+        width: max-content;
+    }
+
+    .event p {
+        margin: 0;
+        font-size: 8px
+    }
+    .event button {
+        padding: 0.35rem 0.75rem;
+        font-size: 10px;
+    }
+    .events-main button{
+        padding: 0.35rem 0.75rem;
+        font-size: 10px
+    }
+    .event-filter p {
+        font-size: 8px
+    }
+    .event-filter {
+        padding: 0.5rem;
+        top: 34px;
+        left: 224px;
+        display: flex;
+        gap: 0.5rem;
+        flex-direction: column;
+    }
+    .filter-enter-active,
+    .filter-leave-active {
+        .filter-asc {
+            opacity: 0;
+        }
+        .filter-desc {
+            opacity: 0;
+        }
+        transition: all 0.5s ease-in-out;
+        height: 64px
+    }
+    .filter-enter-from,
+    .filter-leave-to {
+        .filter-asc {
+            opacity: 0;
+        }
+        .filter-desc {
+            opacity: 0;
+        }
+        height: 0;
+        opacity: 0;
+    }
+}
 /* Events View */
