@@ -972,18 +972,23 @@ nav a:hover {
     height: max-content;
 }
 
-.event h1 , .event h3, .event p {
+.event h1, .event h2, .event h3, .event p {
     color: black;
 }
 
 .event h1 {
-    font-size: 25px
+    font-size: 25px;
+    margin: 0;
+}
+
+.event h2 {
+    font-size: 20px;
+    margin: 0 0 1rem;
 }
 
 .event h3 {
     font-size: 18px;
     margin: 0;
-    width: max-content;
 }
 
 .event p {
@@ -991,7 +996,7 @@ nav a:hover {
 }
 
 
-.event button {
+.event a, .event button {
     background-color: var(--main-color-hover);
     color: var(--main-text-color);
     border-style: none;
@@ -1000,10 +1005,10 @@ nav a:hover {
     box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
     cursor: pointer;
     transition: 0.5s;
-
+    text-decoration: none;
 }
 
-.event button:hover {
+.event a:hover, .event button:hover {
     background-color: var(--main-color-hover-admin);
 
 }
@@ -1169,6 +1174,11 @@ nav a:hover {
         font-size: 20px
     }
 
+    .event h2 {
+        font-size: 18px;
+    }
+
+
     .event h3 {
         font-size: 16px;
         margin: 0;
@@ -1258,6 +1268,10 @@ nav a:hover {
         font-size: 16px
     }
 
+    .event h2 {
+        font-size: 14px;
+    }
+
     .event h3 {
         font-size: 12px;
         margin: 0;
@@ -1268,7 +1282,7 @@ nav a:hover {
         margin: 0;
         font-size: 10px
     }
-    .event button {
+    .event a, .event button {
         padding: 0.35rem 0.75rem;
         font-size: 12px;
     }
@@ -1324,6 +1338,10 @@ nav a:hover {
         font-size: 14px
     }
 
+    .event h2 {
+        font-size: 12px;
+    }
+
     .event h3 {
         font-size: 10px;
         margin: 0;
@@ -1334,7 +1352,7 @@ nav a:hover {
         margin: 0;
         font-size: 8px
     }
-    .event button {
+    .event a, .event button {
         padding: 0.35rem 0.75rem;
         font-size: 10px;
     }
@@ -1377,3 +1395,91 @@ nav a:hover {
     }
 }
 /* Events View */
+
+.event-main {
+
+}
+
+.detail-event {
+    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+    display: flex;
+}
+
+.detail-event-left {
+
+}
+
+.detail-event-left img {
+    -o-object-fit: cover;
+    object-fit: cover;
+    aspect-ratio: 16/18;
+    width: 580px;
+    height: 100%;
+}
+
+.detail-event-right {
+    display: flex;
+    justify-content: space-between;
+}
+
+.detail-event-right-left {
+    display: flex;
+    flex-direction: column;
+}
+
+.detail-event-right-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.detail-event-right-main {
+    gap: 8rem;
+    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+    margin: 1rem;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+}
+
+
+.event-main h1 {
+    color: black;
+    margin: 0
+}
+
+.event-main h3 {
+    color: black;
+    margin: 0
+}
+
+.event-main p {
+    color: black;
+    margin: 0
+}
+
+.detail-event-right-bottom p {
+    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+    padding: 1rem
+}
+.event-title {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.event-title button {
+    background-color: var(--main-color-hover);
+    color: var(--main-text-color);
+    border-style: none;
+    padding: 0.5rem 1.25rem;
+    font-size: 18px;
+    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+    cursor: pointer;
+    transition: 0.5s;
+    text-decoration: none;
+}
+
+.event-title button:hover {
+    background-color: var(--main-color-hover-admin);
+}

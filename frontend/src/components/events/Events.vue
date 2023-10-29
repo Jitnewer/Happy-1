@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div v-if="selectedEvent === null" class="container">
     <div class="events-main">
       <div class="events-main-left">
         <h1>Events</h1>
@@ -29,7 +29,8 @@
         <div class="event-right">
           <div class="event-right-main">
             <div class="event-right-left">
-              <h1>{{ event.name }}</h1>
+              <h1>{{ event.city }}</h1>
+              <h2>{{ event.name }}</h2>
               <h3>{{ event.location }}</h3>
             </div>
             <div class="event-right-right">
@@ -39,13 +40,14 @@
             </div>
           </div>
           <div class="event-right-bottom">
-            <button>More Info</button>
+            <button @click="selectEventMoreInfo(event)" >More Info</button>
             <button>Sign In</button>
           </div>
         </div>
       </div>
     </div>
   </div>
+  <router-view ref="event" :selectedEvent="selectedEvent"></router-view>
 </template>
 
 <script>
@@ -59,7 +61,24 @@ export default {
       events: [],
       search: null,
       filter: 'asc',
-      showFilter: false
+      showFilter: false,
+      selectedEvent: null
+    }
+  },
+  created () {
+    for (let i = 0; i < 12; i++) {
+      this.events.push(Event.createSampleEvents2(this.nextId()))
+    }
+  },
+  watch: {
+    '$route' (to, from) {
+      const eventId = to.params.id
+      console.log(eventId)
+      if (eventId) {
+        this.selectedEvent = this.events.find(event => event.id === parseInt(eventId))
+      } else {
+        this.selectedEvent = null
+      }
     }
   },
   methods: {
@@ -72,6 +91,9 @@ export default {
     nextId () {
       this.lastId = this.lastId + Math.floor(Math.random() * 5) + 1 // Ensure uniqueness
       return this.lastId
+    },
+    selectEventMoreInfo (event) {
+      this.$router.push({ name: 'event', params: { id: event.id } })
     },
     searchEvent () {
       return this.events.filter(event => {
@@ -90,6 +112,9 @@ export default {
         this.showFilter = false
       }
     },
+    isSelected (event) {
+      return event === this.selectedEvent
+    },
     parseDate (dateString) {
       const parts = dateString.split('-')
       return new Date(parts[2], parts[1] - 1, parts[0])
@@ -102,11 +127,7 @@ export default {
       }
     }
   },
-  created () {
-    for (let i = 0; i < 12; i++) {
-      this.events.push(Event.createSampleEvents2(this.nextId()))
-    }
-  },
+
   computed: {
     filteredEventsOnDate () {
       const sortedEvents = this.events.slice().sort((a, b) => {

@@ -1,9 +1,10 @@
 
 export class Event {
-  constructor (id, image, name, date, timeBegin, timeEnd, price, location, info) {
+  constructor (id, image, name, city, date, timeBegin, timeEnd, price, location, info) {
     this.id = id
     this.image = image
     this.name = name
+    this.city = city
     this.date = date
     this.timeBegin = timeBegin
     this.timeEnd = timeEnd
@@ -55,11 +56,10 @@ export class Event {
   }
 
   static createSampleEvents2 (pId = 0) {
-    const imageIndex = Math.floor(Math.random() * 2)
     const images = [require('../assets/images/arnhem-event.jpg'), require('../assets/images/rotterdam-event.webp'), require('../assets/images/restaurant-nederland.png'), require('../assets/images/cafe-nederland.png')]
     const names = ['Kroegpraat', 'Cafépraat', 'Lounge Borrel']
     const cities = ['Amsterdam', 'Rotterdam', 'Arnhem', 'Zaandam', 'Utrecht', 'Edam', 'Purmerend', 'Brabant', 'Assen', 'Den Haag', 'Haarlem', 'Hilversum']
-    const locations = ['Amsterdam Dam', 'Rotterdam Ahoy', 'Villa Sansbeek', 'Zaandam', 'Utrecht', 'Edam', 'Purmerend', 'Brabant', 'Assen', 'Den Haag', 'Haarlem', 'Hilversum']
+    const locations = ['Amsterdam Dam Restaurant', 'Rotterdam Ahoy Lounge', 'Villa Sansbeek Bistro', 'Zaandam Delightful Diner', 'Utrecht Culinary Corner', 'Edam Cheese Haven', 'Purmerend Oasis Bar', 'Brabant Gastropub', 'Assen Retreat Cafe', 'Den Haag Coastal Eatery', 'Haarlem Vineyard Lounge', 'Hilversum Skyline Bistro']
     const infos = [
       'Are you a supporter of sustainability and a good time? Then we warmly invite you to the Green Gathering in Amsterdam! Alongside experts like Sarah Groenewoud from EcoEats, the Municipality of Utrecht, and various other businesses in the food sector and events industry, we will engage in discussions about how sustainability plays a pivotal role in their endeavors. Together, we will explore innovative solutions to comply with the latest environmental regulations and combat plastic pollution.',
       "Do you share a passion for both sustainability and a good time? If so, we invite you to the Eco-Friendly Hangout in Rotterdam! Join us alongside environmental enthusiasts, including local eco-leaders, the City of Amsterdam, and fellow businesses in the hospitality and events sectors, as we delve into the importance of sustainability in our endeavors. Together, we'll embark on a quest to find innovative solutions to meet the latest Single Use Plastics regulations that came into force this year.",
@@ -67,15 +67,28 @@ export class Event {
       "Do you believe in the importance of sustainability while enjoying a great atmosphere? Then don't miss out on the Sustainable Social Gathering in Arnhem! Together with industry leaders like Emily Greenfield from Green Eats, the Rotterdam City Council, and several other hospitality and event professionals, we will discuss the impact of sustainability on our businesses. Additionally, we'll be on the hunt for the ultimate solution to comply with the new Single Use Plastics legislation that has been in effect since the beginning of the year.",
       'Are you a supporter of sustainability and a good time? Then we warmly invite you to the Green Gathering in Amsterdam! Alongside experts like Sarah Groenewoud from EcoEats, the Municipality of Utrecht, and various other businesses in the food sector and events industry, we will engage in discussions about how sustainability plays a pivotal role in their endeavors. Together, we will explore innovative solutions to comply with the latest environmental regulations and combat plastic pollution.'
     ]
+
+    const cityName = cities[Math.floor(Math.random() * 12)]
+    let location
+
+    const matchingLocations = locations.filter(location => location.toLowerCase().includes(cityName.toLowerCase()))
+
+    if (matchingLocations.length > 0) {
+      location = matchingLocations[Math.floor(Math.random() * matchingLocations.length)]
+    } else {
+      location = locations[Math.floor(Math.random() * 12)]
+    }
+
     return new Event(
       pId,
       images[Math.floor(Math.random() * 4)],
-      ` ${names[Math.floor(Math.random() * 3)]} - ${cities[Math.floor(Math.random() * 12)]}`,
+      `${names[Math.floor(Math.random() * 3)]}`,
+      cityName,
       this.getRandomDate(),
       this.getRandomTimeBegin(),
       this.getRandomTimeEnd(this.getRandomTimeBegin()),
       this.getRandomPrice(),
-      locations[Math.floor(Math.random() * 12)],
+      location,
       infos[Math.floor(Math.random() * 5)]
     )
   }
