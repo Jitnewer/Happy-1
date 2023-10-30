@@ -1,6 +1,6 @@
 
 export class Event {
-  constructor (id, image, name, city, date, timeBegin, timeEnd, price, location, info) {
+  constructor (id, image, name, city, date, timeBegin, timeEnd, price, location, info, size, participants) {
     this.id = id
     this.image = image
     this.name = name
@@ -11,6 +11,23 @@ export class Event {
     this.price = price
     this.location = location
     this.info = info
+    this.size = size
+    this.participants = []
+  }
+
+  addParticipant (name) {
+    this.participants.push(name)
+  }
+
+  removeParticipant (name) {
+    const index = this.participants.indexOf(name)
+    if (index !== -1) {
+      this.participants.splice(index, 1)
+    }
+  }
+
+  getDate () {
+    return this.date
   }
 
   static createSampleEvents (index) {
@@ -89,7 +106,8 @@ export class Event {
       this.getRandomTimeEnd(this.getRandomTimeBegin()),
       this.getRandomPrice(),
       location,
-      infos[Math.floor(Math.random() * 5)]
+      infos[Math.floor(Math.random() * 5)],
+      Math.floor(Math.random() * (40 - 10 + 1) + 10)
     )
   }
 
@@ -128,7 +146,11 @@ export class Event {
     const randomTimestamp = today.getTime() + Math.random() * (nextYear.getTime() - today.getTime())
     const randomDate = new Date(randomTimestamp)
 
-    return `${randomDate.getDate()}-${randomDate.getMonth()}-${randomDate.getFullYear()}`
+    const day = randomDate.getDate()
+    const month = randomDate.getMonth() + 1 // Add 1 to the month value
+    const year = randomDate.getFullYear()
+
+    return `${day}-${month}-${year}`
   }
 
   static getRandomPrice () {

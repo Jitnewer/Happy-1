@@ -34,7 +34,7 @@
 <script>
 export default {
   name: 'EventsDetails.vue',
-  props: ['selectedEvent'],
+  props: ['selectedEvent', 'filter'],
   methods: {
     formattedPrice (event) {
       if (event.price !== null) {
@@ -44,7 +44,7 @@ export default {
       }
     },
     back () {
-      this.$router.push({ name: 'events' })
+      this.$router.push({ name: 'events', query: { sort: this.filter } })
     }
   }
 }

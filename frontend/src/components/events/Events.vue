@@ -41,17 +41,54 @@
           </div>
           <div class="event-right-bottom">
             <button @click="selectEventMoreInfo(event)" >More Info</button>
-            <button>Sign In</button>
+            <button v-if="!isSignedIn(event)" @click="toggleSignIn(event)">Sign In</button>
+            <button :disabled="disableSignOut(event)" v-if="isSignedIn(event)" @click="toggleSignOut(event)">Sign Out</button>
           </div>
         </div>
       </div>
     </div>
   </div>
-  <router-view ref="event" :selectedEvent="selectedEvent"></router-view>
+  <div v-if="showSignIn" class="sign-in">
+    <div class="sign-in-title">
+      <h1>Are you sure you want to sign in?</h1>
+    </div>
+    <div class="sign-in-buttons">
+      <button @click="toggleSignIn">Cancel</button>
+      <button @click="signIn">Sign In</button>
+    </div>
+  </div>
+  <div v-if="showSignOut" class="sign-in">
+    <div class="sign-in-title">
+      <h1>Are you sure you want to sign Out?</h1>
+    </div>
+    <div class="sign-in-buttons">
+      <button @click="toggleSignOut">Cancel</button>
+      <button @click="signOut">Sign Out</button>
+    </div>
+  </div>
+  <div v-if="signInIn || signInOut">
+    <div class="loading-animation">
+      <div class="loadingio-spinner-spinner-p60giii2jcd"><div class="ldio-4bagb6lp0r">
+        <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+      </div></div>
+    </div>
+  </div>
+  <div v-if="signInComplete">
+    <div class="sign-in-complete">
+      <h1>You are signed in!</h1>
+      </div>
+  </div>
+  <div v-if="signOutComplete">
+    <div class="sign-in-complete">
+      <h1>You are signed out!</h1>
+    </div>
+  </div>
+  <router-view ref="event" :selectedEvent="selectedEvent" :filter="filter"></router-view>
 </template>
 
 <script>
 import { Event } from '@/models/event'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'Events.vue',
@@ -60,20 +97,28 @@ export default {
       lastId: 3000,
       events: [],
       search: null,
-      filter: 'asc',
+      filter: 'desc',
       showFilter: false,
-      selectedEvent: null
+      selectedEvent: null,
+      showSignIn: false,
+      showSignOut: false,
+      signInIn: false,
+      selectedEventsSignIn: null,
+      selectedEventsSignOut: null,
+      signInComplete: false,
+      signOutComplete: false,
+      signInOut: false
     }
   },
   created () {
     for (let i = 0; i < 12; i++) {
       this.events.push(Event.createSampleEvents2(this.nextId()))
     }
+    this.$router.push({ name: 'events', query: { sort: this.filter } })
   },
   watch: {
     '$route' (to, from) {
       const eventId = to.params.id
-      console.log(eventId)
       if (eventId) {
         this.selectedEvent = this.events.find(event => event.id === parseInt(eventId))
       } else {
@@ -85,8 +130,94 @@ export default {
     toggleFilter () {
       this.showFilter = !this.showFilter
     },
+    disableSignOut (event) {
+      // Get the current date
+      const today = new Date()
+
+      // Get the date string from the event and split it into day, month, and year
+      const [day, month, year] = event.getDate().split('-').map(Number)
+
+      // Create a Date object for the event date
+      const eventDate = new Date(year, month - 1, day)
+
+      // Calculate the difference in milliseconds
+      const timeDifference = eventDate - today
+
+      // Calculate the difference in days
+      const daysDifference = timeDifference / (1000 * 60 * 60 * 24)
+
+      // Check if the event is within 5 days from today
+      if (daysDifference <= 5) {
+        return true
+      } else {
+        return true
+      }
+    },
+    toggleSignIn (event) {
+      this.showSignIn = !this.showSignIn
+      if (this.selectedEventsSignIn !== null) {
+        this.selectedEventsSignIn = null
+      } else {
+        this.selectedEventsSignIn = event
+      }
+    },
+    isSignedIn (event) {
+      return !!event.participants.find(participant => participant === this.getFullName)
+    },
     updateFilter (filterValue) {
       this.filter = filterValue
+
+      this.$router.push({ name: 'events', query: { sort: filterValue } })
+    },
+    toggleSignOut (event) {
+      this.showSignOut = !this.showSignOut
+      if (this.selectedEventsSignOut !== null) {
+        this.selectedEventsSignOut = null
+      } else {
+        this.selectedEventsSignOut = event
+      }
+    },
+    signIn () {
+      this.showSignIn = false
+      this.signInIn = true
+
+      // First timeout: Add participant after 10 seconds
+      setTimeout(() => {
+        this.selectedEventsSignIn.addParticipant(this.getFullName)
+      }, 15000)
+
+      // Second timeout: Hide signInIn and set signInComplete after 10 seconds
+      setTimeout(() => {
+        this.signInIn = false
+        this.signInComplete = true
+
+        // Third timeout: Reset selectedEventsSignIn after 5 seconds
+        setTimeout(() => {
+          this.signInComplete = false
+          this.selectedEventsSignIn = null
+        }, 5000)
+      }, 10000)
+    },
+    signOut () {
+      this.showSignOut = false
+      this.signInOut = true
+
+      // First timeout: Add participant after 10 seconds
+      setTimeout(() => {
+        this.selectedEventsSignOut.removeParticipant(this.getFullName)
+      }, 15000)
+
+      // Second timeout: Hide signInIn and set signInComplete after 10 seconds
+      setTimeout(() => {
+        this.signInOut = false
+        this.signOutComplete = true
+
+        // Third timeout: Reset selectedEventsSignIn after 5 seconds
+        setTimeout(() => {
+          this.signOutComplete = false
+          this.selectedEventsSignOut = null
+        }, 5000)
+      }, 10000)
     },
     nextId () {
       this.lastId = this.lastId + Math.floor(Math.random() * 5) + 1 // Ensure uniqueness
@@ -133,11 +264,12 @@ export default {
       const sortedEvents = this.events.slice().sort((a, b) => {
         const dateA = new Date(this.parseDate(a.date))
         const dateB = new Date(this.parseDate(b.date))
-        return this.filter === 'asc' ? dateA - dateB : dateB - dateA
+        return this.filter === 'asc' ? dateB - dateA : dateA - dateB
       })
 
       return this.search ? this.searchEvent(sortedEvents) : sortedEvents
-    }
+    },
+    ...mapGetters(['getFullName'])
   },
   mounted () {
     window.addEventListener('click', this.handleOutsideClick)
