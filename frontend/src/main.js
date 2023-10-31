@@ -26,12 +26,16 @@ const store = createStore({
   mutations: {
     setLoggedIn (state, value) {
       state.loggedIn = value
+    },
+    setFullName (state, name) {
+      state.fullName = name
     }
   },
   getters: {
     isLoggedIn: state => state.loggedIn > 1,
     isAdmin: state => state.loggedIn > 2,
-    isSuperUser: state => state.loggedIn > 3
+    isSuperUser: state => state.loggedIn > 3,
+    getFullName: state => state.fullName
   },
   plugins: [createPersistedState({
     storage: {
@@ -39,6 +43,7 @@ const store = createStore({
       setItem: (key, value) => Cookies.set(key, value, { expires: 365 }),
       removeItem: (key) => Cookies.remove(key)
     }
+
   })]
 })
 

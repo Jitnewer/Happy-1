@@ -83,22 +83,17 @@ export default {
       showDashboard: true,
       randomColor: '',
       user: {
-        name: 'Rick Veerman',
+        name: this.getFullName,
         role: 'Admin'
       }
     }
   },
   computed: {
-    ...mapGetters(['isLoggedIn'])
+    ...mapGetters(['isLoggedIn']),
+    ...mapGetters(['getFullName'])
   },
   methods: {
     ...mapMutations(['setLoggedIn']),
-    login () {
-      this.setLoggedIn(1) // Log in as a user
-    },
-    loginAdmin () {
-      this.setLoggedIn(2) // Log in as a admin
-    },
     logout () {
       this.setLoggedIn(0)
     },

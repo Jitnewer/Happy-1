@@ -33,7 +33,7 @@
           <div class="dropdown-profile" @click="toggleProfile">
             <div class="profile-d">
             <canvas ref="profileCanvas" class="profile" width="45" height="45"></canvas>
-                <p id="profile-name"> {{ this.name }}</p>
+                <p id="profile-name"> {{ this.getFullName }}</p>
               <div class="caret">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Pro 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M182.6 137.4c-12.5-12.5-32.8-12.5-45.3 0l-128 128c-9.2 9.2-11.9 22.9-6.9 34.9s16.6 19.8 29.6 19.8H288c12.9 0 24.6-7.8 29.6-19.8s2.2-25.7-6.9-34.9l-128-128z"/></svg>
               </div>
@@ -68,21 +68,14 @@ export default {
       showNav: false,
       showDropdown: false,
       showProfile: false,
-      randomColor: '',
-      name: 'Rick Veerman'
+      randomColor: ''
     }
   },
   computed: {
-    ...mapGetters(['isLoggedIn'])
+    ...mapGetters(['isLoggedIn', 'getFullName'])
   },
   methods: {
     ...mapMutations(['setLoggedIn']),
-    login () {
-      this.setLoggedIn(1) // Log in as a user
-    },
-    loginAdmin () {
-      this.setLoggedIn(2) // Log in as a admin
-    },
     logout () {
       this.setLoggedIn(0)
     },
@@ -98,7 +91,7 @@ export default {
       this.showProfile = !this.showProfile
     },
     updateShowNav () {
-      this.showNav = window.innerWidth >= 860
+      this.showNav = window.innerWidth >= 1050
     },
     showDropdownContent () {
       this.$refs.dropdownContent.style.visibility = 'visible'
@@ -144,9 +137,9 @@ export default {
   },
   created () {
     let initials = ''
-    const words = this.name.split(' ')
+    const words = this.getFullName.split(' ')
     if (words.length === 1) {
-      initials = this.name.charAt(0).toUpperCase()
+      initials = this.getFullName.charAt(0).toUpperCase()
     } else {
       initials = words[0].charAt(0).toUpperCase() + words[1].charAt(0).toUpperCase()
     }
@@ -154,6 +147,7 @@ export default {
 
     this.drawProfilePicture(initials, this.randomColor)
     this.updateShowNav()
+    console.log(this.getFullName)
   },
   mounted () {
     window.addEventListener('click', this.handleOutsideClick)

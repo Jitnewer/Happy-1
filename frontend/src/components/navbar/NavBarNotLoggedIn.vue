@@ -28,15 +28,19 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['isLoggedIn'])
+    ...mapGetters(['isLoggedIn']),
+    ...mapGetters(['getFullName'])
   },
   methods: {
     ...mapMutations(['setLoggedIn']),
+    ...mapMutations(['setFullName']),
     login () {
       this.setLoggedIn(1) // Log in as a user
+      this.setFullName('Rick Veerman')
     },
     loginAdmin () {
       this.setLoggedIn(2) // Log in as a admin
+      this.setFullName('Rick Veerman')
     },
     toggleNav () {
       this.showNav = !this.showNav
