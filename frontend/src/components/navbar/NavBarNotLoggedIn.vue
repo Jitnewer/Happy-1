@@ -28,8 +28,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['isLoggedIn']),
-    ...mapGetters(['getFullName'])
+    ...mapGetters(['isLoggedIn'])
   },
   methods: {
     ...mapMutations(['setLoggedIn']),
