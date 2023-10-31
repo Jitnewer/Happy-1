@@ -73,15 +73,17 @@
       </div></div>
     </div>
   </div>
-  <div v-if="signInComplete">
+  <div v-if="signInComplete || signOutComplete">
     <div class="sign-in-complete">
-      <h1>You are signed in!</h1>
+      <div class="success-checkmark">
+        <div class="check-icon">
+          <span class="icon-line line-tip"></span>
+          <span class="icon-line line-long"></span>
+          <div class="icon-circle"></div>
+          <div class="icon-fix"></div>
+        </div>
       </div>
-  </div>
-  <div v-if="signOutComplete">
-    <div class="sign-in-complete">
-      <h1>You are signed out!</h1>
-    </div>
+      </div>
   </div>
   <router-view ref="event" :selectedEvent="selectedEvent" :filter="filter"></router-view>
 </template>
@@ -150,7 +152,7 @@ export default {
       if (daysDifference <= 5) {
         return true
       } else {
-        return true
+        return false
       }
     },
     toggleSignIn (event) {
@@ -184,7 +186,7 @@ export default {
       // First timeout: Add participant after 10 seconds
       setTimeout(() => {
         this.selectedEventsSignIn.addParticipant(this.getFullName)
-      }, 15000)
+      }, 10000)
 
       // Second timeout: Hide signInIn and set signInComplete after 10 seconds
       setTimeout(() => {
@@ -195,8 +197,8 @@ export default {
         setTimeout(() => {
           this.signInComplete = false
           this.selectedEventsSignIn = null
-        }, 5000)
-      }, 10000)
+        }, 3000)
+      }, 7000)
     },
     signOut () {
       this.showSignOut = false
@@ -205,7 +207,7 @@ export default {
       // First timeout: Add participant after 10 seconds
       setTimeout(() => {
         this.selectedEventsSignOut.removeParticipant(this.getFullName)
-      }, 15000)
+      }, 10000)
 
       // Second timeout: Hide signInIn and set signInComplete after 10 seconds
       setTimeout(() => {
@@ -216,8 +218,8 @@ export default {
         setTimeout(() => {
           this.signOutComplete = false
           this.selectedEventsSignOut = null
-        }, 5000)
-      }, 10000)
+        }, 3000)
+      }, 7000)
     },
     nextId () {
       this.lastId = this.lastId + Math.floor(Math.random() * 5) + 1 // Ensure uniqueness
