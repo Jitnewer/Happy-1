@@ -10,6 +10,24 @@
         innovate from there for a sustainable catering industry.
       </p>
     </div>
+  <div>
+    <h1>
+      <span class="yellow-text">OUR</span> <span class="blue-text">THEMES</span>
+    </h1>
+    <div class="theme">
+      <button>
+        <img class="themeImg" src="@/assets/img/restaurant1.png" alt="">
+      </button>
+      <h5>In the dynamic world of hospitality, integrating sustainability practices into water management is a pivotal
+        step towards a greener and more responsible industry. From sourcing to consumption, every aspect of water usage
+        offers an opportunity for positive environmental impact. This journey involves conscious choices, such as
+        adopting water-efficient technologies, minimizing wastage, and embracing eco-friendly purification methods.
+        By navigating the waters of sustainability in the hospitality sector, establishments can not only contribute
+        to environmental conservation but also enhance their reputation as responsible stewards in the ever-evolving
+        landscape of hospitality.</h5>
+    </div>
+
+  </div>
 
     <div class="carouselHolder">
       <Carousel class="carousel" v-slot="{ currentSlide }">
@@ -27,10 +45,10 @@
         class="blue-text">ONS</span>
       </h1>
       <p>
-        We have all heard the bell tolling; one talks about sustainability, the other about circular business models or a
-        fair way of working. The newspaper is full of news about nitrogen, emissions, CO2 reduction and less meat.
-        Our pleasures are being restricted, no more flying for a weekend, no more meat, and now also out of the stove.
-        And the bad thing is that it all seems to be related and we have to take and bear that responsibility together.
+        In the hospitality sector, sustainability in water management is key. From sourcing to consumption, making
+        conscious choices like adopting water-efficient technologies and minimizing wastage can significantly reduce
+        environmental impact. By embracing eco-friendly practices, establishments not only contribute to conservation
+        but also bolster their reputation as responsible players in the evolving hospitality landscape.
       </p>
       <div class="imageHolder">
         <img class="homePageImg" src="@/assets/img/restaurant1.png" alt="">
@@ -58,5 +76,23 @@ export default {
 </script>
 
 <style scoped>
+.theme {
+  display: flex;
+  align-items: center;
+  border: 2px solid black;
+}
+.theme button {
+  background: none;
+  border: none;
+}
+.theme .themeImg {
+  width: 100%;
+  height: 100%;
 
+}
+
+.theme h5{
+  color: black;
+  margin-left: 20px;
+}
 </style>
