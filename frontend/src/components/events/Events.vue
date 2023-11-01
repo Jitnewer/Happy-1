@@ -24,7 +24,7 @@
     <div class="events">
       <div class="event" v-for="event in filteredEventsOnDate" :key="event.id">
         <div class="event-left">
-          <img :src="event.image" alt="Event Image">
+          <img :src="require(`../../assets/images/${event.image}`)" alt="Event Image">
         </div>
         <div class="event-right">
           <div class="event-right-main">
@@ -34,8 +34,8 @@
               <h3>{{ event.location }}</h3>
             </div>
             <div class="event-right-right">
-              <p>{{ event.date }}</p>
-              <p>{{ event.timeBegin }}-{{ event.timeEnd }}</p>
+              <p>{{ parseDate(event.date)  }}</p>
+              <p>{{ event.timeBegin.slice(0, 5) }} - {{ event.timeEnd.slice(0, 5) }}</p>
               <p> {{ formattedPrice(event) }}</p>
             </div>
           </div>
@@ -85,7 +85,7 @@
       </div>
       </div>
   </div>
-  <router-view ref="event" :selectedEvent="selectedEvent" :filter="filter"></router-view>
+  <router-view  :filter="filter"></router-view>
 </template>
 
 <script>
@@ -94,12 +94,13 @@ import { mapGetters } from 'vuex'
 
 export default {
   name: 'Events.vue',
+  inject: ['eventsService'],
   data () {
     return {
       lastId: 3000,
       events: [],
       search: null,
-      filter: 'desc',
+      filter: 'asc',
       showFilter: false,
       selectedEvent: null,
       showSignIn: false,
@@ -112,10 +113,8 @@ export default {
       signInOut: false
     }
   },
-  created () {
-    for (let i = 0; i < 12; i++) {
-      this.events.push(Event.createSampleEvents2(this.nextId()))
-    }
+  async created () {
+    this.events = await this.eventsService.asyncFindAll()
     this.$router.push({ name: 'events', query: { sort: this.filter } })
   },
   watch: {
@@ -149,11 +148,7 @@ export default {
       const daysDifference = timeDifference / (1000 * 60 * 60 * 24)
 
       // Check if the event is within 5 days from today
-      if (daysDifference <= 5) {
-        return true
-      } else {
-        return false
-      }
+      return daysDifference <= 5
     },
     toggleSignIn (event) {
       this.showSignIn = !this.showSignIn
@@ -221,10 +216,6 @@ export default {
         }, 3000)
       }, 7000)
     },
-    nextId () {
-      this.lastId = this.lastId + Math.floor(Math.random() * 5) + 1 // Ensure uniqueness
-      return this.lastId
-    },
     selectEventMoreInfo (event) {
       this.$router.push({ name: 'event', params: { id: event.id } })
     },
@@ -249,12 +240,16 @@ export default {
       return event === this.selectedEvent
     },
     parseDate (dateString) {
-      const parts = dateString.split('-')
-      return new Date(parts[2], parts[1] - 1, parts[0])
+      const dateObject = new Date(dateString)
+      const day = dateObject.getDate()
+      const month = dateObject.getMonth() + 1
+      const year = dateObject.getFullYear()
+
+      return `${day}-${month}-${year}`
     },
     formattedPrice (event) {
       if (event.price !== null) {
-        return `€${event.price.toFixed(2)},-`
+        return `€${event.price.toFixed(2).replace('.', ',')},-`
       } else {
         return 'N/A'
       }
@@ -263,12 +258,12 @@ export default {
 
   computed: {
     filteredEventsOnDate () {
+      console.log(this.events)
       const sortedEvents = this.events.slice().sort((a, b) => {
-        const dateA = new Date(this.parseDate(a.date))
-        const dateB = new Date(this.parseDate(b.date))
-        return this.filter === 'asc' ? dateB - dateA : dateA - dateB
+        const dateA = new Date(a.date)
+        const dateB = new Date(b.date)
+        return this.filter === 'asc' ? dateA - dateB : dateB - dateA
       })
-
       return this.search ? this.searchEvent(sortedEvents) : sortedEvents
     },
     ...mapGetters(['getFullName'])
