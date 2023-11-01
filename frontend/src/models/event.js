@@ -189,12 +189,14 @@ export class Event {
       event.id,
       event.image,
       event.name,
+      event.city,
       event.date,
       event.timeBegin,
       event.timeEnd,
       event.price,
       event.location,
-      event.info
+      event.info,
+      event.size
     )
   }
 }
