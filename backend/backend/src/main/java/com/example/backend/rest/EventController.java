@@ -1,10 +1,9 @@
 package com.example.backend.rest;
 
-import com.example.backend.repositories.EventRepository;
+import com.example.backend.repositories.event.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import com.example.backend.models.Event;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
 
 import java.util.List;
 

@@ -6,11 +6,11 @@
     <div class="nav-links" v-show="showNav">
       <div class="nav-links-left">
         <router-link to="/home">Home</router-link>
-        <router-link to="/home">About Us</router-link>
+        <router-link to="/about-us">About Us</router-link>
       </div>
       <div class="nav-links-right">
-        <router-link to="/home" @click="loginAdmin">Register</router-link>
-        <router-link to="/home" @click="login">Login</router-link>
+        <router-link to="/register">Register</router-link>
+        <router-link to="/login" @click="login">Login</router-link>
       </div>
     </div>
     </transition>
@@ -22,26 +22,29 @@ import { mapGetters, mapMutations } from 'vuex'
 
 export default {
   name: 'NavBar.vue',
+  inject: ['loginAndRegisterService'],
   data () {
     return {
       showNav: false
     }
   },
-  computed: {
-    ...mapGetters(['isLoggedIn'])
-  },
   methods: {
-    ...mapMutations(['setLoggedIn']),
-    ...mapMutations(['setFullName']),
-    login () {
-      this.setLoggedIn(1) // Log in as a user
-      this.setFullName('Rick Veerman')
-      this.$router.push({ path: '/home' })
-    },
-    loginAdmin () {
-      this.setLoggedIn(2) // Log in as a admin
-      this.setFullName('Rick Veerman')
-      this.$router.push({ path: '/admin/events' })
+    async login () {
+      try {
+        const user = await this.loginAndRegisterService.asyncLogin('nickybosveld@gmail.com', 'NickyBosveld')
+        if (user !== null) {
+          console.log(await this.loginAndRegisterService.asyncIsAdmin(user.id))
+          if (await this.loginAndRegisterService.asyncIsAdmin(user.id)) {
+            localStorage.setItem('email', 'nickybosveld@gmail.com')
+            this.$router.push({ path: '/admin/events' })
+          } else {
+            localStorage.setItem('email', 'nickybosveld@gmail.com')
+            this.$router.push({ path: '/home' })
+          }
+        }
+      } catch (e) {
+        console.error(e)
+      }
     },
     toggleNav () {
       this.showNav = !this.showNav
