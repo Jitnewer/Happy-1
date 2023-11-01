@@ -15,7 +15,7 @@
       <Carousel class="carousel" v-slot="{ currentSlide }">
         <Slide v-for="(slide, index) in carouselSlides" :key="index">
           <div v-show="currentSlide === index + 1" class="slide">
-            <img :src="require(`@/assets/img/carousel/${slide}.jpg`)" alt="">
+            <img class="homePageImg" :src="require(`@/assets/img/carousel/${slide}.jpg`)" alt="">
           </div>
         </Slide>
       </Carousel>
@@ -33,8 +33,8 @@
         And the bad thing is that it all seems to be related and we have to take and bear that responsibility together.
       </p>
       <div class="imageHolder">
-        <img src="@/assets/img/restaurant1.png" alt="">
-        <img src="@/assets/img/restaurant2.jpg" alt="">
+        <img class="homePageImg" src="@/assets/img/restaurant1.png" alt="">
+        <img class="homePageImg" src="@/assets/img/restaurant2.jpg" alt="">
       </div>
     </div>
     <div>
@@ -44,8 +44,8 @@
 </template>
 
 <script>
-import Carousel from '../components/Carousel.vue'
-import Slide from '../components/Slide.vue'
+import Carousel from './Carousel.vue'
+import Slide from './Slide.vue'
 export default {
   name: 'Welcome.vue',
   components: { Carousel, Slide },
@@ -58,62 +58,5 @@ export default {
 </script>
 
 <style scoped>
-.container {
-  margin-top: 20px;
-  margin-bottom: 20px;
-  position: relative;
-}
-h1 {
-  color: black;
-  margin-bottom: 10px;
-  margin-top: 70px;
-}
-p {
-  color: black;
-  margin-bottom: 100px;
-  margin-top: 30px;
-}
-.yellow-text {
-  color: #FECC32;
-}
-.blue-text {
-  color: #1F93A5;
-}
-.carousel {
-  max-width: 80%;
-  margin: auto;
-}
-.carouselHolder {
-  position: relative;
-  margin-top: 20px;
-  z-index: 1;
-}
-.slide {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  max-height: 100%;
-  height: 100%;
-}
-img {
-   width: 100%;
-   object-fit: cover;
-  aspect-ratio: 21/9;
-  height: 350px;
-  border: 1px solid black;
- }
-.imageHolder img {
-  aspect-ratio: 16/9;
-  width: 50%;
-}
-.imageHolder {
-  display: flex;
-  gap: 30px;
-  justify-content: center;
-  align-items: center;
-}
-.aboutUs {
-  margin-top: 150px;
-}
+
 </style>

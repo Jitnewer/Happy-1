@@ -4,7 +4,7 @@ import EventDetailsView from '@/components/EventDetailsView.vue'
 import AdminStatistics from '@/components/AdminStatistics.vue'
 import Events from '@/components/events/Events.vue'
 import EventsDetails from '@/components/events/EventsDetails.vue'
-import WelcomePage from '@/components/Welcome.vue'
+import WelcomePage from '@/components/welcomePage/Welcome.vue'
 const routes = [
   {
     path: '/home',

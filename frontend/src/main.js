@@ -5,6 +5,7 @@ import router from './router'
 import createPersistedState from 'vuex-persistedstate'
 import Cookies from 'js-cookie'
 import '../src/assets/css/main.css'
+import './assets/css/welcomePageAndFooter.css'
 /* import the fontawesome core */
 import { library, config } from '@fortawesome/fontawesome-svg-core'
 
