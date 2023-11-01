@@ -78,6 +78,7 @@ export default {
     ...mapMutations(['setLoggedIn']),
     logout () {
       this.setLoggedIn(0)
+      this.$router.push({ path: '/home' })
     },
     toggleNav () {
       this.showNav = !this.showNav

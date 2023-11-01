@@ -95,6 +95,7 @@ export default {
     ...mapMutations(['setLoggedIn']),
     logout () {
       this.setLoggedIn(0)
+      this.$router.push({ path: '/home' })
     },
     toggleDropdown (event) {
       event.stopPropagation()
