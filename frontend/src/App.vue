@@ -1,6 +1,7 @@
 <template>
   <component :is="navBar"></component>
   <router-view v-if="navBar !== 'NavBarLoggedInAdminAndSuperUser'"></router-view>
+  <Footer></Footer>
 </template>
 
 <script>
@@ -8,13 +9,15 @@ import { mapState } from 'vuex'
 import NavBarNotLoggedIn from '@/components/navbar/NavBarNotLoggedIn.vue'
 import NavBarLoggedIn from '@/components/navbar/NavBarLoggedIn.vue'
 import NavBarLoggedInAdminAndSuperUser from '@/components/navbar/NavBarLoggedInAdminAndSuperUser.vue'
+import Footer from '@/components/Footer.vue'
 
 export default {
   name: 'App',
   components: {
     NavBarNotLoggedIn,
     NavBarLoggedIn,
-    NavBarLoggedInAdminAndSuperUser
+    NavBarLoggedInAdminAndSuperUser,
+    Footer
   },
   computed: {
     ...mapState(['loggedIn']), // Map the 'loggedIn' state from Vuex
