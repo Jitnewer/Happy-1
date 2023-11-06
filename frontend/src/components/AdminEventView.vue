@@ -134,9 +134,9 @@ export default {
 </script>
 
 <template>
-  <div class="container" v-if="!isSelected">
+  <div class="container admin-event" v-if="!isSelected">
       <div class="title">
-        <h2>Events</h2>
+        <h1>Events</h1>
       </div>
       <div class="filters">
         <input type="text" class="search-filter" id="nameFilter" placeholder="Search for events.." title="Type in a name"
@@ -190,7 +190,7 @@ export default {
   justify-content: left;
 }
 
-h1, h2, h3, h4, h5, h6, p {
+.admin-event:where(h1, h2, h3, h4, h5, h6, p)  {
   color: black;
 }
 
