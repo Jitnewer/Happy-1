@@ -57,18 +57,21 @@ export class Event {
       'Do you consider sustainability as important as having a good time? Then join us at the Happy Hospitality Pub Talk in Arnhem! Together with Kees Bouwhof, owner of Villa Sonsbeek and the Palatijn, the Municipality of Arnhem, and several other entrepreneurs from the hospitality and events industry, we will discuss how sustainability is at the forefront of their concerns. We will also search for the holy grail of solutions to address the new Single Use Plastics legislation that came into effect earlier this year.',
       "Do you believe in the importance of sustainability while enjoying a great atmosphere? Then don't miss out on the Sustainable Social Gathering in Arnhem! Together with industry leaders like Emily Greenfield from Green Eats, the Rotterdam City Council, and several other hospitality and event professionals, we will discuss the impact of sustainability on our businesses. Additionally, we'll be on the hunt for the ultimate solution to comply with the new Single Use Plastics legislation that has been in effect since the beginning of the year."
     ][index]
+    const size = 20
     return new Event(
       id,
       imageIndex === 0
         ? require('../assets/images/arnhem-event.jpg')
         : require('../assets/images/rotterdam-event.webp'),
       `Kroegpraat @ ${nameSuffix}`,
+      nameSuffix,
       date,
       timeBegin,
       timeEnd,
       price,
       location,
-      info
+      info,
+      size
     )
   }
 
@@ -184,17 +187,19 @@ export class Event {
   static copyConstructor (event) {
     if (!event) return null
 
-    // You can add more logic here to deep clone attributes if needed.
     return new Event(
       event.id,
       event.image,
       event.name,
+      event.city,
       event.date,
       event.timeBegin,
       event.timeEnd,
       event.price,
       event.location,
-      event.info
+      event.info,
+      event.size,
+      event.participants
     )
   }
 }
