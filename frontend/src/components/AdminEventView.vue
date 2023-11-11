@@ -22,13 +22,13 @@ export default {
         if (parseInt(this.$route.params.id) === this.events[i].id) {
           this.selectedEvent = this.events[i]
           this.isSelected = !this.isSelected
-          document.body.style.overflow = 'hidden'
+          // document.body.style.overflow = 'hidden'
           break
         }
       }
     },
     setSelectedEvent (event) {
-      this.$router.push(this.$route.matched[0].path + '/' + event.id)
+      this.$router.push(this.$route.matched[0].path + '/' + event)
     },
     deleteEvent (eventToDelete) {
       const indexToDelete = this.events.findIndex(event => event.id === eventToDelete.id)
@@ -38,14 +38,14 @@ export default {
 
       this.selectedEvent = null // Clear the selected event
       this.isSelected = !this.isSelected // Update the isSelected flag
-      document.body.style.overflow = 'auto'
+      // document.body.style.overflow = 'auto'
       this.$router.push(this.$route.matched[0])
     },
     closeEvent () {
       this.selectedEvent = null
       this.create = false
       this.isSelected = !this.isSelected
-      document.body.style.overflow = 'auto'
+      // document.body.style.overflow = 'auto'
       this.$router.push(this.$route.matched[0])
     },
     activateCreateEvent () {
@@ -54,7 +54,7 @@ export default {
       this.selectedEvent.image = require('../assets/images/imagePlaceholder.jpg')
       this.create = true
       this.isSelected = !this.isSelected
-      document.body.overflow = 'hidden'
+      // document.body.overflow = 'hidden'
       this.$router.push(this.$route.matched[0].path + '/' + this.selectedEvent.id)
     },
     saveEvent (event) {
@@ -77,7 +77,7 @@ export default {
         this.create = false
       }
 
-      document.body.style.overflow = 'auto'
+      // document.body.style.overflow = 'auto'
       this.$router.push(this.$route.matched[0])
     },
     generateId () {
@@ -88,6 +88,13 @@ export default {
       } while (this.usedIds.includes(newId))
       // Once a unique ID is generated, return it
       return newId
+    },
+    formattedPrice (event) {
+      if (event.price !== null) {
+        return `€${event.price.toFixed(2)},-`
+      } else {
+        return 'N/A'
+      }
     }
   },
   computed: {
@@ -127,43 +134,79 @@ export default {
 </script>
 
 <template>
-  <div class="container">
-    <div class="title">
-      <h2>Events</h2>
-    </div>
-    <div class="filters">
-      <input type="text" class="search-filter" id="nameFilter" placeholder="Search for events.." title="Type in a name"
+  <div class="container admin-event" v-if="!isSelected">
+      <div class="title">
+        <h1>Events</h1>
+      </div>
+      <div class="filters">
+        <input type="text" class="search-filter" id="nameFilter" placeholder="Search for events.." title="Type in a name"
              v-model="filter.search">
-      <input class="date-filter" type="date" id="dateFilter" v-model="filter.date">
-      <button class="create-btn" @click="activateCreateEvent">Create</button>
-    </div>
-    <div class="events-list">
-      <ul>
-        <li v-for="event in filteredEvents" :key="event.id" @click="setSelectedEvent(event)">
-          <img class="event-image" :src="event.image" alt="Event Image">
-          <div class="event-info-master">
-            <div class="name-price">
-              <h2 class="event-name">{{ event.name }}</h2>
-              <h3 class="event-price" v-if="event.price">&#x20AC; {{ event.price }}</h3>
-            </div>
-            <div>
-              <h4><i class="fa-regular fa-calendar-days"></i>{{ event.date }}</h4>
-              <h4><i class="fa-regular fa-clock"></i>{{ event.timeBegin }} - {{ event.timeEnd }}</h4>
-              <h4><i class="fa-regular fa-location-dot"></i>{{ event.location }}</h4>
-            </div>
-            <p> {{ event.info }}</p>
+        <input class="date-filter" type="date" id="dateFilter" v-model="filter.date">
+        <button class="create-btn" @click="activateCreateEvent">Create</button>
+      </div>
+      <div class="events">
+        <div class="event" v-for="event in filteredEvents" :key="event.id" @click="setSelectedEvent(event.id)">
+          <div class="event-left">
+            <img :src="event.image" alt="Event Image">
           </div>
-        </li>
-      </ul>
+          <div class="event-right">
+            <div class="event-right-main">
+              <div class="event-right-left">
+                <h1>{{ event.city }}</h1>
+                <h2>{{ event.name }}</h2>
+                <h3>{{ event.location }}</h3>
+              </div>
+              <div class="event-right-right">
+                <p>{{ event.date }}</p>
+                <p>{{ event.timeBegin }}-{{ event.timeEnd }}</p>
+                <p> {{ formattedPrice(event) }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
-  <router-view class="event-detail" v-if="isSelected" :create="create" :selectedEvent="selectedEvent" @delete-event="deleteEvent"
-    @deselect-event="closeEvent" @save-event="saveEvent"
-  />
+    <router-view v-else :create="create" :selectedEvent="selectedEvent" @delete-event="deleteEvent"
+                 @deselect-event="closeEvent" @save-event="saveEvent"
+    />
 </template>
 
 <style scoped>
-h1, h2, h3, h4, h5, h6, p {
-  color: black
+.container {
+  margin-top: 0;
+  margin-right: 0;
+  width: 100%;
+  max-height: calc(100vh - 119px);
+}
+
+.events {
+  z-index: 1;
+  display: flex;
+  padding: 0 10px;
+  margin-left: 20px;
+  flex-wrap: wrap;
+  flex-direction: row;
+  gap: 10px;
+  justify-content: left;
+}
+
+.admin-event:where(h1, h2, h3, h4, h5, h6, p)  {
+  color: black;
+}
+
+.event {
+  max-width: 450px;
+}
+
+@media (max-width: 1030px) {
+  .events {
+    padding: 0;
+    margin-bottom: 0;
+    max-height: 758px;
+  }
+
+  .container {
+    max-height: 760px;
+  }
 }
 </style>

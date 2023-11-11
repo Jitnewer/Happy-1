@@ -31,6 +31,16 @@ export default {
       this.selectedCopy.image = URL.createObjectURL(file)
       console.log(this.selectedCopy.image)
     },
+    clearInputs () {
+      this.selectedCopy.name = null
+      this.selectedCopy.date = null
+      this.selectedCopy.timeBegin = null
+      this.selectedCopy.timeEnd = null
+      this.selectedCopy.location = null
+      this.selectedCopy.city = null
+      this.selectedCopy.price = null
+      this.selectedCopy.info = null
+    },
     activateInput () {
       document.querySelector('#file').click()
     }
@@ -64,34 +74,49 @@ export default {
 </script>
 
 <template>
-  <div class="event-details-container">
-    <div class="black-filter"></div>
-    <div class="event-container">
-      <div class="event-info">
-        <img :src="selectedCopy.image" alt="event-image" class="edit-image" @click="activateInput">
+  <div class="container">
+    <div class="events-title">
+      <button @click="closeEventDetail" class="back-button">Back</button>
+      <h3>Event</h3>
+    </div>
+    <div class="event-details">
+      <div class="event-image-container">
         <input type="file" accept="image/jpeg, image/png, image/jpg" id="file" @change="handleImageUpload">
-        <div class="edit-inputs">
-          <input type="text" placeholder="Event name" v-model="selectedCopy.name" id="edit-event-name">
-          <input type="date" v-model="selectedCopy.date" id="edit-event-date">
-          <div class="time-container">
-            <input type="time" v-model="selectedCopy.timeBegin" id="edit-event-time-begin">
-            <input type="time" v-model="selectedCopy.timeEnd" id="edit-event-time-end">
-          </div>
-          <input type="text" placeholder="Event location" v-model="selectedCopy.location" id="edit-event-location">
-          <input type="number" v-model="selectedCopy.price" id="edit-event-price" placeholder="Event price">
-        </div>
+        <img :src="selectedCopy.image" alt="event image" class="event-image" @click="activateInput">
       </div>
-      <div class="event-summary">
+      <div class="info-inputs">
+        <input type="text" placeholder="Event name" v-model="selectedCopy.name" id="edit-event-name">
+        <input type="date" v-model="selectedCopy.date" id="edit-event-date">
+        <div class="time-container">
+          <input type="time" v-model="selectedCopy.timeBegin" id="edit-event-time-begin">
+          <input type="time" v-model="selectedCopy.timeEnd" id="edit-event-time-end">
+        </div>
+        <input type="text" placeholder="Event location" v-model="selectedCopy.location" id="edit-event-location">
+        <input type="text" placeholder="Event city" v-model="selectedCopy.city" id="edit-event-city">
+        <input type="number" v-model="selectedCopy.price" id="edit-event-price" placeholder="Event price">
         <textarea placeholder="Enter event summary" v-model="selectedCopy.info" id="edit-event-summary"></textarea>
       </div>
-      <div class="buttons">
-        <button class="edit-btn" @click="deleteEventDetail" v-if="!created">Delete</button>
-        <button class="edit-btn" @click="saveEventDetail" :disabled="isSaveButtonDisabled">Save</button>
-        <button class="edit-btn" @click="closeEventDetail">Cancel</button>
-      </div>
+    </div>
+    <div class="buttons-container">
+      <button @click="clearInputs">Clear</button>
+      <button @click="saveEventDetail" :disabled="isSaveButtonDisabled">Save</button>
+      <button @click="deleteEventDetail" v-if="!created">Delete</button>
     </div>
   </div>
 </template>
 
 <style scoped>
+h1, h2, h3, h4 {
+  color: #000000;
+}
+
+.events-title h3{
+  margin: 0;
+}
+
+.container {
+  margin-top: 0;
+  margin-right: 0;
+  width: 100%;
+}
 </style>
