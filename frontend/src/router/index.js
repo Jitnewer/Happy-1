@@ -5,6 +5,8 @@ import AdminStatistics from '@/components/AdminStatistics.vue'
 import Events from '@/components/events/Events.vue'
 import EventsDetails from '@/components/events/EventsDetails.vue'
 import WelcomePage from '@/components/welcomePage/Welcome.vue'
+import SuperUserView from '@/components/admin/SuperUserView.vue'
+import SuperUserDetail from '@/components/admin/SuperUserDetail.vue'
 const routes = [
   {
     path: '/home',
@@ -33,6 +35,13 @@ const routes = [
   {
     path: '/admin/statistics',
     component: AdminStatistics
+  },
+  {
+    path: '/superuser/news',
+    component: SuperUserView,
+    children: [
+      { path: ':id', component: SuperUserDetail }
+    ]
   }
 ]
 
