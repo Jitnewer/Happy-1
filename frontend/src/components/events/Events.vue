@@ -114,8 +114,12 @@ export default {
     }
   },
   async created () {
-    this.events = await this.eventsService.asyncFindAll()
-    this.$router.push({ name: 'events', query: { sort: this.filter } })
+    try {
+      this.events = await this.eventsService.asyncFindAll()
+      this.$router.push({ name: 'events', query: { sort: this.filter } })
+    } catch (e) {
+      console.error(e)
+    }
   },
   watch: {
     '$route' (to, from) {
@@ -258,7 +262,6 @@ export default {
 
   computed: {
     filteredEventsOnDate () {
-      console.log(this.events)
       const sortedEvents = this.events.slice().sort((a, b) => {
         const dateA = new Date(a.date)
         const dateB = new Date(b.date)

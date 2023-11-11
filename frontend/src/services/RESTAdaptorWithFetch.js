@@ -1,12 +1,9 @@
-import { Event } from '@/models/event'
-
 export class RESTAdaptorWithFetch {
   resourceUrl;
   copyConstructor;
   constructor (resourceUrl, copyConstructor) {
     this.resourceUrl = resourceUrl
     this.copyConstructor = copyConstructor
-    console.log(copyConstructor)
     console.log('Created RESTAdaptorWithFetch for ' + resourceUrl)
   }
 
@@ -46,14 +43,35 @@ export class RESTAdaptorWithFetch {
     }
   }
 
-  async asyncSave (event) {
+  async asyncCreate (data) {
     try {
-      const response = await this.fetchJson(`${this.resourceUrl}/${event.id}`, {
-        method: 'PUT'
+      const response = await this.fetchJson(this.resourceUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      })
+
+      return this.copyConstructor(response)
+    } catch (error) {
+      console.error('Error in asyncCreate:', error)
+      return null
+    }
+  }
+
+  async asyncUpdate (data) {
+    try {
+      const response = await this.fetchJson(this.resourceUrl, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
       })
       return this.copyConstructor(response)
     } catch (error) {
-      console.error('Error in asyncSave:', error)
+      console.error('Error in asyncUpdate:', error)
       return null
     }
   }

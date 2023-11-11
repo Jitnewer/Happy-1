@@ -1,4 +1,4 @@
-package com.example.backend.repositories;
+package com.example.backend.repositories.event;
 
 import com.example.backend.models.Event;
 

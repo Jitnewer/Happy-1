@@ -1,0 +1,19 @@
+package com.example.backend.repositories.user;
+
+
+import com.example.backend.models.User;
+
+import java.util.List;
+
+public interface UserRepository {
+    List<User> getUsers();
+    User getUser(long id);
+    void addUser(User user);
+    void register(User user);
+    User login(String email, String password);
+    void updateUser(User user);
+    void deleteUser(long id);
+    boolean isAdmin(String email);
+
+    User getUserByEmail(String email);
+}

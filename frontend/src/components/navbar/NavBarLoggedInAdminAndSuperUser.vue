@@ -1,5 +1,5 @@
 <template>
-  <nav id="admin">
+  <nav  id="admin">
     <img id="logo" src="../../assets/images/happy-hospitality-collective.png" height="119" width="310" alt=""/>
       <div class="nav-links-admin">
         <div class="nav-links-left-admin">
@@ -8,7 +8,7 @@
         <div class="nav-links-right-admin">
           <div class="dropdown-profile" @click="toggleProfile">
             <canvas ref="profileCanvas" class="profile" width="33" height="33"></canvas>
-            <p id="profile-name"> {{ this.getFullName }}</p>
+            <p id="profile-name">{{ user.firstname }} {{ user.lastname }}</p>
             <div class="caret">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512"><!--! Font Awesome Pro 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M246.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-128-128c-9.2-9.2-22.9-11.9-34.9-6.9s-19.8 16.6-19.8 29.6l0 256c0 12.9 7.8 24.6 19.8 29.6s25.7 2.2 34.9-6.9l128-128z"/></svg>            </div>
             <transition name="dropdownProfile">
@@ -33,8 +33,8 @@
   <div class="dashboard" v-show="showDashboard && !smallVersionDasboard">
     <div class="profile-dashboard" >
       <canvas ref="profileCanvasDashboard" class="profile-photo-dashboard" width="45" height="45"></canvas>
-      <p id="profile-dashboard-name">{{this.getFullName}}</p>
-      <p id="profile-dashboard-role">{{this.user.role}}</p>
+      <p id="profile-dashboard-name">{{ user.firstname }} {{ user.lastname }}</p>
+      <p id="profile-dashboard-role">Admin</p>
     </div>
     <div class="dashboard-links">
       <router-link  to="/admin/users">
@@ -71,30 +71,42 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations } from 'vuex'
-
 export default {
   name: 'NavBar.vue',
+  inject: ['loginAndRegisterService'],
   data () {
     return {
+      user: this.loginAndRegisterService.asyncFindByEmail(localStorage.getItem('email')),
       showDropdown: false,
       showProfile: false,
       smallVersionDasboard: false,
       showDashboard: true,
-      randomColor: '',
-      user: {
-        name: this.getFullName,
-        role: 'Admin'
-      }
+      randomColor: ''
     }
   },
-  computed: {
-    ...mapGetters(['isLoggedIn', 'getFullName'])
+  async created () {
+    try {
+      this.user = await this.loginAndRegisterService.asyncFindByEmail(localStorage.getItem('email'))
+    } catch (e) {
+      console.log(e)
+    }
+    const fullname = `${this.user.firstname} ${this.user.lastname}`
+    let initials = ''
+    const words = fullname.split(' ')
+    if (words.length === 1) {
+      initials = fullname.charAt(0).toUpperCase()
+    } else {
+      initials = words[0].charAt(0).toUpperCase() + words[1].charAt(0).toUpperCase()
+    }
+    this.randomColor = this.getRandomColor()
+
+    this.drawProfilePicture(initials, this.randomColor)
+    this.drawProfilePictureDashboard(initials, this.randomColor)
+    this.updateShowNav()
   },
   methods: {
-    ...mapMutations(['setLoggedIn']),
     logout () {
-      this.setLoggedIn(0)
+      localStorage.removeItem('email')
       this.$router.push({ path: '/home' })
     },
     toggleDropdown (event) {
@@ -190,21 +202,6 @@ export default {
       }
       return color
     }
-  },
-  created () {
-    console.log(this.getFullName)
-    let initials = ''
-    const words = this.getFullName.split(' ')
-    if (words.length === 1) {
-      initials = this.user.name.charAt(0).toUpperCase()
-    } else {
-      initials = words[0].charAt(0).toUpperCase() + words[1].charAt(0).toUpperCase()
-    }
-    this.randomColor = this.getRandomColor()
-
-    this.drawProfilePicture(initials, this.randomColor)
-    this.drawProfilePictureDashboard(initials, this.randomColor)
-    this.updateShowNav()
   },
   mounted () {
     window.addEventListener('click', this.handleOutsideClick)
