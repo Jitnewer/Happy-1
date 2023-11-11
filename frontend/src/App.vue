@@ -1,6 +1,8 @@
 <template>
-  <component :is="navBar"></component>
-  <router-view v-if="navBar !== 'NavBarLoggedInAdminAndSuperUser'"></router-view>
+  <div>
+    <component :is="navBar" @logout="handleLogout" @loginAdmin="loginAdmin" @loginUser="loginUser"></component>
+    <router-view v-if="navBar !== 'NavBarLoggedInAdminAndSuperUser'"></router-view>
+  </div>
 </template>
 
 <script>
@@ -22,8 +24,7 @@ export default {
   },
   data () {
     return {
-      email: localStorage.getItem('email'), // Initialize email with the value from localStorage
-      isAdmin: false, // New data property to store admin status
+      loggedIn: false,
       loginAndRegisterService: new LoginAndRegisterAdapter(CONFIG.BACKEND_URL, User.copyConstructor)
     }
   },
@@ -34,34 +35,23 @@ export default {
       loginAndRegisterService: new LoginAndRegisterAdapter(CONFIG.BACKEND_URL, User.copyConstructor)
     }
   },
-  watch: {
-    $route: {
-      handler () {
-        // Check if email has changed in localStorage
-        if (localStorage.getItem('email') !== this.email) {
-          // Update the email property and recompute the navBar
-          this.email = localStorage.getItem('email')
-        }
-      },
-      deep: true
-    }
-  },
   methods: {
-    async checkAdminStatus () {
-      try {
-        this.isAdmin = await this.loginAndRegisterService.asyncIsAdmin(this.email)
-      } catch (error) {
-        console.error(error)
-        // Handle error if asyncIsAdmin fails
-      }
+    handleLogout () {
+      // Update the navBar when the user logs out
+      this.loggedIn = false
+      this.isAdmin = false
+    },
+    loginAdmin () {
+      this.loggedIn = true
+      this.isAdmin = true
+    },
+    loginUser () {
+      this.loggedIn = true
     }
-  },
-  created () {
-    this.checkAdminStatus()
   },
   computed: {
     navBar () {
-      if (this.email === null) {
+      if (!this.loggedIn) {
         return 'NavBarNotLoggedIn'
       } else {
         if (this.isAdmin) {

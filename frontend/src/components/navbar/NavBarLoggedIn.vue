@@ -32,7 +32,8 @@
         <div class="nav-links-right">
           <div class="dropdown-profile" @click="toggleProfile">
             <div class="profile-d">
-            <canvas ref="profileCanvas" class="profile" width="45" height="45"></canvas>
+              <img v-if="user.profilePic != null" :src=picture class="profile" width="45" height="45" alt="Event Image">
+              <canvas v-if="user.profilePic == null" ref="profileCanvas" class="profile" width="45" height="45"></canvas>
                 <p id="profile-name">{{ user.firstname }} {{ user.lastname }}</p>
               <div class="caret">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Pro 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M182.6 137.4c-12.5-12.5-32.8-12.5-45.3 0l-128 128c-9.2 9.2-11.9 22.9-6.9 34.9s16.6 19.8 29.6 19.8H288c12.9 0 24.6-7.8 29.6-19.8s2.2-25.7-6.9-34.9l-128-128z"/></svg>
@@ -72,13 +73,15 @@ export default {
       showDropdown: false,
       showProfile: false,
       randomColor: '',
-      fullName: null
+      fullName: null,
+      picture: null
     }
   },
   methods: {
     logout () {
       localStorage.removeItem('email')
       this.$router.push({ path: '/home' })
+      this.$emit('logout')
     },
     toggleNav () {
       this.showNav = !this.showNav
@@ -138,10 +141,17 @@ export default {
   },
   async created () {
     try {
-      this.user = await this.loginAndRegisterService.asyncFindByEmail(localStorage.getItem('email'))
+      // Initiate the asynchronous operation
+      const user = await this.loginAndRegisterService.asyncFindByEmail(localStorage.getItem('email'))
+
+      // Update the user property with the result
+      this.user = user
+
+      console.log(this.user)
     } catch (e) {
       console.log(e)
     }
+    this.picture = require(`../../assets/img/${this.user.profilePic}`)
     const fullname = `${this.user.firstname} ${this.user.lastname}`
 
     let initials = ''

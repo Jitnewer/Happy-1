@@ -64,13 +64,4 @@ export class LoginAndRegisterAdapter {
       return null
     }
   }
-
-  async asyncIsAdmin (email) {
-    try {
-      return await this.fetchJson(`${this.resourceUrl}/users/is-admin/${email}`)
-    } catch (error) {
-      console.error('Error in asyncIsAdmin:', error)
-      return null
-    }
-  }
 }

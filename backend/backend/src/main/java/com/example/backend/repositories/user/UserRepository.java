@@ -13,7 +13,6 @@ public interface UserRepository {
     User login(String email, String password);
     void updateUser(User user);
     void deleteUser(long id);
-    boolean isAdmin(String email);
 
-    User getUserByEmail(String email);
+    User getUserByMail(String email);
 }

@@ -24,16 +24,11 @@ public class UserController {
     public List<User> getUsers() {
         return userRepository.getUsers();
     }
-    @GetMapping("/users/is-admin/{email}")
-    public boolean isAdmin(@PathVariable String email) {
-        return userRepository.isAdmin(email);
+    @GetMapping("/users/fullname/{mail}")
+    public User getUserByMail(@PathVariable String mail) {
+        return userRepository.getUserByMail(mail);
     }
-
-    @GetMapping("/users/fullname/{email}")
-    public User getUserByEmail(@PathVariable String email) {
-        return userRepository.getUserByEmail(email);
-    }
-    @GetMapping("/users/{id}")
+    @GetMapping("/user/{id}")
     public User getUser(@PathVariable long id) {
         return userRepository.getUser(id);
     }

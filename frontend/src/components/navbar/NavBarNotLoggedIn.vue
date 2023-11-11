@@ -31,15 +31,19 @@ export default {
   methods: {
     async login () {
       try {
-        const user = await this.loginAndRegisterService.asyncLogin('nickybosveld@gmail.com', 'NickyBosveld')
+        // const user = await this.loginAndRegisterService.asyncLogin('mylovandijk@gmail.com', 'test')
+        const user = await this.loginAndRegisterService.asyncLogin('evadegraaf@gmail.com', 'test')
+
+        // const user = await this.loginAndRegisterService.asyncLogin('timgroot@gmail.com', 'test')
         if (user !== null) {
-          console.log(await this.loginAndRegisterService.asyncIsAdmin(user.id))
-          if (await this.loginAndRegisterService.asyncIsAdmin(user.id)) {
-            localStorage.setItem('email', 'nickybosveld@gmail.com')
+          if (user.userType === 'ADMIN') {
+            localStorage.setItem('email', 'evadegraaf@gmail.com')
+            this.$emit('loginAdmin')
             this.$router.push({ path: '/admin/events' })
           } else {
-            localStorage.setItem('email', 'nickybosveld@gmail.com')
+            localStorage.setItem('email', 'mylovandijk@gmail.com')
             this.$router.push({ path: '/home' })
+            this.$emit('loginUser')
           }
         }
       } catch (e) {

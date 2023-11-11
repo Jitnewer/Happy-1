@@ -1,5 +1,6 @@
 package com.example.backend.repositories.user;
 
+import com.example.backend.models.Event;
 import com.example.backend.models.User;
 import org.springframework.stereotype.Component;
 
@@ -12,8 +13,9 @@ public class UserRepositoryMock implements UserRepository {
     private List<User> users = new ArrayList<>();
 
     public UserRepositoryMock() {
-        users.add(new User("Rick", "Veerman", "rickveerman4@gmail.com", "0655076733", "RickVeerman2002" , true));
-        users.add(new User("Nicky", "Bosveld", "nickybosveld@gmail.com", "061234567", "NickyBosveld",  false));
+        for (int i = 0; i < 6; i++) {
+            users.add(User.createSampleUser());
+        }
     }
     @Override
     public List<User> getUsers() {
@@ -44,7 +46,7 @@ public class UserRepositoryMock implements UserRepository {
     @Override
     public User login(String email, String password) {
         for (User user : users) {
-            if (user.getEmail().equals(email) && user.getPassword().equals(password)) {
+            if (user.getMail().equals(email) && user.getPassword().equals(password)) {
                 return user;
             }
         }
@@ -68,19 +70,9 @@ public class UserRepositoryMock implements UserRepository {
     }
 
     @Override
-    public boolean isAdmin(String email) {
+    public User getUserByMail(String mail) {
         for (User user : users) {
-            if (Objects.equals(user.getEmail(), email)) {
-                return user.isAdmin();
-            }
-        }
-        return false;
-    }
-
-    @Override
-    public User getUserByEmail(String email) {
-        for (User user : users) {
-            if (Objects.equals(user.getEmail(), email)) {
+            if (Objects.equals(user.getMail(), mail)) {
                 return user;
             }
         }
