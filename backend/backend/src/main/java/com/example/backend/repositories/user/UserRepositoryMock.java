@@ -1,12 +1,12 @@
 package com.example.backend.repositories.user;
 
-import com.example.backend.models.Event;
 import com.example.backend.models.User;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Component
 public class UserRepositoryMock implements UserRepository {
@@ -17,6 +17,7 @@ public class UserRepositoryMock implements UserRepository {
             users.add(User.createSampleUser());
         }
     }
+
     @Override
     public List<User> getUsers() {
         return users;
@@ -29,7 +30,7 @@ public class UserRepositoryMock implements UserRepository {
                 return user;
             }
         }
-        return null;
+        throw new IllegalArgumentException("User not found");
     }
 
     @Override
@@ -40,7 +41,6 @@ public class UserRepositoryMock implements UserRepository {
     @Override
     public void register(User user) {
         users.add(user);
-
     }
 
     @Override
@@ -50,23 +50,41 @@ public class UserRepositoryMock implements UserRepository {
                 return user;
             }
         }
-        return null; // Return null if no matching user is found
+        throw new IllegalArgumentException("Invalid credentials");
     }
-
 
     @Override
     public void updateUser(User updatedUser) {
+        Optional<User> existingUser = Optional.empty();
         for (User user : users) {
             if (user.getId() == updatedUser.getId()) {
-                int index = users.indexOf(user);
-                users.set(index, updatedUser);
+                existingUser = Optional.of(user);
+                break;
             }
+        }
+
+        if (existingUser.isPresent()) {
+            int index = users.indexOf(existingUser.get());
+            users.set(index, updatedUser);
+        } else {
+            throw new IllegalArgumentException("User not found with id: " + updatedUser.getId());
         }
     }
 
     @Override
     public void deleteUser(long id) {
-        users.removeIf(event -> event.getId() == id);
+        boolean userRemoved = false;
+        for (User user : users) {
+            if (user.getId() == id) {
+                users.remove(user);
+                userRemoved = true;
+                break;
+            }
+        }
+
+        if (!userRemoved) {
+            throw new IllegalArgumentException("User not found with id: " + id);
+        }
     }
 
     @Override
@@ -76,8 +94,6 @@ public class UserRepositoryMock implements UserRepository {
                 return user;
             }
         }
-        return null;
+        throw new IllegalArgumentException("User not found with email: " + mail);
     }
-
-
 }
