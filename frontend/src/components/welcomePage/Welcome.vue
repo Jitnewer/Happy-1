@@ -5,30 +5,13 @@
         <span class="yellow-text">SUSTANCE</span> <span class="blue-text">FOR GOOD</span>
       </h1>
       <p>
-        Happy Hospitality is a collective that sets the market in motion around sustainability within hospitality through
-        innovation and collaboration. We connect users and chain partners by initiating innovation hubs and continuing to
+        Happy Hospitality is a collective that sets the market in motion around sustainability within hospitality
+        through
+        innovation and collaboration. We connect users and chain partners by initiating innovation hubs and continuing
+        to
         innovate from there for a sustainable catering industry.
       </p>
     </div>
-  <div>
-    <h1>
-      <span class="yellow-text">OUR</span> <span class="blue-text">THEMES</span>
-    </h1>
-    <div class="theme">
-      <button>
-        <img class="themeImg" src="@/assets/img/restaurant1.png" alt="">
-      </button>
-      <h5>In the dynamic world of hospitality, integrating sustainability practices into water management is a pivotal
-        step towards a greener and more responsible industry. From sourcing to consumption, every aspect of water usage
-        offers an opportunity for positive environmental impact. This journey involves conscious choices, such as
-        adopting water-efficient technologies, minimizing wastage, and embracing eco-friendly purification methods.
-        By navigating the waters of sustainability in the hospitality sector, establishments can not only contribute
-        to environmental conservation but also enhance their reputation as responsible stewards in the ever-evolving
-        landscape of hospitality.</h5>
-    </div>
-
-  </div>
-
     <div class="carouselHolder">
       <Carousel class="carousel" v-slot="{ currentSlide }">
         <Slide v-for="(slide, index) in carouselSlides" :key="index">
@@ -38,11 +21,140 @@
         </Slide>
       </Carousel>
     </div>
+    <div>
+      <h1>
+        <span class="yellow-text">OUR</span> <span class="blue-text">THEMES</span>
+      </h1>
+      <p>Explore sustainability themes in hospitality: Food Waste, Single-Used Plastic, Distribution, Energy & Protein
+        Transition, and Water Sustainability. Click to learn more and join us in creating a greener future for the
+        catering industry.
+      </p>
+      <div class="themeContainer">
+        <div class="theme">
+          <button>
+            <h2>
+              <span class="yellow-text">Food</span> <span class="blue-text">Waste</span>
+            </h2>
+            <h4>Addressing food waste in the hospitality industry involves implementing sustainable practices to
+              minimize
+              excess food disposal, promoting efficiency, and contributing to a more responsible and environmentally
+              friendly approach.</h4>
+            <img class="themeImg" src="../../assets/img/foodWasteT.png" alt="">
+          </button>
+        </div>
+        <div class="theme">
+          <button>
+            <h2><span class="yellow-text">Single Us</span><span class="blue-text">ed Plastic</span></h2>
+            <h4>Tackling the issue of single-use plastic in hospitality focuses on reducing reliance on disposable
+              plastic
+              items, adopting eco-friendly alternatives, and fostering a commitment to minimizing plastic
+              pollution.</h4>
+            <img class="themeImg" src="@/assets/img/plasticT.png" alt="">
+          </button>
+        </div>
+        <div class="theme">
+          <button>
+            <h2>
+              <span class="yellow-text">Distrib</span><span class="blue-text">ution</span></h2>
+            <h4>Sustainable distribution practices in the hospitality sector aim to optimize supply chains, reduce
+              carbon
+              footprints, and enhance efficiency, contributing to a more environmentally conscious and socially
+              responsible industry.</h4>
+            <img class="themeImg" src="@/assets/img/Distribution.webp" alt="">
+          </button>
+        </div>
+        <div class="theme">
+          <button>
+            <h2><span class="yellow-text">Energy</span> <span class="blue-text">Transition</span></h2>
+            <h4>Embracing energy transition within hospitality involves adopting renewable energy sources,
+              energy-efficient
+              technologies, and sustainable practices to minimize environmental impact and contribute to a greener, more
+              sustainable future.</h4>
+            <img class="themeImg" src="@/assets/img/energyT.png" alt="">
+          </button>
+        </div>
+        <div class="theme">
+          <button>
+            <h2><span class="yellow-text">Protein</span> <span class="blue-text">Transition</span></h2>
+            <h4>The protein transition in the hospitality industry emphasizes a shift towards sustainable and
+              plant-based
+              protein options, reducing reliance on traditional meat sources and promoting environmentally friendly
+              alternatives.</h4>
+            <img class="themeImg" src="@/assets/img/proteinT.avif" alt="">
+          </button>
+        </div>
+        <div class="theme">
+          <button>
+            <h2>
+              <span class="yellow-text">Wat</span><span class="blue-text">er</span>
+            </h2>
+            <h4>Promoting water sustainability in hospitality encompasses implementing water-efficient technologies,
+              minimizing wastage, and making conscious choices to reduce the environmental impact of water usage in the
+              industry.</h4>
+            <img class="themeImg" src="@/assets/img/waterT.webp" alt="">
+          </button>
+        </div>
+      </div>
+      <h1>
+        <span class="yellow-text">OUR</span> <span class="blue-text">PILLARS</span>
+      </h1>
+      <div class="pillarContainer">
+        <button>
+        <div class="pillar">
+            <div class="pillarText">
+              <h1>
+                <span class="blue-text">Challenges</span>
+              </h1>
+              <h3>
+                Explore sustainability challenges in the hospitality industry with our initiative.
+              </h3>
+              <h3><span class="blue-text"> > Read more</span> </h3>
+            </div>
+            <div class="pillarImg">
+              <img class="pillarImgContent" src="@/assets/img/challenges2.jpeg" alt="">
+            </div>
+        </div>
+        </button>
+        <button>
+          <div class="pillar">
+            <div class="pillarText">
+              <h1>
+                <span class="blue-text">Network</span>
+              </h1>
+              <h3>
+                Discover the challenges and innovations shaping eco-friendly networking practices within the hospitality
+                industry.
+              </h3>
+              <h3><span class="blue-text"> > Read more</span> </h3>
+            </div>
+            <div class="pillarImg">
+              <img class="pillarImgContent" src="@/assets/img/network.jpg" alt="">
+            </div>
+          </div>
+        </button>
+        <button>
+          <div class="pillar">
+            <div class="pillarText">
+              <h1>
+                <span class="blue-text">Research</span>
+              </h1>
+              <h3>
+                Explore the challenges and advancements in sustainable research practices within the hospitality sector.
 
+              </h3>
+              <h3><span class="blue-text"> > Read more</span> </h3>
+            </div>
+            <div class="pillarImg">
+              <img class="pillarImgContent" src="@/assets/img/research.jpg" alt="">
+            </div>
+          </div>
+        </button>
+      </div>
+    </div>
     <div class="aboutUs">
       <h1>
-        <span class="blue-text">OVER HAPPY HOSPITALITY</span> <span class="yellow-text">& </span><span
-        class="blue-text">ONS</span>
+        <span class="blue-text">ABOUT HAPPY HOSPITALITY</span> <span class="yellow-text">& </span><span
+        class="blue-text">US</span>
       </h1>
       <p>
         In the hospitality sector, sustainability in water management is key. From sourcing to consumption, making
@@ -64,6 +176,7 @@
 <script>
 import Carousel from './Carousel.vue'
 import Slide from './Slide.vue'
+
 export default {
   name: 'Welcome.vue',
   components: { Carousel, Slide },
@@ -76,23 +189,100 @@ export default {
 </script>
 
 <style scoped>
+.pillar {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+  margin-bottom: 20px;
+  margin-top: 50px;
+  height: 280px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.theme h1,h2,h3,h4,h5{
+  color: black;
+}
+.pillarText{
+  width: 40%;
+  margin-left: 30px;
+}
+.pillarText h1{
+  margin-bottom: 30px;
+}
+
+.pillarContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.pillarContainer button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s;
+  width: 100%;
+}
+
+.pillarContainer button:hover {
+  transform: scale(1.1);
+}
+.pillarImg .pillarImgContent {
+  max-width: 100%; /* Ensure the image does not exceed the width of its container */
+  max-height: 100%; /* Ensure the image does not exceed the height of its container */
+  object-fit: cover;
+  clip-path: polygon(20% 0, 100% 0, 100% 100%, 0 100%)
+}
+.pillarImg {
+  width: 70%; /* Adjust the width as needed */
+  max-height: 100%;
+  aspect-ratio: 16/9;
+}
+
+.themeContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
 .theme {
   display: flex;
-  align-items: center;
-  border: 2px solid black;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 30%;
+  margin-bottom: 80px;
+  margin-top: 10px;
+  height: 300px;
 }
+
 .theme button {
   background: none;
   border: none;
+  cursor: pointer;
+  transition: transform 0.2s;
+
 }
+
+.theme button:hover {
+  transform: scale(1.1); /* Add a scaling effect on hover */
+}
+
 .theme .themeImg {
-  width: 100%;
-  height: 100%;
-
+  width: 60%;
+  height: 70%;
+  object-fit: fill;
+  aspect-ratio: 16/9;
+  margin-top: 10px; /* Add margin to separate image from text */
 }
 
-.theme h5{
+.theme h2 {
+  color: var(--main-color);
+  margin: 10px 20px 5px 20px; /* Adjust margins as needed */
+}
+
+.theme h5 {
   color: black;
-  margin-left: 20px;
+  margin: 0 20px 20px 20px; /* Adjust margins as needed */
 }
+
 </style>
