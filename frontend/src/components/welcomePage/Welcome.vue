@@ -44,16 +44,6 @@
         </div>
         <div class="theme">
           <button>
-            <h2><span class="yellow-text">Single Us</span><span class="blue-text">ed Plastic</span></h2>
-            <h4>Tackling the issue of single-use plastic in hospitality focuses on reducing reliance on disposable
-              plastic
-              items, adopting eco-friendly alternatives, and fostering a commitment to minimizing plastic
-              pollution.</h4>
-            <img class="themeImg" src="@/assets/img/plasticT.png" alt="">
-          </button>
-        </div>
-        <div class="theme">
-          <button>
             <h2>
               <span class="yellow-text">Distrib</span><span class="blue-text">ution</span></h2>
             <h4>Sustainable distribution practices in the hospitality sector aim to optimize supply chains, reduce
@@ -71,6 +61,16 @@
               technologies, and sustainable practices to minimize environmental impact and contribute to a greener, more
               sustainable future.</h4>
             <img class="themeImg" src="@/assets/img/energyT.png" alt="">
+          </button>
+        </div>
+        <div class="theme">
+          <button>
+            <h2><span class="yellow-text">Single Us</span><span class="blue-text">ed Plastic</span></h2>
+            <h4>Tackling the issue of single-use plastic in hospitality focuses on reducing reliance on disposable
+              plastic
+              items, adopting eco-friendly alternatives, and fostering a commitment to minimizing plastic
+              pollution.</h4>
+            <img class="themeImg" src="@/assets/img/plasticT.png" alt="">
           </button>
         </div>
         <div class="theme">
