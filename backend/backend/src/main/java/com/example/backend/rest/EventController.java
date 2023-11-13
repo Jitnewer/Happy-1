@@ -11,21 +11,28 @@ import javax.sound.sampled.FloatControl;
 import java.net.URI;
 import java.util.List;
 
-
-@RestController @RequestMapping("events")
+@RestController
+@RequestMapping("events")
 @CrossOrigin(origins = {"http://localhost:8080"})
-public class EventController  {
+public class EventController {
+
     @Autowired
     EventRepository eventRepository;
 
     @GetMapping()
-    public List<Event> getEvents() {
-        return eventRepository.getEvents();
+    public ResponseEntity<List<Event>> getEvents() {
+        List<Event> events = eventRepository.getEvents();
+        return ResponseEntity.ok(events); // 200 OK
     }
 
     @GetMapping("/{id}")
-    public Event getEvent(@PathVariable long id) {
-        return eventRepository.getEvent(id);
+    public ResponseEntity<?> getEvent(@PathVariable long id) {
+        try {
+            Event event = eventRepository.getEvent(id);
+            return ResponseEntity.ok(event); // 200 OK
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Event not found with id: " + id); // 404 Not Found
+        }
     }
 
     @PostMapping("")
@@ -47,7 +54,12 @@ public class EventController  {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteEvent(@PathVariable long id) {
-        eventRepository.deleteEvent(id);
+    public ResponseEntity<String> deleteEvent(@PathVariable long id) {
+        try {
+            eventRepository.deleteEvent(id);
+            return ResponseEntity.ok("Event deleted successfully"); // 200 OK
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage()); // 404 Not Found
+        }
     }
 }

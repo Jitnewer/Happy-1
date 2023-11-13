@@ -1,4 +1,4 @@
-package com.example.backend.repositories;
+package com.example.backend.repositories.event;
 
 import com.example.backend.models.Event;
 import org.springframework.stereotype.Component;
@@ -25,10 +25,10 @@ public class EventRepositoryMock implements EventRepository {
     public Event getEvent(long id) {
         for (Event event : events) {
             if (event.getId() == id) {
-                return event;
+                return event; // Success: Event found
             }
         }
-        return null;
+        throw new IllegalArgumentException("Event not found");
     }
 
     @Override
@@ -46,10 +46,12 @@ public class EventRepositoryMock implements EventRepository {
         }
     }
 
-
     @Override
     public void deleteEvent(long id) {
-        events.removeIf(event -> event.getId() == id);
-    }
+        boolean eventRemoved = events.removeIf(event -> event.getId() == id);
+        if (!eventRemoved) {
+            throw new IllegalArgumentException("Event not found with id: " + id);
+        }
 
+    }
 }

@@ -1,12 +1,9 @@
-import { Event } from '@/models/event'
-
 export class RESTAdaptorWithFetch {
   resourceUrl;
   copyConstructor;
   constructor (resourceUrl, copyConstructor) {
     this.resourceUrl = resourceUrl
     this.copyConstructor = copyConstructor
-    console.log(copyConstructor)
     console.log('Created RESTAdaptorWithFetch for ' + resourceUrl)
   }
 
@@ -69,7 +66,7 @@ export class RESTAdaptorWithFetch {
 
       return this.copyConstructor(response)
     } catch (error) {
-      console.error('Error in asyncSave:', error)
+      console.error('Error in asyncUpdate:', error)
       return null
     }
   }

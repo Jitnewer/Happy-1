@@ -32,8 +32,9 @@
         <div class="nav-links-right">
           <div class="dropdown-profile" @click="toggleProfile">
             <div class="profile-d">
-            <canvas ref="profileCanvas" class="profile" width="45" height="45"></canvas>
-                <p id="profile-name"> {{ this.getFullName }}</p>
+              <img v-if="user.profilePic != null" :src=picture class="profile" width="45" height="45" alt="Event Image">
+              <canvas v-if="user.profilePic == null" ref="profileCanvas" class="profile" width="45" height="45"></canvas>
+                <p id="profile-name">{{ user.firstname }} {{ user.lastname }}</p>
               <div class="caret">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Pro 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M182.6 137.4c-12.5-12.5-32.8-12.5-45.3 0l-128 128c-9.2 9.2-11.9 22.9-6.9 34.9s16.6 19.8 29.6 19.8H288c12.9 0 24.6-7.8 29.6-19.8s2.2-25.7-6.9-34.9l-128-128z"/></svg>
               </div>
@@ -63,22 +64,24 @@ import { mapGetters, mapMutations } from 'vuex'
 
 export default {
   name: 'NavBar.vue',
+  inject: ['loginAndRegisterService'],
+
   data () {
     return {
+      user: this.loginAndRegisterService.asyncFindByEmail(localStorage.getItem('email')),
       showNav: false,
       showDropdown: false,
       showProfile: false,
-      randomColor: ''
+      randomColor: '',
+      fullName: null,
+      picture: null
     }
   },
-  computed: {
-    ...mapGetters(['isLoggedIn', 'getFullName'])
-  },
   methods: {
-    ...mapMutations(['setLoggedIn']),
     logout () {
-      this.setLoggedIn(0)
+      localStorage.removeItem('email')
       this.$router.push({ path: '/home' })
+      this.$emit('logout')
     },
     toggleNav () {
       this.showNav = !this.showNav
@@ -136,11 +139,25 @@ export default {
       return color
     }
   },
-  created () {
+  async created () {
+    try {
+      // Initiate the asynchronous operation
+      const user = await this.loginAndRegisterService.asyncFindByEmail(localStorage.getItem('email'))
+
+      // Update the user property with the result
+      this.user = user
+
+      console.log(this.user)
+    } catch (e) {
+      console.log(e)
+    }
+    this.picture = require(`../../assets/img/${this.user.profilePic}`)
+    const fullname = `${this.user.firstname} ${this.user.lastname}`
+
     let initials = ''
-    const words = this.getFullName.split(' ')
+    const words = fullname.split(' ')
     if (words.length === 1) {
-      initials = this.getFullName.charAt(0).toUpperCase()
+      initials = fullname.charAt(0).toUpperCase()
     } else {
       initials = words[0].charAt(0).toUpperCase() + words[1].charAt(0).toUpperCase()
     }
@@ -148,7 +165,6 @@ export default {
 
     this.drawProfilePicture(initials, this.randomColor)
     this.updateShowNav()
-    console.log(this.getFullName)
   },
   mounted () {
     window.addEventListener('click', this.handleOutsideClick)
