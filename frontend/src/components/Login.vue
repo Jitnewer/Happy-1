@@ -1,35 +1,61 @@
-<script setup>
-
-</script>
-
 <template>
   <div class="sign-up-body">
     <div class="container-sign-up">
       <div class="header-sign-up">Login:</div>
       <div class="form-sign-up-1">
-        <form action="#">
+        <form @submit.prevent="login">
           <div class="sign-up-page">
             <div class="title-sign-up-form">Login with your email:</div>
             <div class="field-sign-up">
               <div class="label-sign-up">Email:</div>
-              <input type="email" class="sign-up-input" required>
+              <input v-model="email" type="email" class="sign-up-input" required>
             </div>
 
             <div class="field-sign-up">
               <div class="label-sign-up">Password:</div>
-              <input type="password" class="sign-up-input" required>
+              <input v-model="password" type="password" class="sign-up-input" required>
             </div>
 
             <div class="field-btn">
-              <button class="submit">Log in</button>
+              <button type="submit" class="submit">Log in</button>
             </div>
           </div>
         </form>
       </div>
     </div>
   </div>
-
 </template>
+
+<script>
+export default {
+  name: 'login.vue',
+  inject: ['loginAndRegisterService'],
+  data () {
+    return {
+      email: '',
+      password: ''
+    }
+  },
+  methods: {
+    async login () {
+      try {
+        const user = await this.loginAndRegisterService.asyncLogin(this.email, this.password)
+        if (user !== null) {
+          if (user.userType === 'ADMIN') {
+            localStorage.setItem('email', this.email)
+            this.$router.push({ path: '/admin/events' })
+          } else {
+            localStorage.setItem('email', this.email)
+            this.$router.push({ path: '/home' })
+          }
+        }
+      } catch (e) {
+        console.error(e)
+      }
+    }
+  }
+}
+</script>
 
 <style scoped>
 /*Sign up form */

@@ -161,10 +161,10 @@ export default {
 
 <style scoped>
 .container {
-  margin-top: 0;
-  margin-right: 0;
-  width: 100%;
-  max-height: calc(100vh - 119px);
+  //margin-top: 0;
+  //margin-right: 0;
+  //width: 100%;
+  //max-height: calc(100vh - 119px);
 }
 
 .events {
@@ -200,7 +200,7 @@ export default {
   }
 
   .container {
-    max-height: 760px;
+    //max-height: 760px;
   }
 }
 </style>

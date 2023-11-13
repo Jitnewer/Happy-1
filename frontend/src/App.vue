@@ -1,6 +1,6 @@
 <template>
   <div>
-    <component :is="navBar" @logout="handleLogout" @loginAdmin="loginAdmin" @loginUser="loginUser"></component>
+    <component :is="navBar" ></component>
     <router-view v-if="navBar !== 'NavBarLoggedInAdminAndSuperUser'"></router-view>
   </div>
 </template>
@@ -25,6 +25,7 @@ export default {
   data () {
     return {
       loggedIn: false,
+      admin: false,
       loginAndRegisterService: new LoginAndRegisterAdapter(CONFIG.BACKEND_URL, User.copyConstructor)
     }
   },
@@ -36,22 +37,14 @@ export default {
     }
   },
   methods: {
-    handleLogout () {
-      // Update the navBar when the user logs out
-      this.loggedIn = false
-      this.isAdmin = false
-    },
-    loginAdmin () {
-      this.loggedIn = true
-      this.isAdmin = true
-    },
-    loginUser () {
-      this.loggedIn = true
+    async isAdmin () {
+      const user = await this.loginAndRegisterService.asyncFindByEmail(this.email)
+      return user.userType === 'ADMIN'
     }
   },
   computed: {
     navBar () {
-      if (!this.loggedIn) {
+      if (!localStorage.getItem('email')) {
         return 'NavBarNotLoggedIn'
       } else {
         if (this.isAdmin) {

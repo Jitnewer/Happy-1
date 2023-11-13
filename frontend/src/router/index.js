@@ -11,6 +11,7 @@ import AdminUsersView from '@/components/admin/userPage/AdminUsersView.vue'
 import AdminUsersDetail from '@/components/admin/userPage/AdminUsersDetail.vue'
 import Registration from '@/components/Registration.vue'
 import AboutUs from '@/components/AboutUs.vue'
+import logIn from '@/components/Login.vue'
 
 const routes = [
   {
@@ -63,6 +64,11 @@ const routes = [
     path: '/register',
     name: 'register',
     component: Registration
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: logIn
   },
   {
     path: '/about-us',

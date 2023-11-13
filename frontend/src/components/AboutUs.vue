@@ -60,15 +60,15 @@ export default {
 
 <style>
 p {
-  color: black !important;
+  //color: black !important;
 }
 
 h1, h2 {
-  color: #0992A4 !important;
+  //color: #0992A4 !important;
 }
 
 h2 {
-  margin-top: 50px !important;
+  //margin-top: 50px !important;
 }
 
 .aboutUsContent {
