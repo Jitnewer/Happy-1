@@ -124,7 +124,7 @@ h1 {
 }
 .carouselHolder {
     position: relative;
-    margin-top: 20px;
+    margin-top: 100px;
     z-index: 1;
 }
 .slide {
@@ -154,4 +154,99 @@ h1 {
 }
 .aboutUs {
     margin-top: 150px;
+}
+.pillar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    width: 100%;
+    margin-bottom: 20px;
+    margin-top: 50px;
+    height: 280px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.theme h1,h2,h3,h4,h5{
+    color: black;
+}
+.pillarText{
+    width: 40%;
+    margin-left: 30px;
+}
+.pillarText h1{
+    margin-bottom: 30px;
+}
+
+.pillarContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.pillarContainer button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s;
+    width: 100%;
+}
+
+.pillarContainer button:hover {
+    transform: scale(1.1);
+}
+.pillarImg .pillarImgContent {
+    max-width: 100%; /* Ensure the image does not exceed the width of its container */
+    max-height: 100%; /* Ensure the image does not exceed the height of its container */
+    object-fit: cover;
+    clip-path: polygon(20% 0, 100% 0, 100% 100%, 0 100%)
+}
+.pillarImg {
+    width: 70%; /* Adjust the width as needed */
+    max-height: 100%;
+    aspect-ratio: 16/9;
+}
+
+.themeContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.theme {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 30%;
+    margin-bottom: 80px;
+    margin-top: 10px;
+    height: 300px;
+}
+
+.theme button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s;
+
+}
+
+.theme button:hover {
+    transform: scale(1.1); /* Add a scaling effect on hover */
+}
+
+.theme .themeImg {
+    width: 60%;
+    height: 70%;
+    object-fit: fill;
+    aspect-ratio: 16/9;
+    margin-top: 10px; /* Add margin to separate image from text */
+}
+
+.theme h2 {
+    color: var(--main-color);
+    margin: 10px 20px 5px 20px; /* Adjust margins as needed */
+}
+
+.theme h5 {
+    color: black;
+    margin: 0 20px 20px 20px; /* Adjust margins as needed */
 }
