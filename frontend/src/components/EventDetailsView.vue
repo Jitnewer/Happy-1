@@ -2,6 +2,7 @@
 import { Event } from '@/models/event'
 export default {
   name: 'EventDetailsView',
+  inject: ['eventsService'],
   props: ['selectedEvent', 'create'],
   emits: ['deselect-event', 'delete-event', 'save-event'],
   data () {
@@ -16,13 +17,16 @@ export default {
         this.$emit('deselect-event', this.selectedEvent)
       }
     },
-    saveEventDetail () {
-      if (confirm('Are you sure you want to save changes to event?')) {
-        this.$emit('save-event', this.selectedCopy)
+    async saveEventDetail () {
+      if (this.isAllInputsFilled) {
+        if (confirm('Are you sure you want to save changes to event?')) {
+          this.$emit('save-event', this.selectedCopy)
+        }
       }
     },
-    deleteEventDetail () {
+    async deleteEventDetail () {
       if (confirm('Are you sure you want to delete this event?')) {
+        await this.eventsService.asyncDeleteById(this.selectedEvent.id)
         this.$emit('delete-event', this.selectedEvent)
       }
     },
@@ -68,6 +72,18 @@ export default {
         this.selectedCopy.price === this.selectedEvent.price &&
         this.selectedCopy.info === this.selectedEvent.info
       )
+    },
+    isAllInputsFilled () {
+      // Check if all input fields are filled (except the textarea)
+      return (
+        this.selectedCopy.name &&
+        this.selectedCopy.date &&
+        this.selectedCopy.timeBegin &&
+        this.selectedCopy.timeEnd &&
+        this.selectedCopy.location &&
+        this.selectedCopy.city &&
+        this.selectedCopy.price !== null
+      )
     }
   }
 }
@@ -82,7 +98,7 @@ export default {
     <div class="event-details">
       <div class="event-image-container">
         <input type="file" accept="image/jpeg, image/png, image/jpg" id="file" @change="handleImageUpload">
-        <img :src="selectedCopy.image" alt="event image" class="event-image" @click="activateInput">
+        <img :src="require(`../assets/images/${selectedCopy.image}`)" alt="event image" class="event-image" @click="activateInput">
       </div>
       <div class="info-inputs">
         <input type="text" placeholder="Event name" v-model="selectedCopy.name" id="edit-event-name">

@@ -47,10 +47,26 @@ export class RESTAdaptorWithFetch {
   }
 
   async asyncSave (event) {
+    let response
     try {
-      const response = await this.fetchJson(`${this.resourceUrl}/${event.id}`, {
-        method: 'PUT'
-      })
+      if (event.id === 0) {
+        response = await this.fetchJson(this.resourceUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(event)
+        })
+      } else {
+        response = await this.fetchJson(`${this.resourceUrl}/${event.id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(event)
+        })
+      }
+
       return this.copyConstructor(response)
     } catch (error) {
       console.error('Error in asyncSave:', error)

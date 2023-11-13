@@ -22,8 +22,12 @@ public class Event {
 
 
 
-    public Event (String image, String name, String city, Date date, LocalTime timeBegin, LocalTime timeEnd, double price, String location, String info, int size) {
-        this.id = idCounter++;
+    public Event (long id, String image, String name, String city, Date date, LocalTime timeBegin, LocalTime timeEnd, double price, String location, String info, int size) {
+        if (id == 0){
+            this.id = idCounter++;
+        } else {
+            this.id = id;
+        }
         this.image = image;
         this.name = name;
         this.city = city;
@@ -35,7 +39,6 @@ public class Event {
         this.info = info;
         this.size = size;
     }
-
     public long getId() {
         return id;
     }
@@ -104,6 +107,7 @@ public class Event {
         }
 
         return new Event(
+                0,
                 getImages()[random.nextInt(getImages().length)],
                 getNames()[random.nextInt(getNames().length)],
                 cityName,
@@ -248,5 +252,23 @@ public class Event {
                 "Do you believe in the importance of sustainability while enjoying a great atmosphere? Then don't miss out on the Sustainable Social Gathering in Arnhem! Together with industry leaders like Emily Greenfield from Green Eats, the Rotterdam City Council, and several other hospitality and event professionals, we will discuss the impact of sustainability on our businesses. Additionally, we'll be on the hunt for the ultimate solution to comply with the new Single Use Plastics legislation that has been in effect since the beginning of the year.",
                 "Are you a supporter of sustainability and a good time? Then we warmly invite you to the Green Gathering in Amsterdam! Alongside experts like Sarah Groenewoud from EcoEats, the Municipality of Utrecht, and various other businesses in the food sector and events industry, we will engage in discussions about how sustainability plays a pivotal role in their endeavors. Together, we will explore innovative solutions to comply with the latest environmental regulations and combat plastic pollution."
         };
+    }
+
+    public static Event copyConstructor (Event event) {
+        if (event == null) return null;
+
+        return new Event(
+                event.id,
+                event.image,
+                event.name,
+                event.city,
+                event.date,
+                event.timeBegin,
+                event.timeEnd,
+                event.price,
+                event.location,
+                event.info,
+                event.size
+        );
     }
  }
