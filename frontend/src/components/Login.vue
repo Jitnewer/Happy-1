@@ -43,10 +43,15 @@ export default {
         if (user !== null) {
           if (user.userType === 'ADMIN') {
             localStorage.setItem('email', this.email)
+            localStorage.setItem('admin', 'true')
+            this.$emit('loginAdmin')
+
             this.$router.push({ path: '/admin/events' })
           } else {
             localStorage.setItem('email', this.email)
+            localStorage.setItem('admin', 'false')
             this.$router.push({ path: '/home' })
+            this.$emit('loginUser')
           }
         }
       } catch (e) {

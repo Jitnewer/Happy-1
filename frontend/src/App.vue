@@ -1,7 +1,7 @@
 <template>
   <div>
-    <component :is="navBar" ></component>
-    <router-view v-if="navBar !== 'NavBarLoggedInAdminAndSuperUser'"></router-view>
+    <component :is="navBar" @handleLogout="handleLogout"></component>
+    <router-view v-if="navBar !== 'NavBarLoggedInAdminAndSuperUser'"  @loginAdmin="loginAdmin" @loginUser="loginUser"></router-view>
   </div>
 </template>
 
@@ -37,17 +37,28 @@ export default {
     }
   },
   methods: {
-    async isAdmin () {
-      const user = await this.loginAndRegisterService.asyncFindByEmail(this.email)
-      return user.userType === 'ADMIN'
+    handleLogout () {
+      // Update the navBar when the user logs out
+      this.loggedIn = false
+      this.isAdmin = false
+    },
+    loginAdmin () {
+      this.loggedIn = true
+      this.isAdmin = true
+    },
+    loginUser () {
+      this.loggedIn = true
     }
   },
   computed: {
     navBar () {
-      if (!localStorage.getItem('email')) {
+      console.log(this.loggedIn)
+      console.log(localStorage.getItem('email'))
+      console.log(localStorage.getItem('admin'))
+      if (!this.loggedIn && !localStorage.getItem('email')) {
         return 'NavBarNotLoggedIn'
       } else {
-        if (this.isAdmin) {
+        if (this.isAdmin || (localStorage.getItem('admin') === 'true')) {
           return 'NavBarLoggedInAdminAndSuperUser'
         } else {
           return 'NavBarLoggedIn'
@@ -56,5 +67,4 @@ export default {
     }
   }
 }
-
 </script>
