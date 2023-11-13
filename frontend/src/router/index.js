@@ -55,7 +55,7 @@ const routes = [
     ]
   },
   {
-    path: '/sign-up',
+    path: '/register',
     name: 'register',
     component: Registration
   }
