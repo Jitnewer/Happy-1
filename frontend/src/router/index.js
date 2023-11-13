@@ -1,4 +1,4 @@
-import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'
 import AdminEventView from '@/components/admin/eventPage/AdminEventView.vue'
 import EventDetailsView from '@/components/admin/eventPage/EventDetailsView.vue'
 import AdminStatistics from '@/components/admin/AdminStatistics.vue'
@@ -9,7 +9,6 @@ import SuperUserView from '@/components/admin/superUser/SuperUserView.vue'
 import SuperUserDetail from '@/components/admin/superUser/SuperUserDetail.vue'
 import AdminUsersView from '@/components/admin/userPage/AdminUsersView.vue'
 import AdminUsersDetail from '@/components/admin/userPage/AdminUsersDetail.vue'
-import { createRouter, createWebHashHistory } from 'vue-router'
 import Registration from '@/components/Registration.vue'
 
 const routes = [
@@ -54,8 +53,7 @@ const routes = [
     children: [
       { path: ':id', component: SuperUserDetail }
     ]
-  }
-
+  },
   {
     path: '/sign-up',
     name: 'register',
