@@ -3,9 +3,9 @@ import { Event } from '@/models/event'
 
 export default {
   name: 'AdminEventView',
+  inject: ['eventsService'],
   data () {
     return {
-      usedIds: [],
       selectedEvent: null,
       isSelected: false,
       create: false,
@@ -22,7 +22,6 @@ export default {
         if (parseInt(this.$route.params.id) === this.events[i].id) {
           this.selectedEvent = this.events[i]
           this.isSelected = !this.isSelected
-          // document.body.style.overflow = 'hidden'
           break
         }
       }
@@ -30,7 +29,7 @@ export default {
     setSelectedEvent (event) {
       this.$router.push(this.$route.matched[0].path + '/' + event)
     },
-    deleteEvent (eventToDelete) {
+    async deleteEvent (eventToDelete) {
       const indexToDelete = this.events.findIndex(event => event.id === eventToDelete.id)
       if (indexToDelete !== -1) {
         this.events.splice(indexToDelete, 1)
@@ -38,56 +37,39 @@ export default {
 
       this.selectedEvent = null // Clear the selected event
       this.isSelected = !this.isSelected // Update the isSelected flag
-      // document.body.style.overflow = 'auto'
       this.$router.push(this.$route.matched[0])
     },
     closeEvent () {
       this.selectedEvent = null
       this.create = false
       this.isSelected = !this.isSelected
-      // document.body.style.overflow = 'auto'
       this.$router.push(this.$route.matched[0])
     },
     activateCreateEvent () {
       this.selectedEvent = new Event()
-      this.selectedEvent.id = this.generateId()
-      this.selectedEvent.image = require('../assets/images/imagePlaceholder.jpg')
+      this.selectedEvent.id = 0
+      this.selectedEvent.image = 'imagePlaceholder.jpg'
       this.create = true
       this.isSelected = !this.isSelected
-      // document.body.overflow = 'hidden'
       this.$router.push(this.$route.matched[0].path + '/' + this.selectedEvent.id)
     },
-    saveEvent (event) {
-      if (!this.create) {
-        // Find the index of the selected item in the array
-        const selectedIndex = this.events.findIndex(oldEvent => oldEvent.id === event.id)
-        if (selectedIndex !== -1) {
-          // Replace the selected item with the new item
-          this.events.splice(selectedIndex, 1, event)
-        }
+    async saveEvent (event) {
+      const createdEvent = await this.eventsService.asyncSave(event)
 
-        // Reset selected item and clear isSelected
-        this.selectedEvent = null
-        this.isSelected = !this.isSelected
+      if (this.create === true) {
+        this.events.push(createdEvent)
       } else {
-        this.events.push(event)
-        this.usedIds.push(event.id)
-        this.isSelected = !this.isSelected
-        this.selectedEvent = null
-        this.create = false
-      }
+        const indexToUpdate = this.events.findIndex(oldEvent => oldEvent.id === event.id)
 
-      // document.body.style.overflow = 'auto'
+        if (indexToUpdate >= 0) {
+          this.events.splice(indexToUpdate, 1, createdEvent)
+        }
+      }
+      this.isSelected = !this.isSelected
+      this.selectedEvent = null
+      this.create = false
+
       this.$router.push(this.$route.matched[0])
-    },
-    generateId () {
-      let newId
-      do {
-        // Generate a new ID (you can use any method you prefer)
-        newId = Math.floor((Math.random() * 100) + 1) // Replace with your preferred method to generate IDs
-      } while (this.usedIds.includes(newId))
-      // Once a unique ID is generated, return it
-      return newId
     },
     formattedPrice (event) {
       if (event.price !== null) {
@@ -95,6 +77,14 @@ export default {
       } else {
         return 'N/A'
       }
+    },
+    parseDate (dateString) {
+      const dateObject = new Date(dateString)
+      const day = dateObject.getDate()
+      const month = dateObject.getMonth() + 1
+      const year = dateObject.getFullYear()
+
+      return `${day}-${month}-${year}`
     }
   },
   computed: {
@@ -117,13 +107,8 @@ export default {
       })
     }
   },
-  created () {
-    for (let i = 0; i < 4; i++) {
-      this.events.push(Event.createSampleEvents(i))
-    }
-    for (let i = 0; i < this.events.length; i++) {
-      this.usedIds.push(this.events[i].id)
-    }
+  async created () {
+    this.events = await this.eventsService.asyncFindAll()
   },
   watch: {
     '$route' () {
@@ -145,9 +130,9 @@ export default {
         <button class="create-btn" @click="activateCreateEvent">Create</button>
       </div>
       <div class="events">
-        <div class="event" v-for="event in filteredEvents" :key="event.id" @click="setSelectedEvent(event.id)">
+        <div class="event" v-for="event in filteredEvents" :key="event.id">
           <div class="event-left">
-            <img :src="event.image" alt="Event Image">
+            <img :src="require(`../assets/images/${event.image}`)" alt="Event Image">
           </div>
           <div class="event-right">
             <div class="event-right-main">
@@ -157,10 +142,13 @@ export default {
                 <h3>{{ event.location }}</h3>
               </div>
               <div class="event-right-right">
-                <p>{{ event.date }}</p>
-                <p>{{ event.timeBegin }}-{{ event.timeEnd }}</p>
+                <p>{{ parseDate(event.date)  }}</p>
+                <p>{{ event.timeBegin.slice(0, 5) }} - {{ event.timeEnd.slice(0, 5) }}</p>
                 <p> {{ formattedPrice(event) }}</p>
               </div>
+            </div>
+            <div class="event-right-bottom">
+              <button @click="setSelectedEvent(event.id)">Edit</button>
             </div>
           </div>
         </div>
@@ -196,6 +184,12 @@ export default {
 
 .event {
   max-width: 450px;
+}
+
+.event-right-bottom {
+  display: flex;
+  flex-direction: row;
+  justify-content: right;
 }
 
 @media (max-width: 1030px) {

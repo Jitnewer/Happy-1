@@ -1,12 +1,14 @@
 package com.example.backend.rest;
 
-import com.example.backend.models.Event;
-import com.example.backend.repositories.event.EventRepository;
+import com.example.backend.repositories.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.example.backend.models.Event;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.sound.sampled.FloatControl;
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -33,16 +35,22 @@ public class EventController {
         }
     }
 
-    @PostMapping()
-    public ResponseEntity<String> addEvent(@RequestBody Event event) {
-        eventRepository.addEvent(event);
-        return ResponseEntity.status(HttpStatus.CREATED).body("Event added successfully"); // 201 Created
+    @PostMapping("")
+    public ResponseEntity<Event> addEvent(@RequestBody Event event) {
+        Event savedEvent = Event.copyConstructor(event);
+        eventRepository.addEvent(savedEvent);
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}").buildAndExpand(savedEvent.getId()).toUri();
+        return ResponseEntity.created(location).body(savedEvent);
     }
 
-    @PutMapping()
-    public ResponseEntity<String> updateEvent(@RequestBody Event event) {
-        eventRepository.updateEvent(event);
-        return ResponseEntity.ok("Event updated successfully"); // 200 OK
+    @PutMapping("/{id}")
+    public ResponseEntity<Event> updateEvent(@RequestBody Event event) {
+        Event updatedEvent = Event.copyConstructor(event);
+        eventRepository.updateEvent(updatedEvent);
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}").buildAndExpand(updatedEvent.getId()).toUri();
+        return ResponseEntity.created(location).body(updatedEvent);
     }
 
     @DeleteMapping("/{id}")

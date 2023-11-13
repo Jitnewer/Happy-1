@@ -43,32 +43,27 @@ export class RESTAdaptorWithFetch {
     }
   }
 
-  async asyncCreate (data) {
+  async asyncSave (event) {
+    let response
     try {
-      const response = await this.fetchJson(this.resourceUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-      })
+      if (event.id === 0) {
+        response = await this.fetchJson(this.resourceUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(event)
+        })
+      } else {
+        response = await this.fetchJson(`${this.resourceUrl}/${event.id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(event)
+        })
+      }
 
-      return this.copyConstructor(response)
-    } catch (error) {
-      console.error('Error in asyncCreate:', error)
-      return null
-    }
-  }
-
-  async asyncUpdate (data) {
-    try {
-      const response = await this.fetchJson(this.resourceUrl, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-      })
       return this.copyConstructor(response)
     } catch (error) {
       console.error('Error in asyncUpdate:', error)
