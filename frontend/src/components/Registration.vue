@@ -1,46 +1,231 @@
+<script>
+export default {
+  data () {
+    return {
+      entrepreneur: false,
+      generalPartner: true,
+      sliderValue: 0,
+      currentForm: 1,
+      currentEntrepreneurForm: 1
+    }
+  },
+  methods: {
+    toggleChecked (e) {
+      this.sliderValue = e.target.checked
+      console.log(this.sliderValue)
+      console.log('Dit is de waarde van partner: ' + this.generalPartner)
+      console.log('Dit is de waarde van entrepreneur: ' + this.entrepreneur)
+    },
+    goToPrevForm () {
+      this.currentForm--
+    },
+    goToNextForm () {
+      this.currentForm++
+    },
+    goToPrevFormEntrepreneur () {
+      this.currentEntrepreneurForm--
+    },
+    goToNextFormEntrepreneur () {
+      this.currentEntrepreneurForm++
+    }
+  },
+  watch: {
+    sliderValue (value) {
+      console.log(value)
+      if (value) {
+        this.generalPartner = false
+        this.entrepreneur = true
+      } else {
+        this.entrepreneur = false
+        this.generalPartner = true
+      }
+    }
+  }
+}
+</script>
+
 <template>
-  <!--  <div class="sign-up-specific">-->
-  <!--    <h1 class="h1-sign-up">Sign Up</h1>-->
-  <!--    <div class="options-reg">-->
-  <!--      <button class="button-left-reg">Sign Up As Entrepreneur</button></div>-->
-  <!--    <span class="options-span"></span>-->
-  <!--    <div> <button class="button-right-reg">Sign up as General Partner </button></div>-->
-  <!--  </div>-->
   <div class="sign-up-body">
     <div class="container-sign-up">
-      <div class="header-sign-up">Sign Up Entrepreneur</div>
-      <div class="progress-bar-sign-up">
-        <div class="step">
-          <p class="p-sign-up-form">Name</p>
-          <div class="bullet-sign-up-form">
-            <span class="span-sign-up-form-check">1</span>
+      <div class="header-sign-up">Sign Up</div>
+      <div class="form-sign-up-as-1">
+        <form action="#">
+          <!--              <div class="sign-up-page">-->
+          <!--                <div class="title-sign-up-form">Here you can sign up as:</div>-->
+          <!--                <div class="field-sign-up">-->
+          <!--                <div class="field-btn-sign-up-as">-->
+          <!--                  <button>Entrepreneur</button>-->
+          <!--                  <button>General Partner</button>-->
+          <!--                </div>-->
+          <!--                </div>-->
+          <!--              </div>-->
+        </form>
+        <label class="switch">
+          <input type="checkbox" @click="toggleChecked">
+          <span class="slider round"></span>
+        </label>
+        <div v-if="generalPartner">
+          <div class="header-sign-up">General Partner</div>
+          <div class="progress-bar-sign-up">
+            <div class="step">
+              <p class="p-sign-up-form">Name</p>
+              <div class="bullet-sign-up-form">
+                <span class="span-sign-up-form-check">1</span>
+              </div>
+              <div class="check-sign-up">&#10003;</div>
+            </div>
+            <div class="step">
+              <p class="p-sign-up-form">Contact</p>
+              <div class="bullet-sign-up-form">
+                <span class="span-sign-up-form-check">2</span>
+              </div>
+              <div class="check-sign-up">&#10003;</div>
+            </div>
+            <div class="step">
+              <p class="p-sign-up-form">Birth</p>
+              <div class="bullet-sign-up-form">
+                <span class="span-sign-up-form-check">3</span>
+              </div>
+              <div class="check-sign-up">&#10003;</div>
+            </div>
+            <div class="step">
+              <p class="p-sign-up-form">Submit</p>
+              <div class="bullet-sign-up-form">
+                <span class="span-sign-up-form-check">4</span>
+              </div>
+              <div class="check-sign-up">&#10003;</div>
+            </div>
           </div>
-          <div class="check-sign-up">&#10003;</div>
-        </div>
-        <div class="step">
-          <p class="p-sign-up-form">Contact</p>
-          <div class="bullet-sign-up-form">
-            <span class="span-sign-up-form-check">2</span>
+          <div class="form-sign-up-1" v-if="currentForm ===1">
+            <div class="sign-up-page">
+              <div class="title-sign-up-form">Basic Info:</div>
+              <div class="field-sign-up">
+                <div class="label-sign-up">Company Name:</div>
+                <input type="text" class="sign-up-input" required>
+              </div>
+
+              <div class="field-sign-up" >
+                <div class="label-sign-up">Contact Name:</div>
+                <input type="text" class="sign-up-input" required>
+              </div>
+
+              <div class="field-sign-up">
+                <div class="label-sign-up">Email Address:</div>
+                <input type="email" class="sign-up-input" required>
+              </div>
+
+              <div class="field-btn">
+                <button  @click.prevent="goToNextForm">Next</button>
+              </div>
+            </div>
           </div>
-          <div class="check-sign-up">&#10003;</div>
-        </div>
-        <div class="step">
-          <p class="p-sign-up-form">Birth</p>
-          <div class="bullet-sign-up-form">
-            <span class="span-sign-up-form-check">3</span>
+
+          <div class="sign-up-page" id="user_detail2"  v-if="currentForm ===2">
+            <div class="title-sign-up-form">Contact Info:</div>
+            <div class="field-sign-up">
+              <div class="label-sign-up">Type of industry:</div>
+              <select class="select-gender-sign-up">
+                <option>Horeca</option>
+                <option>Bar</option>
+                <option>Restaurant</option>
+              </select>
+            </div>
+            <div class="field-sign-up">
+              <div class="label-sign-up">Type of partner:</div>
+              <select class="select-gender-sign-up">
+                <option>Chain partner</option>
+                <option>Knowledge partner</option>
+              </select>
+            </div>
+            <div class="field-sign-up">
+              <div class="label-sign-up">Postal code:</div>
+              <input type="text" class="sign-up-input" required>
+            </div>
+
+            <div class="field-btn">
+              <button class="prev-1" @click="goToPrevForm">Previous</button>
+              <button class="next-1" @click.prevent="goToNextForm">Next</button>
+            </div>
           </div>
-          <div class="check-sign-up">&#10003;</div>
-        </div>
-        <div class="step">
-          <p class="p-sign-up-form">Submit</p>
-          <div class="bullet-sign-up-form">
-            <span class="span-sign-up-form-check">4</span>
+
+          <div class="sign-up-page" id="user_detail3" v-if="currentForm ===3" >
+            <div class="title-sign-up-form">Date of Birth:</div>
+            <div class="field-sign-up">
+              <div class="label-sign-up">Dates:</div>
+              <input type="date" class="sign-up-input">
+            </div>
+
+            <div class="field-sign-up">
+              <div class="label-sign-up">Gender:</div>
+              <select class="select-gender-sign-up">
+                <option>Male</option>
+                <option>Female</option>
+                <option>Prefer not to tell</option>
+              </select>
+            </div>
+
+            <div class="field-btn">
+              <button class="prev-2" @click="goToPrevForm">Previous</button>
+              <button class="next-2" @click.prevent="goToNextForm">Next</button>
+            </div>
           </div>
-          <div class="check-sign-up">&#10003;</div>
+          <div class="sign-up-page" v-if="currentForm ===4">
+            <div class="title-sign-up-form">Login Details:</div>
+            <div class="field-sign-up">
+              <div class="label-sign-up">Username:</div>
+              <input type="text" class="sign-up-input" required>
+            </div>
+
+            <div class="field-sign-up">
+              <div class="label-sign-up">Password:</div>
+              <input type="password" class="sign-up-input" required>
+            </div>
+
+            <div class="field-sign-up">
+              <div class="label-sign-up">Confirm password:</div>
+              <input type="password" class="sign-up-input" required>
+            </div>
+
+            <div class="field-btn">
+              <button class="prev-3" @click="goToPrevForm">Previous</button>
+              <button class="submit">Submit</button>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="form-sign-up-1">
-        <form action="#">
+      <div v-if="entrepreneur">
+        <div class="header-sign-up">Entrepreneur</div>
+        <div class="progress-bar-sign-up">
+          <div class="step">
+            <p class="p-sign-up-form">Name</p>
+            <div class="bullet-sign-up-form">
+              <span class="span-sign-up-form-check">1</span>
+            </div>
+            <div class="check-sign-up">&#10003;</div>
+          </div>
+          <div class="step">
+            <p class="p-sign-up-form">Contact</p>
+            <div class="bullet-sign-up-form">
+              <span class="span-sign-up-form-check">2</span>
+            </div>
+            <div class="check-sign-up">&#10003;</div>
+          </div>
+          <div class="step">
+            <p class="p-sign-up-form">Birth</p>
+            <div class="bullet-sign-up-form">
+              <span class="span-sign-up-form-check">3</span>
+            </div>
+            <div class="check-sign-up">&#10003;</div>
+          </div>
+          <div class="step">
+            <p class="p-sign-up-form">Submit</p>
+            <div class="bullet-sign-up-form">
+              <span class="span-sign-up-form-check">4</span>
+            </div>
+            <div class="check-sign-up">&#10003;</div>
+          </div>
+        </div>
+        <div class="form-sign-up-1" v-if="this.currentEntrepreneurForm === 1">
           <div class="sign-up-page">
             <div class="title-sign-up-form">Basic Info:</div>
             <div class="field-sign-up">
@@ -63,130 +248,158 @@
             </div>
 
             <div class="field-btn">
-              <button>Next</button>
+              <button @click.prevent="goToNextFormEntrepreneur">Next</button>
             </div>
           </div>
+        </div>
 
-          <div class="sign-up-page" id="user_detail2" >
-            <div class="title-sign-up-form">Contact Info:</div>
-            <div class="field-sign-up">
-              <div class="label-sign-up">Email Address:</div>
-              <input type="email" class="sign-up-input" required>
-            </div>
-
-            <div class="field-sign-up">
-              <div class="label-sign-up">Postal code:</div>
-              <input type="text" class="sign-up-input" required>
-            </div>
-
-            <div class="field-btn">
-              <button class="prev-1">Previous</button>
-              <button class="next-1">Next</button>
-            </div>
+        <div class="sign-up-page" id="user_detail2" v-if="this.currentEntrepreneurForm === 2">
+          <div class="title-sign-up-form">Contact Info:</div>
+          <div class="field-sign-up">
+            <div class="label-sign-up">Email Address:</div>
+            <input type="email" class="sign-up-input" required>
           </div>
-          <div class="sign-up-page" id="user_detail3">
-            <div class="title-sign-up-form">Date of Birth:</div>
-            <div class="field-sign-up">
-              <div class="label-sign-up">Dates:</div>
-              <input type="date" class="sign-up-input">
-            </div>
 
-            <div class="field-sign-up">
-              <div class="label-sign-up">Gender:</div>
-              <select class="select-gender-sign-up">
-                <option>Male</option>
-                <option>Female</option>
-                <option>Prefer not to tell</option>
-              </select>
-            </div>
-
-            <div class="field-btn">
-              <button class="prev-2">Previous</button>
-              <button class="next-2">Next</button>
-            </div>
+          <div class="field-sign-up">
+            <div class="label-sign-up">Postal code:</div>
+            <input type="text" class="sign-up-input" required>
           </div>
-          <div class="sign-up-page">
-            <div class="title-sign-up-form">Login Details:</div>
-            <div class="field-sign-up">
-              <div class="label-sign-up">Username:</div>
-              <input type="text" class="sign-up-input" required>
-            </div>
 
-            <div class="field-sign-up">
-              <div class="label-sign-up">Password:</div>
-              <input type="password" class="sign-up-input" required>
-            </div>
-
-            <div class="field-sign-up">
-              <div class="label-sign-up">Confirm password:</div>
-              <input type="password" class="sign-up-input" required>
-            </div>
-
-            <div class="field-btn">
-              <button class="prev-3">Previous</button>
-              <button class="submit" @click="loginAdmin">Submit</button>
-            </div>
+          <div class="field-btn">
+            <button class="prev-1" @click="goToPrevFormEntrepreneur">Previous</button>
+            <button class="next-1" @click.prevent="goToNextFormEntrepreneur">Next</button>
           </div>
-        </form>
+        </div>
+
+        <div class="sign-up-page" id="user_detail3" v-if="this.currentEntrepreneurForm === 3">
+          <div class="title-sign-up-form">Date of Birth:</div>
+          <div class="field-sign-up">
+            <div class="label-sign-up">Dates:</div>
+            <input type="date" class="sign-up-input">
+          </div>
+
+          <div class="field-sign-up">
+            <div class="label-sign-up">Gender:</div>
+            <select class="select-gender-sign-up">
+              <option>Male</option>
+              <option>Female</option>
+              <option>Prefer not to tell</option>
+            </select>
+          </div>
+
+          <div class="field-btn">
+            <button class="prev-2" @click="goToPrevFormEntrepreneur">Previous</button>
+            <button class="next-2" @click.prevent="goToNextFormEntrepreneur">Next</button>
+          </div>
+        </div>
+
+        <div class="sign-up-page" v-if="this.currentEntrepreneurForm === 4">
+          <div class="title-sign-up-form">Login Details:</div>
+          <div class="field-sign-up">
+            <div class="label-sign-up">Username:</div>
+            <input type="text" class="sign-up-input" required>
+          </div>
+
+          <div class="field-sign-up">
+            <div class="label-sign-up">Password:</div>
+            <input type="password" class="sign-up-input" required>
+          </div>
+
+          <div class="field-sign-up">
+            <div class="label-sign-up">Confirm password:</div>
+            <input type="password" class="sign-up-input" required>
+          </div>
+
+          <div class="field-btn">
+            <button class="prev-3" @click="goToPrevFormEntrepreneur">Previous</button>
+            <button class="submit">Submit</button>
+          </div>
+        </div>
       </div>
     </div>
+    <form action="#">
+      <!--              <div class="sign-up-page">-->
+      <!--                <div class="title-sign-up-form">Here you can sign up as:</div>-->
+      <!--                <div class="field-sign-up">-->
+      <!--                <div class="field-btn-sign-up-as">-->
+      <!--                  <button>Entrepreneur</button>-->
+      <!--                  <button>General Partner</button>-->
+      <!--                </div>-->
+      <!--                </div>-->
+      <!--              </div>-->
+    </form>
   </div>
-  <!--  <div class="body">-->
-  <!--<div class="container-reg">-->
-  <!--  <div class="title">Registration</div>-->
-  <!--  <form action="#">-->
-  <!--    <div class="user-details">-->
-  <!--      <div class="input-box">-->
-  <!--        <span class="details">Full Name</span>-->
-  <!--        <input type="text" placeholder="Enter your name" required>-->
-  <!--      </div>-->
-  <!--      <div class="input-box">-->
-  <!--        <span class="details">Username</span>-->
-  <!--        <input type="text" placeholder="Enter your username" required>-->
-  <!--      </div>-->
-  <!--      <div class="input-box">-->
-  <!--        <span class="details">Email</span>-->
-  <!--        <input type="text" placeholder="Enter your email" required>-->
-  <!--      </div>-->
-  <!--      <div class="input-box">-->
-  <!--        <span class="details">Phone Number</span>-->
-  <!--        <input type="text" placeholder="Enter your number" required>-->
-  <!--      </div>-->
-  <!--      <div class="input-box">-->
-  <!--        <span class="details">Password</span>-->
-  <!--        <input type="text" placeholder="Enter your password" required>-->
-  <!--      </div>-->
-  <!--      <div class="input-box">-->
-  <!--        <span class="details">Confirm Password</span>-->
-  <!--        <input type="text" placeholder="Confirm your password" required>-->
-  <!--      </div>-->
-
-  <!--      <div class="gender-details">-->
-  <!--        <input type="radio" name="gender" id="dot-1">-->
-  <!--        <input type="radio" name="gender" id="dot-2">-->
-  <!--        <input type="radio" name="gender" id="dot-3">-->
-  <!--        <span class="gender-title">Gender</span>-->
-  <!--        <div class="gender-category">-->
-  <!--          <label for="dot-1">-->
-  <!--            <span class="dot one"></span>-->
-  <!--            <span class="gender">Male</span>-->
-  <!--          </label>-->
-  <!--          <label for="dot-2">-->
-  <!--            <span class="dot two"></span>-->
-  <!--            <span class="gender">Female</span>-->
-  <!--          </label>-->
-  <!--        </div>-->
-  <!--      </div>-->
-  <!--      <div class="button">-->
-  <!--        <input type="submit" value="Register">-->
-  <!--      </div>-->
-  <!--    </div>-->
-  <!--  </form>-->
-  <!--</div>-->
-  <!--  </div>-->
 </template>
 
 <style scoped>
+.dark-text{
+  font-size: 32px;
+  color: black;
+}
+/* The switch - the box around the slider */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+/* -----------------------------------------------------------------r */
+/*Sign up form */
 .sign-up-body {
   display: flex;
   align-items: center;
@@ -195,6 +408,7 @@
 }
 
 .container-sign-up {
+  height: 800px;
   width: 400px;
   background: #fff;
   border-radius: 5px;
@@ -259,10 +473,15 @@
   font-size: 17px;
   font-weight: 500;
 }
+.field-btn{
+  display: flex;
+}
 
 .field-btn button {
   width: 100%;
-  height: 50px;
+  height: 60px;
+  margin-left: 5px;
+  margin-bottom: 10px;
   margin-top: -20px;
   border: none;
   background: #0992A4;
@@ -432,6 +651,33 @@
   padding: 10px;
   background: white;
 }
+/*Sign up AS form -  */
+.form-sign-up-as-1 form .sign-up-page {
+  width: 400%;
+  height: 400px;
+}
+
+/*Sign up AS button -  */
+.field-btn-sign-up-as button {
+  width: 100%;
+  height: 60px;
+  margin-top: 50px;
+  margin-bottom: 10px;
+  border: none;
+  background: #0992A4;
+  border-radius: 5px;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.field-btn-sign-up-as button:hover {
+  background: #000;
+}
 
 .container-reg {
   max-width: 700px;
@@ -553,26 +799,3 @@ form .button input:hover {
   background: black;
 }
 </style>
-
-<script>
-import { mapGetters, mapMutations } from 'vuex'
-
-export default {
-  name: 'NavBar.vue',
-  data () {
-    return {
-      showDropdown: false,
-      showNav: window.innerWidth > 800
-    }
-  },
-  computed: {
-    ...mapGetters(['isLoggedIn'])
-  },
-  methods: {
-    ...mapMutations(['setLoggedIn']),
-    loginAdmin () {
-      this.setLoggedIn(2) // Log in as a admin
-    }
-  }
-}
-</script>

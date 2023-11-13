@@ -1,0 +1,252 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+:root {
+    --main-color: #0991a3;
+    --main-color-admin: #0a454d;
+    --secondairy-color-admin: #64bac7;
+    --main-color-hover: #FECC32;
+    --main-color-hover-admin: #5e4a06;
+    --main-text-color: whitesmoke;
+    --shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+}
+
+#app {
+    font-family: 'Poppins', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    margin: 0;
+    box-sizing: border-box;
+    padding: 0;
+}
+/* Carousel
+ */
+.navigate {
+    position: relative;
+    display: flex;
+    width: auto;
+}
+.left {
+    margin-right: 88%;
+}
+.toggle-page {
+    display: flex;
+    flex: 1;
+    margin-top: 38%;
+}
+
+i.fa-arrow-left {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    background-color:  var(--main-color);
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    position: absolute;
+    top: calc(50% + 155px);
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+span.carouselPagination {
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color:  var(--main-color);
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
+
+.active {
+    color: var(--main-color-hover);
+}
+/* Footer */
+
+.bottomFooter{
+    align-items: center;
+    justify-content: center;
+    background-color:  var(--main-color);
+    width: 100%;
+    height: 30px;
+    padding: 15px;
+}
+.topFooter {
+    width: 100%;
+    height: 150px;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--main-color-hover);
+    align-items: flex-start;
+    justify-content: flex-start;
+    margin-top: 70px;
+}
+.topFooter p {
+    margin-left: 50px;
+}
+
+.yellow-text {
+    color: var(--main-color-hover);
+}
+.blue-text {
+    color: var(--main-color);
+}
+.white-text {
+    color: var(--main-text-color);
+}
+/* homePage */
+.container {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    position: relative;
+}
+.welcomeH1 {
+    color: black;
+    margin-bottom: 10px;
+    margin-top: 70px;
+}
+
+.welcomeP {
+    color: black;
+    margin-bottom: 100px;
+    margin-top: 30px;
+}
+
+.carousel {
+    max-width: 80%;
+    margin: auto;
+}
+.carouselHolder {
+    position: relative;
+    margin-top: 100px;
+    z-index: 1;
+}
+.slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    max-height: 100%;
+    height: 100%;
+}
+.homePageImg {
+    width: 100%;
+    object-fit: cover;
+    aspect-ratio: 21/9;
+    height: 350px;
+    border: 1px solid black;
+}
+.imageHolder img {
+    aspect-ratio: 16/9;
+    width: 50%;
+}
+.imageHolder {
+    display: flex;
+    gap: 30px;
+    justify-content: center;
+    align-items: center;
+}
+.aboutUs {
+    margin-top: 150px;
+}
+.pillar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    width: 100%;
+    margin-bottom: 20px;
+    margin-top: 50px;
+    height: 280px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.theme h1,h2,h3,h4,h5{
+    color: black;
+}
+.pillarText{
+    width: 40%;
+    margin-left: 30px;
+}
+.pillarText h1{
+    margin-bottom: 30px;
+}
+
+.pillarContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.pillarContainer button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s;
+    width: 100%;
+}
+
+.pillarContainer button:hover {
+    transform: scale(1.1);
+}
+.pillarImg .pillarImgContent {
+    max-width: 100%; /* Ensure the image does not exceed the width of its container */
+    max-height: 100%; /* Ensure the image does not exceed the height of its container */
+    object-fit: cover;
+    clip-path: polygon(20% 0, 100% 0, 100% 100%, 0 100%)
+}
+.pillarImg {
+    width: 70%; /* Adjust the width as needed */
+    max-height: 100%;
+    aspect-ratio: 16/9;
+}
+
+.themeContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.theme {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 30%;
+    margin-bottom: 80px;
+    margin-top: 10px;
+    height: 300px;
+}
+
+.theme button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s;
+
+}
+
+.theme button:hover {
+    transform: scale(1.1); /* Add a scaling effect on hover */
+}
+
+.theme .themeImg {
+    width: 60%;
+    height: 70%;
+    object-fit: fill;
+    aspect-ratio: 16/9;
+    margin-top: 10px; /* Add margin to separate image from text */
+}
+
+.theme h2 {
+    color: var(--main-color);
+    margin: 10px 20px 5px 20px; /* Adjust margins as needed */
+}
+
+.theme h5 {
+    color: black;
+    margin: 0 20px 20px 20px; /* Adjust margins as needed */
+}

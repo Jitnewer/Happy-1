@@ -1,10 +1,16 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
-import Vuex from 'vuex'
-import AdminEventView from '@/components/AdminEventView.vue'
-import EventDetailsView from '@/components/EventDetailsView.vue'
-import WelcomePage from '@/components/Welcome.vue'
-import AboutUs from '@/components/AboutUs.vue'
+import AdminEventView from '@/components/admin/eventPage/AdminEventView.vue'
+import EventDetailsView from '@/components/admin/eventPage/EventDetailsView.vue'
+import AdminStatistics from '@/components/admin/AdminStatistics.vue'
+import Events from '@/components/events/Events.vue'
+import EventsDetails from '@/components/events/EventsDetails.vue'
+import WelcomePage from '@/components/welcomePage/Welcome.vue'
+import SuperUserView from '@/components/admin/superUser/SuperUserView.vue'
+import SuperUserDetail from '@/components/admin/superUser/SuperUserDetail.vue'
+import AdminUsersView from '@/components/admin/userPage/AdminUsersView.vue'
+import AdminUsersDetail from '@/components/admin/userPage/AdminUsersDetail.vue'
 import Registration from '@/components/Registration.vue'
+import AboutUs from '@/components/AboutUs.vue'
 
 const routes = [
   {
@@ -17,6 +23,18 @@ const routes = [
     component: WelcomePage
   },
   {
+    path: '/events',
+    name: 'events',
+    component: Events,
+    children: [
+      {
+        path: ':id',
+        name: 'event',
+        component: EventsDetails
+      }
+    ]
+  },
+  {
     path: '/admin/events',
     component: AdminEventView,
     children: [
@@ -24,14 +42,32 @@ const routes = [
     ]
   },
   {
+    path: '/admin/statistics',
+    component: AdminStatistics
+  },
+  {
+    path: '/admin/users',
+    component: AdminUsersView,
+    children: [
+      { path: ':id', component: AdminUsersDetail }
+    ]
+  },
+  {
+    path: '/superuser/news',
+    component: SuperUserView,
+    children: [
+      { path: ':id', component: SuperUserDetail }
+    ]
+  },
+  {
+    path: '/register',
+    name: 'register',
+    component: Registration
+  },
+  {
     path: '/about-us',
     name: 'AboutUs',
     component: AboutUs
-  },
-  {
-    path: '/sign-up',
-    name: 'register',
-    component: Registration
   }
 ]
 
