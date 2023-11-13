@@ -132,7 +132,7 @@ export default {
       <div class="events">
         <div class="event" v-for="event in filteredEvents" :key="event.id">
           <div class="event-left">
-            <img :src="require(`../assets/images/${event.image}`)" alt="Event Image">
+            <img :src="require(`../../../assets/images/${event.image}`)" alt="Event Image">
           </div>
           <div class="event-right">
             <div class="event-right-main">
@@ -164,7 +164,6 @@ export default {
   margin-top: 0;
   margin-right: 0;
   width: 100%;
-  max-height: calc(100vh - 119px);
 }
 
 .events {
@@ -197,10 +196,6 @@ export default {
     padding: 0;
     margin-bottom: 0;
     max-height: 758px;
-  }
-
-  .container {
-    max-height: 760px;
   }
 }
 </style>

@@ -16,17 +16,6 @@
     margin-left: 20px;
 }
 
-/*button {*/
-/*    background: var(--main-color-hover);*/
-/*    color: var(--main-text-color);*/
-/*    border-style: none;*/
-/*    padding: 1rem 1.5rem;*/
-/*    font-size: 18px;*/
-/*    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;*/
-/*    cursor: pointer;*/
-/*    transition: 0.5s;*/
-/*}*/
-
 button:hover {
     background-color: var(--main-color-hover-admin);
 }

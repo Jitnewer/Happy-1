@@ -98,7 +98,7 @@ export default {
     <div class="event-details">
       <div class="event-image-container">
         <input type="file" accept="image/jpeg, image/png, image/jpg" id="file" @change="handleImageUpload">
-        <img :src="require(`../assets/images/${selectedCopy.image}`)" alt="event image" class="event-image" @click="activateInput">
+        <img :src="require(`../../../assets/images/${selectedCopy.image}`)" alt="event image" class="event-image" @click="activateInput">
       </div>
       <div class="info-inputs">
         <input type="text" placeholder="Event name" v-model="selectedCopy.name" id="edit-event-name">
@@ -134,5 +134,16 @@ h1, h2, h3, h4 {
   margin-top: 0;
   margin-right: 0;
   width: 100%;
+}
+
+button {
+  background: var(--main-color-hover);
+  color: var(--main-text-color);
+  border-style: none;
+  padding: 1rem 1.5rem;
+  font-size: 18px;
+  box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+  cursor: pointer;
+  transition: 0.5s;
 }
 </style>
