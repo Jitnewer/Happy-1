@@ -53,13 +53,14 @@ export class User {
 
   static createSampleUser () {
     const id = Math.floor((Math.random() * 100) + 1)
-    const image = require('../assets/img/profilepic.png')
+    const image = require('./../assets/img/profilepic.png')
 
+    const firstname = ['Tim', 'Mylo', 'Pim', 'Eva']
+    const lastname = ['Groot', 'Commandeur', 'Voortuin', 'Mase']
     const names = ['Tim Groot', 'Mylo', 'Pim', 'Eva']
-    let randomIndex = Math.floor(Math.random() * names.length)
+    const randomIndex = Math.floor(Math.random() * names.length)
     const randomName = names[randomIndex]
 
-    randomIndex = Math.floor(Math.random() * names.length)
     const userTypeValues = Object.values(this.userTypes)
     const randomUserType = userTypeValues[randomIndex]
 
@@ -78,7 +79,7 @@ export class User {
     const companyType = 'Catering'
     const postalCode = '1242 DA'
 
-    return new User(id, image, randomName, mail, gender, age, companyType, tag, status, randomUserType, postalCode)
+    return new User(id, image, firstname[randomIndex], lastname[randomIndex], mail, gender, age, companyType, tag, status, randomUserType, postalCode)
   }
 
   static generateId (usedIdList) {

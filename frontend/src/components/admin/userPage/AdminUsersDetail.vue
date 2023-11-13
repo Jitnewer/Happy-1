@@ -34,6 +34,13 @@ export default {
         }
       }
     },
+    handleImageUpload (event) {
+      const file = event.target.files[0]
+      this.selectedCopy.profilePic = URL.createObjectURL(file)
+    },
+    activateInput () {
+      document.querySelector('#file').click()
+    },
     validateInput () {
       this.nameError = ''
       this.mailError = ''
@@ -41,7 +48,12 @@ export default {
       this.isValid = true
 
       if (this.create) {
-        if (!this.selectedCopy.name) {
+        if (!this.selectedCopy.firstname) {
+          this.nameError = 'Name is required'
+          this.isValid = false
+        }
+
+        if (!this.selectedCopy.lastname) {
           this.nameError = 'Name is required'
           this.isValid = false
         }
@@ -76,11 +88,14 @@ export default {
     <div class="black"></div>
     <div class="user">
       <div class="user-info">
-        <img :src="selectedUser.profilePic" alt="user image"/>
+        <img @click="activateInput" :src="selectedCopy.profilePic" alt="user image"/>
+        <input type="file" accept="image/jpeg, image/png, image/jpg" id="file" @change="handleImageUpload">
         <div class="inputInfo">
-          <h2 v-if="!create"> {{ selectedUser.name }} </h2>
-          <h3 v-if="!create"> {{ selectedUser.mail }} </h3>
-          <input v-if="create" type="text" id="name" v-model="selectedCopy.name" placeholder="Username" :style="{ borderColor: nameError ? 'red' : '' }">
+          <h2 v-if="!create"> {{ selectedCopy.firstname }} {{ selectedCopy.lastname }} </h2>
+          <h3 v-if="!create"> {{ selectedCopy.mail }} </h3>
+          <input v-if="create" type="text" id="firstname" v-model="selectedCopy.firstname" placeholder="firstname" :style="{ borderColor: nameError ? 'red' : '' }">
+          <span class="error-message" v-if="!isValid">{{ nameError }}</span>
+          <input v-if="create" type="text" id="lastname" v-model="selectedCopy.lastname" placeholder="lastname" :style="{ borderColor: nameError ? 'red' : '' }">
           <span class="error-message" v-if="!isValid">{{ nameError }}</span>
           <input v-if="create" type="email" id="email" v-model="selectedCopy.mail" placeholder="Email" :style="{ borderColor: mailError ? 'red' : '' }">
           <span class="error-message" v-if="!isValid">{{ mailError }}</span>
@@ -104,7 +119,7 @@ export default {
 <style scoped>
 h1, h2, h3, h4, h5, h6, p {
   color: black;
-  margin: 0;
+  margin-left: 0;
   padding: 0.2rem 1rem;
   box-shadow: rgba(0, 0, 0, 0.19) 0 10px 20px, rgba(0, 0, 0, 0.23) 0 6px 6px;
   border: none;
