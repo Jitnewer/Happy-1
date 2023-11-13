@@ -1,14 +1,14 @@
 import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router'
-import AdminEventView from '@/components/AdminEventView.vue'
-import EventDetailsView from '@/components/EventDetailsView.vue'
+import AdminEventView from '@/components/admin/eventPage/AdminEventView.vue'
+import EventDetailsView from '@/components/admin/eventPage/EventDetailsView.vue'
 import AdminStatistics from '@/components/admin/AdminStatistics.vue'
 import Events from '@/components/events/Events.vue'
 import EventsDetails from '@/components/events/EventsDetails.vue'
 import WelcomePage from '@/components/welcomePage/Welcome.vue'
-import SuperUserView from '@/components/admin/SuperUserView.vue'
-import SuperUserDetail from '@/components/admin/SuperUserDetail.vue'
-import AdminUsersView from '@/components/admin/AdminUsersView.vue'
-import AdminUsersDetail from '@/components/admin/AdminUsersDetail.vue'
+import SuperUserView from '@/components/admin/superUser/SuperUserView.vue'
+import SuperUserDetail from '@/components/admin/superUser/SuperUserDetail.vue'
+import AdminUsersView from '@/components/admin/userPage/AdminUsersView.vue'
+import AdminUsersDetail from '@/components/admin/userPage/AdminUsersDetail.vue'
 const routes = [
   {
     path: '/home',
