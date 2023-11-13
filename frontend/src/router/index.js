@@ -9,6 +9,9 @@ import SuperUserView from '@/components/admin/superUser/SuperUserView.vue'
 import SuperUserDetail from '@/components/admin/superUser/SuperUserDetail.vue'
 import AdminUsersView from '@/components/admin/userPage/AdminUsersView.vue'
 import AdminUsersDetail from '@/components/admin/userPage/AdminUsersDetail.vue'
+import { createRouter, createWebHashHistory } from 'vue-router'
+import Registration from '@/components/Registration.vue'
+
 const routes = [
   {
     path: '/home',
@@ -53,6 +56,11 @@ const routes = [
     ]
   }
 
+  {
+    path: '/sign-up',
+    name: 'register',
+    component: Registration
+  }
 ]
 
 const router = createRouter({
