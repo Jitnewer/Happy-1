@@ -1,6 +1,6 @@
 <template>
   <div class="aboutUsContent">
-    <div class="aboutUsTitle"><h1>OVER HAPPY HOSPITALITY & ONS</h1></div>
+    <div class="aboutUsTitle"><h1><span class="blue-text">OVER HAPPY HOSPITALITY</span>  <span class="yellow-text">&</span> <span class="blue-text"> ONS</span></h1></div>
     <div><h2>Duurzaamheid</h2></div>
     <div class="aboutUsRow">
       <div class="aboutUsText">
@@ -58,41 +58,6 @@ export default {
 
 </script>
 
-<style>
-p {
-  color: black !important;
-}
+<style scoped>
 
-h1, h2 {
-  color: #0992A4 !important;
-}
-
-h2 {
-  margin-top: 50px !important;
-}
-
-.aboutUsContent {
-  display: flex;
-  flex-direction: column;
-}
-
-.aboutUsRow {
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  //background-color: #FECC30;
-  margin:  10px auto;
-}
-
-.aboutUsText {
-  margin: auto;
-  max-width: 50%;
-//height: 200px;
-}
-
-.aboutUsImage {
-  margin:auto;
-  max-width: 40%;
-//height: 200px;
-}
 </style>

@@ -30,8 +30,8 @@ const routes = [
     ]
   },
   {
-    path: '/admin/events',
     path: '/about-us',
+    name: 'aboutus',
     component: AboutUs
   },
   {
