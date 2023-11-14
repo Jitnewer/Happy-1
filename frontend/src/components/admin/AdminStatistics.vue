@@ -94,7 +94,7 @@ export default {
 .container-admin {
   margin-left: 1rem;
   margin-top: 1rem;
-  width:75%
+  width:80%
 }
 p {
   //color: black;
