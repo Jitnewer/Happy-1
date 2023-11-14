@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="containerHomepage">
     <div>
       <h1 class="welcomeH1">
         <span class="yellow-text">SUSTANCE</span> <span class="blue-text">FOR GOOD</span>
