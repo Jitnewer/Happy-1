@@ -173,6 +173,7 @@ export default {
 .container-admin {
   margin-left: 1rem;
   margin-top: 1rem;
+  width:75%
 }
 
 h1, h2, h3, h4, h5, h6, p {

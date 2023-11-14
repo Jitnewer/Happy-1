@@ -163,6 +163,7 @@ export default {
 .container-admin {
   margin-left: 1rem;
   margin-top: 1rem;
+  width:75%
 }
 
 .events {
