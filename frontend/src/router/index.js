@@ -9,6 +9,7 @@ import SuperUserView from '@/components/admin/superUser/SuperUserView.vue'
 import SuperUserDetail from '@/components/admin/superUser/SuperUserDetail.vue'
 import AdminUsersView from '@/components/admin/userPage/AdminUsersView.vue'
 import AdminUsersDetail from '@/components/admin/userPage/AdminUsersDetail.vue'
+import Registration from '@/components/Registration.vue'
 import AboutUs from '@/components/AboutUs.vue'
 
 const routes = [
@@ -58,6 +59,11 @@ const routes = [
     children: [
       { path: ':id', component: SuperUserDetail }
     ]
+  },
+  {
+    path: '/register',
+    name: 'register',
+    component: Registration
   }
 
 ]

@@ -28,7 +28,7 @@ export default {
     createUser () {
       this.create = true
       const id = User.generateId(this.usedIds)
-      this.selectedUser = new User(id, require('../../assets/img/profilepic.png'), null, null, null, null, 'N/A', 'N/A', 'Inactive', null, null)
+      this.selectedUser = new User(id, require('../../../assets/img/profilepic.png'), null, null, null, null, 'N/A', 'N/A', 'Inactive', null, null)
       this.usedIds.push(id)
       this.isSelected = !this.isSelected
       this.$router.push(this.$route.matched[0].path + '/' + id)
