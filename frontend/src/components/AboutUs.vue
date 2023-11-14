@@ -1,45 +1,52 @@
-<template>
-  <div class="aboutUsContent">
-    <div class="aboutUsTitle"><h1><span class="blue-text">OVER HAPPY HOSPITALITY</span>  <span class="yellow-text">&</span> <span class="blue-text"> ONS</span></h1></div>
-    <div><h2>Duurzaamheid</h2></div>
-    <div class="aboutUsRow">
-      <div class="aboutUsText">
-        <p>
-          We hebben allemaal de klok wel horen luiden; de een heeft het over duurzaamheid, de ander over circulaire
-          business modellen of een eerlijke manier van werken. De krant staat bol van nieuws over stikstof, uitstoot,
-          co2 reductie sus en minder vlees zo. Onze geneugten worden aan banden gelegd, niet meer vliegen voor een
-          weekendje, geen vlees meer, en nu ook nog eens de kachel uit. En het erge is dat het allemaal verband schijnt
-          te hebben en we die verantwoordelijkheid samen moeten pakken en dragen. </p>
-      </div>
-      <img src="../assets/img/sustainability.jpg" class="aboutUsImage" alt="Image">
-    </div>
-    <div><h2>Horeca's</h2></div>
-    <div class="aboutUsRow">
-      <img src="../assets/img/horeca.jpg" class="aboutUsImage" alt="Image">
-      <div class="aboutUsText"><p>
-        Maar waar begin je dan als horeca ondernemer? Wie spreek je aan als je toeleverancier gewoonweg niet aan je
-        duurzame vraag kan voldoen en jij morgen wel weer aan je klant vraag moet voldoen en er een volle menukaart
-        aanwezig moet zijn? Hoe spreek je die accountmanager aan op het assortiment als je het gevoel hebt dat je alleen
-        staat? En welke vragen moet die accountmanager terugstellen om goed te begrijpen waar je behoefte ligt op het
-        gebied van duurzaamheid? Hoe kan je samenwerken zodat het gewoon eerlijk, duurzaam en vooral gezellig is in de
-        horeca?
-      </p></div>
-    </div>
-    <div><h2>Happy Hospitality!</h2></div>
-    <div class="aboutUsRow">
-      <div class="aboutUsText">
-        <p>
-          Happy Hospitality is een initiatief van Karin Lindenhovius, Ellekari Klaasse, Carlijn Wijnmalen-Groen en World
-          Startup. We pakken de meest actuele duurzame thema’s, de grootste horeca problemen en gaan met elkaar werken aan
-          constructieve oplossingen en innovaties.
-          Dit doen we door het gesprek te faciliteren, een grootschalig onderzoek uit te zetten in de markt, de
-          inzichten te vertalen naar concrete probleemstellingen, deze met experts te analyseren door met verschillende
-          waardeproposities te komen, en deze vervolgens te testen in de markt.
-          De inzichten en uitkomsten delen we met de markt, zodat iedereen kan mee leren en profiteren en we samen
-          werken aan een gelukkige duurzame horeca markt.
-        </p>
-      </div>
-      <img src="../assets/img/happy.webp" class="aboutUsImage" alt="Image">
+<template xmlns="http://www.w3.org/1999/html">
+  <div class="container">
+    <div class="aboutUsContent">
+      <h1 class="aboutLanding">
+        <span class="blue-text">ABOUT </span>
+        <span class="yellow-text">HAPPY HOSPITALITY </span>
+        <span class="blue-text">& </span>
+        <span class="yellow-text"> US </span>
+      </h1>
+      <img class="aboutBanner" src="../assets/img/forestscreen.jpg">
+
+      <div><h2>
+        <span class="blue-text">Sustain</span>
+        <span class="yellow-text">ablility</span>
+      </h2></div>
+      <p class="aboutP">
+        We have all heard the same story; one person talks about sustainability, the other about circular business
+        models or a fair way of working. The newspaper is full of news about nitrogen, emissions, co2 reduction and
+        less consumption of meat. Our pleasures are curbed, no more flying for a weekend, no more meat, and now the
+        heater is also out. And the worst thing is that it all seems to be related and we have to take and bear that
+        responsibility together.
+      </p>
+
+      <div><h2>
+        <span class="blue-text">Catering </span>
+        <span class="yellow-text">industry</span>
+      </h2></div>
+      <p class="aboutP">
+        But where do you start as a catering entrepreneur? Who do you hold accountable if your supplier simply cannot
+        meet your sustainable demand and you have to meet your customer demand again tomorrow and there must be a full
+        menu? How do you address that account manager on the assortment if you feel like you are alone? And what
+        questions should that account manager ask back to understand where your needs are in terms of sustainability?
+        How can you work together so that it is just fair, sustainable and above all fun in the hospitality industry?
+      </p>
+
+      <div><h2>
+        <span class="blue-text">Happy </span>
+        <span class="yellow-text">Hospitality!</span>
+      </h2></div>
+      <p class="aboutP">
+        Happy Hospitality is an initiative of Karin Lindenhovius, Ellekari Klaasse, Carlijn Wijnmalen-Groen and World
+        Startup. We tackle the most current sustainable themes, the biggest hospitality problems and work together on
+        constructive solutions and innovations.
+        We do this by facilitating the conversation, conducting a large-scale survey in the market, translating the
+        insights into concrete problem statements, analyzing them with experts by coming up with different value
+        propositions, and then testing them in the market.
+        We share the insights and results with the market, so that everyone can learn and benefit and we work
+        together on a happy sustainable hospitality market.
+      </p>
     </div>
   </div>
 </template>

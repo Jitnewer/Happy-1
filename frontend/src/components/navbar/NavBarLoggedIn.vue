@@ -25,7 +25,7 @@
           <router-link to="/events">
             Events
           </router-link>
-          <router-link to="/about-us">
+          <router-link to="/about">
             About Us
           </router-link>
         </div>

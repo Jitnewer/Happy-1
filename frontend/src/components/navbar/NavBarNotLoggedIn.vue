@@ -6,7 +6,7 @@
     <div class="nav-links" v-show="showNav">
       <div class="nav-links-left">
         <router-link to="/home">Home</router-link>
-        <router-link to="/about-us">About Us</router-link>
+        <router-link to="/about">About Us</router-link>
       </div>
       <div class="nav-links-right">
         <router-link to="/register">Register</router-link>
