@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container-admin">
     <div class="users-amount-container">
       <div class="legend">
         <p>Total Users: {{ totalUsersCount }}</p>
@@ -91,7 +91,10 @@ export default {
 .canvas-container {
   width: 600px;
 }
-
+.container-admin {
+  margin-left: 1rem;
+  margin-top: 1rem;
+}
 p {
   //color: black;
 }

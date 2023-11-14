@@ -119,7 +119,7 @@ export default {
 </script>
 
 <template>
-  <div class="container admin-event" v-if="!isSelected">
+  <div class="container-admin admin-event" v-if="!isSelected">
       <div class="title">
         <h1>Events</h1>
       </div>
@@ -160,11 +160,9 @@ export default {
 </template>
 
 <style scoped>
-.container {
-  //margin-top: 0;
-  //margin-right: 0;
-  //width: 100%;
-  //max-height: calc(100vh - 119px);
+.container-admin {
+  margin-left: 1rem;
+  margin-top: 1rem;
 }
 
 .events {
