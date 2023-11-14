@@ -26,7 +26,11 @@ export default {
     },
     async deleteEventDetail () {
       if (confirm('Are you sure you want to delete this event?')) {
-        await this.eventsService.asyncDeleteById(this.selectedEvent.id)
+        try {
+          await this.eventsService.asyncDeleteById(this.selectedEvent.id)
+        } catch (e) {
+          console.error(e)
+        }
         this.$emit('delete-event', this.selectedEvent)
       }
     },

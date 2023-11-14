@@ -54,22 +54,26 @@ export default {
       this.$router.push(this.$route.matched[0].path + '/' + this.selectedEvent.id)
     },
     async saveEvent (event) {
-      const createdEvent = await this.eventsService.asyncSave(event)
+      try {
+        const createdEvent = await this.eventsService.asyncSave(event)
 
-      if (this.create === true) {
-        this.events.push(createdEvent)
-      } else {
-        const indexToUpdate = this.events.findIndex(oldEvent => oldEvent.id === event.id)
+        if (this.create === true) {
+          this.events.push(createdEvent)
+        } else {
+          const indexToUpdate = this.events.findIndex(oldEvent => oldEvent.id === event.id)
 
-        if (indexToUpdate >= 0) {
-          this.events.splice(indexToUpdate, 1, createdEvent)
+          if (indexToUpdate >= 0) {
+            this.events.splice(indexToUpdate, 1, createdEvent)
+          }
         }
-      }
-      this.isSelected = !this.isSelected
-      this.selectedEvent = null
-      this.create = false
+        this.isSelected = !this.isSelected
+        this.selectedEvent = null
+        this.create = false
 
-      this.$router.push(this.$route.matched[0])
+        this.$router.push(this.$route.matched[0])
+      } catch (e) {
+        console.error(e)
+      }
     },
     formattedPrice (event) {
       if (event.price !== null) {

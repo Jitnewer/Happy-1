@@ -61,7 +61,7 @@ export default {
         if (this.isAdmin || (localStorage.getItem('admin') === 'true')) {
           return 'NavBarLoggedInAdminAndSuperUser'
         } else {
-          return 'NavBarLoggedInAdminAndSuperUser'
+          return 'NavBarLoggedIn'
         }
       }
     }
