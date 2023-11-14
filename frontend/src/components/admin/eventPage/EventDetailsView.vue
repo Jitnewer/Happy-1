@@ -123,7 +123,7 @@ export default {
 
 <style scoped>
 h1, h2, h3, h4 {
-  color: #000000;
+  //color: #000000;
 }
 
 .events-title h3{

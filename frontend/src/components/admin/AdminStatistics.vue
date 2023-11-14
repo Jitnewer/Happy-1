@@ -93,7 +93,7 @@ export default {
 }
 
 p {
-  color: black;
+  //color: black;
 }
 
 .entrepreneur {
@@ -122,7 +122,7 @@ p {
   }
 
   p {
-    font-size: 14px;
+    //font-size: 14px;
   }
 }
 </style>

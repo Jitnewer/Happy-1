@@ -419,7 +419,7 @@ nav a:hover {
     display: flex;
     flex-direction: column;
     padding: 18px 45px;
-    height: 69.6vh;
+    height: 100%;
 }
 
 .dashboard-links-small {
@@ -428,7 +428,7 @@ nav a:hover {
     display: flex;
     flex-direction: column;
     padding: 18px 14px;
-    height: 85.2vh;
+    height: 100%;
 }
 
 .dashboard-links a {
@@ -2115,3 +2115,5 @@ button:hover {
     margin-left: 20px;
     margin-top: 4px;
 }
+
+

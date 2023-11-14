@@ -10,7 +10,7 @@
       </div>
       <div class="nav-links-right">
         <router-link to="/register">Register</router-link>
-        <router-link to="/login" @click="login">Login</router-link>
+        <router-link to="/login">Login</router-link>
       </div>
     </div>
     </transition>

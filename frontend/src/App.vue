@@ -1,7 +1,7 @@
 <template>
   <div>
-    <component :is="navBar" @logout="handleLogout" @loginAdmin="loginAdmin" @loginUser="loginUser"></component>
-    <router-view v-if="navBar !== 'NavBarLoggedInAdminAndSuperUser'"></router-view>
+    <component :is="navBar" @handleLogout="handleLogout"></component>
+    <router-view v-if="navBar !== 'NavBarLoggedInAdminAndSuperUser'"  @loginAdmin="loginAdmin" @loginUser="loginUser"></router-view>
   </div>
 </template>
 
@@ -25,6 +25,7 @@ export default {
   data () {
     return {
       loggedIn: false,
+      admin: false,
       loginAndRegisterService: new LoginAndRegisterAdapter(CONFIG.BACKEND_URL, User.copyConstructor)
     }
   },
@@ -51,10 +52,13 @@ export default {
   },
   computed: {
     navBar () {
-      if (!this.loggedIn) {
+      console.log(this.loggedIn)
+      console.log(localStorage.getItem('email'))
+      console.log(localStorage.getItem('admin'))
+      if (!this.loggedIn && !localStorage.getItem('email')) {
         return 'NavBarNotLoggedIn'
       } else {
-        if (this.isAdmin) {
+        if (this.isAdmin || (localStorage.getItem('admin') === 'true')) {
           return 'NavBarLoggedInAdminAndSuperUser'
         } else {
           return 'NavBarLoggedIn'
@@ -63,5 +67,4 @@ export default {
     }
   }
 }
-
 </script>

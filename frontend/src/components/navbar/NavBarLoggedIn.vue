@@ -80,8 +80,9 @@ export default {
   methods: {
     logout () {
       localStorage.removeItem('email')
+      localStorage.removeItem('admin')
       this.$router.push({ path: '/home' })
-      this.$emit('logout')
+      this.$emit('handleLogout')
     },
     toggleNav () {
       this.showNav = !this.showNav
