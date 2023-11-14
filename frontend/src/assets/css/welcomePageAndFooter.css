@@ -101,10 +101,12 @@ span.carouselPagination {
     color: var(--main-text-color);
 }
 /* homePage */
-.container {
-    margin-top: 20px;
-    margin-bottom: 20px;
+.containerHomepage {
+    /*margin-top: 20px;*/
+    /*margin-bottom: 20px;*/
     position: relative;
+    width: 80%;
+    margin: 20rem auto auto;
 }
 .welcomeH1 {
     color: black;
