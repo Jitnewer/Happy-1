@@ -341,6 +341,7 @@ nav a:hover {
 /* NavBar - Admin */
 .dashboard-container {
     display: flex;
+    min-height: 100vh;
 }
 #admin {
     background-color: var(--main-color-admin)
@@ -378,7 +379,7 @@ nav a:hover {
 .dashboard {
     display: flex;
     flex-direction: column;
-    width: 313px;
+    width: 20%;
     z-index: 99;
 }
 

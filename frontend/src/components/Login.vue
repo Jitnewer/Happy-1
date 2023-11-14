@@ -41,6 +41,7 @@ export default {
       try {
         const user = await this.loginAndRegisterService.asyncLogin(this.email, this.password)
         if (user !== null) {
+          console.log(user)
           if (user.userType === 'ADMIN') {
             localStorage.setItem('email', this.email)
             localStorage.setItem('admin', 'true')

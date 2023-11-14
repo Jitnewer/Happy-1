@@ -41,7 +41,7 @@ const routes = [
     component: AboutUs
   },
   {
-    path: '/admin/event',
+    path: '/admin/events',
     component: AdminEventView,
     children: [
       { path: ':id', component: EventDetailsView }

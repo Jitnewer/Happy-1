@@ -54,22 +54,26 @@ export default {
       this.$router.push(this.$route.matched[0].path + '/' + this.selectedEvent.id)
     },
     async saveEvent (event) {
-      const createdEvent = await this.eventsService.asyncSave(event)
+      try {
+        const createdEvent = await this.eventsService.asyncSave(event)
 
-      if (this.create === true) {
-        this.events.push(createdEvent)
-      } else {
-        const indexToUpdate = this.events.findIndex(oldEvent => oldEvent.id === event.id)
+        if (this.create === true) {
+          this.events.push(createdEvent)
+        } else {
+          const indexToUpdate = this.events.findIndex(oldEvent => oldEvent.id === event.id)
 
-        if (indexToUpdate >= 0) {
-          this.events.splice(indexToUpdate, 1, createdEvent)
+          if (indexToUpdate >= 0) {
+            this.events.splice(indexToUpdate, 1, createdEvent)
+          }
         }
-      }
-      this.isSelected = !this.isSelected
-      this.selectedEvent = null
-      this.create = false
+        this.isSelected = !this.isSelected
+        this.selectedEvent = null
+        this.create = false
 
-      this.$router.push(this.$route.matched[0])
+        this.$router.push(this.$route.matched[0])
+      } catch (e) {
+        console.error(e)
+      }
     },
     formattedPrice (event) {
       if (event.price !== null) {
@@ -119,7 +123,7 @@ export default {
 </script>
 
 <template>
-  <div class="container admin-event" v-if="!isSelected">
+  <div class="container-admin admin-event" v-if="!isSelected">
       <div class="title">
         <h1>Events</h1>
       </div>
@@ -160,11 +164,10 @@ export default {
 </template>
 
 <style scoped>
-.container {
-  //margin-top: 0;
-  //margin-right: 0;
-  //width: 100%;
-  //max-height: calc(100vh - 119px);
+.container-admin {
+  margin-left: 1rem;
+  margin-top: 1rem;
+  width:80%
 }
 
 .events {

@@ -117,7 +117,7 @@ export default {
 </script>
 
 <template>
-  <div class="container">
+  <div class="container-admin">
     <div class="title">
       <h2>Users</h2>
     </div>
@@ -170,14 +170,10 @@ export default {
 </template>
 
 <style scoped>
-.container {
-  margin-left: 20px;
-  max-height: 95%;
-  height: 100%;
-  width: 100%;
-  display: flex;
-  max-width: 100%; /* Add this line to limit the maximum width of the container */
-  flex-direction: column;
+.container-admin {
+  margin-left: 1rem;
+  margin-top: 1rem;
+  width:80%
 }
 
 h1, h2, h3, h4, h5, h6, p {
