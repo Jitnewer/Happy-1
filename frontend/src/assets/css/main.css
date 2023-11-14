@@ -2,6 +2,7 @@
 @import "users.css";
 @import 'event.css';
 @import "news.css";
+@import "aboutUs.css";
 :root {
     --main-color: #0991a3;
     --main-color-admin: #0a454d;

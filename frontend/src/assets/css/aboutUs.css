@@ -1,0 +1,46 @@
+@import url("https://cdn.jsdelivr.net/npm/animate.css@3.5.2/animate.min.css");
+.aboutP {
+    color: black;
+    margin-bottom: 1rem;
+    text-align: justify;
+}
+
+.aboutImg {
+    max-width: 50%;
+}
+
+.aboutLanding {
+    text-align: center;
+    justify-content: center;
+    margin-top: 60px;
+    margin-bottom: 40px;
+}
+
+.aboutBanner {
+    max-width: 80vw;
+    height: auto;
+}
+
+.aboutBanner img {
+    max-width: 100%;
+    height: auto;
+}
+
+.aboutArticle {
+    width: 80%;
+    margin: 100px auto;
+}
+
+.animate {
+    transition-delay: .1s;
+    transition-duration: .25s;
+    transition-timing-function: ease-in
+}
+
+.slide-up {
+    transform: translateY(0)
+}
+
+.slide-up.animate-active {
+    transform: translateY(-100px)
+}

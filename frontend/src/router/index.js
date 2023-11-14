@@ -1,4 +1,4 @@
-import { createRouter, createWebHashHistory } from 'vue-router'
+import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router'
 import AdminEventView from '@/components/admin/eventPage/AdminEventView.vue'
 import EventDetailsView from '@/components/admin/eventPage/EventDetailsView.vue'
 import AdminStatistics from '@/components/admin/AdminStatistics.vue'
@@ -36,7 +36,12 @@ const routes = [
     ]
   },
   {
-    path: '/admin/events',
+    path: '/about',
+    name: 'about',
+    component: AboutUs
+  },
+  {
+    path: '/admin/event',
     component: AdminEventView,
     children: [
       { path: ':id', component: EventDetailsView }
@@ -75,6 +80,7 @@ const routes = [
     name: 'AboutUs',
     component: AboutUs
   }
+
 ]
 
 const router = createRouter({
