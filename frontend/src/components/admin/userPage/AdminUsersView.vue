@@ -7,7 +7,7 @@ export default {
     return {
       filter: {
         search: null,
-        tag: null
+        userType: null
       },
       selectedUser: null,
       isSelected: false,
@@ -85,7 +85,7 @@ export default {
   },
   computed: {
     filterdUsers () {
-      if (!this.filter.search && !this.filter.tag) {
+      if (!this.filter.search && !this.filter.userType) {
         // If neither date nor search filter is set, return all events
         return this.users
       }
@@ -93,11 +93,12 @@ export default {
       // Filter events based on date and/or search filter
       return this.users.filter(user => {
         // Check if the event date matches the date filter (if set)
-        const tagMatch = !this.filter.tag || user.userType === this.filter.tag
+        const userTypeMatch = !this.filter.userType || user.userType === this.filter.userType
         // Check if the event name contains the search filter (if set)
-        const searchMatch = !this.filter.search || user.name.toLowerCase().includes(this.filter.search.toLowerCase())
+        const name = user.firstname + ' ' + user.lastname
+        const searchMatch = !this.filter.search || name.toLowerCase().includes(this.filter.search.toLowerCase())
         // Return true if both date and search filters match, or if neither filter is set
-        return searchMatch && tagMatch
+        return searchMatch && userTypeMatch
       })
     }
   },
@@ -124,8 +125,8 @@ export default {
     <div class="filters">
       <input type="text" class="search-filter" id="nameFilter" placeholder="Search for Users.." title="Type in a name"
              v-model="filter.search">
-      <select id="select-master" class="select-usertype" v-model="filter.tag">
-        <option value="">Choose tag</option>
+      <select id="select-master" class="select-usertype" v-model="filter.userType">
+        <option value="">Choose userType</option>
         <option value="ADMIN">Admin</option>
         <option value="ENTREPRENEUR">Entrepreneur</option>
         <option value="PARTNER">Partner</option>
@@ -150,7 +151,7 @@ export default {
         <tbody>
           <tr v-bind:class="{ 'banned': isBanned(user) }" v-for="user in filterdUsers" :key="user.id">
           <td> {{ user.id }}</td>
-          <td> {{ user.name }}</td>
+          <td> {{ user.firstname }} {{ user.lastname}} </td>
           <td> {{ user.mail }}</td>
           <td> {{ user.userType }}</td>
           <td> {{ user.tag }}</td>
