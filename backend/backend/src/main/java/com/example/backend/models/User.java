@@ -1,53 +1,68 @@
 package com.example.backend.models;
 
+import jakarta.persistence.*;
+
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Random;
+import java.util.Set;
 
+@Entity
+@Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames = "mail")})
 public class User {
     public static final String ADMIN = "ADMIN";
     public static final String ENTREPRENEUR = "ENTREPRENEUR";
     public static final String PARTNER = "PARTNER";
     public static final String SUPERUSER = "SUPERUSER";
-
     public static final String ACTIVE = "ACTIVE";
     public static final String INACTIVE = "INACTIVE";
     public static final String BANNED = "BANNED";
     public static final String UNBANNED = "UNBANNED";
-    private int id;
-    private static int idCounter = 3001;
+    @Id
+    @GeneratedValue
+    private long id;
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private Set<UserEvent> userEvents = new HashSet<>();
     private String profilePic;
-
-
+    @Column(nullable = false)
     private String firstname;
+    @Column(nullable = false)
     private String lastname;
+    @Column(unique = true, nullable = false)
     private String mail;
     private String gender;
     private int age;
+    @Column(nullable = false)
     private String companyType;
+    @Column(nullable = false)
     private String tag;
+    @Column(nullable = false)
     private String status;
+    @Column(nullable = false)
     private String userType;
+    @Column(nullable = false)
     private String postalCode;
+    @Column(nullable = false)
     private String password;
 
-    public int getId() {
-        return id;
+    public User() {
+
     }
 
-    public static int getIdCounter() {
-        return idCounter;
+    public long getId() {
+        return id;
     }
 
     public String getProfilePic() {
         return profilePic;
     }
 
-
-
     public String getMail() {
         return mail;
     }
-
+    public Set<UserEvent> getUserEvents() {
+        return userEvents;
+    }
     public String getGender() {
         return gender;
     }
@@ -77,7 +92,6 @@ public class User {
     }
 
     public User(String profilePic, String firstname, String lastname, String mail, String gender, int age, String companyType, String tag, String status, String userType, String postalCode, String password) {
-        this.id = idCounter++;
         this.profilePic = profilePic;
         this.firstname = firstname;
         this.lastname = lastname;
@@ -151,5 +165,24 @@ public class User {
         String postalCode = "1242 DA";
 
         return new User(image, randomFirstname, randomLastname, mail, gender, age, companyType, tag, status, randomUserType, postalCode, "test");
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", profilePic='" + profilePic + '\'' +
+                ", firstname='" + firstname + '\'' +
+                ", lastname='" + lastname + '\'' +
+                ", mail='" + mail + '\'' +
+                ", gender='" + gender + '\'' +
+                ", age=" + age +
+                ", companyType='" + companyType + '\'' +
+                ", tag='" + tag + '\'' +
+                ", status='" + status + '\'' +
+                ", userType='" + userType + '\'' +
+                ", postalCode='" + postalCode + '\'' +
+                ", password='" + password + '\'' +
+                '}';
     }
 }

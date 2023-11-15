@@ -11,10 +11,22 @@ export class RESTAdaptorWithFetch {
     try {
       const response = await fetch(url, options)
       if (response.ok) {
+        console.log(await response)
         return await response.json()
       } else {
-        console.log(response, !response.bodyUsed ? await response.text() : '')
-        return null
+        let errorMessage
+        try {
+          errorMessage = JSON.parse(await response.text()).message
+        } catch (parseError) {
+          errorMessage = 'Failed to parse error message'
+        }
+
+        // Return an object with error information
+        return {
+          error: true,
+          status: response.status,
+          message: errorMessage
+        }
       }
     } catch (error) {
       console.error('Error fetching JSON:', error)
@@ -34,12 +46,50 @@ export class RESTAdaptorWithFetch {
 
   async asyncFindById (id) {
     try {
-      console.log(`${this.resourceUrl}/${id}`)
       const response = await this.fetchJson(`${this.resourceUrl}/${id}`)
       return this.copyConstructor(response)
     } catch (error) {
       console.error('Error in asyncFindById:', error)
       return null
+    }
+  }
+
+  async asyncAddEntityToEntity (id1, id2, url) {
+    try {
+      const response = await this.fetchJson(`${this.resourceUrl}/${url}/${id1}/${id2}`, {
+        method: 'POST'
+      })
+      return this.copyConstructor(response)
+    } catch (error) {
+      console.error('Error in asyncAddEntityToEntity:', error)
+      return null
+    }
+  }
+
+  async asyncFindByColumn (column, url) {
+    try {
+      const response = await this.fetchJson(`${this.resourceUrl}/${url}/${column}`)
+      return this.copyConstructor(response)
+    } catch (error) {
+      console.error('Error in asyncAddEntityToEntity:', error)
+      return null
+    }
+  }
+
+  async asyncGetCount (id1, url) {
+    try {
+      return await this.fetchJson(`${this.resourceUrl}/${url}/${id1}`)
+    } catch (error) {
+      console.error('Error in asyncAddEntityToEntity:', error)
+      return null
+    }
+  }
+
+  async asyncHasEntityEntity (id1, id2, url) {
+    try {
+      return await this.fetchJson(`${this.resourceUrl}/${url}/${id1}/${id2}`)
+    } catch (error) {
+      console.error('Error in asyncAddEntityToEntity:', error)
     }
   }
 

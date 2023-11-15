@@ -12,18 +12,6 @@ export class Event {
     this.location = location
     this.info = info
     this.size = size
-    this.participants = []
-  }
-
-  addParticipant (name) {
-    this.participants.push(name)
-  }
-
-  removeParticipant (name) {
-    const index = this.participants.indexOf(name)
-    if (index !== -1) {
-      this.participants.splice(index, 1)
-    }
   }
 
   getDate () {
@@ -198,8 +186,7 @@ export class Event {
       event.price,
       event.location,
       event.info,
-      event.size,
-      event.participants
+      event.size
     )
   }
 }

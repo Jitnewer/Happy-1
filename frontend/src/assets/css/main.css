@@ -28,8 +28,7 @@ body {
 
 .container {
     width: 80%;
-    margin: 1rem auto auto;
-}
+    margin: 1rem auto 6rem auto;}
 
 input {
     font-family: 'Poppins', sans-serif;
@@ -625,7 +624,7 @@ nav a:hover {
 }
 
 .events {
-    grid-template-columns: repeat(3, 464px);
+    grid-template-columns: repeat(3, 457px);
     display: grid;
     gap: 3.5rem;
     margin-block: 3rem;
@@ -1900,11 +1899,11 @@ nav a:hover {
 /* AdminUsersView */
 /* remove later on*/
 .container {
-    font-family: Poppins, serif;
-    color: #000000;
-    margin: 0 60px;
-    height: 100%;
-    overflow: hidden;
+    /*font-family: Poppins, serif;*/
+    /*color: #000000;*/
+    /*margin: 0 60px;*/
+    /*height: 100%;*/
+    /*overflow: hidden;*/
 }
 
 .title {

@@ -1,15 +1,15 @@
 package com.example.backend.rest;
 
-import com.example.backend.repositories.event.EventRepository;
+import com.example.backend.models.UserEvent;
+import com.example.backend.repositories.event.EventSpringDataJpaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.example.backend.models.Event;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("events")
@@ -17,49 +17,52 @@ import java.util.List;
 public class EventController {
 
     @Autowired
-    EventRepository eventRepository;
+    private EventSpringDataJpaRepository eventRepository;
 
     @GetMapping()
-    public ResponseEntity<List<Event>> getEvents() {
-        List<Event> events = eventRepository.getEvents();
-        return ResponseEntity.ok(events); // 200 OK
+    public ResponseEntity<?> getEvents() {
+        List<Event> events = eventRepository.findAll();
+        if (events.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Events not found");
+        return ResponseEntity.ok(events);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getEvent(@PathVariable long id) {
-        try {
-            Event event = eventRepository.getEvent(id);
-            return ResponseEntity.ok(event); // 200 OK
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Event not found with id: " + id); // 404 Not Found
-        }
+        Optional<Event> event = eventRepository.findById(id);
+        if (event.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Event not found with id: " + id);
+        return ResponseEntity.ok(event);
     }
 
     @PostMapping("")
-    public ResponseEntity<Event> addEvent(@RequestBody Event event) {
-        Event savedEvent = Event.copyConstructor(event);
-        eventRepository.addEvent(savedEvent);
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("/{id}").buildAndExpand(savedEvent.getId()).toUri();
-        return ResponseEntity.created(location).body(savedEvent);
+    public ResponseEntity<?> addEvent(@RequestBody Event event) {
+        eventRepository.save(event);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Event added successfully");
+    }
+
+    @PostMapping("/multiple")
+    public ResponseEntity<String> createUsers() {
+        for (int i = 0; i < 12; i++) {
+            Event event = Event.createSampleEvent();
+            eventRepository.save(event);
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body("Events added successfully");
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Event> updateEvent(@RequestBody Event event) {
-        Event updatedEvent = Event.copyConstructor(event);
-        eventRepository.updateEvent(updatedEvent);
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("/{id}").buildAndExpand(updatedEvent.getId()).toUri();
-        return ResponseEntity.created(location).body(updatedEvent);
+    public ResponseEntity<?> updateEvent(@RequestBody Event event, @PathVariable Long id) {
+        if (!eventRepository.existsById(id)) return ResponseEntity.notFound().build();
+        eventRepository.save(event);
+        return ResponseEntity.status(HttpStatus.OK).body("Event updated successfully");
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteEvent(@PathVariable long id) {
-        try {
-            eventRepository.deleteEvent(id);
-            return ResponseEntity.ok("Event deleted successfully"); // 200 OK
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage()); // 404 Not Found
+        Optional<Event> event = eventRepository.findById(id);
+        if (event.isPresent()) {
+            eventRepository.deleteById(id);
+            return ResponseEntity.status(HttpStatus.OK).body("Event with id " + id + " deleted successfully");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Event not found with id: " + id);
         }
     }
 }

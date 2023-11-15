@@ -32,7 +32,8 @@ export class User {
   static copyConstructor (user) {
     if (!user) return null
 
-    const copy = new User(
+    // You can add more logic here to deep clone attributes if needed.
+    return new User(
       user.id,
       user.profilePic,
       user.firstname,
@@ -47,8 +48,6 @@ export class User {
       user.postalCode,
       user.password
     )
-    // You can add more logic here to deep clone attributes if needed.
-    return copy
   }
 
   static createSampleUser () {
