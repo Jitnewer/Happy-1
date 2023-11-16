@@ -153,6 +153,7 @@ export default {
   padding: 20px;
   overflow: auto;
   max-height: 550px;
+  margin-left: 0;
 }
 
 .title {
