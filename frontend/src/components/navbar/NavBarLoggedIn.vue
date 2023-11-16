@@ -22,7 +22,7 @@
               </div>
             </transition>
           </div>
-          <router-link to="/events">
+          <router-link :to="{ name: 'events', query: { sort: 'asc' } }">
             Events
           </router-link>
           <router-link to="/about">
@@ -143,8 +143,6 @@ export default {
     try {
       // Initiate the asynchronous operation
       this.user = await this.loginAndRegisterService.asyncFindByEmail(localStorage.getItem('email'))
-
-      console.log(this.user)
     } catch (e) {
       console.log(e)
     }

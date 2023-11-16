@@ -15,4 +15,7 @@ public interface UserEventSpringDataJpaRepository extends JpaRepository<UserEven
 
     boolean existsByUserAndEvent(User user, Event event);
 
+    Optional<UserEvent> findByUserAndEvent(User user, Event event);
+
+
 }

@@ -1,7 +1,8 @@
 
 export class Event {
-  constructor (id, image, name, city, date, timeBegin, timeEnd, price, location, info, size, participants) {
+  constructor (id, userEvents, image, name, city, date, timeBegin, timeEnd, price, location, info, size, participants) {
     this.id = id
+    this.userEvents = userEvents
     this.image = image
     this.name = name
     this.city = city
@@ -177,6 +178,7 @@ export class Event {
 
     return new Event(
       event.id,
+      event.userEvents,
       event.image,
       event.name,
       event.city,

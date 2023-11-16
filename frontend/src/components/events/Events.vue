@@ -120,7 +120,6 @@ export default {
       for (let i = 0; i < this.events.length; i++) {
         await this.isSignedIn(this.events[i])
       }
-      this.$router.push({ name: 'events', query: { sort: this.filter } })
     } catch (e) {
       console.error(e)
     }
@@ -165,6 +164,7 @@ export default {
       } else {
         this.selectedEventsSignIn = event
       }
+      console.log(this.selectedEventsSignIn)
     },
     async isSignedIn (event) {
       const user = await this.loginAndRegisterService.asyncFindByEmail(localStorage.getItem('email'))
@@ -183,17 +183,16 @@ export default {
         this.selectedEventsSignOut = event
       }
     },
-    signIn () {
+    async signIn () {
       this.showSignIn = false
       this.signInIn = true
 
+      const user = await this.loginAndRegisterService.asyncFindByEmail(localStorage.getItem('email'))
+
       // First timeout: Add participant after 10 seconds
       setTimeout(() => {
-        const user = this.usersService.asyncFindByColumn(localStorage.getItem('email'), 'mail')
-        console.log(user, this.selectedEventsSignIn)
-        // this.userEventsService.asyncAddEntityToEntity(user.id, this.selectedEventsSignIn.id)
+        this.userEventsService.asyncAddEntityToEntity(user.id, this.selectedEventsSignIn.id, 'addUserToEvent')
       }, 10000)
-
       // Second timeout: Hide signInIn and set signInComplete after 10 seconds
       setTimeout(() => {
         this.signInIn = false
@@ -203,16 +202,20 @@ export default {
         setTimeout(() => {
           this.signInComplete = false
           this.selectedEventsSignIn = null
+          for (let i = 0; i < this.events.length; i++) {
+            this.isSignedIn(this.events[i])
+          }
         }, 3000)
       }, 7000)
     },
-    signOut () {
+    async signOut () {
       this.showSignOut = false
       this.signInOut = true
+      const user = await this.loginAndRegisterService.asyncFindByEmail(localStorage.getItem('email'))
 
       // First timeout: Add participant after 10 seconds
       setTimeout(() => {
-        this.selectedEventsSignOut.removeParticipant(this.getFullName)
+        this.userEventsService.asyncRemoveEntityFromEntity(user.id, this.selectedEventsSignOut.id, 'removeUserFromEvent')
       }, 10000)
 
       // Second timeout: Hide signInIn and set signInComplete after 10 seconds
@@ -224,6 +227,9 @@ export default {
         setTimeout(() => {
           this.signOutComplete = false
           this.selectedEventsSignOut = null
+          for (let i = 0; i < this.events.length; i++) {
+            this.isSignedIn(this.events[i])
+          }
         }, 3000)
       }, 7000)
     },

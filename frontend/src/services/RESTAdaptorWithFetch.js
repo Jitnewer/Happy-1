@@ -66,6 +66,18 @@ export class RESTAdaptorWithFetch {
     }
   }
 
+  async asyncRemoveEntityFromEntity (id1, id2, url) {
+    try {
+      const response = await this.fetchJson(`${this.resourceUrl}/${url}/${id1}/${id2}`, {
+        method: 'DELETE'
+      })
+      return true
+    } catch (error) {
+      console.error('Error in asyncRemoveEntityToEntity:', error)
+      return null
+    }
+  }
+
   async asyncFindByColumn (column, url) {
     try {
       const response = await this.fetchJson(`${this.resourceUrl}/${url}/${column}`)

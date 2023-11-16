@@ -1,14 +1,17 @@
 package com.example.backend.rest;
 
-import com.example.backend.models.UserEvent;
+import com.example.backend.models.Event;
 import com.example.backend.repositories.event.EventSpringDataJpaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.example.backend.models.Event;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -20,49 +23,78 @@ public class EventController {
     private EventSpringDataJpaRepository eventRepository;
 
     @GetMapping()
-    public ResponseEntity<?> getEvents() {
+    public ResponseEntity<Object> getEvents() {
         List<Event> events = eventRepository.findAll();
-        if (events.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Events not found");
+        if (events.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", "Events not found"));
+        }
         return ResponseEntity.ok(events);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getEvent(@PathVariable long id) {
+    public ResponseEntity<Object> getEvent(@PathVariable long id) {
         Optional<Event> event = eventRepository.findById(id);
-        if (event.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Event not found with id: " + id);
-        return ResponseEntity.ok(event);
+        return event.<ResponseEntity<Object>>map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", "Event not found with id: " + id)));
     }
 
     @PostMapping("")
-    public ResponseEntity<?> addEvent(@RequestBody Event event) {
-        eventRepository.save(event);
-        return ResponseEntity.status(HttpStatus.CREATED).body("Event added successfully");
+    public ResponseEntity<Object> addEvent(@RequestBody Event event) {
+        try {
+            Event savedEvent = eventRepository.save(event);
+
+            URI location = ServletUriComponentsBuilder
+                    .fromCurrentRequest()
+                    .path("/{id}")
+                    .buildAndExpand(savedEvent.getId())
+                    .toUri();
+
+            return ResponseEntity.created(location).body(Map.of(
+                    "message", "Event added successfully",
+                    "status", HttpStatus.CREATED.value(),
+                    "location", location.toString()));
+        } catch (Exception e) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("message", "Error adding the event");
+            errorResponse.put("error", e.getMessage()); // Include more details about the error if needed
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+        }
     }
+
 
     @PostMapping("/multiple")
-    public ResponseEntity<String> createUsers() {
-        for (int i = 0; i < 12; i++) {
-            Event event = Event.createSampleEvent();
-            eventRepository.save(event);
+    public ResponseEntity<Object> createEvents() {
+        try {
+            for (int i = 0; i < 12; i++) {
+                Event event = Event.createSampleEvent();
+                eventRepository.save(event);
+            }
+            return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("message", "Events added successfully"));
+        } catch (Exception e) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("message", "Error adding events");
+            errorResponse.put("error", e.getMessage()); // Include more details about the error if needed
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
-        return ResponseEntity.status(HttpStatus.CREATED).body("Events added successfully");
     }
 
+
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateEvent(@RequestBody Event event, @PathVariable Long id) {
-        if (!eventRepository.existsById(id)) return ResponseEntity.notFound().build();
+    public ResponseEntity<Object> updateEvent(@RequestBody Event event, @PathVariable Long id) {
+        if (!eventRepository.existsById(id)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", "Event not found with id: " + id));
+        }
         eventRepository.save(event);
-        return ResponseEntity.status(HttpStatus.OK).body("Event updated successfully");
+        return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "Event updated successfully"));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteEvent(@PathVariable long id) {
+    public ResponseEntity<Object> deleteEvent(@PathVariable long id) {
         Optional<Event> event = eventRepository.findById(id);
         if (event.isPresent()) {
             eventRepository.deleteById(id);
-            return ResponseEntity.status(HttpStatus.OK).body("Event with id " + id + " deleted successfully");
+            return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "Event with id " + id + " deleted successfully"));
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Event not found with id: " + id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", "Event not found with id: " + id));
         }
     }
 }
