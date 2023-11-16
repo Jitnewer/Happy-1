@@ -70,29 +70,19 @@ span.carouselPagination {
 /* Footer */
 
 .bottomFooter{
-    align-items: center;
-    justify-content: center;
-    background-color:  var(--main-color);
-    width: 100%;
-    height: 30px;
-    padding: 15px;
+    background-color: var(--main-color);
+    width: 100%
 }
 .topFooter {
-    width: 100%;
-    height: 150px;
-    display: flex;
-    flex-direction: column;
-    background-color: var(--main-color-hover);
-    align-items: flex-start;
-    justify-content: flex-start;
-    margin-top: 70px;
+    color: var(--main-color-hover);
+    width: 100%
 }
 .topFooter p {
-    margin-left: 50px;
 }
 
 .yellow-text {
     color: var(--main-color-hover);
+    display: block;
 }
 .blue-text {
     color: var(--main-color);
@@ -101,6 +91,11 @@ span.carouselPagination {
     color: var(--main-text-color);
 }
 /* homePage */
+/*.container {*/
+/*    margin-top: 20px;*/
+/*    margin-bottom: 20px;*/
+/*    position: relative;*/
+/*}*/
 .containerHomepage {
     /*margin-top: 20px;*/
     /*margin-bottom: 20px;*/
@@ -251,4 +246,29 @@ span.carouselPagination {
 .theme h5 {
     color: black;
     margin: 0 20px 20px 20px; /* Adjust margins as needed */
+}
+
+.container-footer {
+
+}
+
+.topFooterChild {
+    width: 80%;
+    margin: auto;
+    padding: 1rem;
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
+}
+
+.topFooterChild p {
+margin: 0
+}
+
+.bottomFooterChild {
+    width: 80%;
+    margin: auto;
+    padding: 3rem;
+    display: flex;
+
 }

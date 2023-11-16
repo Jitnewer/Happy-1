@@ -1,11 +1,15 @@
 <template>
-  <div class="container">
+  <div class="container-footer">
     <div class="topFooter">
+      <div class="topFooterChild">
       <p class="blue-text">Follow Us</p>
       <p class="white-text">On social media</p>
+      </div>
     </div>
     <div class="bottomFooter">
-      <span class="yellow-text">© Happy</span> <span class="white-text">Hospitality collective </span>
+      <div class="bottomFooterChild">
+        <span class="yellow-text">© Happy</span> <span class="white-text">Hospitality collective </span>
+      </div>
     </div>
   </div>
 </template>

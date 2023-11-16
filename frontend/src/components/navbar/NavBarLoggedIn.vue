@@ -22,7 +22,7 @@
               </div>
             </transition>
           </div>
-          <router-link to="/events">
+          <router-link :to="{ name: 'events', query: { sort: 'asc' } }">
             Events
           </router-link>
           <router-link to="/about">
@@ -79,10 +79,9 @@ export default {
   },
   methods: {
     logout () {
-      localStorage.removeItem('email')
-      localStorage.removeItem('admin')
-      this.$router.push({ path: '/home' })
       this.$emit('handleLogout')
+      localStorage.removeItem('email')
+      this.$router.push({ path: '/home' })
     },
     toggleNav () {
       this.showNav = !this.showNav
@@ -143,12 +142,7 @@ export default {
   async created () {
     try {
       // Initiate the asynchronous operation
-      const user = await this.loginAndRegisterService.asyncFindByEmail(localStorage.getItem('email'))
-
-      // Update the user property with the result
-      this.user = user
-
-      console.log(this.user)
+      this.user = await this.loginAndRegisterService.asyncFindByEmail(localStorage.getItem('email'))
     } catch (e) {
       console.log(e)
     }

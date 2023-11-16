@@ -37,13 +37,13 @@ export default {
         // const user = await this.loginAndRegisterService.asyncLogin('timgroot@gmail.com', 'test')
         if (user !== null) {
           if (user.userType === 'ADMIN') {
+            await this.$emit('loginAdmin')
             localStorage.setItem('email', 'evadegraaf@gmail.com')
-            this.$emit('loginAdmin')
             this.$router.push({ path: '/admin/events' })
           } else {
+            await this.$emit('loginUser')
             localStorage.setItem('email', 'mylovandijk@gmail.com')
             this.$router.push({ path: '/home' })
-            this.$emit('loginUser')
           }
         }
       } catch (e) {

@@ -1,33 +1,43 @@
 package com.example.backend.models;
 
-import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
+import jakarta.persistence.*;
 
+import java.time.LocalTime;
+import java.util.*;
+
+@Entity
+@Table(name = "events")
 public class Event {
-    private static long idCounter = 3001;
+    @Id
+    @GeneratedValue
     private long id;
+
+    @OneToMany(mappedBy = "event", fetch = FetchType.LAZY)
+    private Set<UserEvent> userEvents = new HashSet<>();
+    @Column(nullable = false)
     private String image;
+    @Column(nullable = false)
     private String name;
+    @Column(nullable = false)
     private String city;
+    @Column(nullable = false)
     private Date date;
+    @Column(nullable = false)
     private LocalTime timeBegin;
+    @Column(nullable = false)
     private LocalTime timeEnd;
+    @Column(nullable = false)
     private double price;
+    @Column(nullable = false)
     private String location;
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String info;
+    @Column(nullable = false)
     private int size;
 
 
 
-    public Event (long id, String image, String name, String city, Date date, LocalTime timeBegin, LocalTime timeEnd, double price, String location, String info, int size) {
-        if (id == 0){
-            this.id = idCounter++;
-        } else {
-            this.id = id;
-        }
+    public Event (String image, String name, String city, Date date, LocalTime timeBegin, LocalTime timeEnd, double price, String location, String info, int size) {
         this.image = image;
         this.name = name;
         this.city = city;
@@ -39,12 +49,21 @@ public class Event {
         this.info = info;
         this.size = size;
     }
+
+    public Event() {
+
+    }
+
     public long getId() {
         return id;
     }
 
     public String getImage() {
         return image;
+    }
+
+    public Set<UserEvent> getUserEvents() {
+        return userEvents;
     }
 
     public String getName() {
@@ -107,7 +126,6 @@ public class Event {
         }
 
         return new Event(
-                0,
                 getImages()[random.nextInt(getImages().length)],
                 getNames()[random.nextInt(getNames().length)],
                 cityName,
@@ -258,7 +276,6 @@ public class Event {
         if (event == null) return null;
 
         return new Event(
-                event.id,
                 event.image,
                 event.name,
                 event.city,

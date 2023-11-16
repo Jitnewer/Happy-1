@@ -106,10 +106,9 @@ export default {
   },
   methods: {
     logout () {
-      localStorage.removeItem('email')
-      localStorage.removeItem('admin')
-      this.$router.push({ path: '/home' })
       this.$emit('handleLogout')
+      localStorage.removeItem('email')
+      this.$router.push({ path: '/home' })
     },
     toggleDropdown (event) {
       event.stopPropagation()

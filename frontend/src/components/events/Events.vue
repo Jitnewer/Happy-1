@@ -41,8 +41,8 @@
           </div>
           <div class="event-right-bottom">
             <button @click="selectEventMoreInfo(event)" >More Info</button>
-            <button v-if="!isSignedIn(event)" @click="toggleSignIn(event)">Sign In</button>
-            <button :disabled="disableSignOut(event)" v-if="isSignedIn(event)" @click="toggleSignOut(event)">Sign Out</button>
+            <button v-if="!event.hasUser" @click="toggleSignIn(event)">Sign In</button>
+            <button :disabled="disableSignOut(event)" v-if="event.hasUser" @click="toggleSignOut(event)">Sign Out</button>
           </div>
         </div>
       </div>
@@ -94,7 +94,7 @@ import { mapGetters } from 'vuex'
 
 export default {
   name: 'Events.vue',
-  inject: ['eventsService'],
+  inject: ['eventsService', 'usersService', 'userEventsService', 'loginAndRegisterService'],
   data () {
     return {
       lastId: 3000,
@@ -102,6 +102,7 @@ export default {
       search: null,
       filter: 'asc',
       showFilter: false,
+      signedIn: false,
       selectedEvent: null,
       showSignIn: false,
       showSignOut: false,
@@ -116,7 +117,9 @@ export default {
   async created () {
     try {
       this.events = await this.eventsService.asyncFindAll()
-      this.$router.push({ name: 'events', query: { sort: this.filter } })
+      for (let i = 0; i < this.events.length; i++) {
+        await this.isSignedIn(this.events[i])
+      }
     } catch (e) {
       console.error(e)
     }
@@ -161,13 +164,15 @@ export default {
       } else {
         this.selectedEventsSignIn = event
       }
+      console.log(this.selectedEventsSignIn)
     },
-    isSignedIn (event) {
-      return !!event.participants.find(participant => participant === this.getFullName)
+    async isSignedIn (event) {
+      const user = await this.loginAndRegisterService.asyncFindByEmail(localStorage.getItem('email'))
+      const response = await this.userEventsService.asyncHasEntityEntity(user.id, event.id, 'hasUserEvent')
+      event.hasUser = response.status !== 404
     },
     updateFilter (filterValue) {
       this.filter = filterValue
-
       this.$router.push({ name: 'events', query: { sort: filterValue } })
     },
     toggleSignOut (event) {
@@ -178,15 +183,16 @@ export default {
         this.selectedEventsSignOut = event
       }
     },
-    signIn () {
+    async signIn () {
       this.showSignIn = false
       this.signInIn = true
 
+      const user = await this.loginAndRegisterService.asyncFindByEmail(localStorage.getItem('email'))
+
       // First timeout: Add participant after 10 seconds
       setTimeout(() => {
-        this.selectedEventsSignIn.addParticipant(this.getFullName)
+        this.userEventsService.asyncAddEntityToEntity(user.id, this.selectedEventsSignIn.id, 'addUserToEvent')
       }, 10000)
-
       // Second timeout: Hide signInIn and set signInComplete after 10 seconds
       setTimeout(() => {
         this.signInIn = false
@@ -196,16 +202,20 @@ export default {
         setTimeout(() => {
           this.signInComplete = false
           this.selectedEventsSignIn = null
+          for (let i = 0; i < this.events.length; i++) {
+            this.isSignedIn(this.events[i])
+          }
         }, 3000)
       }, 7000)
     },
-    signOut () {
+    async signOut () {
       this.showSignOut = false
       this.signInOut = true
+      const user = await this.loginAndRegisterService.asyncFindByEmail(localStorage.getItem('email'))
 
       // First timeout: Add participant after 10 seconds
       setTimeout(() => {
-        this.selectedEventsSignOut.removeParticipant(this.getFullName)
+        this.userEventsService.asyncRemoveEntityFromEntity(user.id, this.selectedEventsSignOut.id, 'removeUserFromEvent')
       }, 10000)
 
       // Second timeout: Hide signInIn and set signInComplete after 10 seconds
@@ -217,6 +227,9 @@ export default {
         setTimeout(() => {
           this.signOutComplete = false
           this.selectedEventsSignOut = null
+          for (let i = 0; i < this.events.length; i++) {
+            this.isSignedIn(this.events[i])
+          }
         }, 3000)
       }, 7000)
     },

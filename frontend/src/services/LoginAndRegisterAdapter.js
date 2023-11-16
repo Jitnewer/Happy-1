@@ -14,8 +14,19 @@ export class LoginAndRegisterAdapter {
       if (response.ok) {
         return await response.json()
       } else {
-        console.log(response, !response.bodyUsed ? await response.text() : '')
-        return null
+        let errorMessage
+        try {
+          errorMessage = JSON.parse(await response.text()).message
+        } catch (parseError) {
+          errorMessage = 'Failed to parse error message'
+        }
+
+        // Return an object with error information
+        return {
+          error: true,
+          status: response.status,
+          message: errorMessage
+        }
       }
     } catch (error) {
       console.error('Error fetching JSON:', error)
@@ -57,7 +68,7 @@ export class LoginAndRegisterAdapter {
 
   async asyncFindByEmail (email) {
     try {
-      const response = await this.fetchJson(`${this.resourceUrl}/users/fullname/${email}`)
+      const response = await this.fetchJson(`${this.resourceUrl}/users/mail/${email}`)
       return this.copyConstructor(response)
     } catch (error) {
       console.error('Error in asyncFindByEmail:', error)

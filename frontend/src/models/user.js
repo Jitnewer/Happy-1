@@ -13,8 +13,9 @@ export class User {
     Unbanned: 'UNBANNED' // Adding the opposite status
   }
 
-  constructor (id, profilePic, firstname, lastname, mail, gender, age, companyType, tag, status, userType, postalCode, password, admin) {
+  constructor (id, userEvents, profilePic, firstname, lastname, mail, gender, age, companyType, tag, status, userType, postalCode, password, admin) {
     this.id = id
+    this.userEvents = userEvents
     this.profilePic = profilePic
     this.firstname = firstname
     this.lastname = lastname
@@ -32,8 +33,10 @@ export class User {
   static copyConstructor (user) {
     if (!user) return null
 
-    const copy = new User(
+    // You can add more logic here to deep clone attributes if needed.
+    return new User(
       user.id,
+      user.userEvents,
       user.profilePic,
       user.firstname,
       user.lastname,
@@ -47,8 +50,6 @@ export class User {
       user.postalCode,
       user.password
     )
-    // You can add more logic here to deep clone attributes if needed.
-    return copy
   }
 
   static createSampleUser () {
