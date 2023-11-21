@@ -1,6 +1,7 @@
 package com.example.backend.rest;
 
 import com.example.backend.models.User;
+import com.example.backend.repositories.event.EventSpringDataJpaRepository;
 import com.example.backend.repositories.user.UserRepository;
 import com.example.backend.repositories.user.UserSpringDataJpaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,7 @@ import java.util.Optional;
 public class UserController {
 
     @Autowired
-    private UserRepository userRepository;
+    private UserSpringDataJpaRepository userRepository;
 
     @PostMapping("/register")
     public ResponseEntity<Object> register(@RequestBody User user) {

@@ -10,19 +10,15 @@ import java.util.Set;
 @Entity
 @Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames = "mail")})
 public class User {
-    public static final String ADMIN = "ADMIN";
-    public static final String ENTREPRENEUR = "ENTREPRENEUR";
-    public static final String PARTNER = "PARTNER";
-    public static final String SUPERUSER = "SUPERUSER";
-    public static final String ACTIVE = "ACTIVE";
-    public static final String INACTIVE = "INACTIVE";
-    public static final String BANNED = "BANNED";
-    public static final String UNBANNED = "UNBANNED";
     @Id
     @GeneratedValue
     private long id;
+
+    private static int idCounter = 3001;
+
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private Set<UserEvent> userEvents = new HashSet<>();
+
     public enum UserType {
         ADMIN,
         ENTREPRENEUR,
@@ -35,29 +31,37 @@ public class User {
         BANNED,
         UNBANNED
     }
-    private int id;
-    private static int idCounter = 3001;
+
     private String profilePic;
+
     @Column(nullable = false)
     private String firstname;
+
     @Column(nullable = false)
     private String lastname;
+
     @Column(unique = true, nullable = false)
     private String mail;
+
     private String gender;
+
     private int age;
+
     @Column(nullable = false)
     private String companyType;
+
     @Column(nullable = false)
     private String tag;
-    @Column(nullable = false)
-    private String status;
-    @Column(nullable = false)
-    private String userType;
+
     @Column(nullable = false)
     private UserStatus status;
+
+    @Column(nullable = false)
     private UserType userType;
+
+    @Column(nullable = false)
     private String postalCode;
+
     @Column(nullable = false)
     private String password;
 
@@ -107,7 +111,7 @@ public class User {
         return postalCode;
     }
 
-    public User(String profilePic, String firstname, String lastname, String mail, String gender, int age, String companyType, String tag, String status, String userType, String postalCode, String password) {
+    public User(String profilePic, String firstname, String lastname, String mail, String gender, int age, String companyType, String tag, UserStatus status, UserType userType, String postalCode, String password) {
         this.profilePic = profilePic;
         this.firstname = firstname;
         this.lastname = lastname;

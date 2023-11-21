@@ -23,7 +23,7 @@ import java.util.Optional;
 public class EventController {
 
     @Autowired
-    EventRepository eventRepository;
+    EventSpringDataJpaRepository eventRepository;
 
     @GetMapping()
     public ResponseEntity<Object> getEvents() {
@@ -68,7 +68,7 @@ public class EventController {
         try {
             Event updatedEvent = Event.copyConstructor(event);
 
-            eventRepository.updateEvent(updatedEvent);
+            eventRepository.save(updatedEvent);
             URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                     .path("/{id}").buildAndExpand(updatedEvent.getId()).toUri();
             return ResponseEntity.created(location)
