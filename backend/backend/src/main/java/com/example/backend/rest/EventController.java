@@ -1,5 +1,6 @@
 package com.example.backend.rest;
 
+import com.example.backend.models.User;
 import com.example.backend.repositories.event.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -36,21 +37,35 @@ public class EventController {
     }
 
     @PostMapping("")
-    public ResponseEntity<Event> addEvent(@RequestBody Event event) {
-        Event savedEvent = Event.copyConstructor(event);
-        eventRepository.addEvent(savedEvent);
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("/{id}").buildAndExpand(savedEvent.getId()).toUri();
-        return ResponseEntity.created(location).body(savedEvent);
+    public ResponseEntity<?> addEvent(@RequestBody Event event) {
+        try {
+            Event savedEvent = Event.copyConstructor(event);
+
+            eventRepository.updateEvent(savedEvent);
+            URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                    .path("/{id}").buildAndExpand(savedEvent.getId()).toUri();
+            return ResponseEntity.created(location)
+                    .header("Response-message", "Event saved successfully.")
+                    .body(savedEvent);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e);
+        }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Event> updateEvent(@RequestBody Event event) {
-        Event updatedEvent = Event.copyConstructor(event);
-        eventRepository.updateEvent(updatedEvent);
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("/{id}").buildAndExpand(updatedEvent.getId()).toUri();
-        return ResponseEntity.created(location).body(updatedEvent);
+    public ResponseEntity<?> updateEvent(@RequestBody Event event) {
+        try {
+            Event updatedEvent = Event.copyConstructor(event);
+
+            eventRepository.updateEvent(updatedEvent);
+            URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                    .path("/{id}").buildAndExpand(updatedEvent.getId()).toUri();
+            return ResponseEntity.created(location)
+                    .header("Response-message", "Event updated successfully.")
+                    .body(updatedEvent);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 
     @DeleteMapping("/{id}")

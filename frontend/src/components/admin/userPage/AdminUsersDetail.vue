@@ -5,12 +5,17 @@ export default {
   name: 'AdminUserDetail',
   props: ['selectedUser', 'create'],
   emits: ['cancel-edit', 'save-edit'],
+  inject: ['usersService'],
   data () {
     return {
       selectedCopy: null,
-      nameError: '',
-      mailError: '',
-      userTypeError: '',
+      error: {
+        firstNameError: '',
+        lastNameError: '',
+        mailError: '',
+        userTypeError: '',
+        passwordError: ''
+      },
       isValid: true
     }
   },
@@ -19,17 +24,13 @@ export default {
   },
   methods: {
     cancel () {
-      if (!this.changedData) {
-        if (confirm('Are you sure you wnat to discard changes?')) {
-          this.$emit('cancel-edit', this.selectedUser)
-        }
-      } else {
+      if (confirm('Are you sure you want to discard changes?')) {
         this.$emit('cancel-edit', this.selectedUser)
       }
     },
     save () {
-      if (this.validateInput()) {
-        if (confirm('Are you sure you want to change the access of this user?')) {
+      if (confirm('Are you sure you want to change the access of this user?')) {
+        if (this.validateFields()) {
           this.$emit('save-edit', this.selectedCopy)
         }
       }
@@ -41,43 +42,49 @@ export default {
     activateInput () {
       document.querySelector('#file').click()
     },
-    validateInput () {
-      this.nameError = ''
-      this.mailError = ''
+    validateFirstName () {
+      const firstNameFieldIsEmpty = !this.selectedCopy.firstname || this.selectedCopy.firstname.trim() === ''
+      return !firstNameFieldIsEmpty && /^[a-zA-Z]{3,}$/.test(this.selectedCopy.firstname)
+    },
+    validateLastName () {
+      const lastNameFieldIsEmpty = !this.selectedCopy.lastname || this.selectedCopy.lastname.trim() === ''
+      return !lastNameFieldIsEmpty && /^[a-zA-Z]{3,}$/.test(this.selectedCopy.firstname)
+    },
+    validatePassWord () {
+      const passwordFieldIsEmpty = !this.selectedCopy.password || this.selectedCopy.password.trim() === ''
+      return !passwordFieldIsEmpty && this.selectedCopy.password.length > 4
+    },
+    validateMail () {
+      const emailFieldIsEmpty = !this.selectedCopy.mail || this.selectedCopy.mail.trim() === ''
+      return !emailFieldIsEmpty && /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(this.selectedCopy.mail)
+    },
+    validateFields () {
+      this.error.firstNameError = ''
+      this.error.lastNameError = ''
+      this.error.mailError = ''
+      this.error.passwordError = ''
+      let invalid = false
 
-      this.isValid = true
-
-      if (this.create) {
-        if (!this.selectedCopy.firstname) {
-          this.nameError = 'Name is required'
-          this.isValid = false
-        }
-
-        if (!this.selectedCopy.lastname) {
-          this.nameError = 'Name is required'
-          this.isValid = false
-        }
-
-        if (!this.selectedCopy.mail) {
-          this.mailError = 'Email is required'
-          this.isValid = false
-        } else if (!/^.*@.*\.com$/.test(this.selectedCopy.mail)) {
-          this.mailError = 'Invalid email'
-          this.isValid = false
-        }
-
-        if (!this.selectedCopy.userType) {
-          this.userTypeError = 'Usertype is required'
-          this.isValid = false
-        }
-        return this.isValid
+      if (!this.validateFirstName()) {
+        this.error.firstNameError = 'Invalid firstname'
+        invalid = true
       }
-    }
-  },
-  computed: {
-    changedData () {
-      // Compare the selectedCopy data with the selectedEvent data
-      return !this.selectedUser.equals(this.selectedCopy, this.create)
+      if (!this.validateLastName()) {
+        this.error.lastNameError = 'Invalid lastname'
+        invalid = true
+      }
+      if (!this.validatePassWord()) {
+        this.error.passwordError = 'Invalid password length'
+        invalid = true
+      }
+      if (!this.validateMail()) {
+        this.error.mailError = 'Invalid e-mail'
+        invalid = true
+      }
+
+      if (invalid === true) return false
+
+      return true
     }
   }
 }
@@ -90,26 +97,26 @@ export default {
       <div class="user-info">
         <img @click="activateInput" :src="selectedCopy.profilePic" alt="user image"/>
         <input type="file" accept="image/jpeg, image/png, image/jpg" id="file" @change="handleImageUpload">
-        <div class="inputInfo">
+        <form class="inputInfo">
           <h2 v-if="!create"> {{ selectedCopy.firstname }} {{ selectedCopy.lastname }} </h2>
           <h3 v-if="!create"> {{ selectedCopy.mail }} </h3>
-          <input v-if="create" type="text" id="firstname" v-model="selectedCopy.firstname" placeholder="firstname" :style="{ borderColor: nameError ? 'red' : '' }">
-          <span class="error-message" v-if="!isValid">{{ nameError }}</span>
-          <input v-if="create" type="text" id="lastname" v-model="selectedCopy.lastname" placeholder="lastname" :style="{ borderColor: nameError ? 'red' : '' }">
-          <span class="error-message" v-if="!isValid">{{ nameError }}</span>
-          <input v-if="create" type="email" id="email" v-model="selectedCopy.mail" placeholder="Email" :style="{ borderColor: mailError ? 'red' : '' }">
-          <span class="error-message" v-if="!isValid">{{ mailError }}</span>
-          <select id="select" class="edit-usertype" v-model="selectedCopy.userType" :style="{ borderColor: userTypeError ? 'red' : '' }">
+          <input autocomplete="username" v-if="create" type="text" id="firstname" v-model="selectedCopy.firstname" placeholder="firstname" :style="{ borderColor: error.firstNameError ? 'red' : '' }">
+          <span class="error-message">{{ error.firstNameError }}</span>
+          <input v-if="create" type="text" id="lastname" v-model="selectedCopy.lastname" placeholder="lastname" :style="{ borderColor: error.lastNameError ? 'red' : '' }">
+          <span class="error-message">{{ error.lastNameError }}</span>
+          <input autocomplete="email" v-if="create" type="email" id="email" v-model="selectedCopy.mail" placeholder="Email" :style="{ borderColor: error.mailError ? 'red' : '' }">
+          <span class="error-message">{{ error.mailError }}</span>
+          <input autocomplete="new-password" v-if="create" type="password" id="password" v-model="selectedCopy.password" placeholder="Password" :style="{ borderColor: error.passwordError ? 'red' : '' }">
+          <span class="error-message">{{ error.passwordError }}</span>
+          <select id="select" class="edit-usertype" v-model="selectedCopy.userType" :style="{ borderColor: error.userTypeError ? 'red' : '' }">
             <option value="ADMIN">Admin</option>
-            <option value="ENTREPRENEUR">Entrepreneur</option>
-            <option value="PARTNER">Partner</option>
             <option value="SUPERUSER">Superuser</option>
           </select>
-          <span class="error-message">{{ userTypeError }}</span>
-        </div>
+          <span class="error-message">{{ error.userTypeError }}</span>
+        </form>
       </div>
       <div class="edit-user-btn">
-        <button class="save" :disabled="changedData" @click="save">Save</button>
+        <button class="save" @click="save">Save</button>
         <button class="cancel" @click="cancel">Cancel</button>
       </div>
     </div>

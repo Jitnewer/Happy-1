@@ -2,7 +2,7 @@
   <div class="container-admin">
     <div class="users-amount-container">
       <div class="legend">
-        <p>Total Users: {{ totalUsersCount }}</p>
+        <p class="total">Total Users: {{ totalUsers }}</p>
         <p class="entrepreneur">Entrepreneurs: {{ entrepreneurCount }}</p>
         <p class="partner">Partners: {{ partnerCount }}</p>
         <p class="admin">Admins: {{ adminCount }}</p>
@@ -16,49 +16,46 @@
 </template>
 
 <script>
-import Chart from 'chart.js/auto' // Import Chart.js
+import Chart from 'chart.js/auto'
+import { User } from '@/models/user' // Import Chart.js
 
 export default {
   name: 'AdminStatistics',
+  inject: ['usersService'],
   data () {
     return {
-      totalUsersCount: 50,
-      entrepreneurCount: 20,
-      partnerCount: 25,
-      adminCount: 3,
-      superuserCount: 2
+      users: [],
+      totalUsers: 0,
+      entrepreneurCount: 0,
+      partnerCount: 0,
+      adminCount: 0,
+      superuserCount: 0
     }
   },
-  mounted () {
-    this.createBarChart()
-  },
   methods: {
+    loadDataAndCreateChart () {
+      this.totalUsers = this.users.length
+      this.entrepreneurCount = this.users.filter(user => user.userType === User.userTypes.Entrepreneur).length
+      this.partnerCount = this.users.filter(user => user.userType === User.userTypes.Partner).length
+      this.adminCount = this.users.filter(user => user.userType === User.userTypes.Admin).length
+      this.superuserCount = this.users.filter(user => user.userType === User.userTypes.SuperUser).length
+
+      this.createBarChart()
+    },
     createBarChart () {
       const chart = document.getElementById('chart').getContext('2d')
       // eslint-disable-next-line no-new
       new Chart(chart, {
         type: 'bar',
         data: {
-          labels: ['Entrepreneurs', 'Partners', 'Admin', 'Superuser'],
-          datasets: [
-            {
-              data: [
-                this.entrepreneurCount,
-                this.partnerCount,
-                this.adminCount,
-                this.superuserCount
-              ],
-              backgroundColor: [
-                'blue',
-                'green',
-                'orange',
-                'red'
-              ]
-            }
-          ]
+          labels: ['Entrepreneurs', 'Partners', 'Admins', 'SuperUsers'],
+          datasets: [{
+            data: [this.entrepreneurCount, this.partnerCount, this.adminCount, this.superuserCount],
+            backgroundColor: ['blue', 'green', 'orange', 'red']
+          }]
         },
         options: {
-          indexAxis: 'y', // Set the y-axis as the category axis
+          indexAxis: 'y',
           scales: {
             x: {
               beginAtZero: true
@@ -73,6 +70,14 @@ export default {
         }
       })
     }
+  },
+  watch: {
+    'users' () {
+      this.loadDataAndCreateChart()
+    }
+  },
+  async created () {
+    this.users = await this.usersService.asyncFindAll()
   }
 }
 </script>
@@ -86,47 +91,5 @@ export default {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
-}
-
-.canvas-container {
-  width: 600px;
-}
-.container-admin {
-  margin-left: 1rem;
-  margin-top: 1rem;
-  width:80%
-}
-p {
-  //color: black;
-}
-
-.entrepreneur {
-  color: blue;
-}
-
-.partner {
-  color: green;
-}
-
-.admin {
-  color: orange;
-}
-
-.superUser {
-  color: red;
-}
-
-.legend {
-  margin-top: 30px;
-}
-
-@media (max-width: 800px) {
-  .canvas-container {
-    width: 300px;
-  }
-
-  p {
-    //font-size: 14px;
-  }
 }
 </style>

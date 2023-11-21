@@ -3,6 +3,7 @@ import { User } from '@/models/user'
 
 export default {
   name: 'AdminUsersView',
+  inject: ['usersService'],
   data () {
     return {
       filter: {
@@ -12,8 +13,7 @@ export default {
       selectedUser: null,
       isSelected: false,
       create: false,
-      users: [],
-      usedIds: []
+      users: []
     }
   },
   methods: {
@@ -27,60 +27,74 @@ export default {
     },
     createUser () {
       this.create = true
-      const id = User.generateId(this.usedIds)
-      this.selectedUser = new User(id, require('../../../assets/img/profilepic.png'), null, null, null, null, 'N/A', 'N/A', 'Inactive', null, null)
-      this.usedIds.push(id)
+      this.selectedUser = new User(0, require('../../../assets/img/profilepic.png'))
+      this.selectedUser.status = User.status.Active
+      this.selectedUser.tag = 'N/A'
+      this.selectedUser.userType = User.userTypes.Admin
       this.isSelected = !this.isSelected
-      this.$router.push(this.$route.matched[0].path + '/' + id)
+      this.$router.push(this.$route.matched[0].path + '/' + this.selectedUser.id)
     },
-    unblockUser (user) {
+    async unblockUser (user) {
       if (confirm('Are you sure you want to unblock this user')) {
-        user.status = User.status.Active
-        // TODO send to the backend the status
+        user.status = User.status.Unbanned
+        await this.usersService.asyncSave(user)
       }
     },
-    blockUser (userToBlock) {
+    async blockUser (user) {
       if (confirm('Are you sure you want to block this user?')) {
-        const indexToBlock = this.users.findIndex(user => user.id === userToBlock.id)
-        if (indexToBlock !== -1) {
-          this.users[indexToBlock].status = User.status.Banned
-          // TODO send to the backend the status
-        }
+        user.status = User.status.Banned
+        await this.usersService.asyncSave(user)
       }
     },
     editUser (user) {
       this.$router.push(this.$route.matched[0].path + '/' + user.id)
     },
-    cancel (cancelEdit) {
-      if (this.create) {
-        const foundUser = this.usedIds.findIndex(usedId => usedId === cancelEdit.id)
-        this.usedIds.splice(foundUser, 1)
-      }
-
+    cancel () {
       this.selectedUser = null
       this.isSelected = !this.isSelected
       this.create = false
       this.$router.push(this.$route.matched[0])
     },
-    save (user) {
-      const selectedIndex = this.users.findIndex(oldUser => oldUser.id === user.id)
+    async save (user) {
+      try {
+        const savedUser = await this.usersService.asyncSave(user)
 
-      if (selectedIndex !== -1) {
-        // Replace the selected item with the new item
-        this.users.splice(selectedIndex, 1, user)
-      } else {
-        this.users.push(user)
+        if (this.create === true) {
+          this.users.push(savedUser)
+        } else {
+          const indexToUpdate = this.users.findIndex(oldUser => oldUser.id === savedUser.id)
+
+          if (indexToUpdate >= 0) {
+            this.users.splice(indexToUpdate, 1, savedUser)
+          }
+        }
+        this.selectedUser = null
+        this.isSelected = !this.isSelected
+        this.create = false
+        this.$router.push(this.$route.matched[0])
+      } catch (e) {
+        console.log(e)
       }
-      this.selectedUser = null
-      this.isSelected = !this.isSelected
-      this.create = false
-      this.$router.push(this.$route.matched[0])
+    },
+    async deleteUser (user) {
+      if (confirm('Are you sure you want to delete this user?')) {
+        try {
+          await this.usersService.asyncDeleteById(user.id)
+          const indexToUpdate = this.users.findIndex(oldUser => oldUser.id === user.id)
+
+          if (indexToUpdate >= 0) {
+            this.users.splice(indexToUpdate, 1)
+          }
+        } catch (e) {
+          console.log(e)
+        }
+      }
     },
     viewUser () {
       // TODO redirect to profile of user
     },
     isBanned (user) {
-      return user.status === User.status.Banned
+      return user && user.status === User.status.Banned
     }
   },
   computed: {
@@ -102,12 +116,8 @@ export default {
       })
     }
   },
-  created () {
-    for (let i = 0; i < 5; i++) {
-      const user = User.createSampleUser()
-      this.users.push(user)
-      this.usedIds.push(user.id)
-    }
+  async created () {
+    this.users = await this.usersService.asyncFindAll()
   },
   watch: {
     '$route' () {
@@ -120,7 +130,7 @@ export default {
 <template>
   <div class="container-admin">
     <div class="title">
-      <h2>Users</h2>
+      <h1>Users</h1>
     </div>
     <div class="filters">
       <input type="text" class="search-filter" id="nameFilter" placeholder="Search for Users.." title="Type in a name"
@@ -149,7 +159,7 @@ export default {
         </tr>
         </thead>
         <tbody>
-          <tr v-bind:class="{ 'banned': isBanned(user) }" v-for="user in filterdUsers" :key="user.id">
+          <tr v-bind:class="{'banned': isBanned(user)}" v-for="user in filterdUsers" :key="user.id">
           <td> {{ user.id }}</td>
           <td> {{ user.firstname }} {{ user.lastname}} </td>
           <td> {{ user.mail }}</td>
@@ -157,10 +167,11 @@ export default {
           <td> {{ user.tag }}</td>
           <td> {{ user.status }}</td>
           <td class="buttons">
-              <button class="view-button">View</button>
-              <button class="edit-button" @click="editUser(user)">Edit</button>
-              <button v-if="!isBanned(user)" class="block-button" @click="blockUser(user)">Block</button>
-              <button v-if="isBanned(user)" class="block-button" @click="unblockUser(user)">Unblock</button>
+            <button class="view-button">View</button>
+            <button class="edit-button" @click="editUser(user)">Edit</button>
+            <button v-if="!isBanned(user)" class="block-button" @click="blockUser(user)">Block</button>
+            <button v-if="isBanned(user)" class="block-button" @click="unblockUser(user)">Unblock</button>
+            <button class="delete-button" @click="deleteUser(user)">Delete</button>
           </td>
           </tr>
         </tbody>
@@ -172,7 +183,6 @@ export default {
 
 <style scoped>
 .container-admin {
-  margin-left: 1rem;
   margin-top: 1rem;
   width:80%
 }

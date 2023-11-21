@@ -1,14 +1,28 @@
 package com.example.backend.models;
 
+import org.springframework.boot.autoconfigure.security.SecurityProperties;
+
 import java.util.Objects;
 import java.util.Random;
 
 public class User {
+    public enum UserType {
+        ADMIN,
+        ENTREPRENEUR,
+        PARTNER,
+        SUPERUSER
+    }
     public static final String ADMIN = "ADMIN";
     public static final String ENTREPRENEUR = "ENTREPRENEUR";
     public static final String PARTNER = "PARTNER";
     public static final String SUPERUSER = "SUPERUSER";
 
+    public enum UserStatus {
+        ACTIVE,
+        INACTIVE,
+        BANNED,
+        UNBANNED
+    }
     public static final String ACTIVE = "ACTIVE";
     public static final String INACTIVE = "INACTIVE";
     public static final String BANNED = "BANNED";
@@ -25,8 +39,8 @@ public class User {
     private int age;
     private String companyType;
     private String tag;
-    private String status;
-    private String userType;
+    private UserStatus status;
+    private UserType userType;
     private String postalCode;
     private String password;
 
@@ -64,11 +78,11 @@ public class User {
         return tag;
     }
 
-    public String getStatus() {
+    public UserStatus getStatus() {
         return status;
     }
 
-    public String getUserType() {
+    public UserType getUserType() {
         return userType;
     }
 
@@ -76,8 +90,12 @@ public class User {
         return postalCode;
     }
 
-    public User(String profilePic, String firstname, String lastname, String mail, String gender, int age, String companyType, String tag, String status, String userType, String postalCode, String password) {
-        this.id = idCounter++;
+    public User(int id, String profilePic, String firstname, String lastname, String mail, String gender, int age, String companyType, String tag, UserStatus status, UserType userType, String postalCode, String password) {
+        if (id == 0){
+            this.id = idCounter++;
+        } else {
+            this.id = id;
+        }
         this.profilePic = profilePic;
         this.firstname = firstname;
         this.lastname = lastname;
@@ -92,9 +110,6 @@ public class User {
         this.password = password;
     }
 
-
-
-
     public String getFirstname() {
         return firstname;
     }
@@ -107,6 +122,7 @@ public class User {
         if (user == null) return null;
 
         return new User(
+                user.id,
                 user.profilePic,
                 user.firstname,
                 user.lastname,
@@ -137,19 +153,19 @@ public class User {
         String randomLastname = lastnames[randomIndex];
 
         randomIndex = random.nextInt(firstnames.length);
-        String[] userTypeValues = {ADMIN, ENTREPRENEUR, PARTNER, SUPERUSER};
-        String randomUserType = userTypeValues[randomIndex];
+        UserType[] userTypeValues = {UserType.ADMIN, UserType.ENTREPRENEUR, UserType.PARTNER, UserType.SUPERUSER};
+        UserType randomUserType = userTypeValues[randomIndex];
 
         String mail = randomFirstname.toLowerCase() + randomLastname.replaceAll("\\s", "").toLowerCase() + "@gmail.com";
         String gender = "male";
-        String tag = (randomUserType.equals(PARTNER)) ? "Chain-partner" : "N/A";
+        String tag = (randomUserType.equals(UserType.PARTNER)) ? "Chain-partner" : "N/A";
 
         double randomStatusNum = random.nextDouble();
-        String status = (randomStatusNum < 0.5) ? ACTIVE : INACTIVE;
+        UserStatus status = (randomStatusNum < 0.5) ? UserStatus.ACTIVE : UserStatus.INACTIVE;
         int age = random.nextInt(50) + 50;
         String companyType = "Catering";
         String postalCode = "1242 DA";
 
-        return new User(image, randomFirstname, randomLastname, mail, gender, age, companyType, tag, status, randomUserType, postalCode, "test");
+        return new User(0, image, randomFirstname, randomLastname, mail, gender, age, companyType, tag, status, randomUserType, postalCode, "test");
     }
 }

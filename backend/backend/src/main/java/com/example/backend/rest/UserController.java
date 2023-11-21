@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -38,7 +40,7 @@ public class UserController {
         }
     }
 
-    @GetMapping("/user/{id}")
+    @GetMapping("/users/{id}")
     public ResponseEntity<?> getUser(@PathVariable long id) {
         try {
             User user = userRepository.getUser(id);
@@ -49,9 +51,19 @@ public class UserController {
     }
 
     @PostMapping("/users")
-    public ResponseEntity<String> addUser(@RequestBody User user) {
-        userRepository.addUser(user);
-        return ResponseEntity.status(HttpStatus.CREATED).body("User added successfully");
+    public ResponseEntity<?> addUser(@RequestBody User user) {
+        try {
+            User updatedUser = User.copyConstructor(user);
+
+            userRepository.addUser(updatedUser);
+            URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                    .path("/{id}").buildAndExpand(updatedUser.getId()).toUri();
+            return ResponseEntity.created(location)
+                    .header("Response-message", "User is saved successfully.")
+                    .body(updatedUser);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e);
+        }
     }
 
     @PostMapping("/login/{email}/{password}")
@@ -64,11 +76,17 @@ public class UserController {
         }
     }
 
-    @PutMapping("/users")
-    public ResponseEntity<String> updateUser(@RequestBody User user) {
+    @PutMapping("/users/{id}")
+    public ResponseEntity<?> updateUser(@RequestBody User user) {
         try {
-            userRepository.updateUser(user);
-            return ResponseEntity.ok("User updated successfully");
+            User updatedUser = User.copyConstructor(user);
+
+            userRepository.updateUser(updatedUser);
+            URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                    .path("/{id}").buildAndExpand(updatedUser.getId()).toUri();
+            return ResponseEntity.created(location)
+                    .header("Response-message", "User updated successfully.")
+                    .body(updatedUser);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
