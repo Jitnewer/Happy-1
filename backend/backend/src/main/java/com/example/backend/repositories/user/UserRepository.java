@@ -9,7 +9,6 @@ public interface UserRepository {
     List<User> getUsers();
     User getUser(long id);
     void addUser(User user);
-    void register(User user);
     User login(String email, String password);
     void updateUser(User user);
     void deleteUser(long id);

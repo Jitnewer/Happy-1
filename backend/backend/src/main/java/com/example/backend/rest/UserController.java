@@ -1,9 +1,8 @@
 package com.example.backend.rest;
 
 import com.example.backend.models.User;
-import com.example.backend.repositories.event.EventSpringDataJpaRepository;
 import com.example.backend.repositories.user.UserRepository;
-import com.example.backend.repositories.user.UserSpringDataJpaRepository;
+import com.example.backend.repositories.user.UserRepositoryJpa;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,8 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.net.URI;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -22,16 +19,16 @@ import java.util.Optional;
 public class UserController {
 
     @Autowired
-    private UserSpringDataJpaRepository userRepository;
+    private UserRepository userRepository;
 
     @PostMapping("/register")
     public ResponseEntity<Object> register(@RequestBody User user) {
         try {
-            if (userRepository.existsByMail(user.getMail())) {
+            if (userRepository.getUserByMail(user.getMail()) == null) {
                 return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("message", "User with mail: " + user.getMail() + " already exists"));
             }
 
-            userRepository.save(user);
+            userRepository.addUser(user);
             return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("message", "User registered successfully"));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("message", "Error registering user", "error", e.getMessage()));
@@ -41,10 +38,10 @@ public class UserController {
     @PostMapping("/login/{email}/{password}")
     public ResponseEntity<Object> login(@PathVariable String email, @PathVariable String password) {
         try {
-            Optional<User> foundUser = userRepository.findByMailAndPassword(email, password);
+            User user = userRepository.login(email, password);
 
-            if (foundUser.isPresent()) {
-                return ResponseEntity.ok(foundUser.get());
+            if (user != null) {
+                return ResponseEntity.ok(user);
             } else {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "Invalid credentials"));
             }
@@ -56,7 +53,7 @@ public class UserController {
     @GetMapping("/users")
     public ResponseEntity<Object> getUsers() {
         try {
-            List<User> users = userRepository.findAll();
+            List<User> users = userRepository.getUsers();
             if (users.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", "Users not found"));
             }
@@ -69,11 +66,11 @@ public class UserController {
     @GetMapping("/users/mail/{mail}")
     public ResponseEntity<Object> getUserByMail(@PathVariable String mail) {
         try {
-            Optional<User> user = userRepository.findByMail(mail);
-            if (user.isEmpty()) {
+            User user = userRepository.getUserByMail(mail);
+            if (user == null) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", "User not found with email: " + mail));
             }
-            return ResponseEntity.ok(user.get());
+            return ResponseEntity.ok(user);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("message", "Error getting user by mail", "error", e.getMessage()));
         }
@@ -82,11 +79,11 @@ public class UserController {
     @GetMapping("/users/{id}")
     public ResponseEntity<Object> getUser(@PathVariable long id) {
         try {
-            Optional<User> user = userRepository.findById(id);
-            if (user.isEmpty()) {
+            User user = userRepository.getUser(id);
+            if (user == null) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", "User not found with id: " + id));
             }
-            return ResponseEntity.ok(user.get());
+            return ResponseEntity.ok(user);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("message", "Error getting user by ID", "error", e.getMessage()));
         }
@@ -95,16 +92,16 @@ public class UserController {
     @PostMapping("/users")
     public ResponseEntity<Object> addUser(@RequestBody User user) {
         try {
-            if (userRepository.findByMail(user.getMail()).isPresent()) {
+            if (userRepository.getUserByMail(user.getMail()) == null) {
                 return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("message", "User with mail:" + user.getMail() + " is already in use"));
             }
 
-            User savedUser = userRepository.save(user);
+            userRepository.addUser(user);
 
             URI location = ServletUriComponentsBuilder
                     .fromCurrentRequest()
                     .path("/{id}")
-                    .buildAndExpand(savedUser.getId())
+                    .buildAndExpand(user.getId())
                     .toUri();
 
             return ResponseEntity.created(location).body(Map.of(
@@ -116,30 +113,13 @@ public class UserController {
         }
     }
 
-    @PostMapping("/create-users")
-    public ResponseEntity<Object> createUsers() {
-        try {
-            for (int i = 0; i < 6; i++) {
-                User user = User.createSampleUser();
-                if (userRepository.findByMail(user.getMail()).isPresent()) {
-                    return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("message", "User with mail:" + user.getMail() + " is already in use"));
-                }
-                userRepository.save(user);
-            }
-
-            return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("message", "Users added successfully"));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("message", "Error creating users", "error", e.getMessage()));
-        }
-    }
-
     @PutMapping("/users/{id}")
     public ResponseEntity<Object> updateUser(@RequestBody User user, @PathVariable Long id) {
         try {
-            if (!userRepository.existsById(id)) {
+            if (userRepository.getUser(id) == null) {
                 return ResponseEntity.notFound().build();
             }
-            userRepository.save(user);
+            userRepository.updateUser(user);
             return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "User updated successfully"));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("message", "Error updating user", "error", e.getMessage()));
@@ -149,9 +129,9 @@ public class UserController {
     @DeleteMapping("/users/{id}")
     public ResponseEntity<Object> deleteUser(@PathVariable long id) {
         try {
-            Optional<User> user = userRepository.findById(id);
-            if (user.isPresent()) {
-                userRepository.deleteById(id);
+            User user = userRepository.getUser(id);
+            if (user != null) {
+                userRepository.deleteUser(id);
                 return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "User with id " + id + " deleted successfully"));
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", "User not found with id: " + id));
