@@ -1,8 +1,5 @@
 package com.example.backend.models;
 
-import org.springframework.boot.autoconfigure.security.SecurityProperties;
-
-import java.util.Objects;
 import java.util.Random;
 
 public class User {
@@ -12,26 +9,15 @@ public class User {
         PARTNER,
         SUPERUSER
     }
-    public static final String ADMIN = "ADMIN";
-    public static final String ENTREPRENEUR = "ENTREPRENEUR";
-    public static final String PARTNER = "PARTNER";
-    public static final String SUPERUSER = "SUPERUSER";
-
     public enum UserStatus {
         ACTIVE,
         INACTIVE,
         BANNED,
         UNBANNED
     }
-    public static final String ACTIVE = "ACTIVE";
-    public static final String INACTIVE = "INACTIVE";
-    public static final String BANNED = "BANNED";
-    public static final String UNBANNED = "UNBANNED";
     private int id;
     private static int idCounter = 3001;
     private String profilePic;
-
-
     private String firstname;
     private String lastname;
     private String mail;
