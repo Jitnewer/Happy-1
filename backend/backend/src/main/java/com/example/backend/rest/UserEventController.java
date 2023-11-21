@@ -3,9 +3,9 @@ package com.example.backend.rest;
 import com.example.backend.models.Event;
 import com.example.backend.models.User;
 import com.example.backend.models.UserEvent;
-import com.example.backend.repositories.UserEvent.UserEventSpringDataJpaRepository;
-import com.example.backend.repositories.event.EventSpringDataJpaRepository;
-import com.example.backend.repositories.user.UserSpringDataJpaRepository;
+import com.example.backend.repositories.UserEvent.UserEventRepository;
+import com.example.backend.repositories.event.EventRepository;
+import com.example.backend.repositories.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,28 +22,26 @@ import java.util.Optional;
 public class UserEventController {
 
     @Autowired
-    private UserSpringDataJpaRepository userRepository;
+    private UserRepository userRepository;
 
     @Autowired
-    private EventSpringDataJpaRepository eventRepository;
+    private EventRepository eventRepository;
 
     @Autowired
-    private UserEventSpringDataJpaRepository userEventRepository;
+    private UserEventRepository userEventRepository;
 
     @PostMapping("/addUserToEvent/{userId}/{eventId}")
     public ResponseEntity<?> addUserToEvent(
             @PathVariable Long userId,
             @PathVariable Long eventId) {
 
-        Optional<User> optionalUser = userRepository.findById(userId);
-        Optional<Event> optionalEvent = eventRepository.findById(eventId);
+        User user = userRepository.getUser(userId);
+        Event event = eventRepository.getEvent(eventId);
 
-        if (optionalUser.isPresent() && optionalEvent.isPresent()) {
-            User user = optionalUser.get();
-            Event event = optionalEvent.get();
+        if (user != null && event != null) {
 
             UserEvent userEvent = new UserEvent(user, event);
-            userEventRepository.save(userEvent);
+            userEventRepository.addUserEvent(userEvent);
 
             URI location = ServletUriComponentsBuilder
                     .fromCurrentRequest()
@@ -66,15 +64,15 @@ public class UserEventController {
             @PathVariable Long userId,
             @PathVariable Long eventId) {
 
-        Optional<User> optionalUser = userRepository.findById(userId);
-        Optional<Event> optionalEvent = eventRepository.findById(eventId);
+        User user = userRepository.getUser(userId);
+        Event event = eventRepository.getEvent(eventId);
 
-        if (optionalUser.isPresent() && optionalEvent.isPresent()) {
-            User user = optionalUser.get();
-            Event event = optionalEvent.get();
+        if (user != null && event != null) {
 
-            Optional<UserEvent> userEvent = userEventRepository.findByUserAndEvent(user, event);
-            userEvent.ifPresent(value -> userEventRepository.deleteById(value.getId()));
+            UserEvent userEvent = userEventRepository.getUserEventByUserAndEvent(user, event);
+            if (userEvent != null) {
+                userEventRepository.deleteUserEvent(userEvent.getId());
+            }
 
             URI location = ServletUriComponentsBuilder
                     .fromCurrentRequest()
@@ -94,11 +92,10 @@ public class UserEventController {
 
     @GetMapping("/userCountForEvent/{eventId}")
     public ResponseEntity<?> getUserCountForEvent(@PathVariable Long eventId) {
-        Optional<Event> optionalEvent = eventRepository.findById(eventId);
+        Event event = eventRepository.getEvent(eventId);
 
-        if (optionalEvent.isPresent()) {
-            Event event = optionalEvent.get();
-            int userCount = userEventRepository.countByEvent(event);
+        if (event != null) {
+            int userCount = userEventRepository.countUserEventsByEventId(event.getId());
 
             return new ResponseEntity<>(Map.of(
                     "userCounter", userCount,
@@ -116,16 +113,14 @@ public class UserEventController {
             @PathVariable Long userId,
             @PathVariable Long eventId) {
 
-        Optional<User> optionalUser = userRepository.findById(userId);
-        Optional<Event> optionalEvent = eventRepository.findById(eventId);
+        User user = userRepository.getUser(userId);
+        Event event = eventRepository.getEvent(eventId);
 
-        if (optionalUser.isPresent() && optionalEvent.isPresent()) {
-            User user = optionalUser.get();
-            Event event = optionalEvent.get();
+        if (user != null && event != null) {
 
-            boolean userHasEvent = userEventRepository.existsByUserAndEvent(user, event);
+            UserEvent userEvent = userEventRepository.getUserEventByUserAndEvent(user, event);
 
-            if (userHasEvent) {
+            if (userEvent != null) {
                 return new ResponseEntity<>(Map.of(
                         "message", "User is associated with the event",
                         "status", HttpStatus.OK.value()), HttpStatus.OK);

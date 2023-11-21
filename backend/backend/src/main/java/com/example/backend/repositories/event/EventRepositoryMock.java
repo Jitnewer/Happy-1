@@ -1,12 +1,15 @@
 package com.example.backend.repositories.event;
 
 import com.example.backend.models.Event;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
+@Repository
+@Qualifier("mock")
 public class EventRepositoryMock implements EventRepository {
     private List<Event> events = new ArrayList<>();
 

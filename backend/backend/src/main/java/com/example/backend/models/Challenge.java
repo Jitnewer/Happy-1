@@ -47,6 +47,22 @@ public class Challenge {
 
     }
 
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setDateTime(LocalDateTime dateTime) {
+        this.dateTime = dateTime;
+    }
+
+    public void setFirstParagraph(String firstParagraph) {
+        this.firstParagraph = firstParagraph;
+    }
+
+    public void setParagraphs(Set<Paragraph> paragraphs) {
+        this.paragraphs = paragraphs;
+    }
+
     // Getter methods
     public Long getId() {
         return id;

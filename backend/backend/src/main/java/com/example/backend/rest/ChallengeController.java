@@ -1,9 +1,10 @@
 package com.example.backend.rest;
 
 import com.example.backend.models.Challenge;
+import com.example.backend.models.Event;
 import com.example.backend.models.Paragraph;
-import com.example.backend.repositories.challenge.ChallengeSpringDataJpaRepository;
-import com.example.backend.repositories.paragraph.ParagraphSpringDataJpaRepository;
+import com.example.backend.repositories.challenge.ChallengeRepository;
+import com.example.backend.repositories.paragraph.ParagraphRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,26 +16,35 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/challenges")
 public class ChallengeController {
 
     @Autowired
-    private ChallengeSpringDataJpaRepository challengeRepository;
+    private ChallengeRepository challengeRepository;
     @Autowired
-    private ParagraphSpringDataJpaRepository paragraphRepository;
+    private ParagraphRepository paragraphRepository;
 
     @GetMapping
     public List<Challenge> getAllChallenges() {
-        return challengeRepository.findAll();
+        return challengeRepository.getChallenges();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Object> getChallengeById(@PathVariable Long id) {
-        Optional<Challenge> challenge = challengeRepository.findById(id);
-        return challenge.<ResponseEntity<Object>>map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", "Challenge not found with id: " + id)));
+        try {
+            Challenge challenge = challengeRepository.getChallenge(id);
+            if (challenge != null) {
+                return ResponseEntity.ok(challenge);
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", "Event not found with id: " + id));
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
+                    "message", "Error retrieving event",
+                    "error", e.getMessage()));
+        }
     }
 
     @PostMapping
@@ -47,19 +57,18 @@ public class ChallengeController {
             for (Paragraph paragraph : challenge.getParagraphs()) {
                 paragraph.setChallenge(challenge);
             }
-            Challenge savedChallenge = challengeRepository.save(challenge);
+            challengeRepository.addChallenge(challenge);
 
             URI location = ServletUriComponentsBuilder
                     .fromCurrentRequest()
                     .path("/{id}")
-                    .buildAndExpand(savedChallenge.getId())
+                    .buildAndExpand(challenge.getId())
                     .toUri();
 
             return ResponseEntity.created(location).body(Map.of(
                     "message", "Challenge added successfully",
                     "status", HttpStatus.CREATED.value(),
-                    "location", location.toString(),
-                    "challenge", savedChallenge));
+                    "location", location.toString()));
         } catch (Exception e) {
             Map<String, Object> errorResponse = new HashMap<>();
             errorResponse.put("message", "Error adding the challenge");
@@ -73,7 +82,7 @@ public class ChallengeController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteChallenge(@PathVariable Long id) {
-        challengeRepository.deleteById(id);
+        challengeRepository.deleteChallenge(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
