@@ -4,7 +4,7 @@
 }
 
 .select-usertype {
-    width: 25%;
+    width: 20%;
 }
 
 .notification {
@@ -23,10 +23,9 @@ td, th {
 
 .users-list {
     margin-top: 20px;
-    /*width: 100%;*/
-    /*height: 100%;*/
-    /*max-height: 95%;*/
+    margin-left: 20px;
     overflow: auto;
+    width:90%;
 }
 
 .banned {
@@ -34,25 +33,25 @@ td, th {
 }
 
 .users-table {
-    max-width: 95%;
     width: 100%;
-    overflow: auto;
     border-collapse: collapse;
 }
 
 .users-table th, .users-table td {
-    border: 1px solid #000000;
     padding: 4px;
     text-align: left;
 }
 
-thead th {
+.users-table tr:nth-child(even){
+    background-color: #f2f2f2;
+}
+
+.users-table th {
     background-color: var(--main-color);
     color: var(--main-text-color);
 }
 
-.buttons button {
-    border-radius: 5px;
+.buttons button, .create-btn{
     border: none;
     color: var(--main-text-color);
     padding: 0.5rem 1rem;
@@ -80,7 +79,7 @@ button:hover {
     background-color: var(--main-color-admin);
 }
 
-.edit-button, .edit-user-btn .save{
+.edit-button, .edit-user-btn .save, .create-btn{
     background-color: var(--main-color-hover);
 }
 
@@ -88,21 +87,18 @@ button:hover {
     background-color: var(--main-color-hover-admin);
 }
 
-.block-button, .edit-user-btn .cancel {
+.block-button, .edit-user-btn .cancel, .delete-button {
     background-color: red;
 }
 
-.block-button:hover, .edit-user-btn .cancel:hover {
+.block-button:hover, .edit-user-btn .cancel:hover, .delete-button:hover {
     background-color: #be0000;
 }
 
-@media (max-width: 930px) {
-    .buttons {
-        flex-direction: row;
-        flex-wrap: wrap;
-    }
+.buttons {
+    flex-direction: row;
+    flex-wrap: wrap;
 }
-
 /* AdminUsersDetail */
 .detail-container {
     position: fixed;
@@ -138,8 +134,8 @@ button:hover {
 }
 
 .user-info img {
-    width: 200px;
-    height: 200px;
+    width: 300px;
+    height: 300px;
 }
 
 .inputInfo {
@@ -148,12 +144,19 @@ button:hover {
     flex-direction: column;
 }
 
-.inputInfo input, .edit-usertype {
-    width: 80%;
+.inputInfo input, .edit-usertype, .select-usertype{
     padding: 0.5rem 1.5rem;
     box-shadow: rgba(0, 0, 0, 0.19) 0 10px 20px, rgba(0, 0, 0, 0.23) 0 6px 6px;
     border: none;
     margin-top: 10px
+}
+
+.inputInfo input, .edit-usertype {
+    width: 80%;
+}
+
+.select-usertype {
+    margin-top: 0;
 }
 
 .inputInfo input:first-child {

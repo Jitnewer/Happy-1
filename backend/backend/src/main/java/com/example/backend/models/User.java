@@ -23,6 +23,20 @@ public class User {
     private long id;
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private Set<UserEvent> userEvents = new HashSet<>();
+    public enum UserType {
+        ADMIN,
+        ENTREPRENEUR,
+        PARTNER,
+        SUPERUSER
+    }
+    public enum UserStatus {
+        ACTIVE,
+        INACTIVE,
+        BANNED,
+        UNBANNED
+    }
+    private int id;
+    private static int idCounter = 3001;
     private String profilePic;
     @Column(nullable = false)
     private String firstname;
@@ -41,6 +55,8 @@ public class User {
     @Column(nullable = false)
     private String userType;
     @Column(nullable = false)
+    private UserStatus status;
+    private UserType userType;
     private String postalCode;
     @Column(nullable = false)
     private String password;
@@ -79,11 +95,11 @@ public class User {
         return tag;
     }
 
-    public String getStatus() {
+    public UserStatus getStatus() {
         return status;
     }
 
-    public String getUserType() {
+    public UserType getUserType() {
         return userType;
     }
 
@@ -105,9 +121,6 @@ public class User {
         this.postalCode = postalCode;
         this.password = password;
     }
-
-
-
 
     public String getFirstname() {
         return firstname;
@@ -151,15 +164,15 @@ public class User {
         String randomLastname = lastnames[randomIndex];
 
         randomIndex = random.nextInt(firstnames.length);
-        String[] userTypeValues = {ADMIN, ENTREPRENEUR, PARTNER, SUPERUSER};
-        String randomUserType = userTypeValues[randomIndex];
+        UserType[] userTypeValues = {UserType.ADMIN, UserType.ENTREPRENEUR, UserType.PARTNER, UserType.SUPERUSER};
+        UserType randomUserType = userTypeValues[randomIndex];
 
         String mail = randomFirstname.toLowerCase() + randomLastname.replaceAll("\\s", "").toLowerCase() + "@gmail.com";
         String gender = "male";
-        String tag = (randomUserType.equals(PARTNER)) ? "Chain-partner" : "N/A";
+        String tag = (randomUserType.equals(UserType.PARTNER)) ? "Chain-partner" : "N/A";
 
         double randomStatusNum = random.nextDouble();
-        String status = (randomStatusNum < 0.5) ? ACTIVE : INACTIVE;
+        UserStatus status = (randomStatusNum < 0.5) ? UserStatus.ACTIVE : UserStatus.INACTIVE;
         int age = random.nextInt(50) + 50;
         String companyType = "Catering";
         String postalCode = "1242 DA";

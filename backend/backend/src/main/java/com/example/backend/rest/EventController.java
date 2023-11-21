@@ -2,10 +2,13 @@ package com.example.backend.rest;
 
 import com.example.backend.models.Event;
 import com.example.backend.repositories.event.EventSpringDataJpaRepository;
+import com.example.backend.models.User;
+import com.example.backend.repositories.event.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.example.backend.models.Event;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
@@ -20,7 +23,7 @@ import java.util.Optional;
 public class EventController {
 
     @Autowired
-    private EventSpringDataJpaRepository eventRepository;
+    EventRepository eventRepository;
 
     @GetMapping()
     public ResponseEntity<Object> getEvents() {
@@ -60,31 +63,20 @@ public class EventController {
         }
     }
 
-
-    @PostMapping("/multiple")
-    public ResponseEntity<Object> createEvents() {
-        try {
-            for (int i = 0; i < 12; i++) {
-                Event event = Event.createSampleEvent();
-                eventRepository.save(event);
-            }
-            return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("message", "Events added successfully"));
-        } catch (Exception e) {
-            Map<String, Object> errorResponse = new HashMap<>();
-            errorResponse.put("message", "Error adding events");
-            errorResponse.put("error", e.getMessage()); // Include more details about the error if needed
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
-        }
-    }
-
-
     @PutMapping("/{id}")
-    public ResponseEntity<Object> updateEvent(@RequestBody Event event, @PathVariable Long id) {
-        if (!eventRepository.existsById(id)) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", "Event not found with id: " + id));
+    public ResponseEntity<?> updateEvent(@RequestBody Event event) {
+        try {
+            Event updatedEvent = Event.copyConstructor(event);
+
+            eventRepository.updateEvent(updatedEvent);
+            URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                    .path("/{id}").buildAndExpand(updatedEvent.getId()).toUri();
+            return ResponseEntity.created(location)
+                    .header("Response-message", "Event updated successfully.")
+                    .body(updatedEvent);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
-        eventRepository.save(event);
-        return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "Event updated successfully"));
     }
 
     @DeleteMapping("/{id}")

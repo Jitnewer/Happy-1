@@ -1,0 +1,38 @@
+.canvas-container {
+    width: 600px;
+}
+.container-admin {
+    margin-left: 1rem;
+    margin-top: 1rem;
+    width:80%
+}
+
+.total {
+    color: black;
+}
+
+.entrepreneur {
+    color: blue;
+}
+
+.partner {
+    color: green;
+}
+
+.admin {
+    color: orange;
+}
+
+.superUser {
+    color: red;
+}
+
+.legend {
+    margin-top: 30px;
+}
+
+@media (max-width: 800px) {
+    .canvas-container {
+        width: 300px;
+    }
+}

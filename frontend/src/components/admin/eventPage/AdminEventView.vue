@@ -167,14 +167,13 @@ export default {
 .container-admin {
   margin-left: 1rem;
   margin-top: 1rem;
-  width:80%
+  width:100%
 }
 
 .events {
   z-index: 1;
   display: flex;
   padding: 0 10px;
-  margin-left: 20px;
   flex-wrap: wrap;
   flex-direction: row;
   gap: 10px;
@@ -199,11 +198,6 @@ export default {
   .events {
     padding: 0;
     margin-bottom: 0;
-    max-height: 758px;
-  }
-
-  .container {
-    //max-height: 760px;
   }
 }
 </style>

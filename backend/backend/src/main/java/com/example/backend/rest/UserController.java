@@ -1,6 +1,7 @@
 package com.example.backend.rest;
 
 import com.example.backend.models.User;
+import com.example.backend.repositories.user.UserRepository;
 import com.example.backend.repositories.user.UserSpringDataJpaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -8,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
@@ -19,7 +21,7 @@ import java.util.Optional;
 public class UserController {
 
     @Autowired
-    private UserSpringDataJpaRepository userRepository;
+    private UserRepository userRepository;
 
     @PostMapping("/register")
     public ResponseEntity<Object> register(@RequestBody User user) {
