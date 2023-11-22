@@ -20,8 +20,13 @@ public class Challenge {
     private String title;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column
+    @Column(nullable = false)
     private LocalDateTime dateTime;
+
+
+
+    @Column(nullable = false)
+    private String image;
 
     @Column(columnDefinition = "TEXT")
     private String firstParagraph;
@@ -37,6 +42,7 @@ public class Challenge {
     public Challenge(String title, String firstParagraph, Set<Paragraph> paragraphs) {
         this.title = title;
         this.dateTime = LocalDateTime.now();
+        this.image = "img.png";
         this.firstParagraph = firstParagraph;
         this.paragraphs = paragraphs;
 
@@ -44,7 +50,12 @@ public class Challenge {
 
     public Challenge() {
         this.dateTime = LocalDateTime.now();
+        this.image = "img.png";
 
+    }
+
+    public String getImage() {
+        return image;
     }
 
     public void setTitle(String title) {
@@ -61,6 +72,10 @@ public class Challenge {
 
     public void setParagraphs(Set<Paragraph> paragraphs) {
         this.paragraphs = paragraphs;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     // Getter methods

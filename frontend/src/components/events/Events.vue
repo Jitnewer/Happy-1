@@ -1,5 +1,5 @@
 <template>
-  <div v-if="selectedEvent === null" class="container">
+  <div class="container">
     <div class="events-main">
       <div class="events-main-left">
         <h1>Events</h1>
@@ -85,7 +85,6 @@
       </div>
       </div>
   </div>
-  <router-view  :filter="filter"></router-view>
 </template>
 
 <script>
@@ -103,7 +102,6 @@ export default {
       filter: 'asc',
       showFilter: false,
       signedIn: false,
-      selectedEvent: null,
       showSignIn: false,
       showSignOut: false,
       signInIn: false,
@@ -122,16 +120,6 @@ export default {
       }
     } catch (e) {
       console.error(e)
-    }
-  },
-  watch: {
-    '$route' (to, from) {
-      const eventId = to.params.id
-      if (eventId) {
-        this.selectedEvent = this.events.find(event => event.id === parseInt(eventId))
-      } else {
-        this.selectedEvent = null
-      }
     }
   },
   methods: {
@@ -169,6 +157,7 @@ export default {
     async isSignedIn (event) {
       const user = await this.loginAndRegisterService.asyncFindByEmail(localStorage.getItem('email'))
       const response = await this.userEventsService.asyncHasEntityEntity(user.id, event.id, 'hasUserEvent')
+      console.log(response)
       event.hasUser = response.status !== 404
     },
     updateFilter (filterValue) {
@@ -252,9 +241,6 @@ export default {
       if (!event.target.matches('.event-filter') && !event.target.matches('.filter-button') && !event.target.matches('.asc') && !event.target.matches('.desc')) {
         this.showFilter = false
       }
-    },
-    isSelected (event) {
-      return event === this.selectedEvent
     },
     parseDate (dateString) {
       const dateObject = new Date(dateString)
