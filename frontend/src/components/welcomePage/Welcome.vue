@@ -40,7 +40,7 @@
             catering industry.
           </p>
           <div class="themeContainer">
-            <div class="theme">
+            <div class="theme" data-aos="fade-up">
               <button>
                 <h2>
                   <span class="yellow-text">Food</span> <span class="blue-text">Waste</span>
@@ -52,7 +52,7 @@
                 <img class="themeImg" src="../../assets/img/foodWasteT.png" alt="">
               </button>
             </div>
-            <div class="theme">
+            <div class="theme" data-aos="fade-up">
               <button>
                 <h2>
                   <span class="yellow-text">Distrib</span><span class="blue-text">ution</span></h2>
@@ -63,7 +63,7 @@
                 <img class="themeImg" src="@/assets/img/Distribution.webp" alt="">
               </button>
             </div>
-            <div class="theme">
+            <div class="theme" data-aos="fade-up">
               <button>
                 <h2><span class="yellow-text">Energy</span> <span class="blue-text">Transition</span></h2>
                 <h4>Embracing energy transition within hospitality involves adopting renewable energy sources,
@@ -74,7 +74,7 @@
                 <img class="themeImg" src="@/assets/img/energyT.png" alt="">
               </button>
             </div>
-            <div class="theme">
+            <div class="theme" data-aos="fade-up">
               <button>
                 <h2><span class="yellow-text">Single Us</span><span class="blue-text">ed Plastic</span></h2>
                 <h4>Tackling the issue of single-use plastic in hospitality focuses on reducing reliance on disposable
@@ -84,7 +84,7 @@
                 <img class="themeImg" src="@/assets/img/plasticT.png" alt="">
               </button>
             </div>
-            <div class="theme">
+            <div class="theme" data-aos="fade-up">
               <button>
                 <h2><span class="yellow-text">Protein</span> <span class="blue-text">Transition</span></h2>
                 <h4>The protein transition in the hospitality industry emphasizes a shift towards sustainable and
@@ -94,7 +94,7 @@
                 <img class="themeImg" src="@/assets/img/proteinT.avif" alt="">
               </button>
             </div>
-            <div class="theme">
+            <div class="theme" data-aos="fade-up">
               <button>
                 <h2>
                   <span class="yellow-text">Wat</span><span class="blue-text">er</span>
@@ -107,12 +107,12 @@
               </button>
             </div>
           </div>
-          <h1 class="welcomeH1">
+          <h1 class="welcomeH1" data-aos="fade-up" >
             <span class="yellow-text">OUR</span> <span class="blue-text">PILLARS</span>
           </h1>
           <div class="pillarContainer">
             <button>
-              <div class="pillar">
+              <div class="pillar" data-aos="fade-up">
                 <div class="pillarText">
                   <h1 class="welcomeH1">
                     <span class="blue-text">Challenges</span>
@@ -128,7 +128,7 @@
               </div>
             </button>
             <button>
-              <div class="pillar">
+              <div class="pillar" data-aos="fade-up">
                 <div class="pillarText">
                   <h1 class="welcomeH1">
                     <span class="blue-text">Network</span>
@@ -146,7 +146,7 @@
               </div>
             </button>
             <button>
-              <div class="pillar">
+              <div class="pillar" data-aos="fade-up">
                 <div class="pillarText">
                   <h1 class="welcomeH1">
                     <span class="blue-text">Research</span>
@@ -165,7 +165,7 @@
             </button>
           </div>
     </div>
-    <div class="aboutUs">
+    <div class="aboutUs" data-aos="fade-up">
       <h1 class="welcomeH1">
         <span class="blue-text">ABOUT HAPPY HOSPITALITY</span> <span class="yellow-text">& </span><span
         class="blue-text">US</span>
@@ -176,7 +176,7 @@
         environmental impact. By embracing eco-friendly practices, establishments not only contribute to conservation
         but also bolster their reputation as responsible players in the evolving hospitality landscape.
       </p>
-      <div class="imageHolder">
+      <div class="imageHolder" data-aos="fade-up">
         <img class="homePageImg" src="@/assets/img/restaurant1.png" alt="">
         <img class="homePageImg" src="@/assets/img/restaurant2.jpg" alt="">
       </div>
