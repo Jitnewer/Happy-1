@@ -16,7 +16,15 @@
       <Carousel class="carousel" v-slot="{ currentSlide }">
         <Slide v-for="(slide, index) in carouselSlides" :key="index">
           <div v-show="currentSlide === index + 1" class="slide">
-            <img class="homePageImg" :src="require(`@/assets/img/carousel/${slide}.jpg`)" alt="">
+            <div class="welcomeMsg">
+              <h2 class="blue-text"> 27 Oktober 2023 </h2>
+              <h1 class="yellow-text"> Embracing energy transition within hospitality
+              </h1>
+              <button>
+                <span class="blue-text" > > Lees meer </span>
+              </button>
+            </div>
+            <img class="carouselImg" :src="require(`@/assets/img/carousel/${slide}.jpg`)" alt="">
           </div>
         </Slide>
       </Carousel>
