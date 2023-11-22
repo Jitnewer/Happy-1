@@ -16,7 +16,6 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("events")
-@CrossOrigin(origins = {"http://localhost:8080"})
 public class EventController {
 
     @Autowired

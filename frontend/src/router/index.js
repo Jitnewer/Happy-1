@@ -12,6 +12,8 @@ import AdminUsersDetail from '@/components/admin/userPage/AdminUsersDetail.vue'
 import Registration from '@/components/Registration.vue'
 import AboutUs from '@/components/AboutUs.vue'
 import logIn from '@/components/Login.vue'
+import Challenges from '@/components/challenges/Challenges.vue'
+import ChallengeDetails from '@/components/challenges/ChallengeDetails.vue'
 
 const routes = [
   {
@@ -26,14 +28,22 @@ const routes = [
   {
     path: '/events',
     name: 'events',
-    component: Events,
-    children: [
-      {
-        path: ':id',
-        name: 'event',
-        component: EventsDetails
-      }
-    ]
+    component: Events
+  },
+  {
+    path: '/events/:id',
+    name: 'event',
+    component: EventsDetails
+  },
+  {
+    path: '/news/challenges',
+    name: 'challenges',
+    component: Challenges
+  },
+  {
+    path: '/news/challenges/:id',
+    name: 'challenge',
+    component: ChallengeDetails
   },
   {
     path: '/about',

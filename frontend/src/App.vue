@@ -15,6 +15,7 @@ import { User } from '@/models/user'
 import { LoginAndRegisterAdapter } from '@/services/LoginAndRegisterAdapter'
 import { UserEvent } from '@/models/UserEvent'
 import Footer from '@/components/Footer.vue'
+import { Challenge } from '@/models/challenge'
 
 export default {
   name: 'App',
@@ -36,13 +37,13 @@ export default {
     return {
       eventsService: new RESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/events', Event.copyConstructor),
       usersService: new RESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/users', User.copyConstructor),
+      challengeService: new RESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/challenges', Challenge.copyConstructor),
       userEventsService: new RESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/userevents', UserEvent.copyConstructor),
       loginAndRegisterService: new LoginAndRegisterAdapter(CONFIG.BACKEND_URL, User.copyConstructor)
     }
   },
   methods: {
     handleLogout () {
-      console.log('test')
       // Update the navBar when the user logs out
       this.loggedIn = false
       this.admin = false
@@ -56,7 +57,6 @@ export default {
     },
     async isAdmin () {
       const user = await this.loginAndRegisterService.asyncFindByEmail(this.email)
-      console.log(user.userType, user.userType === 'ADMIN')
       return user.userType === 'ADMIN'
     }
   },
@@ -65,7 +65,6 @@ export default {
       if (!this.loggedIn) {
         return 'NavBarNotLoggedIn'
       } else {
-        console.log(this.admin)
         if (this.admin) {
           return 'NavBarLoggedInAdminAndSuperUser'
         } else {
@@ -74,7 +73,7 @@ export default {
       }
     }
   },
-  async mounted () {
+  async created () {
     // Fetch the user's authentication status and role on component mount
     this.email = localStorage.getItem('email')
     this.loggedIn = !!localStorage.getItem('email')

@@ -44,7 +44,7 @@ public class UserRepositoryJpa implements UserRepository {
 
     @Override
     public User login(String email, String password) {
-        String jpql = "SELECT u FROM User u WHERE u.email = :email AND u.password = :password";
+        String jpql = "SELECT u FROM User u WHERE u.mail = :email AND u.password = :password";
         TypedQuery<User> query = entityManager.createQuery(jpql, User.class);
         query.setParameter("email", email);
         query.setParameter("password", password);

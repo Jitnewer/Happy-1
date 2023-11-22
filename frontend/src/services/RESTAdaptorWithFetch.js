@@ -11,7 +11,6 @@ export class RESTAdaptorWithFetch {
     try {
       const response = await fetch(url, options)
       if (response.ok) {
-        console.log(await response)
         return await response.json()
       } else {
         let errorMessage
@@ -37,6 +36,7 @@ export class RESTAdaptorWithFetch {
   async asyncFindAll () {
     try {
       const data = await this.fetchJson(this.resourceUrl)
+      console.log(data)
       return data?.map(d => this.copyConstructor(d))
     } catch (error) {
       console.error('Error in asyncFindAll:', error)
@@ -99,6 +99,7 @@ export class RESTAdaptorWithFetch {
 
   async asyncHasEntityEntity (id1, id2, url) {
     try {
+      console.log(`${this.resourceUrl}/${url}/${id1}/${id2}`)
       return await this.fetchJson(`${this.resourceUrl}/${url}/${id1}/${id2}`)
     } catch (error) {
       console.error('Error in asyncAddEntityToEntity:', error)

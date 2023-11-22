@@ -65,6 +65,7 @@ public class CommandRunner implements CommandLineRunner {
         Challenge initialChallenge = new Challenge();
         initialChallenge.setTitle("Java Spring Boot Challenge");
         initialChallenge.setFirstParagraph("This is the first paragraph of the challenge.");
+        initialChallenge.setImage("img.png");
 
         Set<Paragraph> initialParagraphs = new HashSet<>();
         initialParagraphs.add(new Paragraph("Introduction", "This is the introduction paragraph.", initialChallenge));
