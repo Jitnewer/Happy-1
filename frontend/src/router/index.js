@@ -12,6 +12,7 @@ import AdminUsersDetail from '@/components/admin/userPage/AdminUsersDetail.vue'
 import Registration from '@/components/Registration.vue'
 import AboutUs from '@/components/AboutUs.vue'
 import logIn from '@/components/Login.vue'
+import UserProfilePage from '@/components/user/UserProfilePage.vue'
 
 const routes = [
   {
@@ -79,8 +80,12 @@ const routes = [
     path: '/about-us',
     name: 'AboutUs',
     component: AboutUs
+  },
+  {
+    path: '/user/:id',
+    name: 'Profile page',
+    component: UserProfilePage
   }
-
 ]
 
 const router = createRouter({
