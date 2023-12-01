@@ -45,19 +45,19 @@ public class User {
 
     private int age;
 
-    @Column(nullable = false)
+//    @Column(nullable = false)
     private String companyType;
 
-    @Column(nullable = false)
+//    @Column(nullable = false)
     private String tag;
 
-    @Column(nullable = false)
+//    @Column(nullable = false)
     private UserStatus status;
 
     @Column(nullable = false)
     private UserType userType;
 
-    @Column(nullable = false)
+//    @Column(nullable = false)
     private String postalCode;
 
     @Column(nullable = false)

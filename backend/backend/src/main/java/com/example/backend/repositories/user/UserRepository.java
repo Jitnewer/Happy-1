@@ -14,4 +14,5 @@ public interface UserRepository {
     void deleteUser(long id);
 
     User getUserByMail(String email);
+    boolean userWithMailExists(String email);
 }

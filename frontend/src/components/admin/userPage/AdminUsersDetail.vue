@@ -73,7 +73,7 @@ export default {
         this.error.lastNameError = 'Invalid lastname'
         invalid = true
       }
-      if (!this.validatePassWord()) {
+      if (this.edit && !this.validatePassWord()) {
         this.error.passwordError = 'Invalid password length'
         invalid = true
       }
@@ -95,7 +95,7 @@ export default {
     <div class="black"></div>
     <div class="user">
       <div class="user-info">
-        <img @click="activateInput" :src="selectedCopy.profilePic" alt="user image"/>
+        <img @click="activateInput" :src="require(`../../../assets/img/${selectedCopy.profilePic}`)" alt="user image"/>
         <input type="file" accept="image/jpeg, image/png, image/jpg" id="file" @change="handleImageUpload">
         <form class="inputInfo">
           <h2 v-if="!create"> {{ selectedCopy.firstname }} {{ selectedCopy.lastname }} </h2>

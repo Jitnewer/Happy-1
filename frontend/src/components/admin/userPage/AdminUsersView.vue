@@ -11,28 +11,33 @@ export default {
         userType: null
       },
       selectedUser: null,
-      isSelected: false,
       create: false,
+      view: false,
       users: []
     }
   },
   methods: {
-    setByUrl () {
-      const routeId = parseInt(this.$route.params.id)
-      const foundUser = this.users.find(user => user.id === routeId)
-      if (foundUser) {
-        this.selectedUser = foundUser
-        this.isSelected = true
-      }
-    },
     createUser () {
       this.create = true
-      this.selectedUser = new User(0, require('../../../assets/img/profilepic.png'))
-      this.selectedUser.status = User.status.Active
-      this.selectedUser.tag = 'N/A'
-      this.selectedUser.userType = User.userTypes.Admin
-      this.isSelected = !this.isSelected
-      this.$router.push(this.$route.matched[0].path + '/' + this.selectedUser.id)
+      this.selectedUser = new User(
+        0,
+        null,
+        'profilepic.png',
+        null,
+        null,
+        null,
+        'N/A',
+        null,
+        null,
+        null,
+        User.status.Active,
+        User.userTypes.Admin,
+        null,
+        null,
+        null
+      )
+
+      this.$router.push({ name: 'userDetail', params: { id: this.selectedUser.id } })
     },
     async unblockUser (user) {
       if (confirm('Are you sure you want to unblock this user')) {
@@ -47,31 +52,28 @@ export default {
       }
     },
     editUser (user) {
-      this.$router.push(this.$route.matched[0].path + '/' + user.id)
+      this.$router.push({ name: 'userDetail', params: { id: user.id } })
     },
-    cancel () {
-      this.selectedUser = null
-      this.isSelected = !this.isSelected
+    cancelEdit () {
       this.create = false
-      this.$router.push(this.$route.matched[0])
+      this.$router.push({ name: 'users' })
     },
-    async save (user) {
+    async saveUser (user) {
       try {
         const savedUser = await this.usersService.asyncSave(user)
-
+        // console.log(savedUser)
         if (this.create === true) {
-          this.users.push(savedUser)
+          this.users.push(user)
         } else {
-          const indexToUpdate = this.users.findIndex(oldUser => oldUser.id === savedUser.id)
+          const indexToUpdate = this.users.findIndex(oldUser => oldUser.id === user.id)
 
           if (indexToUpdate >= 0) {
-            this.users.splice(indexToUpdate, 1, savedUser)
+            this.users.splice(indexToUpdate, 1, user)
           }
         }
-        this.selectedUser = null
-        this.isSelected = !this.isSelected
+
         this.create = false
-        this.$router.push(this.$route.matched[0])
+        this.$router.push({ name: 'users' })
       } catch (e) {
         console.log(e)
       }
@@ -90,11 +92,16 @@ export default {
         }
       }
     },
-    viewUser () {
-      // TODO redirect to profile of user
+    viewUser (user) {
+      this.view = true
+      this.$router.push({ name: 'adminProfileView', params: { id: user.id } })
     },
     isBanned (user) {
       return user && user.status === User.status.Banned
+    },
+    back () {
+      this.view = false
+      this.$router.push({ name: 'users' })
     }
   },
   computed: {
@@ -117,18 +124,28 @@ export default {
     }
   },
   async created () {
+    if (localStorage.getItem('admin') === 'false') this.$router.push({ path: '/PageNotFound' })
     this.users = await this.usersService.asyncFindAll()
   },
   watch: {
-    '$route' () {
-      this.setByUrl()
+    '$route' (to, from) {
+      console.log(to)
+      const userId = parseInt(to.params.id)
+      if (userId === 0) {
+        return
+      }
+      if (userId) {
+        this.selectedUser = this.users.find(user => user.id === userId)
+      } else {
+        this.selectedUser = null
+      }
     }
   }
 }
 </script>
 
 <template>
-  <div class="container-admin">
+  <div class="container-admin" v-if="!view">
     <div class="title">
       <h1>Users</h1>
     </div>
@@ -167,7 +184,7 @@ export default {
           <td> {{ user.tag }}</td>
           <td> {{ user.status }}</td>
           <td class="buttons">
-            <button class="view-button">View</button>
+            <button class="view-button" @click="viewUser(user)">View</button>
             <button class="edit-button" @click="editUser(user)">Edit</button>
             <button v-if="!isBanned(user)" class="block-button" @click="blockUser(user)">Block</button>
             <button v-if="isBanned(user)" class="block-button" @click="unblockUser(user)">Unblock</button>
@@ -178,7 +195,7 @@ export default {
       </table>
     </div>
   </div>
-  <router-view v-if="isSelected" :selectedUser="selectedUser" @cancel-edit="cancel" @save-edit="save" :create="create"/>
+  <router-view :selectedUser="selectedUser" @cancel-edit="cancelEdit" @save-edit="saveUser" :create="create" @back="back"/>
 </template>
 
 <style scoped>

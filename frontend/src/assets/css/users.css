@@ -71,15 +71,15 @@ button:hover {
     cursor: pointer;
 }
 
-.view-button {
+.view-button, .events-view {
     background-color: var(--main-color);
 }
 
-.view-button:hover {
+.view-button:hover, .events-view:hover{
     background-color: var(--main-color-admin);
 }
 
-.edit-button, .edit-user-btn .save, .create-btn, .save-button, .clear{
+.edit-button, .edit-user-btn .save, .create-btn, .save-button{
     background-color: var(--main-color-hover);
 }
 
@@ -281,7 +281,7 @@ button:hover {
 
 .edit-inputs {
     margin-top: 20px;
-    max-height: 400px;
+    max-height: 300px;
     gap: 20px;
     display: flex;
     flex-direction: column;

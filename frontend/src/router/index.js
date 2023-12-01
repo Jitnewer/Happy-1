@@ -13,6 +13,10 @@ import Registration from '@/components/Registration.vue'
 import AboutUs from '@/components/AboutUs.vue'
 import logIn from '@/components/Login.vue'
 import UserProfilePage from '@/components/user/UserProfilePage.vue'
+import PageNotFound from '@/components/PageNotFound.vue'
+import UserProfileInfo from '@/components/user/UserProfileInfo.vue'
+import ProfilePage from '@/components/admin/userPage/ProfilePage.vue'
+import UserProfileEvents from '@/components/user/UserProfileEvents.vue'
 
 const routes = [
   {
@@ -43,9 +47,14 @@ const routes = [
   },
   {
     path: '/admin/events',
+    name: 'adminEvents',
     component: AdminEventView,
     children: [
-      { path: ':id', component: EventDetailsView }
+      {
+        path: ':id',
+        name: 'adminEventDetail',
+        component: EventDetailsView
+      }
     ]
   },
   {
@@ -54,9 +63,31 @@ const routes = [
   },
   {
     path: '/admin/users',
+    name: 'users',
     component: AdminUsersView,
     children: [
-      { path: ':id', component: AdminUsersDetail }
+      {
+        path: 'profile/:id',
+        name: 'adminProfileView',
+        component: ProfilePage,
+        children: [
+          {
+            path: 'info',
+            name: 'adminProfileViewInfo',
+            component: UserProfileInfo
+          },
+          {
+            path: 'events',
+            name: 'adminProfileViewEvents',
+            component: UserProfileEvents
+          }
+        ]
+      },
+      {
+        path: ':id',
+        name: 'userDetail',
+        component: AdminUsersDetail
+      }
     ]
   },
   {
@@ -82,10 +113,27 @@ const routes = [
     component: AboutUs
   },
   {
-    path: '/user/:id',
-    name: 'Profile page',
-    component: UserProfilePage
+    path: '/profile',
+    name: 'profilePage',
+    component: UserProfilePage,
+    children: [
+      {
+        path: 'events',
+        name: 'profilePageEvents',
+        component: UserProfileEvents
+      },
+      {
+        path: 'info',
+        name: 'profilePageInfo',
+        component: UserProfileInfo
+      }
+    ]
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    component: PageNotFound
   }
+
 ]
 
 const router = createRouter({

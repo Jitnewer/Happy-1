@@ -19,12 +19,43 @@ export default {
     cancel () {
       if (confirm('Are you sure you wan\'t to delete changes?')) {
         this.edit = false
+        this.copyUser = null
+      }
+    },
+    handleImageUpload (event) {
+      const file = event.target.files[0]
+      this.selectedCopy.image = URL.createObjectURL(file)
+    },
+    activateInput () {
+      if (this.edit) {
+        document.querySelector('#file').click()
+      }
+    },
+    infoView () {
+      this.$router.push({ name: 'profilePageInfo' })
+    },
+    eventsView () {
+      this.$router.push({ name: 'profilePageEvents' })
+    },
+    async save () {
+      if (confirm('Are you sure you wan\'t to save changes?')) {
+        try {
+          await this.usersService.asyncSave(this.copyUser)
+          this.user = this.copyUser
+          this.edit = false
+          this.copyUser = null
+        } catch (e) {
+          console.log(e)
+        }
       }
     }
   },
   async created () {
-    this.user = await this.usersService.asyncFindById(this.$route.params.id)
-    console.log(this.user)
+    if (localStorage.getItem('email') == null) {
+      this.$router.push({ route: 'PageNotFound' })
+    }
+    this.$router.push({ name: 'profilePageInfo' })
+    this.user = await this.usersService.asyncFindById(parseInt(localStorage.getItem('profileId')))
   }
 }
 </script>
@@ -35,14 +66,14 @@ export default {
     </div>
     <div class="profile-info">
       <div class="info-left">
-        <img class="profile-pic" src="../../../src/assets/img/profilepic.png">
+        <img class="profile-pic" src="../../../src/assets/img/profilepic.png" @click="activateInput">
+        <input type="file" accept="image/jpeg, image/png, image/jpg" id="file" @change="handleImageUpload">
         <div v-if="!edit" class="profile-edit-buttons">
           <button class="edit-button" @click="editProfile">Edit</button>
           <button class="delete-button">Delete</button>
         </div>
         <div v-else class="profile-edit-buttons">
-          <button class="save-button">Save</button>
-          <button class="clear">Clear</button>
+          <button class="save-button" @click="save">Save</button>
           <button class="cancel" @click="cancel">Cancel</button>
         </div>
       </div>
@@ -51,38 +82,11 @@ export default {
           <h1 v-if="!edit"> {{ user.firstname }} {{ user.lastname }}</h1>
         </div>
         <div v-if="!edit">
-          <button class="info-view selected">Info</button>
-          <button class="uploads-view unselected">Uploads</button>
+          <button class="info-view selected" @click="infoView">Info</button>
+          <button class="events-view" @click="eventsView">Events</button>
         </div>
         <div class="info-right-bottom">
-          <div>
-            <h3>Id</h3>
-            <p> {{ user.id }} </p>
-          </div>
-          <div>
-            <h3>Email</h3>
-            <p> {{ user.mail }} </p>
-          </div>
-          <div>
-            <h3>Age</h3>
-            <p> {{ user.age }} </p>
-          </div>
-          <div>
-            <h3>Gender</h3>
-            <p> {{ user.gender }} </p>
-          </div>
-          <div>
-            <h3>Company Type</h3>
-            <p> {{ user.companyType }} </p>
-          </div>
-          <div>
-            <h3>Company Name</h3>
-            <p> {{ user.companyName }} </p>
-          </div>
-          <div>
-            <h3>User type</h3>
-            <div class="usertype-tag"> {{ user.userType }} </div>
-          </div>
+          <router-view v-if="!edit" :user="user"></router-view>
         </div>
       </div>
       <div v-else class="edit-inputs">
@@ -107,6 +111,21 @@ export default {
           </select>
         </div>
         <div class="profile-input">
+          <label>Company Type</label>
+          <select v-model="copyUser.companyType">
+            <option value="Bar">Bar</option>
+            <option value="Catering">Catering</option>
+            <option value="Delivery">Delivery</option>
+            <option value="Fast food">Fast food</option>
+            <option value="Hotel">Hotel</option>
+            <option value="Restaurant">Restaurant</option>
+          </select>
+        </div>
+        <div class="profile-input">
+          <label>Company Name</label>
+          <input type="text" placeholder="1232AD" v-model="copyUser.companyName">
+        </div>
+        <div class="profile-input">
           <label>Postal code</label>
           <input type="text" placeholder="1232AD" v-model="copyUser.postalCode">
         </div>
@@ -116,8 +135,4 @@ export default {
 </template>
 
 <style scoped>
-p, h1 {
-  color: black;
-  margin: 0;
-}
 </style>
