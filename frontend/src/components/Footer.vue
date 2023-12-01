@@ -8,7 +8,7 @@
     </div>
     <div class="bottomFooter">
       <div class="bottomFooterChild">
-        <span class="yellow-text">© Happy</span> <span class="white-text">Hospitality collective </span>
+        <span class="yellow-text">© Happy</span> <span class="white-text2">Hospitality collective </span>
       </div>
     </div>
   </div>
@@ -24,23 +24,7 @@ export default {
 .container {
   width: 100%;
 }
-.bottomFooter{
-  align-items: center;
-  justify-content: center;
-  background-color: #1F93A5;
-  height: 30px;
-  padding: 15px;
-}
-.topFooter {
-  width: 100%;
-  height: 150px;
-  display: flex;
-  flex-direction: column;
-  background-color: #FECC30;
-  align-items: flex-start;
-  justify-content: flex-start;
-  margin-top: 70px;
-}
+
 .topFooter p {
   margin-left: 50px;
 }

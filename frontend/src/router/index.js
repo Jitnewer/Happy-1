@@ -17,6 +17,8 @@ import PageNotFound from '@/components/PageNotFound.vue'
 import UserProfileInfo from '@/components/user/UserProfileInfo.vue'
 import ProfilePage from '@/components/admin/userPage/ProfilePage.vue'
 import UserProfileEvents from '@/components/user/UserProfileEvents.vue'
+import Challenges from '@/components/challenges/Challenges.vue'
+import ChallengeDetails from '@/components/challenges/ChallengeDetails.vue'
 
 const routes = [
   {
@@ -31,14 +33,22 @@ const routes = [
   {
     path: '/events',
     name: 'events',
-    component: Events,
-    children: [
-      {
-        path: ':id',
-        name: 'event',
-        component: EventsDetails
-      }
-    ]
+    component: Events
+  },
+  {
+    path: '/events/:id',
+    name: 'event',
+    component: EventsDetails
+  },
+  {
+    path: '/news/challenges',
+    name: 'challenges',
+    component: Challenges
+  },
+  {
+    path: '/news/challenges/:id',
+    name: 'challenge',
+    component: ChallengeDetails
   },
   {
     path: '/about',

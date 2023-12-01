@@ -62,6 +62,7 @@ export default {
     },
     back () {
       this.$router.push({ name: 'events', query: { sort: this.filter } })
+      this.$emit('update-selected-event')
     }
   }
 }

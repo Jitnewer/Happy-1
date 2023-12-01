@@ -74,7 +74,7 @@ span.carouselPagination {
     width: 100%
 }
 .topFooter {
-    color: var(--main-color-hover);
+    background-color: var(--main-color-hover);
     width: 100%
 }
 .topFooter p {
@@ -86,8 +86,14 @@ span.carouselPagination {
 }
 .blue-text {
     color: var(--main-color);
+    margin-left: 50px;
 }
 .white-text {
+    color: var(--main-text-color);
+    margin-left: 50px;
+}
+
+.white-text2 {
     color: var(--main-text-color);
 }
 /* homePage */
@@ -268,7 +274,7 @@ margin: 0
 .bottomFooterChild {
     width: 80%;
     margin: auto;
-    padding: 3rem;
+    padding: 1rem;
     display: flex;
-
+    gap: 1rem;
 }
