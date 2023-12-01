@@ -17,8 +17,8 @@ export default {
         this.$emit('deselect-event', this.selectedEvent)
       }
     },
-    async saveEventDetail () {
-      if (this.isAllInputsFilled) {
+    saveEventDetail () {
+      if (this.validateFields()) {
         if (confirm('Are you sure you want to save changes to event?')) {
           this.$emit('save-event', this.selectedCopy)
         }
@@ -51,6 +51,68 @@ export default {
     },
     activateInput () {
       document.querySelector('#file').click()
+    },
+    eventNameIsValid () {
+      const eventNameIsEmpty = !this.selectedCopy.name || this.selectedCopy.name.trim() === ''
+      return !eventNameIsEmpty && /^.{3,}$/.test(this.selectedCopy.name)
+    },
+    eventDateIsValid () {
+      const eventDateIsEmpty = !this.selectedCopy.date
+      return !eventDateIsEmpty && Date.parse(this.selectedCopy.date) > Date.now()
+    },
+    eventBeginTimeIsValid () {
+      return this.selectedCopy.timeBegin !== undefined
+    },
+    eventEndTimeIsValid () {
+      return this.selectedCopy.timeEnd !== undefined
+    },
+    eventLocationIsValid () {
+      const eventLocationIsEmpty = !this.selectedCopy.location || this.selectedCopy.location === ''
+      return !eventLocationIsEmpty && /^[a-zA-Z].{3,}$/.test(this.selectedCopy.location)
+    },
+    eventCityIsValid () {
+      const eventCityIsEmpty = !this.selectedCopy.city || this.selectedCopy.city === ''
+      return !eventCityIsEmpty && /^[a-zA-Z].{3,}$/.test(this.selectedCopy.location)
+    },
+    eventPriceIsValid () {
+      const eventPriceIsEmpty = !this.selectedCopy.price || this.selectedCopy.price === ''
+      return !eventPriceIsEmpty && this.selectedCopy.price >= 0 && this.selectedCopy.price <= 500
+    },
+    setUpErrorMessage (elementId, message) {
+      document.querySelector(elementId).setCustomValidity(message)
+      document.querySelector(elementId).reportValidity()
+    },
+    validateFields () {
+      if (!this.eventNameIsValid()) {
+        this.setUpErrorMessage('#edit-event-name', 'Name must be more than 3 characters')
+        return false
+      }
+      if (!this.eventDateIsValid()) {
+        this.setUpErrorMessage('#edit-event-date', 'Event date must be further in the future')
+        return false
+      }
+      if (!this.eventBeginTimeIsValid()) {
+        this.setUpErrorMessage('#edit-event-time-begin', 'This field is required')
+        return false
+      }
+      if (!this.eventEndTimeIsValid()) {
+        this.setUpErrorMessage('#edit-event-time-end', 'This field is required')
+        return false
+      }
+      if (!this.eventLocationIsValid()) {
+        this.setUpErrorMessage('#edit-event-location', 'Location must be more than 3 characters and can\'t contain numbers or symbols')
+        return false
+      }
+      if (!this.eventCityIsValid()) {
+        this.setUpErrorMessage('#edit-event-city', 'City must be more than 3 characters and can\'t contain numbers or symbols')
+        return false
+      }
+      if (!this.eventPriceIsValid()) {
+        this.setUpErrorMessage('#edit-event-price', 'Price must be 0 - 500')
+        return false
+      }
+
+      return true
     }
   },
   watch: {
@@ -62,33 +124,6 @@ export default {
   },
   created () {
     this.selectedCopy = Event.copyConstructor(this.selectedEvent)
-  },
-  computed: {
-    isSaveButtonDisabled () {
-      // Compare the selectedCopy data with the selectedEvent data
-      return (
-        this.selectedCopy.image === this.selectedEvent.image &&
-        this.selectedCopy.name === this.selectedEvent.name &&
-        this.selectedCopy.date === this.selectedEvent.date &&
-        this.selectedCopy.timeBegin === this.selectedEvent.timeBegin &&
-        this.selectedCopy.timeEnd === this.selectedEvent.timeEnd &&
-        this.selectedCopy.location === this.selectedEvent.location &&
-        this.selectedCopy.price === this.selectedEvent.price &&
-        this.selectedCopy.info === this.selectedEvent.info
-      )
-    },
-    isAllInputsFilled () {
-      // Check if all input fields are filled (except the textarea)
-      return (
-        this.selectedCopy.name &&
-        this.selectedCopy.date &&
-        this.selectedCopy.timeBegin &&
-        this.selectedCopy.timeEnd &&
-        this.selectedCopy.location &&
-        this.selectedCopy.city &&
-        this.selectedCopy.price !== null
-      )
-    }
   }
 }
 </script>
@@ -99,7 +134,7 @@ export default {
       <button @click="closeEventDetail" class="back-button">Back</button>
       <h3>Event</h3>
     </div>
-    <div class="event-details">
+    <form class="event-details">
       <div class="event-image-container">
         <input type="file" accept="image/jpeg, image/png, image/jpg" id="file" @change="handleImageUpload">
         <img :src="require(`../../../assets/images/${selectedCopy.image}`)" alt="event image" class="event-image" @click="activateInput">
@@ -116,10 +151,10 @@ export default {
         <input type="number" v-model="selectedCopy.price" id="edit-event-price" placeholder="Event price">
         <textarea placeholder="Enter event summary" v-model="selectedCopy.info" id="edit-event-summary"></textarea>
       </div>
-    </div>
+    </form>
     <div class="buttons-container">
       <button @click="clearInputs">Clear</button>
-      <button @click="saveEventDetail" :disabled="isSaveButtonDisabled">Save</button>
+      <button @click="saveEventDetail">Save</button>
       <button @click="deleteEventDetail" v-if="!created">Delete</button>
     </div>
   </div>
