@@ -126,6 +126,9 @@ export default {
   async created () {
     if (localStorage.getItem('admin') === 'false') this.$router.push({ path: '/PageNotFound' })
     this.users = await this.usersService.asyncFindAll()
+    this.users = this.users.filter(user => {
+      return user.id !== parseInt(localStorage.getItem('profileId'))
+    })
   },
   watch: {
     '$route' (to, from) {

@@ -2,7 +2,7 @@
 export default {
   name: 'ProfileEvents',
   props: ['user'],
-  inject: ['eventsService'],
+  inject: ['eventsService', 'userEventsService'],
   data () {
     return {
       userEvents: []
@@ -25,13 +25,16 @@ export default {
       }
     }
   },
-  created () {
-    for (let i = 0; i < this.user.userEvents.length; i++) {
-      const event = this.eventsService.asyncFindById(this.user.userEvents.id)
-      if (event !== null) {
-        this.userEvents.push()
-      }
-    }
+  async created () {
+    const test = await this.userEventsService.asyncFindById(this.user.userEvents[0].id)
+    // for (let i = 0; i < this.user.userEvents.length; i++) {
+    //   const event = await this.userEventsService.asyncFindById(this.user.userEvents[i].id)
+    //   console.log(event)
+    //
+    //   if (event !== null) {
+    //     this.userEvents.push(event)
+    //   }
+    // }
   }
 }
 </script>

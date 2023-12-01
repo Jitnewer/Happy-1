@@ -202,13 +202,13 @@ button:hover {
     height: 220px;
     background-repeat: no-repeat;
     background-size: cover;
-    background-position-y: -300px;
+    background-position-y: center;
 }
 
 .profile-info {
     display: flex;
     flex-direction: row;
-    padding-left: 200px;
+    padding-left: 100px;
     gap: 30px;
 }
 
@@ -299,4 +299,82 @@ button:hover {
     padding: 0.5em 1em;
     border-bottom: 1px solid var(--main-text-color);
     box-shadow: rgba(0, 0, 0, 0.19) 0 10px 20px, rgba(0, 0, 0, 0.23) 0 6px 6px;
+}
+
+@media (max-width: 1250px) {
+    .info-left {
+        top: -75px;
+    }
+
+    .profile-pic {
+        width: 150px;
+        height: 150px;
+    }
+}
+
+@media (max-width: 920px) {
+    .info-right-bottom {
+        max-height: 375px;
+    }
+}
+
+@media (max-width: 768px) {
+    .profile-info {
+        padding-left: 50px;
+    }
+
+    .info-left {
+        top: -75px;
+    }
+
+    .profile-pic {
+        width: 150px;
+        height: 150px;
+    }
+
+    .profile-banner {
+        height: 160px;
+    }
+}
+
+@media (max-width: 680px) {
+    .profile-banner {
+        height: 140px;
+    }
+
+    .info-left {
+        top: -50px;
+    }
+
+    .profile-pic {
+        width: 100px;
+        height: 100px;
+    }
+
+    .info-right-bottom {
+        max-height: 750px;
+    }
+}
+
+@media (max-width: 450px) {
+    .profile-info {
+        padding-left: 25px;
+        gap: 20px;
+    }
+
+    .info-right .userName {
+        font-size: 10px;
+    }
+
+    .info-right {
+        top: -55px;
+    }
+
+    .info-right-bottom .usertype-tag {
+        font-size: 10px;
+    }
+
+    .edit-inputs {
+        max-height: min-content;
+    }
 }

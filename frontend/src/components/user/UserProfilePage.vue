@@ -81,7 +81,7 @@ export default {
         <div class="userName">
           <h1 v-if="!edit"> {{ user.firstname }} {{ user.lastname }}</h1>
         </div>
-        <div v-if="!edit">
+        <div v-if="!edit" class="buttons-view">
           <button class="info-view selected" @click="infoView">Info</button>
           <button class="events-view" @click="eventsView">Events</button>
         </div>
