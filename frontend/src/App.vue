@@ -19,6 +19,7 @@ import { Challenge } from '@/models/challenge'
 
 export default {
   name: 'App',
+  emits: ['loginAdmin', 'loginUser'],
   components: {
     NavBarNotLoggedIn,
     NavBarLoggedIn,
