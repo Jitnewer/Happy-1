@@ -1,5 +1,5 @@
 <script>
-import { News } from '@/models/news'
+import { Research } from '@/models/research'
 
 export default {
   name: 'SuperUserDetail',
@@ -67,7 +67,7 @@ export default {
     }
   },
   created () {
-    this.copySelected = News.copyConstructor(this.selectedNews)
+    this.copySelected = Research.copyConstructor(this.selectedNews)
     if (this.create) {
       this.chosenPostType = 'link'
     }
@@ -86,7 +86,7 @@ export default {
   <div class="container">
     <div class="title">
       <button class="back" @click="closeNewsDetail">Back</button>
-      <h1>News</h1>
+      <h1>Research</h1>
       <div class="edit-buttons">
         <div v-if="create" class="postType">
           <label>Link</label>
@@ -151,8 +151,6 @@ export default {
 <style scoped>
 .container {
   padding: 20px;
-  overflow: auto;
-  max-height: 550px;
   margin-left: 0;
 }
 

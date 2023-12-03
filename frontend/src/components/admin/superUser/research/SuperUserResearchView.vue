@@ -1,5 +1,5 @@
 <script>
-import { News } from '@/models/news'
+import { Research } from '@/models/research'
 export default {
   name: 'SuperUserView',
   data () {
@@ -17,10 +17,10 @@ export default {
   },
   methods: {
     create () {
-      this.selectedNews = new News()
+      this.selectedNews = new Research()
       this.selectedNews.id = (this.idUse + 1)
       this.idUse++
-      this.selectedNews.image = require('../../../assets/images/imagePlaceholder.jpg')
+      this.selectedNews.image = require('../../../../assets/images/imagePlaceholder.jpg')
       this.createNews = true
       this.isSelected = !this.isSelected
       this.$router.push(this.$route.matched[0].path + '/' + this.selectedNews.id)
@@ -72,8 +72,10 @@ export default {
     }
   },
   created () {
+    console.log(this.$route)
+
     for (let i = 0; i < 2; i++) {
-      this.newsList.push(News.createSampleNews(i))
+      this.newsList.push(Research.createSampleNews(i))
     }
   },
   watch: {
@@ -87,7 +89,7 @@ export default {
 <template>
   <div class="container" v-if="!isSelected">
     <div class="title">
-      <h2>News</h2>
+      <h2>Research</h2>
     </div>
     <div class="filters">
       <input type="text" class="search-filter" id="nameFilter" placeholder="Search for events.." title="Type in a name"

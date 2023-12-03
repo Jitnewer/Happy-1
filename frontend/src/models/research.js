@@ -1,4 +1,4 @@
-export class News {
+export class Research {
   static TAGS = {
     FOOD_WASTE: 'Food Waste',
     ENVIRONMENT: 'Environment'
@@ -31,7 +31,7 @@ export class News {
     const summary = ['It\'s about food waste', 'It\'s about platic'][index]
     const postType = ['post', 'link'][index]
 
-    return new News(
+    return new Research(
       id,
       index === 1
         ? require('../assets/images/plastic-waste.jpg')
@@ -51,7 +51,7 @@ export class News {
     if (!news) return null
 
     // You can add more logic here to deep clone attributes if needed.
-    return new News(
+    return new Research(
       news.id,
       news.image,
       news.title,

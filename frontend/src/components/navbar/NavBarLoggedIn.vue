@@ -7,7 +7,7 @@
         <div class="nav-links-left">
           <router-link to="/home">Home</router-link>
           <div class="dropdown">
-            <a @click="toggleDropdown">News</a>
+            <a @click="toggleDropdown">Research</a>
             <transition name="dropdown">
               <div class="dropdown-content" v-show="showDropdown">
                 <router-link class="dropdown-content-link" to="/news/challenges">

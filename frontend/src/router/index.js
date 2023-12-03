@@ -5,8 +5,7 @@ import AdminStatistics from '@/components/admin/AdminStatistics.vue'
 import Events from '@/components/events/Events.vue'
 import EventsDetails from '@/components/events/EventsDetails.vue'
 import WelcomePage from '@/components/welcomePage/Welcome.vue'
-import SuperUserView from '@/components/admin/superUser/SuperUserView.vue'
-import SuperUserDetail from '@/components/admin/superUser/SuperUserDetail.vue'
+import SuperUserDetail from '@/components/admin/superUser/research/SuperUserResearch.vue'
 import AdminUsersView from '@/components/admin/userPage/AdminUsersView.vue'
 import AdminUsersDetail from '@/components/admin/userPage/AdminUsersDetail.vue'
 import Registration from '@/components/Registration.vue'
@@ -14,6 +13,7 @@ import AboutUs from '@/components/AboutUs.vue'
 import logIn from '@/components/Login.vue'
 import Challenges from '@/components/challenges/Challenges.vue'
 import ChallengeDetails from '@/components/challenges/ChallengeDetails.vue'
+import SuperUserResearchView from '@/components/admin/superUser/research/SuperUserResearchView.vue'
 
 const routes = [
   {
@@ -69,10 +69,15 @@ const routes = [
     ]
   },
   {
-    path: '/superuser/news',
-    component: SuperUserView,
+    path: '/superuser/research',
+    name: 'SuperUserResearch',
+    component: SuperUserResearchView,
     children: [
-      { path: ':id', component: SuperUserDetail }
+      {
+        path: ':id',
+        name: 'SuperUserResearchDetail',
+        component: SuperUserDetail
+      }
     ]
   },
   {
