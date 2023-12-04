@@ -16,6 +16,7 @@ import { LoginAndRegisterAdapter } from '@/services/LoginAndRegisterAdapter'
 import { UserEvent } from '@/models/UserEvent'
 import Footer from '@/components/Footer.vue'
 import { Challenge } from '@/models/challenge'
+import { Research } from '@/models/research'
 
 export default {
   name: 'App',
@@ -39,7 +40,8 @@ export default {
       usersService: new RESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/users', User.copyConstructor),
       challengeService: new RESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/challenges', Challenge.copyConstructor),
       userEventsService: new RESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/userevents', UserEvent.copyConstructor),
-      loginAndRegisterService: new LoginAndRegisterAdapter(CONFIG.BACKEND_URL, User.copyConstructor)
+      loginAndRegisterService: new LoginAndRegisterAdapter(CONFIG.BACKEND_URL, User.copyConstructor),
+      researchService: new RESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/research', Research.copyConstructor)
     }
   },
   methods: {

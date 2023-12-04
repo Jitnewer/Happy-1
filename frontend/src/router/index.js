@@ -14,6 +14,8 @@ import AboutUs from '@/components/AboutUs.vue'
 import logIn from '@/components/Login.vue'
 import Challenges from '@/components/challenges/Challenges.vue'
 import ChallengeDetails from '@/components/challenges/ChallengeDetails.vue'
+import Researches from '@/components/research/Researches.vue'
+import ResearchDetails from '@/components/research/ResearchDetails.vue'
 
 const routes = [
   {
@@ -44,6 +46,16 @@ const routes = [
     path: '/news/challenges/:id',
     name: 'challenge',
     component: ChallengeDetails
+  },
+  {
+    path: '/news/research',
+    name: 'researches',
+    component: Researches
+  },
+  {
+    path: '/news/research/:id',
+    name: 'research',
+    component: ResearchDetails
   },
   {
     path: '/about',
