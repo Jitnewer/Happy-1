@@ -1,5 +1,6 @@
 <script>
 export default {
+  name: 'registration.vue',
   data () {
     return {
       entrepreneur: false,

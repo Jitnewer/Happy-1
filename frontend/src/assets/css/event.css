@@ -1,0 +1,137 @@
+/*AdminEventView */
+.title {
+    height: 30px;
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+/* Filters */
+.filters {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+
+.title, .filters {
+    margin-left: 20px;
+}
+
+button:hover {
+    background-color: var(--main-color-hover-admin);
+}
+
+/* AdminEventDetail*/
+.events-title {
+    display: flex;
+    flex-direction: row;
+    margin-left: 20px;
+    margin-top: 20px;
+    gap: 20px;
+    align-items: center;
+}
+
+.event-details {
+    display: flex;
+    flex-direction: row;
+    margin-left: 20px;
+    margin-top: 20px;
+    gap: 20px;
+}
+
+.event-image {
+    height: 450px;
+    width: 350px;
+}
+
+.search-filter {
+    width: 35%;
+}
+
+.info-inputs {
+    width: 100%;
+}
+
+.info-inputs input, textarea {
+    width: 80%;
+}
+
+.info-inputs input, textarea, .search-filter, .date-filter {
+    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+    border: none;
+    padding: 0.5rem 1.5rem;
+}
+
+.info-inputs input:focus, .search-filter:focus, .date-filter:focus {
+    outline: none;
+}
+
+.date-filter {
+    width: 10%;
+}
+
+.time-container {
+    width: 84%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.time-container input {
+    width: 35%;
+}
+
+textarea {
+    height: 35%;
+    font-family: 'Poppins', serif;
+    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+}
+
+.title h1 {
+    color: black;
+    margin-top: 0.5rem;
+    margin-bottom: 0.25rem;
+}
+
+#file {
+    display: none;
+}
+
+.buttons-container {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.buttons-container button {
+    margin-left: 20px;
+    margin-top: 10px;
+}
+
+.info-inputs {
+    display: flex;
+    flex-direction: column;
+    row-gap: 1rem;
+}
+
+@media (max-width: 1024px) {
+    .time-container {
+        width: 90%;
+    }
+}
+
+@media (max-width: 770px) {
+    /* AdminEventView */
+    .filters {
+        gap: 10px;
+    }
+
+    /* AdminEvenDetails */
+    .event-image {
+        width: 220px;
+        height: 330px;
+    }
+
+    .time-container {
+        width: 87%;
+    }
+}
