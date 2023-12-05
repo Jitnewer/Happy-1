@@ -33,7 +33,7 @@ export default {
     },
     async deleteAccount () {
       if (confirm('Are you sure you want to delete your acount?')) {
-        await this.usersService.asyncDeleteById(localStorage.getItem('userId'))
+        const response = await this.usersService.asyncDeleteById(parseFloat(localStorage.getItem('profileId')))
         localStorage.clear()
         this.$router.push({ path: '/home' })
       }
