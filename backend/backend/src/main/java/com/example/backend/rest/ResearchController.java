@@ -1,5 +1,6 @@
 package com.example.backend.rest;
 
+import com.example.backend.models.Challenge;
 import com.example.backend.models.Paragraph;
 import com.example.backend.models.Research;
 import com.example.backend.repositories.paragraph.ParagraphRepository;
@@ -16,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/research")
+@RequestMapping("/researches")
 public class ResearchController {
 
     @Autowired
@@ -52,10 +53,14 @@ public class ResearchController {
         }
 
         try {
+            // Save the research entity first to generate a valid ID
+            researchRepository.addResearch(research);
+
+            // Set the research property in each paragraph and persist them
             for (Paragraph paragraph : research.getParagraphs()) {
                 paragraph.setResearch(research);
+                paragraphRepository.addParagraph(paragraph);
             }
-            researchRepository.addResearch(research);
 
             URI location = ServletUriComponentsBuilder
                     .fromCurrentRequest()
@@ -64,12 +69,12 @@ public class ResearchController {
                     .toUri();
 
             return ResponseEntity.created(location).body(Map.of(
-                    "message", "Challenge added successfully",
+                    "message", "Research added successfully",
                     "status", HttpStatus.CREATED.value(),
                     "location", location.toString()));
         } catch (Exception e) {
             Map<String, Object> errorResponse = new HashMap<>();
-            errorResponse.put("message", "Error adding the challenge");
+            errorResponse.put("message", "Error adding the research");
             errorResponse.put("error", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }

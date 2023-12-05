@@ -42,7 +42,7 @@ export default {
       challengeService: new RESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/challenges', Challenge.copyConstructor),
       userEventsService: new RESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/userevents', UserEvent.copyConstructor),
       loginAndRegisterService: new LoginAndRegisterAdapter(CONFIG.BACKEND_URL, User.copyConstructor),
-      researchService: new RESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/research', Research.copyConstructor)
+      researchService: new RESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/researches', Research.copyConstructor)
     }
   },
   methods: {

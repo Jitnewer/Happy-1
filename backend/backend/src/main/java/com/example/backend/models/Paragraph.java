@@ -28,7 +28,7 @@ public class Paragraph {
 
     @ManyToOne
     @JoinColumn(name = "research_id")
-    @JsonIgnore
+    @JsonIgnoreProperties("paragraphs") // Add this annotation to exclude 'trips' field from Scooter during serialization
     private Research research;
 
 
@@ -38,10 +38,12 @@ public class Paragraph {
     public Paragraph() {
     }
 
-    public Paragraph(String title, String content, Challenge challenge) {
+    public Paragraph(String title, String content, Challenge challenge, Research research) {
         this.title = title;
         this.content = content;
         this.challenge = challenge;
+        this.research = research;
+
     }
 
     // Getters and Setters
@@ -80,5 +82,16 @@ public class Paragraph {
 
     public void setResearch(Research research) {
         this.research = research;
+    }
+
+    @Override
+    public String toString() {
+        return "Paragraph{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", content='" + content + '\'' +
+                ", challenge=" + challenge +
+                ", research=" + research +
+                '}';
     }
 }
