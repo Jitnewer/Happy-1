@@ -6,7 +6,44 @@ export default {
       generalPartner: true,
       sliderValue: 0,
       currentForm: 1,
-      currentEntrepreneurForm: 1
+      currentEntrepreneurForm: 1,
+      // GeneralPartner
+      companyNameGP: '',
+      contactNameGP: '',
+      emailAddressGP: '',
+      typeOfIndustryGP: 'Horeca',
+      typeOfPartnerGP: 'Chain partner',
+      postalCodeGP: '',
+      dateOfBirthGP: '',
+      genderGP: 'Male',
+      usernameGP: '',
+      passwordGP: '',
+      confirmPasswordGP: '',
+      // Entrepreneur
+      firstNameEP: '',
+      lastNameEP: '',
+      typeOfIndustryEP: 'Horeca',
+      emailAddressEP: '',
+      dateOfBirthEP: '',
+      genderEP: 'Male',
+      postalCodeEP: '',
+      usernameEP: '',
+      passwordEP: '',
+      confirmPasswordEP: '',
+      // Validation GP forms
+      isEmailGPValid: true,
+      isCompanyNameGPValid: true,
+      isContactNameGPValid: true,
+      isPostalCodeGPValid: true,
+      isUsernameGPValid: true,
+      isPasswordGPValid: true,
+      // validation EP forms
+      isFirstnameEPValid: true,
+      isLastnameEPValid: true,
+      isEmailEPValid: true,
+      isPostalCodeEPValid: true,
+      isUsernameEPValid: true,
+      isPasswordEPValid: true
     }
   },
   methods: {
@@ -20,13 +57,134 @@ export default {
       this.currentForm--
     },
     goToNextForm () {
-      this.currentForm++
+      // Validate the form before moving to the next step
+      if (this.validateFormGP1()) {
+        this.currentForm++
+      } if (this.validateFormGP2()) {
+        this.currentForm++
+      } if (this.validateFormGP4()) {
+        this.currentForm++
+      } if (this.validateFormEP1()) {
+        this.currentForm++
+      } if (this.validateFormEP2()) {
+        this.currentForm++
+      } if (this.validateFormEP4()) {
+        this.currentForm++
+      }
     },
     goToPrevFormEntrepreneur () {
       this.currentEntrepreneurForm--
     },
     goToNextFormEntrepreneur () {
       this.currentEntrepreneurForm++
+    },
+    sendGPForm () {
+      const generalPartnerForm = {
+        companyNameGP: this.companyNameGP,
+        contactNameGP: this.contactNameGP,
+        emailAddressGP: this.emailAddressGP,
+        typeOfIndustryGP: this.typeOfIndustryGP,
+        typeOfPartnerGP: this.typeOfPartnerGP,
+        postalCodeGP: this.postalCodeGP,
+        dateOfBirthGP: this.dateOfBirthGP,
+        genderGP: this.genderGP,
+        usernameGP: this.postalCodeGP,
+        passwordGP: this.passwordGP,
+        confirmPasswordGP: this.confirmPasswordGP
+      }
+      console.log(generalPartnerForm)
+    },
+    sendEPForm () {
+      const entrepreneurForm = {
+        firstNameEP: this.firstNameEP,
+        lastNameEP: this.lastNameEP,
+        typeOfIndustryEP: this.typeOfIndustryEP,
+        emailAddressEP: this.emailAddressEP,
+        dateOfBirthEP: this.dateOfBirthEP,
+        genderEP: this.genderEP,
+        usernameEP: this.usernameEP,
+        passwordEP: this.passwordEP,
+        postalCodeEP: this.postalCodeEP
+      }
+      console.log(entrepreneurForm)
+    },
+    validateFormGP1 () {
+      // Add regex validation for each field
+      if (!/[a-z0-9._%+]+@[a-z0-9.]+\.[a-z]{2,}$/.test(this.emailAddressGP)) {
+        this.isEmailGPValid = false
+        return false
+      }
+      // Add similar validations for other fields
+      return true // If all validations pass
+    },
+    validateFormGP2 () {
+      // Add regex validation for each field
+      if (!/^[1-9][0-9]{3}\s?[a-zA-Z]{2}$/.test(this.postalCodeGP)) {
+        this.isPostalCodeGPValid = false
+        return false
+      }
+      // Add similar validations for other fields
+      return true // If all validations pass
+    },
+    validateFormGP4 () {
+      // Add regex validation for each field
+      if (!/.{8,}$/.test(this.usernameGP)) {
+        this.isUsernameGPValid = false
+        return false
+      }
+      if (!/ (?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/.test(this.passwordGP)) {
+        this.isPasswordGPValid = false
+        return false
+      }
+      // if this.passwordGP == this.confirmPasswordGP) {
+      //   this.isPasswordGPValid = false
+      //   return false
+      // }
+      // Add similar validations for other fields
+      return true // If all validations pass
+    },
+    validateFormEP1 () {
+      // Add regex validation for each field
+      if (!/^[A-Za-z]+$/.test(this.firstNameEP)) {
+        this.isFirstnameEPValid = false
+        return false
+      }
+      if (!/^[A-Za-z]+$/.test(this.lastNameEP)) {
+        this.isLastnameEPValid = false
+        return false
+      }
+      if (!/[a-z0-9._%+]+@[a-z0-9.]+\.[a-z]{2,}$/.test(this.emailAddressEP)) {
+        this.isEmailEPValid = false
+        return false
+      }
+      // Add similar validations for other fields
+      return true // If all validations pass
+    },
+    validateFormEP2 () {
+      // Add regex validation for each field
+      if (!/^[1-9][0-9]{3}\s?[a-zA-Z]{2}$/.test(this.postalCodeEP)) {
+        this.isPostalCodeEPValid = false
+        return false
+      }
+      // Add similar validations for other fields
+      return true // If all validations pass
+    },
+    validateFormEP4 () {
+      // Add regex validation for each field
+      if (!/^[a-zA-Z0-9_]{3,20}$/.test(this.usernameEP)) {
+        this.isUsernameEPValid = false
+        return false
+      }
+      if (!/ (?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/.test(this.passwordEP)) {
+        this.isPasswordEPValid = false
+        return false
+      }
+      // if this.passwordEP == this.confirmPasswordEP) {
+      //   this.isPasswordEPValid = false
+      //   return false
+      // }
+      // Add similar validations for other fields
+      return true // If all validations pass
     }
   },
   watch: {
@@ -99,32 +257,32 @@ export default {
           <div class="form-sign-up-1" v-if="currentForm ===1">
             <div class="sign-up-page">
               <div class="title-sign-up-form">Basic Info:</div>
-              <div class="field-sign-up">
+              <div class="field-sign-up" id="formValidation1">
                 <div class="label-sign-up">Company Name:</div>
-                <input type="text" class="sign-up-input" required>
+                <input type="text" class="sign-up-input" required v-model="companyNameGP">
               </div>
-
-              <div class="field-sign-up" >
+              <div class="errorMessageRegistrationForm" v-if="!isCompanyNameGPValid">Company name must contain no more than 8 characters</div>
+              <div class="field-sign-up">
                 <div class="label-sign-up">Contact Name:</div>
-                <input type="text" class="sign-up-input" required>
+                <input type="text" class="sign-up-input" required v-model="contactNameGP">
               </div>
-
+              <div class="errorMessageRegistrationForm" v-if="!isContactNameGPValid">Contact name must contain no more than 8 characters</div>
               <div class="field-sign-up">
                 <div class="label-sign-up">Email Address:</div>
-                <input type="email" class="sign-up-input" required>
+                <input type="email" class="sign-up-input" v-model="emailAddressGP" required>
               </div>
-
+              <div class="errorMessageRegistrationForm" v-if="!isEmailGPValid">Please enter a valid emailaddress</div>
               <div class="field-btn">
-                <button  @click.prevent="goToNextForm">Next</button>
+                <button @click.prevent="goToNextForm">Next</button>
               </div>
             </div>
           </div>
 
-          <div class="sign-up-page" id="user_detail2"  v-if="currentForm ===2">
+          <div class="sign-up-page" id="user_detail2" v-if="currentForm ===2">
             <div class="title-sign-up-form">Contact Info:</div>
             <div class="field-sign-up">
               <div class="label-sign-up">Type of industry:</div>
-              <select class="select-gender-sign-up">
+              <select class="select-gender-sign-up" v-model="typeOfIndustryGP">
                 <option>Horeca</option>
                 <option>Bar</option>
                 <option>Restaurant</option>
@@ -132,32 +290,31 @@ export default {
             </div>
             <div class="field-sign-up">
               <div class="label-sign-up">Type of partner:</div>
-              <select class="select-gender-sign-up">
+              <select class="select-gender-sign-up" v-model="typeOfPartnerGP">
                 <option>Chain partner</option>
                 <option>Knowledge partner</option>
               </select>
             </div>
             <div class="field-sign-up">
               <div class="label-sign-up">Postal code:</div>
-              <input type="text" class="sign-up-input" required>
+              <input type="text" class="sign-up-input" required v-model="postalCodeGP">
             </div>
-
+            <div class="errorMessageRegistrationForm" v-if="!isPostalCodeGPValid">Please enter a valid Dutch postal code</div>
             <div class="field-btn">
               <button class="prev-1" @click="goToPrevForm">Previous</button>
               <button class="next-1" @click.prevent="goToNextForm">Next</button>
             </div>
           </div>
 
-          <div class="sign-up-page" id="user_detail3" v-if="currentForm ===3" >
+          <div class="sign-up-page" id="user_detail3" v-if="currentForm ===3">
             <div class="title-sign-up-form">Date of Birth:</div>
             <div class="field-sign-up">
               <div class="label-sign-up">Dates:</div>
-              <input type="date" class="sign-up-input">
+              <input type="date" class="sign-up-input" v-model="dateOfBirthGP">
             </div>
-
             <div class="field-sign-up">
               <div class="label-sign-up">Gender:</div>
-              <select class="select-gender-sign-up">
+              <select class="select-gender-sign-up" v-model="genderGP">
                 <option>Male</option>
                 <option>Female</option>
                 <option>Prefer not to tell</option>
@@ -173,22 +330,23 @@ export default {
             <div class="title-sign-up-form">Login Details:</div>
             <div class="field-sign-up">
               <div class="label-sign-up">Username:</div>
-              <input type="text" class="sign-up-input" required>
+              <input type="text" class="sign-up-input" required v-model="usernameGP">
             </div>
-
+            <div class="errorMessageRegistrationForm" v-if="!isUsernameGPValid">Must contain no more than 8 characters</div>
             <div class="field-sign-up">
               <div class="label-sign-up">Password:</div>
-              <input type="password" class="sign-up-input" required>
+              <input type="password" class="sign-up-input" required v-model="passwordGP">
             </div>
-
+            <div class="errorMessageRegistrationForm" v-if="!isPasswordGPValid">Must contain at least one  number and one uppercase and lowercase letter,
+              and at least 8 or more characters</div>
             <div class="field-sign-up">
               <div class="label-sign-up">Confirm password:</div>
-              <input type="password" class="sign-up-input" required>
+              <input type="password" class="sign-up-input" required v-model="confirmPasswordGP">
             </div>
-
+            <div class="errorMessageRegistrationForm">AAAAAALLLLLEEEERTTT</div>
             <div class="field-btn">
               <button class="prev-3" @click="goToPrevForm">Previous</button>
-              <button class="submit">Submit</button>
+              <button class="submit" @click="sendGPForm">Submit</button>
             </div>
           </div>
         </div>
@@ -230,17 +388,17 @@ export default {
             <div class="title-sign-up-form">Basic Info:</div>
             <div class="field-sign-up">
               <div class="label-sign-up">First Name:</div>
-              <input type="text" class="sign-up-input" required>
+              <input type="text" class="sign-up-input" required v-model="firstNameEP">
             </div>
-
-            <div class="field-sign-up" >
+            <div class="errorMessageRegistrationForm" v-if="!isFirstnameEPValid">Must only contain letters</div>
+            <div class="field-sign-up">
               <div class="label-sign-up">Last Name:</div>
-              <input type="text" class="sign-up-input" required>
+              <input type="text" class="sign-up-input" required v-model="lastNameEP">
             </div>
-
+            <div class="errorMessageRegistrationForm" v-if="!isLastnameEPValid">Must only contain letters</div>
             <div class="field-sign-up">
               <div class="label-sign-up">Type of industry:</div>
-              <select class="select-gender-sign-up">
+              <select class="select-gender-sign-up" v-model="typeOfIndustryEP">
                 <option>Horeca</option>
                 <option>Bar</option>
                 <option>Hotel</option>
@@ -257,14 +415,14 @@ export default {
           <div class="title-sign-up-form">Contact Info:</div>
           <div class="field-sign-up">
             <div class="label-sign-up">Email Address:</div>
-            <input type="email" class="sign-up-input" required>
+            <input type="email" class="sign-up-input" v-model="emailAddressEP" required>
           </div>
-
+          <div class="errorMessageRegistrationForm" v-if="!isEmailEPValid">Please enter a valid emailaddress</div>
           <div class="field-sign-up">
             <div class="label-sign-up">Postal code:</div>
-            <input type="text" class="sign-up-input" required>
+            <input type="text" class="sign-up-input" required v-model="postalCodeEP">
           </div>
-
+          <div class="errorMessageRegistrationForm" v-if="!isPostalCodeGPValid"> Please enter a valid Dutch postal code</div>
           <div class="field-btn">
             <button class="prev-1" @click="goToPrevFormEntrepreneur">Previous</button>
             <button class="next-1" @click.prevent="goToNextFormEntrepreneur">Next</button>
@@ -275,7 +433,7 @@ export default {
           <div class="title-sign-up-form">Date of Birth:</div>
           <div class="field-sign-up">
             <div class="label-sign-up">Dates:</div>
-            <input type="date" class="sign-up-input">
+            <input type="date" class="sign-up-input" v-model="dateOfBirthEP">
           </div>
 
           <div class="field-sign-up">
@@ -297,22 +455,24 @@ export default {
           <div class="title-sign-up-form">Login Details:</div>
           <div class="field-sign-up">
             <div class="label-sign-up">Username:</div>
-            <input type="text" class="sign-up-input" required>
+            <input type="text" class="sign-up-input" required v-model="usernameEP">
           </div>
-
+          <div class="errorMessageRegistrationForm" v-if="!isUsernameEPValid">Username must contain between 3 and 20 characters</div>
           <div class="field-sign-up">
             <div class="label-sign-up">Password:</div>
-            <input type="password" class="sign-up-input" required>
+            <input type="password" class="sign-up-input" v-model="passwordEP" required>
           </div>
-
+          <div class="errorMessageRegistrationForm" v-if="!isPasswordEPValid">
+            Must contain at least one  number and one uppercase and lowercase letter,
+            and at least 8 or more characters</div>
           <div class="field-sign-up">
             <div class="label-sign-up">Confirm password:</div>
-            <input type="password" class="sign-up-input" required>
+            <input type="password" class="sign-up-input" required v-model="confirmPasswordEP">
           </div>
-
+          <div class="errorMessageRegistrationForm">AAAAAALLLLLEEEERTTT</div>
           <div class="field-btn">
             <button class="prev-3" @click="goToPrevFormEntrepreneur">Previous</button>
-            <button class="submit">Submit</button>
+            <button class="submit" @click="sendEPForm">Submit</button>
           </div>
         </div>
       </div>
@@ -332,10 +492,12 @@ export default {
 </template>
 
 <style scoped>
-.dark-text{
-  font-size: 32px;
-  color: black;
+.errorMessageRegistrationForm{
+  color: red;
+  font-size: 15px;
+  height: 13px;
 }
+
 /* The switch - the box around the slider */
 .switch {
   position: relative;
@@ -398,6 +560,7 @@ input:checked + .slider:before {
 .slider.round:before {
   border-radius: 50%;
 }
+
 /* -----------------------------------------------------------------r */
 /*Sign up form */
 .sign-up-body {
@@ -408,7 +571,7 @@ input:checked + .slider:before {
 }
 
 .container-sign-up {
-  height: 800px;
+  height: 900px;
   width: 400px;
   background: #fff;
   border-radius: 5px;
@@ -448,6 +611,7 @@ input:checked + .slider:before {
   height: 45px;
   width: 330px;
   margin: 45px 0;
+  margin-bottom: 10px;
   display: flex;
   position: relative;
 }
@@ -473,7 +637,8 @@ input:checked + .slider:before {
   font-size: 17px;
   font-weight: 500;
 }
-.field-btn{
+
+.field-btn {
   display: flex;
 }
 
@@ -482,7 +647,7 @@ input:checked + .slider:before {
   height: 60px;
   margin-left: 5px;
   margin-bottom: 10px;
-  margin-top: -20px;
+  margin-top: 30px;
   border: none;
   background: #0992A4;
   border-radius: 5px;
@@ -539,7 +704,7 @@ input:checked + .slider:before {
   line-height: 25px;
 }
 
-.span-sign-up-form-check span{
+.span-sign-up-form-check span {
   font-weight: 500;
   font-size: 17px;
   line-height: 25px;
@@ -547,8 +712,9 @@ input:checked + .slider:before {
   left: 50%;
   transform: translate(-50%);
 }
+
 .bullet-sign-up-form:before,
-.bullet-sign-up-form:after{
+.bullet-sign-up-form:after {
   display: none;
 }
 
@@ -562,18 +728,21 @@ input:checked + .slider:before {
   width: 44px;
   background: #262626;
 }
-.step .bullet-sign-up-form:after{
+
+.step .bullet-sign-up-form:after {
   background: #0992A4;
   transform: scaleX(0);
   transform-origin: left;
   animation: animate 0.3s linear forwards;
 }
+
 @keyframes animate {
-  100%{
+  100% {
     transform: scaleX(1);
   }
 }
-.check-sign-up{
+
+.check-sign-up {
   position: absolute;
   left: 50%;
   top: 70%;
@@ -581,6 +750,7 @@ input:checked + .slider:before {
   transform: translate(-50%, -50%);
   display: none;
 }
+
 .label-sign-upp {
   position: absolute;
   top: 50%;
@@ -651,6 +821,7 @@ input:checked + .slider:before {
   padding: 10px;
   background: white;
 }
+
 /*Sign up AS form -  */
 .form-sign-up-as-1 form .sign-up-page {
   width: 400%;
