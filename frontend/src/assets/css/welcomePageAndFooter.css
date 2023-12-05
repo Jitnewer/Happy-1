@@ -94,7 +94,6 @@ span.carouselPagination.active {
 }
 .blue-text {
     color: var(--main-color);
-    margin-left: 50px;
 }
 .white-text {
     color: var(--main-text-color);
