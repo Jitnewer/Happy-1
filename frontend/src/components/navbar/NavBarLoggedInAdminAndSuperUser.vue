@@ -107,7 +107,9 @@ export default {
   methods: {
     logout () {
       this.$emit('handleLogout')
-      localStorage.removeItem('email')
+      // localStorage.removeItem('email')
+      // localStorage.removeItem('profileId')
+      localStorage.clear()
       this.$router.push({ path: '/home' })
     },
     toggleDropdown (event) {

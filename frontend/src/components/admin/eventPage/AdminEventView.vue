@@ -99,7 +99,7 @@ export default {
     }
   },
   async created () {
-    if (localStorage.getItem('admin') === 'false') this.$router.push({ path: '/PageNotFound' })
+    if (localStorage.getItem('admin') === null || localStorage.getItem('admin') === false) this.$router.push({ path: '/PageNotFound' })
     this.events = await this.eventsService.asyncFindAll()
   },
   watch: {

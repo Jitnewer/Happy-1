@@ -31,6 +31,13 @@ export default {
         document.querySelector('#file').click()
       }
     },
+    async deleteAccount () {
+      if (confirm('Are you sure you want to delete your acount?')) {
+        await this.usersService.asyncDeleteById(localStorage.getItem('userId'))
+        localStorage.clear()
+        this.$router.push({ path: '/home' })
+      }
+    },
     infoView () {
       this.$router.push({ name: 'profilePageInfo' })
     },
@@ -51,11 +58,11 @@ export default {
     }
   },
   async created () {
-    if (localStorage.getItem('email') == null) {
-      this.$router.push({ route: 'PageNotFound' })
+    if (localStorage.getItem('email') === null || localStorage.getItem('profileId') === null) this.$router.push({ path: '/PageNotFound' })
+    else {
+      this.user = await this.usersService.asyncFindById(parseInt(localStorage.getItem('profileId')))
+      this.$router.push({ name: 'profilePageInfo' })
     }
-    this.user = await this.usersService.asyncFindById(parseInt(localStorage.getItem('profileId')))
-    this.$router.push({ name: 'profilePageInfo' })
   }
 }
 </script>
@@ -70,7 +77,7 @@ export default {
         <input type="file" accept="image/jpeg, image/png, image/jpg" id="file" @change="handleImageUpload">
         <div v-if="!edit" class="profile-edit-buttons">
           <button class="edit-button" @click="editProfile">Edit</button>
-          <button class="delete-button">Delete</button>
+          <button class="delete-button" @click="deleteAccount">Delete</button>
         </div>
         <div v-else class="profile-edit-buttons">
           <button class="save-button" @click="save">Save</button>

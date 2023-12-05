@@ -77,7 +77,7 @@ export default {
     }
   },
   async created () {
-    if (localStorage.getItem('admin') === 'false') this.$router.push({ path: '/PageNotFound' })
+    if (localStorage.getItem('admin') === null || localStorage.getItem('admin') === false) this.$router.push({ path: '/PageNotFound' })
 
     this.users = await this.usersService.asyncFindAll()
   }
