@@ -72,6 +72,8 @@ export default {
     }
   },
   created () {
+    // if (localStorage.getItem('admin') !== 'true') this.$router.push({ path: '/PageNotFound' })
+
     for (let i = 0; i < 2; i++) {
       this.newsList.push(News.createSampleNews(i))
     }

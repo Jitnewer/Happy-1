@@ -64,15 +64,14 @@ public class UserRepositoryJpa implements UserRepository {
     @Transactional
     public void updateUser(User user) {
         entityManager.merge(user);
-
     }
 
     @Override
     @Transactional
     public void deleteUser(long id) {
-        Event event = entityManager.find(Event.class, id);
-        if (event != null) {
-            entityManager.remove(event);
+        User user = entityManager.find(User.class, id);
+        if (user != null) {
+            entityManager.remove(user);
         }
     }
 
@@ -86,5 +85,21 @@ public class UserRepositoryJpa implements UserRepository {
             }
         }
         return null;
+    }
+
+    @Override
+    public boolean userWithMailExists(String email) {
+        String jpql = "SELECT u FROM User u WHERE u.mail = ?1";
+        TypedQuery<User> query = entityManager.createQuery(jpql, User.class);
+        query.setParameter(1, email);
+
+        List<User> users = query.getResultList();
+
+        for (User user : users) {
+            if (user.getMail() == email) {
+                return true;
+            }
+        }
+        return false;
     }
 }

@@ -13,7 +13,7 @@ export class User {
     Unbanned: 'UNBANNED' // Adding the opposite status
   }
 
-  constructor (id, userEvents, profilePic, firstname, lastname, mail, gender, age, companyType, tag, status, userType, postalCode, password, admin) {
+  constructor (id, userEvents, profilePic, firstname, lastname, mail, gender, age, companyType, tag, status, userType, postalCode, password, companyName) {
     this.id = id
     this.userEvents = userEvents
     this.profilePic = profilePic
@@ -28,6 +28,7 @@ export class User {
     this.userType = userType
     this.postalCode = postalCode
     this.password = password
+    this.companyName = companyName
   }
 
   static copyConstructor (user) {
@@ -48,7 +49,8 @@ export class User {
       user.status,
       user.userType,
       user.postalCode,
-      user.password
+      user.password,
+      user.companyName
     )
   }
 

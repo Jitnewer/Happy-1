@@ -7,7 +7,6 @@ export default {
   data () {
     return {
       selectedEvent: null,
-      isSelected: false,
       create: false,
       filter: {
         search: '',
@@ -17,17 +16,8 @@ export default {
     }
   },
   methods: {
-    setByUrl () {
-      for (let i = 0; i < this.events.length; i++) {
-        if (parseInt(this.$route.params.id) === this.events[i].id) {
-          this.selectedEvent = this.events[i]
-          this.isSelected = !this.isSelected
-          break
-        }
-      }
-    },
     setSelectedEvent (event) {
-      this.$router.push(this.$route.matched[0].path + '/' + event)
+      this.$router.push({ name: 'adminEventDetail', params: { id: event } })
     },
     async deleteEvent (eventToDelete) {
       const indexToDelete = this.events.findIndex(event => event.id === eventToDelete.id)
@@ -36,22 +26,20 @@ export default {
       }
 
       this.selectedEvent = null // Clear the selected event
-      this.isSelected = !this.isSelected // Update the isSelected flag
-      this.$router.push(this.$route.matched[0])
+      this.$router.push({ name: 'adminEvents' })
     },
     closeEvent () {
       this.selectedEvent = null
       this.create = false
-      this.isSelected = !this.isSelected
-      this.$router.push(this.$route.matched[0])
+      this.$router.push({ name: 'adminEvents' })
     },
     activateCreateEvent () {
       this.selectedEvent = new Event()
       this.selectedEvent.id = 0
       this.selectedEvent.image = 'imagePlaceholder.jpg'
       this.create = true
-      this.isSelected = !this.isSelected
-      this.$router.push(this.$route.matched[0].path + '/' + this.selectedEvent.id)
+      // this.$router.push(this.$route.matched[0].path + '/' + this.selectedEvent.id)
+      this.$router.push({ name: 'adminEventDetail', params: { id: this.selectedEvent.id } })
     },
     async saveEvent (event) {
       try {
@@ -66,11 +54,10 @@ export default {
             this.events.splice(indexToUpdate, 1, createdEvent)
           }
         }
-        this.isSelected = !this.isSelected
         this.selectedEvent = null
         this.create = false
 
-        this.$router.push(this.$route.matched[0])
+        this.$router.push({ name: 'adminEvents' })
       } catch (e) {
         console.error(e)
       }
@@ -112,18 +99,28 @@ export default {
     }
   },
   async created () {
+    if (localStorage.getItem('admin') === 'false') this.$router.push({ path: '/PageNotFound' })
     this.events = await this.eventsService.asyncFindAll()
   },
   watch: {
-    '$route' () {
-      this.setByUrl()
+    '$route' (to, from) {
+      console.log(to)
+      const eventId = parseInt(to.params.id)
+      if (eventId === 0) {
+        return
+      }
+      if (eventId) {
+        this.selectedEvent = this.events.find(event => event.id === eventId)
+      } else {
+        this.selectedEvent = null
+      }
     }
   }
 }
 </script>
 
 <template>
-  <div class="container-admin admin-event" v-if="!isSelected">
+  <div class="container-admin admin-event" v-if="!selectedEvent">
       <div class="title">
         <h1>Events</h1>
       </div>
@@ -158,7 +155,7 @@ export default {
         </div>
       </div>
     </div>
-    <router-view v-else :create="create" :selectedEvent="selectedEvent" @delete-event="deleteEvent"
+    <router-view :create="create" :selectedEvent="selectedEvent" @delete-event="deleteEvent"
                  @deselect-event="closeEvent" @save-event="saveEvent"
     />
 </template>

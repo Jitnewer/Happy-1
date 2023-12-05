@@ -106,24 +106,24 @@ export class RESTAdaptorWithFetch {
     }
   }
 
-  async asyncSave (event) {
+  async asyncSave (object) {
     let response
     try {
-      if (event.id === 0) {
+      if (object.id === 0) {
         response = await this.fetchJson(this.resourceUrl, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify(event)
+          body: JSON.stringify(object)
         })
       } else {
-        response = await this.fetchJson(`${this.resourceUrl}/${event.id}`, {
+        response = await this.fetchJson(`${this.resourceUrl}/${object.id}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify(event)
+          body: JSON.stringify(object)
         })
       }
 
