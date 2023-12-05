@@ -30,7 +30,7 @@ public class UserRepositoryJpa implements UserRepository {
     }
 
     @Override
-    public User getUser(long id) {
+    public User getUserById(long id) {
         return entityManager.find(User.class, id);
 
     }
