@@ -205,7 +205,7 @@ export default {
               <div class="check-sign-up">&#10003;</div>
             </div>
           </div>
-          <div class="form-sign-up-1" v-if="currentForm ===1">
+          <form class="form-sign-up-1" v-if="currentForm ===1">
             <div class="sign-up-page">
               <div class="title-sign-up-form">Basic Info:</div>
               <div class="field-sign-up" id="formValidation1">
@@ -240,9 +240,9 @@ export default {
                 <button @click.prevent="goToNextForm">Next</button>
               </div>
             </div>
-          </div>
+          </form>
 
-          <div class="sign-up-page" id="user_detail2" v-if="currentForm ===2">
+          <form class="sign-up-page" id="user_detail2" v-if="currentForm ===2">
             <div class="title-sign-up-form">Contact Info:</div>
             <div class="field-sign-up">
               <div class="label-sign-up">Type of industry:</div>
@@ -291,7 +291,7 @@ export default {
               <button class="prev-3" @click="goToPrevForm">Previous</button>
               <button class="submit" @click="sendForm">Submit</button>
             </div>
-          </div>
+          </form>
         </div>
       </div>
       <div v-if="entrepreneur">
@@ -319,7 +319,7 @@ export default {
             <div class="check-sign-up">&#10003;</div>
           </div>
         </div>
-        <div class="form-sign-up-1" v-if="this.currentEntrepreneurForm === 1">
+        <form class="form-sign-up-1" v-if="this.currentEntrepreneurForm === 1">
           <div class="sign-up-page">
             <div class="title-sign-up-form">Basic Info:</div>
             <div class="field-sign-up">
@@ -345,9 +345,9 @@ export default {
               <button @click.prevent="goToNextFormEntrepreneur">Next</button>
             </div>
           </div>
-        </div>
+        </form>
 
-        <div class="sign-up-page" id="user_detail2" v-if="this.currentEntrepreneurForm === 2">
+        <form class="sign-up-page" id="user_detail2" v-if="this.currentEntrepreneurForm === 2">
           <div class="title-sign-up-form">Contact Info:</div>
           <div class="field-sign-up">
             <div class="label-sign-up">Email Address:</div>
@@ -373,7 +373,7 @@ export default {
           </div>
         </form>
 
-        <div class="sign-up-page" v-if="this.currentEntrepreneurForm === 4">
+        <form class="sign-up-page" v-if="this.currentEntrepreneurForm === 4">
           <div class="title-sign-up-form">Login Details:</div>
           <div class="field-sign-up">
             <div class="label-sign-up">Username:</div>
@@ -396,7 +396,7 @@ export default {
             <button class="prev-3" @click="goToPrevFormEntrepreneur">Previous</button>
             <button class="submit" @click="sendForm">Submit</button>
           </div>
-        </div>
+        </form>
       </div>
     </div>
     <form action="#">
