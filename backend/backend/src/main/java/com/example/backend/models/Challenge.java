@@ -1,5 +1,7 @@
 package com.example.backend.models;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -10,10 +12,11 @@ import java.util.Set;
 
 @Entity
 @Table(name = "challenges")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Challenge {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
@@ -31,7 +34,7 @@ public class Challenge {
     @Column(columnDefinition = "TEXT")
     private String firstParagraph;
 
-    @OneToMany(mappedBy = "challenge", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Paragraph> paragraphs = new HashSet<>();
 
     // Constructors

@@ -91,7 +91,7 @@ public class UserController {
     @PostMapping("/users")
     public ResponseEntity<Object> addUser(@RequestBody User user) {
         try {
-            if (userRepository.getUserByMail(user.getMail()) == null) {
+            if (userRepository.getUserByMail(user.getMail()) != null) {
                 return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("message", "User with mail:" + user.getMail() + " is already in use"));
             }
 

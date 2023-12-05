@@ -32,7 +32,7 @@
         <div class="nav-links-right">
           <div class="dropdown-profile" @click="toggleProfile">
             <div class="profile-d">
-              <img v-if="user.profilePic != null" :src=picture class="profile" width="45" height="45" alt="Event Image">
+              <img v-if="user.profilePic != null" :src='require(`../../assets/img/${user.profilePic}`)' class="profile" width="45" height="45" alt="Event Image">
               <canvas v-if="user.profilePic == null" ref="profileCanvas" class="profile" width="45" height="45"></canvas>
                 <p id="profile-name">{{ user.firstname }} {{ user.lastname }}</p>
               <div class="caret">
@@ -146,7 +146,9 @@ export default {
     } catch (e) {
       console.log(e)
     }
-    this.picture = require(`../../assets/img/${this.user.profilePic}`)
+
+    console.log(this.user)
+    console.log((`../../assets/img/${this.user.profilePic}`))
     const fullname = `${this.user.firstname} ${this.user.lastname}`
 
     let initials = ''

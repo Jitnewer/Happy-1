@@ -1,10 +1,14 @@
 package com.example.backend.models;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "paragraphs")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Paragraph {
 
     @Id
@@ -19,7 +23,7 @@ public class Paragraph {
 
     @ManyToOne
     @JoinColumn(name = "challenge_id")
-    @JsonIgnore
+    @JsonIgnoreProperties("paragraphs") // Add this annotation to exclude 'trips' field from Scooter during serialization
     private Challenge challenge;
 
 
