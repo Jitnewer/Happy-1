@@ -282,3 +282,15 @@
     padding: 1em 1.5em;
     height: 400px;
 }
+
+/* Super user challenges */
+.challenge-input {
+    box-shadow: rgba(0, 0, 0, 0.19) 0 10px 20px, rgba(0, 0, 0, 0.23) 0 6px 6px;
+    border: none;
+    padding: 1em 1.5em;
+}
+
+#challenge-firstParagraph, #paragraph-content {
+    height: 300px;
+    width: inherit;
+}

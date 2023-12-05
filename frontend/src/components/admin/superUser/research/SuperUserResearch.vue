@@ -2,7 +2,7 @@
 import { Research } from '@/models/research'
 
 export default {
-  name: 'SuperUserDetail',
+  name: 'SuperUserResearch',
   props: ['selectedNews', 'create'],
   emits: ['deselect-news', 'delete-news', 'save-news'],
   data () {
@@ -163,6 +163,6 @@ export default {
 
 h1, h2, h3, h4, h5, h6, p{
   //margin: 0;
-  //color: black;
+  color: black;
 }
 </style>

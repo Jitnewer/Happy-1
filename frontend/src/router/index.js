@@ -14,6 +14,8 @@ import logIn from '@/components/Login.vue'
 import Challenges from '@/components/challenges/Challenges.vue'
 import ChallengeDetails from '@/components/challenges/ChallengeDetails.vue'
 import SuperUserResearchView from '@/components/admin/superUser/research/SuperUserResearchView.vue'
+import SuperUserChallenge from '@/components/admin/superUser/challenge/SuperUserChallenge.vue'
+import SuperUserChallengeView from '@/components/admin/superUser/challenge/SuperUserChallengeView.vue'
 
 const routes = [
   {
@@ -54,7 +56,10 @@ const routes = [
     path: '/admin/events',
     component: AdminEventView,
     children: [
-      { path: ':id', component: EventDetailsView }
+      {
+        path: ':id',
+        component: EventDetailsView
+      }
     ]
   },
   {
@@ -65,7 +70,10 @@ const routes = [
     path: '/admin/users',
     component: AdminUsersView,
     children: [
-      { path: ':id', component: AdminUsersDetail }
+      {
+        path: ':id',
+        component: AdminUsersDetail
+      }
     ]
   },
   {
@@ -77,6 +85,18 @@ const routes = [
         path: ':id',
         name: 'SuperUserResearchDetail',
         component: SuperUserDetail
+      }
+    ]
+  },
+  {
+    path: '/superuser/challenges',
+    name: 'SuperUserChallenges',
+    component: SuperUserChallengeView,
+    children: [
+      {
+        path: ':id',
+        name: 'SuperUserChallengeDetail',
+        component: SuperUserChallenge
       }
     ]
   },
