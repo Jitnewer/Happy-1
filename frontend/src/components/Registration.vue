@@ -461,11 +461,11 @@ export default {
 }
 
 input:checked + .slider {
-  background-color: #2196F3;
+  background-color: #0992A4;
 }
 
 input:focus + .slider {
-  box-shadow: 0 0 1px #2196F3;
+  box-shadow: 0 0 1px #0992A4;
 }
 
 input:checked + .slider:before {
@@ -493,12 +493,12 @@ input:checked + .slider:before {
 }
 
 .container-sign-up {
-  height: 900px;
   width: 400px;
   background: #fff;
   border-radius: 5px;
   text-align: center;
   padding: 50px 35px 10px 35px;
+  margin-bottom: 3rem;
   box-shadow: 0px 3px 40px #000;
   margin-top: 60px;
 }
@@ -583,7 +583,7 @@ input:checked + .slider:before {
 }
 
 .field-btn button:hover {
-  background: #000;
+  background: #FECC32;
 }
 
 .prev-1 {
@@ -745,10 +745,6 @@ input:checked + .slider:before {
 }
 
 /*Sign up AS form -  */
-.form-sign-up-as-1 form .sign-up-page {
-  width: 400%;
-  height: 400px;
-}
 
 /*Sign up AS button -  */
 .field-btn-sign-up-as button {
@@ -769,7 +765,7 @@ input:checked + .slider:before {
 }
 
 .field-btn-sign-up-as button:hover {
-  background: #000;
+  background: #FECC32;
 }
 
 .container-reg {
@@ -889,6 +885,6 @@ form .button {
 }
 
 form .button input:hover {
-  background: black;
+  background: #FECC32;
 }
 </style>
