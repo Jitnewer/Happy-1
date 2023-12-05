@@ -54,8 +54,8 @@ export default {
     if (localStorage.getItem('email') == null) {
       this.$router.push({ route: 'PageNotFound' })
     }
-    this.$router.push({ name: 'profilePageInfo' })
     this.user = await this.usersService.asyncFindById(parseInt(localStorage.getItem('profileId')))
+    this.$router.push({ name: 'profilePageInfo' })
   }
 }
 </script>
