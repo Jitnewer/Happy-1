@@ -1,6 +1,7 @@
 <script>
 export default {
   name: 'registration.vue',
+  inject: ['loginAndRegisterService'],
   data () {
     return {
       entrepreneur: false,
@@ -9,28 +10,21 @@ export default {
       currentForm: 1,
       currentEntrepreneurForm: 1,
       // GeneralPartner
-      companyNameGP: '',
-      contactNameGP: '',
-      emailAddressGP: '',
-      typeOfIndustryGP: 'Horeca',
-      typeOfPartnerGP: 'Chain partner',
-      postalCodeGP: '',
-      dateOfBirthGP: '',
-      genderGP: 'Male',
-      usernameGP: '',
-      passwordGP: '',
-      confirmPasswordGP: '',
-      // Entrepreneur
-      firstNameEP: '',
-      lastNameEP: '',
-      typeOfIndustryEP: 'Horeca',
-      emailAddressEP: '',
-      dateOfBirthEP: '',
-      genderEP: 'Male',
-      postalCodeEP: '',
-      usernameEP: '',
-      passwordEP: '',
-      confirmPasswordEP: '',
+      user: {
+        companyName: '',
+        profilePic: '',
+        firstname: '',
+        lastname: '',
+        gender: '',
+        mail: '',
+        userType: '',
+        tag: '',
+        postalCode: '',
+        password: '',
+        age: '',
+        status: '',
+        companyType: ''
+      },
       // Validation GP forms
       isEmailGPValid: true,
       isCompanyNameGPValid: true,
@@ -79,39 +73,12 @@ export default {
     goToNextFormEntrepreneur () {
       this.currentEntrepreneurForm++
     },
-    sendGPForm () {
-      const generalPartnerForm = {
-        companyNameGP: this.companyNameGP,
-        contactNameGP: this.contactNameGP,
-        emailAddressGP: this.emailAddressGP,
-        typeOfIndustryGP: this.typeOfIndustryGP,
-        typeOfPartnerGP: this.typeOfPartnerGP,
-        postalCodeGP: this.postalCodeGP,
-        dateOfBirthGP: this.dateOfBirthGP,
-        genderGP: this.genderGP,
-        usernameGP: this.postalCodeGP,
-        passwordGP: this.passwordGP,
-        confirmPasswordGP: this.confirmPasswordGP
-      }
-      console.log(generalPartnerForm)
-    },
-    sendEPForm () {
-      const entrepreneurForm = {
-        firstNameEP: this.firstNameEP,
-        lastNameEP: this.lastNameEP,
-        typeOfIndustryEP: this.typeOfIndustryEP,
-        emailAddressEP: this.emailAddressEP,
-        dateOfBirthEP: this.dateOfBirthEP,
-        genderEP: this.genderEP,
-        usernameEP: this.usernameEP,
-        passwordEP: this.passwordEP,
-        postalCodeEP: this.postalCodeEP
-      }
-      console.log(entrepreneurForm)
+    async sendForm () {
+      await this.loginAndRegisterService.asyncRegister(this.user)
     },
     validateFormGP1 () {
       // Add regex validation for each field
-      if (!/[a-z0-9._%+]+@[a-z0-9.]+\.[a-z]{2,}$/.test(this.emailAddressGP)) {
+      if (!/[a-z0-9._%+]+@[a-z0-9.]+\.[a-z]{2,}$/.test(this.user.mail)) {
         this.isEmailGPValid = false
         return false
       }
@@ -120,7 +87,7 @@ export default {
     },
     validateFormGP2 () {
       // Add regex validation for each field
-      if (!/^[1-9][0-9]{3}\s?[a-zA-Z]{2}$/.test(this.postalCodeGP)) {
+      if (!/^[1-9][0-9]{3}\s?[a-zA-Z]{2}$/.test(this.user.postalCode)) {
         this.isPostalCodeGPValid = false
         return false
       }
@@ -129,32 +96,28 @@ export default {
     },
     validateFormGP4 () {
       // Add regex validation for each field
-      if (!/.{8,}$/.test(this.usernameGP)) {
+      if (!/.{8,}$/.test(this.user.mail)) {
         this.isUsernameGPValid = false
         return false
       }
-      if (!/ (?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/.test(this.passwordGP)) {
+      if (!/ (?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/.test(this.user.password)) {
         this.isPasswordGPValid = false
         return false
       }
-      // if this.passwordGP == this.confirmPasswordGP) {
-      //   this.isPasswordGPValid = false
-      //   return false
-      // }
       // Add similar validations for other fields
       return true // If all validations pass
     },
     validateFormEP1 () {
       // Add regex validation for each field
-      if (!/^[A-Za-z]+$/.test(this.firstNameEP)) {
+      if (!/^[A-Za-z]+$/.test(this.user.firstname)) {
         this.isFirstnameEPValid = false
         return false
       }
-      if (!/^[A-Za-z]+$/.test(this.lastNameEP)) {
+      if (!/^[A-Za-z]+$/.test(this.user.lastname)) {
         this.isLastnameEPValid = false
         return false
       }
-      if (!/[a-z0-9._%+]+@[a-z0-9.]+\.[a-z]{2,}$/.test(this.emailAddressEP)) {
+      if (!/[a-z0-9._%+]+@[a-z0-9.]+\.[a-z]{2,}$/.test(this.user.mail)) {
         this.isEmailEPValid = false
         return false
       }
@@ -163,7 +126,7 @@ export default {
     },
     validateFormEP2 () {
       // Add regex validation for each field
-      if (!/^[1-9][0-9]{3}\s?[a-zA-Z]{2}$/.test(this.postalCodeEP)) {
+      if (!/^[1-9][0-9]{3}\s?[a-zA-Z]{2}$/.test(this.user.postalCode)) {
         this.isPostalCodeEPValid = false
         return false
       }
@@ -172,20 +135,14 @@ export default {
     },
     validateFormEP4 () {
       // Add regex validation for each field
-      if (!/^[a-zA-Z0-9_]{3,20}$/.test(this.usernameEP)) {
+      if (!/^[a-zA-Z0-9_]{3,20}$/.test(this.user.mail)) {
         this.isUsernameEPValid = false
         return false
       }
-      if (!/ (?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/.test(this.passwordEP)) {
+      if (!/ (?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/.test(this.user.password)) {
         this.isPasswordEPValid = false
         return false
       }
-      // if this.passwordEP == this.confirmPasswordEP) {
-      //   this.isPasswordEPValid = false
-      //   return false
-      // }
-      // Add similar validations for other fields
-      return true // If all validations pass
     }
   },
   watch: {
@@ -241,13 +198,6 @@ export default {
               <div class="check-sign-up">&#10003;</div>
             </div>
             <div class="step">
-              <p class="p-sign-up-form">Birth</p>
-              <div class="bullet-sign-up-form">
-                <span class="span-sign-up-form-check">3</span>
-              </div>
-              <div class="check-sign-up">&#10003;</div>
-            </div>
-            <div class="step">
               <p class="p-sign-up-form">Submit</p>
               <div class="bullet-sign-up-form">
                 <span class="span-sign-up-form-check">4</span>
@@ -260,17 +210,30 @@ export default {
               <div class="title-sign-up-form">Basic Info:</div>
               <div class="field-sign-up" id="formValidation1">
                 <div class="label-sign-up">Company Name:</div>
-                <input type="text" class="sign-up-input" required v-model="companyNameGP">
+                <input type="text" class="sign-up-input" required v-model="user.companyName">
               </div>
               <div class="errorMessageRegistrationForm" v-if="!isCompanyNameGPValid">Company name must contain no more than 8 characters</div>
               <div class="field-sign-up">
-                <div class="label-sign-up">Contact Name:</div>
-                <input type="text" class="sign-up-input" required v-model="contactNameGP">
+                <div class="label-sign-up">First Name:</div>
+                <input type="text" class="sign-up-input" required v-model="user.firstname">
               </div>
-              <div class="errorMessageRegistrationForm" v-if="!isContactNameGPValid">Contact name must contain no more than 8 characters</div>
+              <div class="errorMessageRegistrationForm" v-if="!isContactNameGPValid">Firstname must contain no more than 8 characters</div>
+              <div class="field-sign-up">
+                <div class="label-sign-up">Last Name:</div>
+                <input type="text" class="sign-up-input" required v-model="user.lastname">
+              </div>
+              <div class="errorMessageRegistrationForm" v-if="!isContactNameGPValid">Lastname must contain no more than 8 characters</div>
+              <div class="field-sign-up">
+                <div class="label-sign-up">Gender:</div>
+                <select class="select-gender-sign-up" v-model="user.gender">
+                  <option>Male</option>
+                  <option>Female</option>
+                  <option>Prefer not to tell</option>
+                </select>
+              </div>
               <div class="field-sign-up">
                 <div class="label-sign-up">Email Address:</div>
-                <input type="email" class="sign-up-input" v-model="emailAddressGP" required>
+                <input type="email" class="sign-up-input" v-model="user.mail" required>
               </div>
               <div class="errorMessageRegistrationForm" v-if="!isEmailGPValid">Please enter a valid emailaddress</div>
               <div class="field-btn">
@@ -283,7 +246,7 @@ export default {
             <div class="title-sign-up-form">Contact Info:</div>
             <div class="field-sign-up">
               <div class="label-sign-up">Type of industry:</div>
-              <select class="select-gender-sign-up" v-model="typeOfIndustryGP">
+              <select class="select-gender-sign-up" v-model="user.userType">
                 <option>Horeca</option>
                 <option>Bar</option>
                 <option>Restaurant</option>
@@ -291,63 +254,42 @@ export default {
             </div>
             <div class="field-sign-up">
               <div class="label-sign-up">Type of partner:</div>
-              <select class="select-gender-sign-up" v-model="typeOfPartnerGP">
+              <select class="select-gender-sign-up" v-model="user.tag">
                 <option>Chain partner</option>
                 <option>Knowledge partner</option>
               </select>
             </div>
             <div class="field-sign-up">
               <div class="label-sign-up">Postal code:</div>
-              <input type="text" class="sign-up-input" required v-model="postalCodeGP">
+              <input type="text" class="sign-up-input" required v-model="user.postalCode">
             </div>
             <div class="errorMessageRegistrationForm" v-if="!isPostalCodeGPValid">Please enter a valid Dutch postal code</div>
             <div class="field-btn">
               <button class="prev-1" @click="goToPrevForm">Previous</button>
               <button class="next-1" @click.prevent="goToNextForm">Next</button>
             </div>
-          </div>
-
-          <div class="sign-up-page" id="user_detail3" v-if="currentForm ===3">
-            <div class="title-sign-up-form">Date of Birth:</div>
-            <div class="field-sign-up">
-              <div class="label-sign-up">Dates:</div>
-              <input type="date" class="sign-up-input" v-model="dateOfBirthGP">
-            </div>
-            <div class="field-sign-up">
-              <div class="label-sign-up">Gender:</div>
-              <select class="select-gender-sign-up" v-model="genderGP">
-                <option>Male</option>
-                <option>Female</option>
-                <option>Prefer not to tell</option>
-              </select>
-            </div>
-
-            <div class="field-btn">
-              <button class="prev-2" @click="goToPrevForm">Previous</button>
-              <button class="next-2" @click.prevent="goToNextForm">Next</button>
-            </div>
-          </div>
-          <div class="sign-up-page" v-if="currentForm ===4">
+          </form>
+<form class="sign-up-page" v-if="currentForm ===4">
             <div class="title-sign-up-form">Login Details:</div>
-            <div class="field-sign-up">
+<div class="field-sign-up">
               <div class="label-sign-up">Username:</div>
-              <input type="text" class="sign-up-input" required v-model="usernameGP">
+              <input type="text" class="sign-up-input" required v-model="user.mail">
             </div>
             <div class="errorMessageRegistrationForm" v-if="!isUsernameGPValid">Must contain no more than 8 characters</div>
             <div class="field-sign-up">
-              <div class="label-sign-up">Password:</div>
-              <input type="password" class="sign-up-input" required v-model="passwordGP">
+<div class="label-sign-up">Password:</div>
+              <input type="password" class="sign-up-input" required v-model="user.password">
             </div>
             <div class="errorMessageRegistrationForm" v-if="!isPasswordGPValid">Must contain at least one  number and one uppercase and lowercase letter,
               and at least 8 or more characters</div>
             <div class="field-sign-up">
               <div class="label-sign-up">Confirm password:</div>
-              <input type="password" class="sign-up-input" required v-model="confirmPasswordGP">
+              <input type="password" class="sign-up-input" required>
             </div>
             <div class="errorMessageRegistrationForm">AAAAAALLLLLEEEERTTT</div>
             <div class="field-btn">
               <button class="prev-3" @click="goToPrevForm">Previous</button>
-              <button class="submit" @click="sendGPForm">Submit</button>
+              <button class="submit" @click="sendForm">Submit</button>
             </div>
           </div>
         </div>
@@ -370,13 +312,6 @@ export default {
             <div class="check-sign-up">&#10003;</div>
           </div>
           <div class="step">
-            <p class="p-sign-up-form">Birth</p>
-            <div class="bullet-sign-up-form">
-              <span class="span-sign-up-form-check">3</span>
-            </div>
-            <div class="check-sign-up">&#10003;</div>
-          </div>
-          <div class="step">
             <p class="p-sign-up-form">Submit</p>
             <div class="bullet-sign-up-form">
               <span class="span-sign-up-form-check">4</span>
@@ -389,17 +324,17 @@ export default {
             <div class="title-sign-up-form">Basic Info:</div>
             <div class="field-sign-up">
               <div class="label-sign-up">First Name:</div>
-              <input type="text" class="sign-up-input" required v-model="firstNameEP">
+              <input type="text" class="sign-up-input" required v-model="user.firstname">
             </div>
             <div class="errorMessageRegistrationForm" v-if="!isFirstnameEPValid">Must only contain letters</div>
             <div class="field-sign-up">
               <div class="label-sign-up">Last Name:</div>
-              <input type="text" class="sign-up-input" required v-model="lastNameEP">
+              <input type="text" class="sign-up-input" required v-model="user.lastname">
             </div>
             <div class="errorMessageRegistrationForm" v-if="!isLastnameEPValid">Must only contain letters</div>
             <div class="field-sign-up">
               <div class="label-sign-up">Type of industry:</div>
-              <select class="select-gender-sign-up" v-model="typeOfIndustryEP">
+              <select class="select-gender-sign-up" v-model="user.userType">
                 <option>Horeca</option>
                 <option>Bar</option>
                 <option>Hotel</option>
@@ -416,64 +351,50 @@ export default {
           <div class="title-sign-up-form">Contact Info:</div>
           <div class="field-sign-up">
             <div class="label-sign-up">Email Address:</div>
-            <input type="email" class="sign-up-input" v-model="emailAddressEP" required>
+            <input type="email" class="sign-up-input" v-model="user.mail" required>
           </div>
           <div class="errorMessageRegistrationForm" v-if="!isEmailEPValid">Please enter a valid emailaddress</div>
           <div class="field-sign-up">
             <div class="label-sign-up">Postal code:</div>
-            <input type="text" class="sign-up-input" required v-model="postalCodeEP">
+            <input type="text" class="sign-up-input" required v-model="user.postalCode">
           </div>
           <div class="errorMessageRegistrationForm" v-if="!isPostalCodeGPValid"> Please enter a valid Dutch postal code</div>
-          <div class="field-btn">
-            <button class="prev-1" @click="goToPrevFormEntrepreneur">Previous</button>
-            <button class="next-1" @click.prevent="goToNextFormEntrepreneur">Next</button>
-          </div>
-        </div>
-
-        <div class="sign-up-page" id="user_detail3" v-if="this.currentEntrepreneurForm === 3">
-          <div class="title-sign-up-form">Date of Birth:</div>
-          <div class="field-sign-up">
-            <div class="label-sign-up">Dates:</div>
-            <input type="date" class="sign-up-input" v-model="dateOfBirthEP">
-          </div>
-
-          <div class="field-sign-up">
+          <form class="field-sign-up">
             <div class="label-sign-up">Gender:</div>
-            <select class="select-gender-sign-up">
+            <select class="select-gender-sign-up" v-model="user.gender">
               <option>Male</option>
               <option>Female</option>
               <option>Prefer not to tell</option>
             </select>
-          </div>
-
+          </form>
           <div class="field-btn">
-            <button class="prev-2" @click="goToPrevFormEntrepreneur">Previous</button>
-            <button class="next-2" @click.prevent="goToNextFormEntrepreneur">Next</button>
+            <button class="prev-1" @click="goToPrevFormEntrepreneur">Previous</button>
+            <button class="next-1" @click.prevent="goToNextFormEntrepreneur">Next</button>
           </div>
-        </div>
+        </form>
 
         <div class="sign-up-page" v-if="this.currentEntrepreneurForm === 4">
           <div class="title-sign-up-form">Login Details:</div>
           <div class="field-sign-up">
             <div class="label-sign-up">Username:</div>
-            <input type="text" class="sign-up-input" required v-model="usernameEP">
+            <input type="email" class="sign-up-input" required v-model="user.mail">
           </div>
           <div class="errorMessageRegistrationForm" v-if="!isUsernameEPValid">Username must contain between 3 and 20 characters</div>
           <div class="field-sign-up">
             <div class="label-sign-up">Password:</div>
-            <input type="password" class="sign-up-input" v-model="passwordEP" required>
+            <input type="password" class="sign-up-input" v-model="user.password" required>
           </div>
           <div class="errorMessageRegistrationForm" v-if="!isPasswordEPValid">
             Must contain at least one  number and one uppercase and lowercase letter,
             and at least 8 or more characters</div>
           <div class="field-sign-up">
             <div class="label-sign-up">Confirm password:</div>
-            <input type="password" class="sign-up-input" required v-model="confirmPasswordEP">
+            <input type="password" class="sign-up-input" required >
           </div>
           <div class="errorMessageRegistrationForm">AAAAAALLLLLEEEERTTT</div>
           <div class="field-btn">
             <button class="prev-3" @click="goToPrevFormEntrepreneur">Previous</button>
-            <button class="submit" @click="sendEPForm">Submit</button>
+            <button class="submit" @click="sendForm">Submit</button>
           </div>
         </div>
       </div>
