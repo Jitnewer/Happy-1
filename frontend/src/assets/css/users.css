@@ -252,11 +252,20 @@ button:hover {
 }
 
 .info-right-bottom {
-    max-height: 300px;
-    display: flex;
     flex-direction: column;
     flex-wrap: wrap;
     color: black;
+    gap: 1rem;
+    margin-top: 1rem;
+    display: flex;
+}
+
+.event-right-left h1 {
+    color: black
+}
+
+.event {
+    margin-bottom:1rem
 }
 
 .usertype-tag {
@@ -351,9 +360,6 @@ button:hover {
         height: 100px;
     }
 
-    .info-right-bottom {
-        max-height: 750px;
-    }
 }
 
 @media (max-width: 450px) {
@@ -374,7 +380,4 @@ button:hover {
         font-size: 10px;
     }
 
-    .edit-inputs {
-        max-height: min-content;
-    }
 }

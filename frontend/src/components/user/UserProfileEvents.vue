@@ -26,15 +26,9 @@ export default {
     }
   },
   async created () {
-    const test = await this.userEventsService.asyncFindById(this.user.userEvents[0].id)
-    // for (let i = 0; i < this.user.userEvents.length; i++) {
-    //   const event = await this.userEventsService.asyncFindById(this.user.userEvents[i].id)
-    //   console.log(event)
-    //
-    //   if (event !== null) {
-    //     this.userEvents.push(event)
-    //   }
-    // }
+    for (let i = 0; i < this.user.userEvents.length; i++) {
+      this.userEvents.push(this.user.userEvents[i].event)
+    }
   }
 }
 </script>

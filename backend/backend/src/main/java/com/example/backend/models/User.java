@@ -17,8 +17,6 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    private static int idCounter = 3001;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<UserEvent> userEvents = new HashSet<>();
