@@ -26,6 +26,11 @@ public class Paragraph {
     @JsonIgnoreProperties("paragraphs") // Add this annotation to exclude 'trips' field from Scooter during serialization
     private Challenge challenge;
 
+    @ManyToOne
+    @JoinColumn(name = "research_id")
+    @JsonIgnore
+    private Research research;
+
 
     // Constructors, getters, and setters
 
@@ -38,8 +43,6 @@ public class Paragraph {
         this.content = content;
         this.challenge = challenge;
     }
-
-
 
     // Getters and Setters
     public Long getId() {
@@ -71,4 +74,11 @@ public class Paragraph {
         return challenge;
     }
 
+    public Research getResearch() {
+        return research;
+    }
+
+    public void setResearch(Research research) {
+        this.research = research;
+    }
 }
