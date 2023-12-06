@@ -14,24 +14,29 @@ export default {
   methods: {
     closeEventDetail () {
       if (confirm('Are you sure you don\'t want to save changes?')) {
-        this.$emit('deselect-event', this.selectedEvent)
+        this.$router.push({ name: 'adminEvents' })
       }
     },
-    saveEventDetail () {
+    async saveEventDetail () {
       if (this.validateFields()) {
         if (confirm('Are you sure you want to save changes to event?')) {
-          this.$emit('save-event', this.selectedCopy)
+          try {
+            await this.eventsService.asyncSave(this.selectedCopy)
+            this.$router.push({ name: 'adminEvents' })
+          } catch (e) {
+            console.error(e)
+          }
         }
       }
     },
     async deleteEventDetail () {
       if (confirm('Are you sure you want to delete this event?')) {
         try {
-          await this.eventsService.asyncDeleteById(this.selectedEvent.id)
+          await this.eventsService.asyncDeleteById(this.selectedCopy.id)
+          this.$router.push({ name: 'adminEvents' })
         } catch (e) {
           console.error(e)
         }
-        this.$emit('delete-event', this.selectedEvent)
       }
     },
     handleImageUpload (event) {
@@ -113,6 +118,18 @@ export default {
       }
 
       return true
+    },
+    async loadEvent () {
+      const eventId = this.$route.params.id
+      if (eventId) {
+        try {
+          this.event = await this.eventsService.asyncFindById(eventId)
+          this.selectedCopy = { ...this.event }
+          console.log(this.selectedCopy)
+        } catch (e) {
+          console.error(e)
+        }
+      }
     }
   },
   watch: {
@@ -120,16 +137,58 @@ export default {
       if (newSelectedEvent) {
         this.selectedCopy = Event.copyConstructor(newSelectedEvent)
       }
+    },
+    async '$route' (to, from) {
+      const eventId = to.params.id
+      // Check if the scooterId is present and different from the current scooter
+      if (eventId !== undefined) {
+        try {
+          this.event = await this.eventsService.asyncFindById(eventId)
+          this.selectedCopy = { ...this.event } // Create a copy of the scooter
+        } catch (e) {
+          console.error(e)
+        }
+      }
+
+      // Check if the scooterId is not present (deselected)
+      if (!eventId) {
+        this.event = null
+        this.selectedCopy = null
+      }
     }
   },
-  created () {
-    this.selectedCopy = Event.copyConstructor(this.selectedEvent)
+  async created () {
+    try {
+      await this.loadEvent()
+    } catch (e) {
+      console.error(e)
+    }
+  },
+  computed: {
+    formattedDate: {
+      get () {
+        if (this.selectedCopy.date) {
+          const eventDate = new Date(this.selectedCopy.date)
+          const formattedDate = `${eventDate.getFullYear()}-${(eventDate.getMonth() + 1)
+            .toString()
+            .padStart(2, '0')}-${eventDate.getDate().toString().padStart(2, '0')}`
+          return formattedDate
+        }
+        return ''
+      },
+      set (newFormattedDate) {
+        if (newFormattedDate) {
+          const [year, month, day] = newFormattedDate.split('-')
+          this.selectedCopy.date = new Date(year, month - 1, day)
+        }
+      }
+    }
   }
 }
 </script>
 
 <template>
-  <div class="container">
+  <div class="container" v-if="selectedCopy">
     <div class="events-title">
       <button @click="closeEventDetail" class="back-button">Back</button>
       <h3>Event</h3>
@@ -141,7 +200,7 @@ export default {
       </div>
       <div class="info-inputs">
         <input type="text" placeholder="Event name" v-model="selectedCopy.name" id="edit-event-name">
-        <input type="date" v-model="selectedCopy.date" id="edit-event-date">
+        <input type="date" v-model="formattedDate" id="edit-event-date">
         <div class="time-container">
           <input type="time" v-model="selectedCopy.timeBegin" id="edit-event-time-begin">
           <input type="time" v-model="selectedCopy.timeEnd" id="edit-event-time-end">

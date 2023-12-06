@@ -20,6 +20,10 @@ button:hover {
     background-color: var(--main-color-hover-admin);
 }
 
+button {
+    background-color: var(--main-color-hover)
+}
+
 /* AdminEventDetail*/
 .events-title {
     display: flex;

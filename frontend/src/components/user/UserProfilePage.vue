@@ -82,8 +82,8 @@ export default {
           <h1 v-if="!edit"> {{ user.firstname }} {{ user.lastname }}</h1>
         </div>
         <div v-if="!edit" class="buttons-view">
-          <button class="info-view selected" @click="infoView">Info</button>
-          <button class="events-view" @click="eventsView">Events</button>
+          <router-link :to="{name: 'profilePageInfo'}"  class="info-view selected">Info</router-link>
+          <router-link :to="{ name: 'profilePageEvents'}" class="events-view">Events</router-link>
         </div>
         <div class="info-right-bottom">
           <router-view v-if="!edit" :user="user"></router-view>

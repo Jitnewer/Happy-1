@@ -2,7 +2,7 @@
 export default {
   name: 'ProfileEvents',
   props: ['user'],
-  inject: ['eventsService', 'userEventsService'],
+  inject: ['eventsService', 'userEventsService', 'userEventsService2'],
   data () {
     return {
       userEvents: []
@@ -26,8 +26,19 @@ export default {
     }
   },
   async created () {
-    for (let i = 0; i < this.user.userEvents.length; i++) {
-      this.userEvents.push(this.user.userEvents[i].event)
+    try {
+      if (this.user.id !== null) {
+        this.userEvents = await this.userEventsService2.asyncFindEventByUser(this.user.id)
+      } else {
+        const userId = this.$route.params.id
+        if (userId) {
+          this.user = await this.userEventsService2.asyncFindEventByUser(userId)
+          this.selectedCopy = { ...this.user }
+          console.log(this.selectedCopy)
+        }
+      }
+    } catch (e) {
+      console.error(e)
     }
   }
 }

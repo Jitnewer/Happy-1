@@ -59,7 +59,6 @@ public class UserRepositoryJpa implements UserRepository {
         return null; // Return null if no user with the given credentials is found
     }
 
-
     @Override
     @Transactional
     public void updateUser(User user) {

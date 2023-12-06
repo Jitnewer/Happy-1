@@ -14,19 +14,8 @@ export class LoginAndRegisterAdapter {
       if (response.ok) {
         return await response.json()
       } else {
-        let errorMessage
-        try {
-          errorMessage = JSON.parse(await response.text()).message
-        } catch (parseError) {
-          errorMessage = 'Failed to parse error message'
-        }
-
-        // Return an object with error information
-        return {
-          error: true,
-          status: response.status,
-          message: errorMessage
-        }
+        console.log(response, !response.bodyUsed ? await response.text() : '')
+        return null
       }
     } catch (error) {
       console.error('Error fetching JSON:', error)

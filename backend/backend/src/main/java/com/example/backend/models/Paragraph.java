@@ -1,14 +1,10 @@
 package com.example.backend.models;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "paragraphs")
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Paragraph {
 
     @Id
@@ -23,12 +19,12 @@ public class Paragraph {
 
     @ManyToOne
     @JoinColumn(name = "challenge_id")
-    @JsonIgnoreProperties("paragraphs") // Add this annotation to exclude 'trips' field from Scooter during serialization
+    @JsonBackReference
     private Challenge challenge;
 
     @ManyToOne
     @JoinColumn(name = "research_id")
-    @JsonIgnoreProperties("paragraphs") // Add this annotation to exclude 'trips' field from Scooter during serialization
+    @JsonBackReference
     private Research research;
 
 
