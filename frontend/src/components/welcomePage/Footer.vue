@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div class="topFooter">
+    <div class="topFooterLeft">
       <p class="blue-text">Follow Us</p>
       <p class="white-text">On social media</p>
     </div>

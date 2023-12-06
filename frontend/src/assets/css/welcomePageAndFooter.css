@@ -77,16 +77,17 @@ span.carouselPagination.active {
 }
 /* Footer */
 
-.bottomFooter{
-    background-color: var(--main-color);
-    width: 100%
-}
-.topFooter {
-    color: var(--main-color-hover);
-    width: 100%
-}
-.topFooter p {
-}
+/*.bottomFooter{*/
+/*    background-color: var(--main-color);*/
+/*    width: 100%*/
+/*}*/
+/*.topFooter {*/
+/*    color: var(--main-color-hover);*/
+/*    width: 100%*/
+
+/*}*/
+/*.topFooter p {*/
+/*}*/
 
 .yellow-text {
     color: var(--main-color-hover);
@@ -247,7 +248,10 @@ span.carouselPagination.active {
     margin-bottom: 80px;
     margin-top: 10px;
 }
-
+.themeButton {
+    border-radius: 20px;
+    background-color: #fbfbfd;
+}
 .theme button {
     background: none;
     border: none;
@@ -280,30 +284,8 @@ span.carouselPagination.active {
     margin: 0 20px 20px 20px; /* Adjust margins as needed */
 }
 
-.container-footer {
 
-}
 .yellow-text, .blue-text {
     display: inline;
 }
 
-.topFooterChild {
-    width: 80%;
-    margin: auto;
-    padding: 1rem;
-    display: flex;
-    gap: 1rem;
-    flex-direction: column;
-}
-
-.topFooterChild p {
-margin: 0
-}
-
-.bottomFooterChild {
-    width: 80%;
-    margin: auto;
-    padding: 3rem;
-    display: flex;
-
-}
