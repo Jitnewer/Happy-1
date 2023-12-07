@@ -57,7 +57,7 @@ export default {
 
             this.$emit('loginAdmin')
 
-            this.$router.push({ path: '/admin/events' })
+            this.$router.push({ path: '/admin' })
           } else {
             localStorage.setItem('email', this.email)
             localStorage.setItem('admin', 'false')
