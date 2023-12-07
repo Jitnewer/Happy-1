@@ -13,19 +13,8 @@ export class RESTAdaptorWithFetch {
       if (response.ok) {
         return await response.json()
       } else {
-        let errorMessage
-        try {
-          errorMessage = JSON.parse(await response.text()).message
-        } catch (parseError) {
-          errorMessage = 'Failed to parse error message'
-        }
-
-        // Return an object with error information
-        return {
-          error: true,
-          status: response.status,
-          message: errorMessage
-        }
+        console.log(response, !response.bodyUsed ? await response.text() : '')
+        return null
       }
     } catch (error) {
       console.error('Error fetching JSON:', error)
@@ -36,7 +25,6 @@ export class RESTAdaptorWithFetch {
   async asyncFindAll () {
     try {
       const data = await this.fetchJson(this.resourceUrl)
-      console.log(data)
       return data?.map(d => this.copyConstructor(d))
     } catch (error) {
       console.error('Error in asyncFindAll:', error)
@@ -106,24 +94,24 @@ export class RESTAdaptorWithFetch {
     }
   }
 
-  async asyncSave (event) {
+  async asyncSave (object) {
     let response
     try {
-      if (event.id === 0) {
+      if (object.id === 0) {
         response = await this.fetchJson(this.resourceUrl, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify(event)
+          body: JSON.stringify(object)
         })
       } else {
-        response = await this.fetchJson(`${this.resourceUrl}/${event.id}`, {
+        response = await this.fetchJson(`${this.resourceUrl}/${object.id}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify(event)
+          body: JSON.stringify(object)
         })
       }
 

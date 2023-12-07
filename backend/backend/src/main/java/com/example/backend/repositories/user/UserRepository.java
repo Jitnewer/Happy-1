@@ -7,11 +7,13 @@ import java.util.List;
 
 public interface UserRepository {
     List<User> getUsers();
-    User getUser(long id);
+    User getUserById(long id);
+
     void addUser(User user);
     User login(String email, String password);
     void updateUser(User user);
     void deleteUser(long id);
 
     User getUserByMail(String email);
+    boolean userWithMailExists(String email);
 }

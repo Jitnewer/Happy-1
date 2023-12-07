@@ -2,7 +2,6 @@ package com.example.backend.repositories.user;
 
 import com.example.backend.models.User;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -27,7 +26,7 @@ public class UserRepositoryMock implements UserRepository {
     }
 
     @Override
-    public User getUser(long id) {
+    public User getUserById(long id) {
         for (User user : users) {
             if (user.getId() == id) {
                 return user;
@@ -35,6 +34,7 @@ public class UserRepositoryMock implements UserRepository {
         }
         throw new IllegalArgumentException("User not found");
     }
+
 
     @Override
     public void addUser(User user) {
@@ -94,6 +94,11 @@ public class UserRepositoryMock implements UserRepository {
             }
         }
         throw new IllegalArgumentException("User not found with email: " + mail);
+    }
+
+    @Override
+    public boolean userWithMailExists(String email) {
+        return false;
     }
 }
 

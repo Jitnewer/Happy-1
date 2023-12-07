@@ -1,23 +1,23 @@
 package com.example.backend.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "userEvents")
 public class UserEvent {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    @JsonIgnore
+    @JsonBackReference
     private User user;
 
     @ManyToOne
     @JoinColumn(name = "event_id")
-    @JsonIgnore
+    @JsonBackReference
     private Event event;
 
     public UserEvent() {

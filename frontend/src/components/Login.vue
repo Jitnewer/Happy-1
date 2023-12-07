@@ -27,6 +27,8 @@
 </template>
 
 <script>
+import { User } from '@/models/user'
+
 export default {
   name: 'login.vue',
   inject: ['loginAndRegisterService'],
@@ -42,15 +44,18 @@ export default {
         const user = await this.loginAndRegisterService.asyncLogin(this.email, this.password)
         if (user !== null) {
           console.log(user)
-          if (user.userType === 'ADMIN') {
+          if (user.userType === User.userTypes.Admin) {
             localStorage.setItem('email', this.email)
             localStorage.setItem('admin', 'true')
+            localStorage.setItem('profileId', `${user.id}`)
+
             this.$emit('loginAdmin')
 
             this.$router.push({ path: '/admin/events' })
           } else {
             localStorage.setItem('email', this.email)
             localStorage.setItem('admin', 'false')
+            localStorage.setItem('profileId', `${user.id}`)
             this.$router.push({ path: '/home' })
             this.$emit('loginUser')
           }

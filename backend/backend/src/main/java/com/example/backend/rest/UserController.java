@@ -78,7 +78,7 @@ public class UserController {
     @GetMapping("/users/{id}")
     public ResponseEntity<Object> getUser(@PathVariable long id) {
         try {
-            User user = userRepository.getUser(id);
+            User user = userRepository.getUserById(id);
             if (user == null) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", "User not found with id: " + id));
             }
@@ -91,7 +91,7 @@ public class UserController {
     @PostMapping("/users")
     public ResponseEntity<Object> addUser(@RequestBody User user) {
         try {
-            if (userRepository.getUserByMail(user.getMail()) == null) {
+            if (userRepository.userWithMailExists(user.getMail())) {
                 return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("message", "User with mail:" + user.getMail() + " is already in use"));
             }
 
@@ -115,7 +115,7 @@ public class UserController {
     @PutMapping("/users/{id}")
     public ResponseEntity<Object> updateUser(@RequestBody User user, @PathVariable Long id) {
         try {
-            if (userRepository.getUser(id) == null) {
+            if (userRepository.getUserById(id) == null) {
                 return ResponseEntity.notFound().build();
             }
             userRepository.updateUser(user);
@@ -128,7 +128,7 @@ public class UserController {
     @DeleteMapping("/users/{id}")
     public ResponseEntity<Object> deleteUser(@PathVariable long id) {
         try {
-            User user = userRepository.getUser(id);
+            User user = userRepository.getUserById(id);
             if (user != null) {
                 userRepository.deleteUser(id);
                 return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "User with id " + id + " deleted successfully"));

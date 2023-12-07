@@ -41,8 +41,9 @@
           </div>
           <div class="event-right-bottom">
             <button @click="selectEventMoreInfo(event)" >More Info</button>
-            <button v-if="!event.hasUser" @click="toggleSignIn(event)">Sign In</button>
-            <button :disabled="disableSignOut(event)" v-if="event.hasUser" @click="toggleSignOut(event)">Sign Out</button>
+            <button v-if="!isEventSignedIn(event)" @click="toggleSignIn(event)">Sign In</button>
+            <button :disabled="disableSignOut(event)" v-if="isEventSignedIn(event)" @click="toggleSignOut(event)">Sign Out</button>
+
           </div>
         </div>
       </div>
@@ -90,10 +91,12 @@
 <script>
 import { Event } from '@/models/event'
 import { mapGetters } from 'vuex'
+import { reactive } from 'vue'
 
 export default {
   name: 'Events.vue',
-  inject: ['eventsService', 'usersService', 'userEventsService', 'loginAndRegisterService'],
+  emits: ['loginAdmin', 'loginUser'],
+  inject: ['eventsService', 'usersService', 'userEventsService', 'loginAndRegisterService', 'userEventsService2'],
   data () {
     return {
       lastId: 3000,
@@ -109,15 +112,17 @@ export default {
       selectedEventsSignOut: null,
       signInComplete: false,
       signOutComplete: false,
-      signInOut: false
+      signInOut: false,
+      user: null,
+      signedInEvents: []
     }
   },
   async created () {
     try {
       this.events = await this.eventsService.asyncFindAll()
-      for (let i = 0; i < this.events.length; i++) {
-        await this.isSignedIn(this.events[i])
-      }
+      this.user = await this.loginAndRegisterService.asyncFindByEmail(localStorage.getItem('email'))
+      const associatedEvents = await this.userEventsService2.asyncFindEventByUser(this.user.id)
+      this.signedInEvents = associatedEvents.map((event) => event.id)
     } catch (e) {
       console.error(e)
     }
@@ -154,11 +159,15 @@ export default {
       }
       console.log(this.selectedEventsSignIn)
     },
-    async isSignedIn (event) {
-      const user = await this.loginAndRegisterService.asyncFindByEmail(localStorage.getItem('email'))
-      const response = await this.userEventsService.asyncHasEntityEntity(user.id, event.id, 'hasUserEvent')
-      console.log(response)
-      event.hasUser = response.status !== 404
+    isSignedIn (event) {
+      try {
+        for (let i = 0; i < this.user.userEvents.length; i++) {
+          if (this.user.userEvents[i].event.id === event.id) return true
+        }
+        return false
+      } catch (e) {
+        console.log(e)
+      }
     },
     updateFilter (filterValue) {
       this.filter = filterValue
@@ -176,11 +185,9 @@ export default {
       this.showSignIn = false
       this.signInIn = true
 
-      const user = await this.loginAndRegisterService.asyncFindByEmail(localStorage.getItem('email'))
-
       // First timeout: Add participant after 10 seconds
       setTimeout(() => {
-        this.userEventsService.asyncAddEntityToEntity(user.id, this.selectedEventsSignIn.id, 'addUserToEvent')
+        this.userEventsService.asyncAddEntityToEntity(this.user.id, this.selectedEventsSignIn.id, 'addUserToEvent')
       }, 10000)
       // Second timeout: Hide signInIn and set signInComplete after 10 seconds
       setTimeout(() => {
@@ -190,21 +197,18 @@ export default {
         // Third timeout: Reset selectedEventsSignIn after 5 seconds
         setTimeout(() => {
           this.signInComplete = false
+          this.signedInEvents.push(this.selectedEventsSignIn.id)
           this.selectedEventsSignIn = null
-          for (let i = 0; i < this.events.length; i++) {
-            this.isSignedIn(this.events[i])
-          }
         }, 3000)
       }, 7000)
     },
     async signOut () {
       this.showSignOut = false
       this.signInOut = true
-      const user = await this.loginAndRegisterService.asyncFindByEmail(localStorage.getItem('email'))
 
       // First timeout: Add participant after 10 seconds
       setTimeout(() => {
-        this.userEventsService.asyncRemoveEntityFromEntity(user.id, this.selectedEventsSignOut.id, 'removeUserFromEvent')
+        this.userEventsService.asyncRemoveEntityFromEntity(this.user.id, this.selectedEventsSignOut.id, 'removeUserFromEvent')
       }, 10000)
 
       // Second timeout: Hide signInIn and set signInComplete after 10 seconds
@@ -215,10 +219,12 @@ export default {
         // Third timeout: Reset selectedEventsSignIn after 5 seconds
         setTimeout(() => {
           this.signOutComplete = false
-          this.selectedEventsSignOut = null
-          for (let i = 0; i < this.events.length; i++) {
-            this.isSignedIn(this.events[i])
+          const index = this.signedInEvents.indexOf(this.selectedEventsSignOut.id)
+          if (index !== -1) {
+            this.signedInEvents.splice(index, 1)
           }
+          this.selectedEventsSignOut = null
+          this.$forceUpdate()
         }, 3000)
       }, 7000)
     },
@@ -268,7 +274,11 @@ export default {
       })
       return this.search ? this.searchEvent(sortedEvents) : sortedEvents
     },
-    ...mapGetters(['getFullName'])
+    isEventSignedIn () {
+      return (event) => {
+        return this.signedInEvents.includes(event.id)
+      }
+    }
   },
   mounted () {
     window.addEventListener('click', this.handleOutsideClick)

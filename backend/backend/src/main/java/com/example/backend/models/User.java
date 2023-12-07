@@ -1,5 +1,6 @@
 package com.example.backend.models;
 
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
@@ -11,12 +12,13 @@ import java.util.Set;
 @Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames = "mail")})
 public class User {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonProperty("id")
     private long id;
 
-    private static int idCounter = 3001;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private Set<UserEvent> userEvents = new HashSet<>();
 
     public enum UserType {
@@ -47,23 +49,25 @@ public class User {
 
     private int age;
 
-    @Column(nullable = false)
+//    @Column(nullable = false)
     private String companyType;
 
-    @Column(nullable = false)
+//    @Column(nullable = false)
     private String tag;
 
-    @Column(nullable = false)
+//    @Column(nullable = false)
     private UserStatus status;
 
     @Column(nullable = false)
     private UserType userType;
 
-    @Column(nullable = false)
+//    @Column(nullable = false)
     private String postalCode;
 
     @Column(nullable = false)
     private String password;
+
+    private String companyName;
 
     public User() {
 
@@ -111,7 +115,11 @@ public class User {
         return postalCode;
     }
 
-    public User(String profilePic, String firstname, String lastname, String mail, String gender, int age, String companyType, String tag, UserStatus status, UserType userType, String postalCode, String password) {
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public User(String profilePic, String firstname, String lastname, String mail, String gender, int age, String companyType, String tag, UserStatus status, UserType userType, String postalCode, String password, String companyName) {
         this.profilePic = profilePic;
         this.firstname = firstname;
         this.lastname = lastname;
@@ -124,6 +132,7 @@ public class User {
         this.userType = userType;
         this.postalCode = postalCode;
         this.password = password;
+        this.companyName = companyName;
     }
 
     public String getFirstname() {
@@ -149,7 +158,8 @@ public class User {
                 user.status,
                 user.userType,
                 user.postalCode,
-                user.password
+                user.password,
+                user.companyName
         );
     }
 
@@ -181,7 +191,10 @@ public class User {
         String companyType = "Catering";
         String postalCode = "1242 DA";
 
-        return new User(image, randomFirstname, randomLastname, mail, gender, age, companyType, tag, status, randomUserType, postalCode, "test");
+        String[] companyName = {"Uber", "Albert Heijn", "McDonalds", "Thuisbezorgd"};
+        String randomCompanyName = companyName[randomIndex];
+
+        return new User(image, randomFirstname, randomLastname, mail, gender, age, companyType, tag, status, randomUserType, postalCode, "test", randomCompanyName);
     }
 
     @Override

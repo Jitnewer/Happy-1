@@ -11,11 +11,15 @@ import AdminUsersDetail from '@/components/admin/userPage/AdminUsersDetail.vue'
 import Registration from '@/components/Registration.vue'
 import AboutUs from '@/components/AboutUs.vue'
 import logIn from '@/components/Login.vue'
+import UserProfilePage from '@/components/user/UserProfilePage.vue'
+import PageNotFound from '@/components/PageNotFound.vue'
+import UserProfileInfo from '@/components/user/UserProfileInfo.vue'
+import ProfilePage from '@/components/admin/userPage/ProfilePage.vue'
+import UserProfileEvents from '@/components/user/UserProfileEvents.vue'
 import Challenges from '@/components/challenges/Challenges.vue'
 import ChallengeDetails from '@/components/challenges/ChallengeDetails.vue'
-import SuperUserResearchView from '@/components/admin/superUser/research/SuperUserResearchView.vue'
-import SuperUserChallenge from '@/components/admin/superUser/challenge/SuperUserChallenge.vue'
-import SuperUserChallengeView from '@/components/admin/superUser/challenge/SuperUserChallengeView.vue'
+import Researches from '@/components/research/Researches.vue'
+import ResearchDetails from '@/components/research/ResearchDetails.vue'
 
 const routes = [
   {
@@ -48,16 +52,28 @@ const routes = [
     component: ChallengeDetails
   },
   {
+    path: '/news/research',
+    name: 'researches',
+    component: Researches
+  },
+  {
+    path: '/news/research/:id',
+    name: 'research',
+    component: ResearchDetails
+  },
+  {
     path: '/about',
     name: 'about',
     component: AboutUs
   },
   {
     path: '/admin/events',
+    name: 'adminEvents',
     component: AdminEventView,
     children: [
       {
         path: ':id',
+        name: 'adminEventDetail',
         component: EventDetailsView
       }
     ]
@@ -68,10 +84,29 @@ const routes = [
   },
   {
     path: '/admin/users',
+    name: 'users',
     component: AdminUsersView,
     children: [
       {
+        path: 'profile/:id',
+        name: 'adminProfileView',
+        component: ProfilePage,
+        children: [
+          {
+            path: 'info',
+            name: 'adminProfileViewInfo',
+            component: UserProfileInfo
+          },
+          {
+            path: 'events',
+            name: 'adminProfileViewEvents',
+            component: UserProfileEvents
+          }
+        ]
+      },
+      {
         path: ':id',
+        name: 'userDetail',
         component: AdminUsersDetail
       }
     ]
@@ -114,6 +149,27 @@ const routes = [
     path: '/about-us',
     name: 'AboutUs',
     component: AboutUs
+  },
+  {
+    path: '/profile',
+    name: 'profilePage',
+    component: UserProfilePage,
+    children: [
+      {
+        path: 'events',
+        name: 'profilePageEvents',
+        component: UserProfileEvents
+      },
+      {
+        path: 'info',
+        name: 'profilePageInfo',
+        component: UserProfileInfo
+      }
+    ]
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    component: PageNotFound
   }
 
 ]

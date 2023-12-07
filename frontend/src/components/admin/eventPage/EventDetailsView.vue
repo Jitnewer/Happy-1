@@ -14,24 +14,29 @@ export default {
   methods: {
     closeEventDetail () {
       if (confirm('Are you sure you don\'t want to save changes?')) {
-        this.$emit('deselect-event', this.selectedEvent)
+        this.$router.push({ name: 'adminEvents' })
       }
     },
     async saveEventDetail () {
-      if (this.isAllInputsFilled) {
+      if (this.validateFields()) {
         if (confirm('Are you sure you want to save changes to event?')) {
-          this.$emit('save-event', this.selectedCopy)
+          try {
+            await this.eventsService.asyncSave(this.selectedCopy)
+            this.$router.push({ name: 'adminEvents' })
+          } catch (e) {
+            console.error(e)
+          }
         }
       }
     },
     async deleteEventDetail () {
       if (confirm('Are you sure you want to delete this event?')) {
         try {
-          await this.eventsService.asyncDeleteById(this.selectedEvent.id)
+          await this.eventsService.asyncDeleteById(this.selectedCopy.id)
+          this.$router.push({ name: 'adminEvents' })
         } catch (e) {
           console.error(e)
         }
-        this.$emit('delete-event', this.selectedEvent)
       }
     },
     handleImageUpload (event) {
@@ -51,6 +56,80 @@ export default {
     },
     activateInput () {
       document.querySelector('#file').click()
+    },
+    eventNameIsValid () {
+      const eventNameIsEmpty = !this.selectedCopy.name || this.selectedCopy.name.trim() === ''
+      return !eventNameIsEmpty && /^.{3,}$/.test(this.selectedCopy.name)
+    },
+    eventDateIsValid () {
+      const eventDateIsEmpty = !this.selectedCopy.date
+      return !eventDateIsEmpty && Date.parse(this.selectedCopy.date) > Date.now()
+    },
+    eventBeginTimeIsValid () {
+      return this.selectedCopy.timeBegin !== undefined
+    },
+    eventEndTimeIsValid () {
+      return this.selectedCopy.timeEnd !== undefined
+    },
+    eventLocationIsValid () {
+      const eventLocationIsEmpty = !this.selectedCopy.location || this.selectedCopy.location === ''
+      return !eventLocationIsEmpty && /^[a-zA-Z].{3,}$/.test(this.selectedCopy.location)
+    },
+    eventCityIsValid () {
+      const eventCityIsEmpty = !this.selectedCopy.city || this.selectedCopy.city === ''
+      return !eventCityIsEmpty && /^[a-zA-Z].{3,}$/.test(this.selectedCopy.location)
+    },
+    eventPriceIsValid () {
+      const eventPriceIsEmpty = !this.selectedCopy.price || this.selectedCopy.price === ''
+      return !eventPriceIsEmpty && this.selectedCopy.price >= 0 && this.selectedCopy.price <= 500
+    },
+    setUpErrorMessage (elementId, message) {
+      document.querySelector(elementId).setCustomValidity(message)
+      document.querySelector(elementId).reportValidity()
+    },
+    validateFields () {
+      if (!this.eventNameIsValid()) {
+        this.setUpErrorMessage('#edit-event-name', 'Name must be more than 3 characters')
+        return false
+      }
+      if (!this.eventDateIsValid()) {
+        this.setUpErrorMessage('#edit-event-date', 'Event date must be further in the future')
+        return false
+      }
+      if (!this.eventBeginTimeIsValid()) {
+        this.setUpErrorMessage('#edit-event-time-begin', 'This field is required')
+        return false
+      }
+      if (!this.eventEndTimeIsValid()) {
+        this.setUpErrorMessage('#edit-event-time-end', 'This field is required')
+        return false
+      }
+      if (!this.eventLocationIsValid()) {
+        this.setUpErrorMessage('#edit-event-location', 'Location must be more than 3 characters and can\'t contain numbers or symbols')
+        return false
+      }
+      if (!this.eventCityIsValid()) {
+        this.setUpErrorMessage('#edit-event-city', 'City must be more than 3 characters and can\'t contain numbers or symbols')
+        return false
+      }
+      if (!this.eventPriceIsValid()) {
+        this.setUpErrorMessage('#edit-event-price', 'Price must be 0 - 500')
+        return false
+      }
+
+      return true
+    },
+    async loadEvent () {
+      const eventId = this.$route.params.id
+      if (eventId) {
+        try {
+          this.event = await this.eventsService.asyncFindById(eventId)
+          this.selectedCopy = { ...this.event }
+          console.log(this.selectedCopy)
+        } catch (e) {
+          console.error(e)
+        }
+      }
     }
   },
   watch: {
@@ -58,55 +137,70 @@ export default {
       if (newSelectedEvent) {
         this.selectedCopy = Event.copyConstructor(newSelectedEvent)
       }
+    },
+    async '$route' (to, from) {
+      const eventId = to.params.id
+      // Check if the scooterId is present and different from the current scooter
+      if (eventId !== undefined) {
+        try {
+          this.event = await this.eventsService.asyncFindById(eventId)
+          this.selectedCopy = { ...this.event } // Create a copy of the scooter
+        } catch (e) {
+          console.error(e)
+        }
+      }
+
+      // Check if the scooterId is not present (deselected)
+      if (!eventId) {
+        this.event = null
+        this.selectedCopy = null
+      }
     }
   },
-  created () {
-    this.selectedCopy = Event.copyConstructor(this.selectedEvent)
+  async created () {
+    try {
+      await this.loadEvent()
+    } catch (e) {
+      console.error(e)
+    }
   },
   computed: {
-    isSaveButtonDisabled () {
-      // Compare the selectedCopy data with the selectedEvent data
-      return (
-        this.selectedCopy.image === this.selectedEvent.image &&
-        this.selectedCopy.name === this.selectedEvent.name &&
-        this.selectedCopy.date === this.selectedEvent.date &&
-        this.selectedCopy.timeBegin === this.selectedEvent.timeBegin &&
-        this.selectedCopy.timeEnd === this.selectedEvent.timeEnd &&
-        this.selectedCopy.location === this.selectedEvent.location &&
-        this.selectedCopy.price === this.selectedEvent.price &&
-        this.selectedCopy.info === this.selectedEvent.info
-      )
-    },
-    isAllInputsFilled () {
-      // Check if all input fields are filled (except the textarea)
-      return (
-        this.selectedCopy.name &&
-        this.selectedCopy.date &&
-        this.selectedCopy.timeBegin &&
-        this.selectedCopy.timeEnd &&
-        this.selectedCopy.location &&
-        this.selectedCopy.city &&
-        this.selectedCopy.price !== null
-      )
+    formattedDate: {
+      get () {
+        if (this.selectedCopy.date) {
+          const eventDate = new Date(this.selectedCopy.date)
+          const formattedDate = `${eventDate.getFullYear()}-${(eventDate.getMonth() + 1)
+            .toString()
+            .padStart(2, '0')}-${eventDate.getDate().toString().padStart(2, '0')}`
+          return formattedDate
+        }
+        return ''
+      },
+      set (newFormattedDate) {
+        if (newFormattedDate) {
+          const [year, month, day] = newFormattedDate.split('-')
+          this.selectedCopy.date = new Date(year, month - 1, day)
+        }
+      }
     }
   }
 }
 </script>
 
 <template>
-  <div class="container">
+  <div class="container" v-if="selectedCopy">
     <div class="events-title">
       <button @click="closeEventDetail" class="back-button">Back</button>
       <h3>Event</h3>
     </div>
-    <div class="event-details">
+    <form class="event-details">
       <div class="event-image-container">
         <input type="file" accept="image/jpeg, image/png, image/jpg" id="file" @change="handleImageUpload">
         <img :src="require(`../../../assets/images/${selectedCopy.image}`)" alt="event image" class="event-image" @click="activateInput">
       </div>
       <div class="info-inputs">
         <input type="text" placeholder="Event name" v-model="selectedCopy.name" id="edit-event-name">
-        <input type="date" v-model="selectedCopy.date" id="edit-event-date">
+        <input type="date" v-model="formattedDate" id="edit-event-date">
         <div class="time-container">
           <input type="time" v-model="selectedCopy.timeBegin" id="edit-event-time-begin">
           <input type="time" v-model="selectedCopy.timeEnd" id="edit-event-time-end">
@@ -116,10 +210,10 @@ export default {
         <input type="number" v-model="selectedCopy.price" id="edit-event-price" placeholder="Event price">
         <textarea placeholder="Enter event summary" v-model="selectedCopy.info" id="edit-event-summary"></textarea>
       </div>
-    </div>
+    </form>
     <div class="buttons-container">
       <button @click="clearInputs">Clear</button>
-      <button @click="saveEventDetail" :disabled="isSaveButtonDisabled">Save</button>
+      <button @click="saveEventDetail">Save</button>
       <button @click="deleteEventDetail" v-if="!created">Delete</button>
     </div>
   </div>
