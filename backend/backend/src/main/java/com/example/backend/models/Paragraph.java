@@ -19,12 +19,12 @@ public class Paragraph {
 
     @ManyToOne
     @JoinColumn(name = "challenge_id")
-    @JsonBackReference
+    @JsonBackReference(value = "challenge-paragraphs")
     private Challenge challenge;
 
     @ManyToOne
     @JoinColumn(name = "research_id")
-    @JsonBackReference
+    @JsonBackReference(value = "research-paragraphs")
     private Research research;
 
 

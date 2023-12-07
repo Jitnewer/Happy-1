@@ -1,4 +1,9 @@
 <template>
+  <div class="breadcrum">
+    <router-link :to="{ name: 'welcome' }">Home</router-link>
+    <p>></p>
+    <router-link :to="{ name: 'events' }">Events</router-link>
+  </div>
   <div class="container">
     <div class="events-main">
       <div class="events-main-left">
@@ -24,7 +29,7 @@
     <div class="events">
       <div class="event" v-for="event in filteredEventsOnDate" :key="event.id">
         <div class="event-left">
-          <img :src="require(`../../assets/images/${event.image}`)" alt="Event Image">
+          <img :src="require(`../../assets/img/${event.image}`)" alt="Event Image">
         </div>
         <div class="event-right">
           <div class="event-right-main">

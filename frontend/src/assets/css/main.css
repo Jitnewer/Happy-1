@@ -1902,3 +1902,96 @@ a.router-link-active:hover {
         top: 38px;
     }
 }
+
+/* BreadCrum */
+.breadcrum {
+    width: 80%;
+    margin: 1rem auto 1rem auto;
+    display: flex;
+    gap: 0.5rem;
+}
+
+.breadcrum-admin {
+    display: flex;
+    gap: 0.5rem;
+    margin: 1rem auto 1rem auto;
+}
+
+.breadcrum-admin a {
+    text-decoration: none;
+    color: black;
+    opacity: 80%;
+}
+
+.breadcrum-admin p {
+    color: black;
+    margin: 0;
+    font-weight: bold;
+}
+
+.breadcrum-admin a:hover {
+    opacity: 100%;
+    color: black;
+    font-weight: bold;
+    background-color: transparent;
+}
+
+.breadcrum-admin a.router-link-active {
+    opacity: 100%;
+    color: black;
+    font-weight: bold;
+    background-color: transparent;
+}
+
+.breadcrum-admin a.router-link-active:hover {
+    opacity: 80%;
+    color: black;
+    font-weight: normal;
+    background-color: transparent;
+}
+
+.breadcrum a {
+    text-decoration: none;
+    color: black;
+    opacity: 80%;
+}
+
+.breadcrum p {
+    color: black;
+    margin: 0;
+    font-weight: bold;
+}
+
+.breadcrum a:hover {
+    opacity: 100%;
+    color: black;
+    font-weight: bold;
+    background-color: transparent;
+}
+
+.breadcrum a.router-link-active {
+    opacity: 100%;
+    color: black;
+    font-weight: bold;
+    background-color: transparent;
+}
+
+.breadcrum a.router-link-active:hover {
+    opacity: 80%;
+    color: black;
+    font-weight: normal;
+    background-color: transparent;
+}
+
+.breadcrum-admin-margin {
+    margin-left: 1rem;
+}
+
+/* Welcome Admin */
+.welcome-admin {
+margin-left: 1rem;
+}
+
+.welcome-admin h1 {
+    color: black
+}

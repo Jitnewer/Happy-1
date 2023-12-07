@@ -21,7 +21,7 @@ import { UserEventAdapter } from '@/services/UserEventAdapter'
 
 export default {
   name: 'App',
-  emits: ['loginAdmin', 'loginUser'],
+  emits: ['loginAdmin', 'loginUser', 'handleLogout'],
   components: {
     NavBarNotLoggedIn,
     NavBarLoggedIn,
@@ -62,7 +62,8 @@ export default {
     },
     async isAdmin () {
       const user = await this.loginAndRegisterService.asyncFindByEmail(this.email)
-      return user.userType === 'ADMIN'
+      if (user != null) return user.userType === 'ADMIN'
+      return false
     }
   },
   computed: {

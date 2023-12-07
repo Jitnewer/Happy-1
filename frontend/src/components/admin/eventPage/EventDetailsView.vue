@@ -189,6 +189,13 @@ export default {
 
 <template>
   <div class="container" v-if="selectedCopy">
+    <div class="breadcrum-admin breadcrum-admin-margin">
+      <router-link :to="{ name: 'admin' }">Admin</router-link>
+      <p>></p>
+      <router-link :to="{ name: 'adminEvents' }">Events</router-link>
+      <p>></p>
+      <router-link :to="{ name: 'adminEventDetail', params: { id: selectedCopy.id } }">Event / {{ selectedCopy.id }}</router-link>
+    </div>
     <div class="events-title">
       <button @click="closeEventDetail" class="back-button">Back</button>
       <h3>Event</h3>
@@ -196,7 +203,7 @@ export default {
     <form class="event-details">
       <div class="event-image-container">
         <input type="file" accept="image/jpeg, image/png, image/jpg" id="file" @change="handleImageUpload">
-        <img :src="require(`../../../assets/images/${selectedCopy.image}`)" alt="event image" class="event-image" @click="activateInput">
+        <img :src="require(`../../../assets/img/${selectedCopy.image}`)" alt="event image" class="event-image" @click="activateInput">
       </div>
       <div class="info-inputs">
         <input type="text" placeholder="Event name" v-model="selectedCopy.name" id="edit-event-name">

@@ -1,4 +1,13 @@
 <template>
+  <div class="breadcrum" v-if="challenge">
+    <router-link :to="{ name: 'welcome' }">Home</router-link>
+    <p>></p>
+    <a>News</a>
+    <p>></p>
+    <router-link :to="{ name: 'challenges' }">Challenges</router-link>
+    <p>></p>
+    <router-link :to="{ name: 'challenge', params: { id: challenge.id } }">Challenge / {{ challenge.id }}</router-link>
+  </div>
   <div v-if="challenge" class="container">
     <div class="challenge-main">
       <div class="challenge-title">
@@ -7,7 +16,7 @@
       </div>
       <div class="detail-challenge">
         <div>
-          <img :src="require(`../../assets/images/${challenge.image}`)" alt="">
+          <img :src="require(`../../assets/img/${challenge.image}`)" alt="">
         </div>
         <div class="content">
           <div>
@@ -74,6 +83,7 @@ export default {
   async created () {
     try {
       this.challenge = await this.challengeService.asyncFindById(this.$route.params.id)
+      console.log(this.challenge)
     } catch (e) {
       console.error(e)
     }

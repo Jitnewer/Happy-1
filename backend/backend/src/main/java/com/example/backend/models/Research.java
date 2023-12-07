@@ -31,7 +31,7 @@ public class Research {
     private String firstParagraph;
 
     @OneToMany(mappedBy = "research", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JsonManagedReference
+    @JsonManagedReference(value = "research-paragraphs")
     private Set<Paragraph> paragraphs = new HashSet<>();
 
     // Constructors
