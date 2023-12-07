@@ -4,6 +4,7 @@ import { Event } from '@/models/event'
 export default {
   name: 'AdminEventView',
   inject: ['eventsService'],
+  emits: ['loginAdmin', 'loginUser'],
   data () {
     return {
       selectedEvent: null,

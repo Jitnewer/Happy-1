@@ -2,6 +2,7 @@
 import { News } from '@/models/news'
 export default {
   name: 'SuperUserView',
+  emits: ['loginAdmin', 'loginUser'],
   data () {
     return {
       filter: {

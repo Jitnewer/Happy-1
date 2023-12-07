@@ -4,7 +4,8 @@ export default {
   name: 'EventDetailsView',
   inject: ['eventsService'],
   props: ['selectedEvent', 'create'],
-  emits: ['deselect-event', 'delete-event', 'save-event'],
+  emits: ['deselect-event', 'delete-event', 'save-event', 'loginAdmin', 'loginUser'],
+
   data () {
     return {
       created: this.create,

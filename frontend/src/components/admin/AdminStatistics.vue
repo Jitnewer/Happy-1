@@ -27,6 +27,7 @@ import { User } from '@/models/user' // Import Chart.js
 export default {
   name: 'AdminStatistics',
   inject: ['usersService'],
+
   data () {
     return {
       users: [],

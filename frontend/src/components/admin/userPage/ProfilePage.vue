@@ -3,7 +3,7 @@ export default {
   name: 'ProfilePage',
   inject: ['usersService'],
   props: ['selectedUser'],
-  emits: ['back'],
+  emits: ['back', 'loginAdmin', 'loginUser'],
   data () {
     return {
       user: null,

@@ -1,6 +1,7 @@
 <script>
 export default {
   name: 'registration.vue',
+  emits: ['loginAdmin', 'loginUser'],
   data () {
     return {
       entrepreneur: false,

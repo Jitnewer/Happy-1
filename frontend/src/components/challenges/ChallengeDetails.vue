@@ -40,6 +40,7 @@ import challenges from './Challenges.vue'
 export default {
   name: 'ChallengeDetails.vue',
   inject: ['challengeService'],
+  emits: ['loginAdmin', 'loginUser'],
   data () {
     return {
       challenge: null
@@ -83,7 +84,6 @@ export default {
   async created () {
     try {
       this.challenge = await this.challengeService.asyncFindById(this.$route.params.id)
-      console.log(this.challenge)
     } catch (e) {
       console.error(e)
     }

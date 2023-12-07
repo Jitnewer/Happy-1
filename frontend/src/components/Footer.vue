@@ -16,7 +16,8 @@
 
 <script>
 export default {
-  name: 'Footer.vue'
+  name: 'Footer.vue',
+  emits: ['loginAdmin', 'loginUser']
 }
 </script>
 

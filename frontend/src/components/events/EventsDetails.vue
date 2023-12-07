@@ -43,6 +43,7 @@ export default {
   name: 'EventsDetails.vue',
   inject: ['eventsService'],
   props: ['filter'],
+  emits: ['loginAdmin', 'loginUser'],
   data () {
     return {
       event: null

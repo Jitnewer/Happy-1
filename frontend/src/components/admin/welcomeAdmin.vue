@@ -14,6 +14,7 @@
 export default {
   name: 'welcomeAdmin.vue',
   inject: ['loginAndRegisterService'],
+  emits: ['loginAdmin', 'loginUser'],
   data () {
     return {
       user: null

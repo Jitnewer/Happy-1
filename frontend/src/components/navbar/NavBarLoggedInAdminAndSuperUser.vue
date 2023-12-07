@@ -74,7 +74,8 @@
 export default {
   name: 'NavBar.vue',
   inject: ['loginAndRegisterService'],
-  emits: ['handleLogout'],
+  emits: ['handleLogout', 'loginAdmin', 'loginUser'],
+
   data () {
     return {
       user: this.loginAndRegisterService.asyncFindByEmail(localStorage.getItem('email')),

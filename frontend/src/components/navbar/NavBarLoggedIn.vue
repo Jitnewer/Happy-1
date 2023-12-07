@@ -65,7 +65,7 @@ import { mapGetters, mapMutations } from 'vuex'
 export default {
   name: 'NavBar.vue',
   inject: ['loginAndRegisterService'],
-  emits: ['handleLogout'],
+  emits: ['handleLogout', 'loginAdmin', 'loginUser'],
   data () {
     return {
       user: this.loginAndRegisterService.asyncFindByEmail(localStorage.getItem('email')),
@@ -147,8 +147,6 @@ export default {
       console.log(e)
     }
 
-    console.log(this.user)
-    console.log((`../../assets/img/${this.user.profilePic}`))
     const fullname = `${this.user.firstname} ${this.user.lastname}`
 
     let initials = ''
