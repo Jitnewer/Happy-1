@@ -186,6 +186,7 @@ span.carouselPagination.active {
 
 .iconButtonHomepage:hover {
     transform: scale(1.2);
+    background-color: transparent;
 }
 
 .social-icons i {
@@ -209,6 +210,8 @@ span.carouselPagination.active {
 }
 .footerButton:hover{
     transform: scale(1.08);
+    border: none;
+    background-color: transparent;
 }
 
 .yellow-text {
