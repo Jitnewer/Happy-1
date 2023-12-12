@@ -1,6 +1,5 @@
 <template>
     <NavBar></NavBar>
-    <router-view></router-view>
   <Footer></Footer>
 </template>
 
@@ -23,7 +22,6 @@ import NavBar from '@/components/navbar/NavBar.vue'
 
 export default {
   name: 'App',
-  emits: ['loginAdmin', 'loginUser', 'handleLogout'],
   components: {
     NavBar,
     Footer
@@ -31,12 +29,15 @@ export default {
   provide () {
     return {
       eventsService: new RESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/events', Event.copyConstructor),
+      eventsServiceAdmin: new RESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/events/admin', Event.copyConstructor),
       usersService: new RESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/users', User.copyConstructor),
       challengeService: new RESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/challenges', Challenge.copyConstructor),
       userEventsService: new RESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/userevents', UserEvent.copyConstructor),
+      usersServiceAdmin: new RESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/users/admin', User.copyConstructor),
       sessionSBService: shallowReactive(new SessionSbService(CONFIG.BACKEND_URL + '/authentication', CONFIG.JWT_STORAGE_ITEM)),
       researchService: new RESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/researches', Research.copyConstructor),
       userEventsService2: new UserEventAdapter(CONFIG.BACKEND_URL, Event.copyConstructor)
+
     }
   }
 }

@@ -15,12 +15,14 @@ import java.util.Map;
 import java.util.Optional;
 
 @RestController
+@RequestMapping("users")
+
 public class UserController {
 
     @Autowired
     private UserRepository userRepository;
 
-    @GetMapping("/admin/users")
+    @GetMapping("/admin")
     public ResponseEntity<Object> getUsers() {
         try {
             List<User> users = userRepository.getUsers();
@@ -35,7 +37,7 @@ public class UserController {
 
 
 
-    @GetMapping("/users/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Object> getUser(@PathVariable long id) {
         try {
             User user = userRepository.getUserById(id);
@@ -48,7 +50,7 @@ public class UserController {
         }
     }
 
-    @PostMapping("/admin/users")
+    @PostMapping("/admin")
     public ResponseEntity<Object> addUser(@RequestBody User user) {
         try {
             if (userRepository.userWithMailExists(user.getMail())) {
@@ -72,7 +74,7 @@ public class UserController {
         }
     }
 
-    @PutMapping("/users/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Object> updateUser(@RequestBody User user, @PathVariable Long id) {
         try {
             if (userRepository.getUserById(id) == null) {
@@ -85,7 +87,7 @@ public class UserController {
         }
     }
 
-    @DeleteMapping("/admin/users/{id}")
+    @DeleteMapping("/admin/{id}")
     public ResponseEntity<Object> deleteUser(@PathVariable long id) {
         try {
             User user = userRepository.getUserById(id);
