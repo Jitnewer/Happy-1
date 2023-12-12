@@ -4,6 +4,7 @@ import { User } from '@/models/user'
 export default {
   name: 'AdminUsersView',
   inject: ['usersService'],
+  emits: ['loginAdmin', 'loginUser'],
   data () {
     return {
       filter: {
@@ -149,6 +150,11 @@ export default {
 
 <template>
   <div class="container-admin" v-if="!view">
+    <div class="breadcrum-admin breadcrum-admin-margin">
+      <router-link :to="{ name: 'admin' }">Admin</router-link>
+      <p>></p>
+      <router-link :to="{ name: 'users' }">Users</router-link>
+    </div>
     <div class="title">
       <h1>Users</h1>
     </div>

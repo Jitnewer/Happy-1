@@ -1,4 +1,9 @@
 <template>
+  <div class="breadcrum">
+    <router-link :to="{ name: 'welcome' }">Home</router-link>
+    <p>></p>
+    <router-link :to="{ name: 'login' }">Login</router-link>
+  </div>
   <div class="sign-up-body">
     <div class="container-sign-up">
       <div class="header-sign-up">Login:</div>
@@ -32,6 +37,7 @@ import { User } from '@/models/user'
 export default {
   name: 'login.vue',
   inject: ['loginAndRegisterService'],
+  emits: ['loginAdmin', 'loginUser'],
   data () {
     return {
       email: '',
@@ -51,7 +57,7 @@ export default {
 
             this.$emit('loginAdmin')
 
-            this.$router.push({ path: '/admin/events' })
+            this.$router.push({ path: '/admin' })
           } else {
             localStorage.setItem('email', this.email)
             localStorage.setItem('admin', 'false')

@@ -1,4 +1,11 @@
 <template>
+  <div class="breadcrum" v-if="event">
+    <router-link :to="{ name: 'welcome' }">Home</router-link>
+    <p>></p>
+    <router-link :to="{ name: 'events' }">Events</router-link>
+    <p>></p>
+    <router-link :to="{ name: 'event', params: { id: event.id } }">Event / {{ event.id }}</router-link>
+  </div>
   <div v-if="event" class="container">
     <div class="event-main">
       <div class="event-title">
@@ -7,7 +14,7 @@
       </div>
       <div class="detail-event">
         <div class="detail-event-left">
-          <img :src="require(`../../assets/images/${event.image}`)" alt="Image">
+          <img :src="require(`../../assets/img/${event.image}`)" alt="Image">
         </div>
         <div class="detail-event-right-main">
           <div class="detail-event-right">
@@ -36,6 +43,7 @@ export default {
   name: 'EventsDetails.vue',
   inject: ['eventsService'],
   props: ['filter'],
+  emits: ['loginAdmin', 'loginUser'],
   data () {
     return {
       event: null

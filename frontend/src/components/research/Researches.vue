@@ -1,10 +1,17 @@
 <template>
+  <div class="breadcrum">
+    <router-link :to="{ name: 'welcome' }">Home</router-link>
+    <p>></p>
+    <a>News</a>
+    <p>></p>
+    <router-link :to="{ name: 'researches' }">Researches</router-link>
+  </div>
   <div class="container">
     <h1 id="challenges-title">Research</h1>
     <div class="challenges">
       <div class="challenge" v-for="research in sortedResearch" :key="research.id" @click="selectResearch(research)">
         <div class="challenge-left">
-          <img :src="require(`../../assets/images/${research.image}`)" alt="Challenge Image"/>
+          <img :src="require(`../../assets/img/${research.image}`)" alt="Challenge Image"/>
         </div>
         <div class="challenge-right">
           <p class="challenge-time">{{ formattedDateTime(research.dateTime) }}</p>
@@ -21,6 +28,7 @@
 export default {
   name: 'Researches.vue',
   inject: ['researchService'],
+  emits: ['loginAdmin', 'loginUser'],
   data () {
     return {
       researches: [],

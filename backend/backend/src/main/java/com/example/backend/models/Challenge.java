@@ -35,7 +35,7 @@ public class Challenge {
     private String firstParagraph;
 
     @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
+    @JsonManagedReference(value = "challenge-paragraphs")
     private Set<Paragraph> paragraphs = new HashSet<>();
 
     // Constructors

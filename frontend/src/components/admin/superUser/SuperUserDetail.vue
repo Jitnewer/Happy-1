@@ -4,7 +4,7 @@ import { News } from '@/models/news'
 export default {
   name: 'SuperUserDetail',
   props: ['selectedNews', 'create'],
-  emits: ['deselect-news', 'delete-news', 'save-news'],
+  emits: ['deselect-news', 'delete-news', 'save-news', 'loginAdmin', 'loginUser'],
   data () {
     return {
       copySelected: null,

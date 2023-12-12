@@ -1,6 +1,7 @@
 <script>
 export default {
   name: 'registration.vue',
+  emits: ['loginAdmin', 'loginUser'],
   data () {
     return {
       entrepreneur: false,
@@ -46,6 +47,11 @@ export default {
 </script>
 
 <template>
+  <div class="breadcrum">
+    <router-link :to="{ name: 'welcome' }">Home</router-link>
+    <p>></p>
+    <router-link :to="{ name: 'register' }">Register</router-link>
+  </div>
   <div class="sign-up-body">
     <div class="container-sign-up">
       <div class="header-sign-up">Sign Up</div>

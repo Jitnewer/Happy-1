@@ -1,4 +1,9 @@
 <template>
+  <div class="breadcrum">
+    <router-link :to="{ name: 'welcome' }">Home</router-link>
+    <p>></p>
+    <router-link :to="{ name: 'about' }">About Us</router-link>
+  </div>
   <div class="aboutUsContainer">
     <div class="aboutUsContent">
       <h1 class="aboutLanding">
@@ -67,6 +72,7 @@ import AOS from 'aos'
 
 export default {
   name: 'AboutUs',
+  emits: ['loginAdmin', 'loginUser'],
   data () {
     return {}
   },

@@ -1,6 +1,7 @@
 <script>
 export default {
   name: 'PageNotFound',
+  emits: ['loginAdmin', 'loginUser'],
   data () {
     return {
     }
