@@ -20,36 +20,7 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
-    @PostMapping("/register")
-    public ResponseEntity<Object> register(@RequestBody User user) {
-        try {
-            if (userRepository.getUserByMail(user.getMail()) == null) {
-                return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("message", "User with mail: " + user.getMail() + " already exists"));
-            }
-
-            userRepository.addUser(user);
-            return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("message", "User registered successfully"));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("message", "Error registering user", "error", e.getMessage()));
-        }
-    }
-
-    @PostMapping("/login/{email}/{password}")
-    public ResponseEntity<Object> login(@PathVariable String email, @PathVariable String password) {
-        try {
-            User user = userRepository.login(email, password);
-
-            if (user != null) {
-                return ResponseEntity.ok(user);
-            } else {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "Invalid credentials"));
-            }
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("message", "Error during login", "error", e.getMessage()));
-        }
-    }
-
-    @GetMapping("/users")
+    @GetMapping("/admin/users")
     public ResponseEntity<Object> getUsers() {
         try {
             List<User> users = userRepository.getUsers();
@@ -62,18 +33,7 @@ public class UserController {
         }
     }
 
-    @GetMapping("/users/mail/{mail}")
-    public ResponseEntity<Object> getUserByMail(@PathVariable String mail) {
-        try {
-            User user = userRepository.getUserByMail(mail);
-            if (user == null) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", "User not found with email: " + mail));
-            }
-            return ResponseEntity.ok(user);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("message", "Error getting user by mail", "error", e.getMessage()));
-        }
-    }
+
 
     @GetMapping("/users/{id}")
     public ResponseEntity<Object> getUser(@PathVariable long id) {
@@ -88,7 +48,7 @@ public class UserController {
         }
     }
 
-    @PostMapping("/users")
+    @PostMapping("/admin/users")
     public ResponseEntity<Object> addUser(@RequestBody User user) {
         try {
             if (userRepository.userWithMailExists(user.getMail())) {
@@ -125,7 +85,7 @@ public class UserController {
         }
     }
 
-    @DeleteMapping("/users/{id}")
+    @DeleteMapping("/admin/users/{id}")
     public ResponseEntity<Object> deleteUser(@PathVariable long id) {
         try {
             User user = userRepository.getUserById(id);

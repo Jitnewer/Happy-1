@@ -1,5 +1,5 @@
 <template>
-  <nav>
+  <nav v-if="user">
     <img id="logo" src="../../assets/img/happy-hospitality-collective.png" height="119" width="310" alt=""/>
     <svg id="hamburger" @click="toggleNav" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Pro 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg>
     <transition name="nav">
@@ -32,9 +32,9 @@
         <div class="nav-links-right">
           <div class="dropdown-profile" @click="toggleProfile">
             <div class="profile-d">
-              <img v-if="user.profilePic != null" :src='require(`../../assets/img/${user.profilePic}`)' class="profile" width="45" height="45" alt="Event Image">
-              <canvas v-if="user.profilePic == null" ref="profileCanvas" class="profile" width="45" height="45"></canvas>
-                <p id="profile-name">{{ user.firstname }} {{ user.lastname }}</p>
+              <img v-if="user.body.profilePic != null" :src='require(`../../assets/img/${user.body.profilePic}`)' class="profile" width="45" height="45" alt="Event Image">
+              <canvas v-if="user.body.profilePic == null" ref="profileCanvas" class="profile" width="45" height="45"></canvas>
+                <p id="profile-name">{{ user.body.firstname }} {{ user.body.lastname }}</p>
               <div class="caret">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Pro 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M182.6 137.4c-12.5-12.5-32.8-12.5-45.3 0l-128 128c-9.2 9.2-11.9 22.9-6.9 34.9s16.6 19.8 29.6 19.8H288c12.9 0 24.6-7.8 29.6-19.8s2.2-25.7-6.9-34.9l-128-128z"/></svg>
               </div>
@@ -64,22 +64,24 @@ import { mapGetters, mapMutations } from 'vuex'
 
 export default {
   name: 'NavBar.vue',
-  inject: ['loginAndRegisterService'],
+  inject: ['sessionSBService'],
   emits: ['handleLogout', 'loginAdmin', 'loginUser'],
   data () {
     return {
-      user: this.loginAndRegisterService.asyncFindByEmail(localStorage.getItem('email')),
+      user: this.sessionSBService.asyncFindByEmail(JSON.parse(localStorage.getItem('userDetails')).mail).body,
       showNav: false,
       showDropdown: false,
       showProfile: false,
       randomColor: '',
       fullName: null,
-      picture: null
+      picture: null,
+      mail: null
     }
   },
   methods: {
     handleLogout () {
-      localStorage.removeItem('email')
+      this.sessionSBService.saveTokenIntoBrowserStorage(null, null)
+      localStorage.removeItem('admin')
       this.$router.push({ path: '/home' })
       this.$emit('handleLogout')
     },
@@ -142,12 +144,12 @@ export default {
   async created () {
     try {
       // Initiate the asynchronous operation
-      this.user = await this.loginAndRegisterService.asyncFindByEmail(localStorage.getItem('email'))
+      this.user = await this.sessionSBService.asyncFindByEmail(JSON.parse(localStorage.getItem('userDetails')).mail)
     } catch (e) {
       console.log(e)
     }
 
-    const fullname = `${this.user.firstname} ${this.user.lastname}`
+    const fullname = `${this.user.body.firstname} ${this.user.body.lastname}`
 
     let initials = ''
     const words = fullname.split(' ')

@@ -47,7 +47,7 @@ public class ChallengeController {
         }
     }
 
-    @PostMapping
+    @PostMapping("/admin")
     public ResponseEntity<Object> createChallenge(@RequestBody Challenge challenge) {
         if (challenge.getTitle() == null || challenge.getTitle().isEmpty()) {
             return ResponseEntity.badRequest().body(Map.of("message", "Title is required"));
@@ -80,7 +80,7 @@ public class ChallengeController {
 
 
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/admin/{id}")
     public ResponseEntity<Void> deleteChallenge(@PathVariable Long id) {
         challengeRepository.deleteChallenge(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

@@ -36,7 +36,7 @@ import { User } from '@/models/user'
 
 export default {
   name: 'login.vue',
-  inject: ['loginAndRegisterService'],
+  inject: ['sessionSBService'],
   emits: ['loginAdmin', 'loginUser'],
   data () {
     return {
@@ -47,21 +47,18 @@ export default {
   methods: {
     async login () {
       try {
-        const user = await this.loginAndRegisterService.asyncLogin(this.email, this.password)
+        const user = await this.sessionSBService.asyncSignIn({
+          mail: this.email,
+          password: this.password
+        })
         if (user !== null) {
           console.log(user)
           if (user.userType === User.userTypes.Admin) {
-            localStorage.setItem('email', this.email)
             localStorage.setItem('admin', 'true')
-            localStorage.setItem('profileId', `${user.id}`)
-
             this.$emit('loginAdmin')
-
             this.$router.push({ path: '/admin' })
           } else {
-            localStorage.setItem('email', this.email)
             localStorage.setItem('admin', 'false')
-            localStorage.setItem('profileId', `${user.id}`)
             this.$router.push({ path: '/home' })
             this.$emit('loginUser')
           }

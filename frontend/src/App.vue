@@ -12,12 +12,13 @@ import { Event } from '@/models/event.js'
 import CONFIG from '../app-config.js'
 import { RESTAdaptorWithFetch } from '@/services/RESTAdaptorWithFetch'
 import { User } from '@/models/user'
-import { LoginAndRegisterAdapter } from '@/services/LoginAndRegisterAdapter'
+import { SessionSbService } from '@/services/SessionSbService'
 import { UserEvent } from '@/models/UserEvent'
 import Footer from '@/components/Footer.vue'
 import { Challenge } from '@/models/challenge'
 import { Research } from '@/models/research'
 import { UserEventAdapter } from '@/services/UserEventAdapter'
+import { shallowReactive } from 'vue'
 
 export default {
   name: 'App',
@@ -33,7 +34,7 @@ export default {
       loggedIn: false,
       admin: false,
       email: null,
-      loginAndRegisterService: new LoginAndRegisterAdapter(CONFIG.BACKEND_URL, User.copyConstructor)
+      sessionSBService: shallowReactive(new SessionSbService(CONFIG.BACKEND_URL + '/authentication', CONFIG.JWT_STORAGE_ITEM))
     }
   },
   provide () {
@@ -42,7 +43,7 @@ export default {
       usersService: new RESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/users', User.copyConstructor),
       challengeService: new RESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/challenges', Challenge.copyConstructor),
       userEventsService: new RESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/userevents', UserEvent.copyConstructor),
-      loginAndRegisterService: new LoginAndRegisterAdapter(CONFIG.BACKEND_URL, User.copyConstructor),
+      sessionSBService: shallowReactive(new SessionSbService(CONFIG.BACKEND_URL + '/authentication', CONFIG.JWT_STORAGE_ITEM)),
       researchService: new RESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/researches', Research.copyConstructor),
       userEventsService2: new UserEventAdapter(CONFIG.BACKEND_URL, Event.copyConstructor)
     }
@@ -61,8 +62,8 @@ export default {
       this.loggedIn = true
     },
     async isAdmin () {
-      const user = await this.loginAndRegisterService.asyncFindByEmail(this.email)
-      if (user != null) return user.userType === 'ADMIN'
+      const user = await this.sessionSBService.asyncFindByEmail(this.email)
+      if (user != null) return user.body.userType === 'ADMIN'
       return false
     }
   },

@@ -47,7 +47,7 @@ public class ResearchController {
         }
     }
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping("/admin")
     public ResponseEntity<Object> createResearch(@RequestBody Research research) {
         if (research.getTitle() == null || research.getTitle().isEmpty()) {
             return ResponseEntity.badRequest().body(Map.of("message", "Title is required"));
@@ -81,7 +81,7 @@ public class ResearchController {
         }
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/admin/{id}")
     public ResponseEntity<Object> deleteResearch(@PathVariable Long id) {
         researchRepository.deleteResearch(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

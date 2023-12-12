@@ -52,7 +52,7 @@ public class EventController {
         }
     }
 
-    @PostMapping("")
+    @PostMapping("/admin")
     public ResponseEntity<Object> addEvent(@RequestBody Event event) {
         try {
             eventRepository.addEvent(event);
@@ -74,22 +74,8 @@ public class EventController {
         }
     }
 
-    @PostMapping("/multiple")
-    public ResponseEntity<Object> createEvents() {
-        try {
-            for (int i = 0; i < 12; i++) {
-                Event event = Event.createSampleEvent();
-                eventRepository.addEvent(event);
-            }
-            return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("message", "Events added successfully"));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
-                    "message", "Error adding events",
-                    "error", e.getMessage()));
-        }
-    }
 
-    @PutMapping("/{id}")
+    @PutMapping("/admin/{id}")
     public ResponseEntity<Object> updateEvent(@RequestBody Event event, @PathVariable Long id) {
         try {
             // Ensure the ID in the path matches the ID in the request body
@@ -106,7 +92,7 @@ public class EventController {
         }
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/admin/{id}")
     public ResponseEntity<Object> deleteEvent(@PathVariable long id) {
         try {
             eventRepository.deleteEvent(id);

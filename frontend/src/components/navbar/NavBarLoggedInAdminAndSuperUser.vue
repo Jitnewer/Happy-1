@@ -1,5 +1,5 @@
 <template>
-  <nav  id="admin">
+  <nav  id="admin" v-if="user">
     <img id="logo" src="../../assets/img/happy-hospitality-collective.png" height="119" width="310" alt=""/>
       <div class="nav-links-admin">
         <div class="nav-links-left-admin">
@@ -7,10 +7,14 @@
         </div>
         <div class="nav-links-right-admin">
           <div class="dropdown-profile" @click="toggleProfile">
-            <canvas ref="profileCanvas" class="profile" width="33" height="33"></canvas>
-            <p id="profile-name">{{ user.firstname }} {{ user.lastname }}</p>
-            <div class="caret">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512"><!--! Font Awesome Pro 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M246.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-128-128c-9.2-9.2-22.9-11.9-34.9-6.9s-19.8 16.6-19.8 29.6l0 256c0 12.9 7.8 24.6 19.8 29.6s25.7 2.2 34.9-6.9l128-128z"/></svg>            </div>
+            <div class="profile-d">
+              <img v-if="user.body.profilePic != null" :src='require(`../../assets/img/${user.body.profilePic}`)' class="profile" width="45" height="45" alt="Event Image">
+              <canvas v-if="user.body.profilePic == null" ref="profileCanvas" class="profile" width="45" height="45"></canvas>
+              <p id="profile-name">{{ user.body.firstname }} {{ user.body.lastname }}</p>
+              <div class="caret">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Pro 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M182.6 137.4c-12.5-12.5-32.8-12.5-45.3 0l-128 128c-9.2 9.2-11.9 22.9-6.9 34.9s16.6 19.8 29.6 19.8H288c12.9 0 24.6-7.8 29.6-19.8s2.2-25.7-6.9-34.9l-128-128z"/></svg>
+              </div>
+            </div>
             <transition name="dropdownProfile">
               <div class="dropdown-profile-content" v-show="showProfile">
                 <router-link  to="/profile">
@@ -33,7 +37,7 @@
   <div class="dashboard" v-show="showDashboard && !smallVersionDasboard">
     <div class="profile-dashboard" >
       <canvas ref="profileCanvasDashboard" class="profile-photo-dashboard" width="45" height="45"></canvas>
-      <p id="profile-dashboard-name">{{ user.firstname }} {{ user.lastname }}</p>
+      <p id="profile-dashboard-name">{{ user.body.firstname }} {{ user.body.lastname }}</p>
       <p id="profile-dashboard-role">Admin</p>
     </div>
     <div class="dashboard-links">
@@ -73,12 +77,12 @@
 <script>
 export default {
   name: 'NavBar.vue',
-  inject: ['loginAndRegisterService'],
+  inject: ['sessionSBService'],
   emits: ['handleLogout', 'loginAdmin', 'loginUser'],
 
   data () {
     return {
-      user: this.loginAndRegisterService.asyncFindByEmail(localStorage.getItem('email')),
+      user: this.sessionSBService.asyncFindByEmail(JSON.parse(localStorage.getItem('userDetails')).mail).body,
       showDropdown: false,
       showProfile: false,
       smallVersionDasboard: false,
@@ -88,11 +92,11 @@ export default {
   },
   async created () {
     try {
-      this.user = await this.loginAndRegisterService.asyncFindByEmail(localStorage.getItem('email'))
+      this.user = await this.sessionSBService.asyncFindByEmail(JSON.parse(localStorage.getItem('userDetails')).mail)
     } catch (e) {
       console.log(e)
     }
-    const fullname = `${this.user.firstname} ${this.user.lastname}`
+    const fullname = `${this.user.body.firstname} ${this.user.body.lastname}`
     let initials = ''
     const words = fullname.split(' ')
     if (words.length === 1) {
@@ -108,7 +112,7 @@ export default {
   },
   methods: {
     handleLogout () {
-      localStorage.removeItem('email')
+      this.sessionSBService.saveTokenIntoBrowserStorage(null, null)
       localStorage.removeItem('admin')
       this.$router.push({ path: '/home' })
       this.$emit('handleLogout')
