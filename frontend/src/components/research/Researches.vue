@@ -28,7 +28,6 @@
 export default {
   name: 'Researches.vue',
   inject: ['researchService'],
-  emits: ['loginAdmin', 'loginUser'],
   data () {
     return {
       researches: [],

@@ -28,7 +28,6 @@
 export default {
   name: 'Challenges.vue',
   inject: ['challengeService'],
-  emits: ['loginAdmin', 'loginUser'],
   data () {
     return {
       challenges: [],

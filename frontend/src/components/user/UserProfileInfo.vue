@@ -1,8 +1,7 @@
 <script>
 export default {
   name: 'UserProfileInfo',
-  props: ['user'],
-  emits: ['loginAdmin', 'loginUser']
+  props: ['user']
 }
 </script>
 

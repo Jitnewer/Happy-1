@@ -72,7 +72,6 @@ import AOS from 'aos'
 
 export default {
   name: 'AboutUs',
-  emits: ['loginAdmin', 'loginUser'],
   data () {
     return {}
   },

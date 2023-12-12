@@ -3,7 +3,6 @@ export default {
   name: 'ProfileEvents',
   props: ['user'],
   inject: ['eventsService', 'userEventsService', 'userEventsService2'],
-  emits: ['loginAdmin', 'loginUser'],
   data () {
     return {
       userEvents: []

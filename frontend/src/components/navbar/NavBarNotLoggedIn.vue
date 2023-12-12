@@ -21,9 +21,8 @@
 import { mapGetters, mapMutations } from 'vuex'
 
 export default {
-  name: 'NavBar.vue',
-  inject: ['loginAndRegisterService'],
-  emits: ['loginAdmin', 'loginUser'],
+  name: 'NavBarNotLoggedIn.vue',
+  inject: ['sessionSBService'],
   data () {
     return {
       showNav: false

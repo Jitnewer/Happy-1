@@ -1,7 +1,7 @@
 <template>
-    <component :is="navBar" @handleLogout="handleLogout"></component>
-    <router-view v-if="navBar !== 'NavBarLoggedInAdminAndSuperUser'"  @loginAdmin="loginAdmin" @loginUser="loginUser"></router-view>
-  <Footer v-if="navBar !== 'NavBarLoggedInAdminAndSuperUser'"></Footer>
+    <NavBar></NavBar>
+    <router-view></router-view>
+  <Footer></Footer>
 </template>
 
 <script>
@@ -19,23 +19,14 @@ import { Challenge } from '@/models/challenge'
 import { Research } from '@/models/research'
 import { UserEventAdapter } from '@/services/UserEventAdapter'
 import { shallowReactive } from 'vue'
+import NavBar from '@/components/navbar/NavBar.vue'
 
 export default {
   name: 'App',
   emits: ['loginAdmin', 'loginUser', 'handleLogout'],
   components: {
-    NavBarNotLoggedIn,
-    NavBarLoggedIn,
-    NavBarLoggedInAdminAndSuperUser,
+    NavBar,
     Footer
-  },
-  data () {
-    return {
-      loggedIn: false,
-      admin: false,
-      email: null,
-      sessionSBService: shallowReactive(new SessionSbService(CONFIG.BACKEND_URL + '/authentication', CONFIG.JWT_STORAGE_ITEM))
-    }
   },
   provide () {
     return {
@@ -47,44 +38,6 @@ export default {
       researchService: new RESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/researches', Research.copyConstructor),
       userEventsService2: new UserEventAdapter(CONFIG.BACKEND_URL, Event.copyConstructor)
     }
-  },
-  methods: {
-    handleLogout () {
-      // Update the navBar when the user logs out
-      this.loggedIn = false
-      this.admin = false
-    },
-    loginAdmin () {
-      this.loggedIn = true
-      this.admin = true
-    },
-    loginUser () {
-      this.loggedIn = true
-    },
-    async isAdmin () {
-      const user = await this.sessionSBService.asyncFindByEmail(this.email)
-      if (user != null) return user.body.userType === 'ADMIN'
-      return false
-    }
-  },
-  computed: {
-    navBar () {
-      if (!this.loggedIn) {
-        return 'NavBarNotLoggedIn'
-      } else {
-        if (this.admin) {
-          return 'NavBarLoggedInAdminAndSuperUser'
-        } else {
-          return 'NavBarLoggedIn'
-        }
-      }
-    }
-  },
-  async created () {
-    // Fetch the user's authentication status and role on component mount
-    this.email = localStorage.getItem('email')
-    this.loggedIn = !!localStorage.getItem('email')
-    this.admin = await this.isAdmin()
   }
 }
 </script>

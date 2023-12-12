@@ -4,7 +4,6 @@ import { User } from '@/models/user'
 export default {
   name: 'AdminUsersView',
   inject: ['usersService'],
-  emits: ['loginAdmin', 'loginUser'],
   data () {
     return {
       filter: {

@@ -100,7 +100,6 @@ import { reactive } from 'vue'
 
 export default {
   name: 'Events.vue',
-  emits: ['loginAdmin', 'loginUser'],
   inject: ['eventsService', 'usersService', 'userEventsService', 'loginAndRegisterService', 'userEventsService2'],
   data () {
     return {

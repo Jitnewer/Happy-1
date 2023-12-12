@@ -4,7 +4,6 @@ import { User } from '@/models/user'
 export default {
   name: 'UserProfilePage',
   inject: ['usersService'],
-  emits: ['loginAdmin', 'loginUser'],
   data () {
     return {
       user: null,

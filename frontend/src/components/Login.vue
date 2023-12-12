@@ -37,7 +37,6 @@ import { User } from '@/models/user'
 export default {
   name: 'login.vue',
   inject: ['sessionSBService'],
-  emits: ['loginAdmin', 'loginUser'],
   data () {
     return {
       email: '',
@@ -51,16 +50,17 @@ export default {
           mail: this.email,
           password: this.password
         })
+
         if (user !== null) {
-          console.log(user)
-          if (user.userType === User.userTypes.Admin) {
-            localStorage.setItem('admin', 'true')
-            this.$emit('loginAdmin')
+          const userType = user.body.userType
+
+          if (userType === User.userTypes.Admin) {
+            this.$store.commit('setLoggedInAsAdmin', true)
             this.$router.push({ path: '/admin' })
           } else {
-            localStorage.setItem('admin', 'false')
+            this.$store.commit('setLoggedIn', true)
+
             this.$router.push({ path: '/home' })
-            this.$emit('loginUser')
           }
         }
       } catch (e) {

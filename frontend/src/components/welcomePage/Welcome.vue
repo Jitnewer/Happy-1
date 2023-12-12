@@ -185,7 +185,6 @@ import Slide from './Slide.vue'
 export default {
   name: 'Welcome.vue',
   components: { Carousel, Slide },
-  emits: ['loginAdmin', 'loginUser'],
   data () {
     return {
       carouselSlides: [
