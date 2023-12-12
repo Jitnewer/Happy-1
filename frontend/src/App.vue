@@ -14,7 +14,7 @@ import { RESTAdaptorWithFetch } from '@/services/RESTAdaptorWithFetch'
 import { User } from '@/models/user'
 import { LoginAndRegisterAdapter } from '@/services/LoginAndRegisterAdapter'
 import { UserEvent } from '@/models/UserEvent'
-import Footer from '@/components/Footer.vue'
+import Footer from '@/components/welcomePage/Footer.vue'
 
 export default {
   name: 'App',
