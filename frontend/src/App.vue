@@ -14,10 +14,10 @@ import { RESTAdaptorWithFetch } from '@/services/RESTAdaptorWithFetch'
 import { User } from '@/models/user'
 import { LoginAndRegisterAdapter } from '@/services/LoginAndRegisterAdapter'
 import { UserEvent } from '@/models/UserEvent'
-import Footer from '@/components/Footer.vue'
 import { Challenge } from '@/models/challenge'
 import { Research } from '@/models/research'
 import { UserEventAdapter } from '@/services/UserEventAdapter'
+import Footer from '@/components/welcomePage/Footer.vue'
 
 export default {
   name: 'App',
