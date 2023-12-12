@@ -100,8 +100,7 @@ import { reactive } from 'vue'
 
 export default {
   name: 'Events.vue',
-  emits: ['loginAdmin', 'loginUser'],
-  inject: ['eventsService', 'usersService', 'userEventsService', 'loginAndRegisterService', 'userEventsService2'],
+  inject: ['eventsService', 'usersService', 'userEventsService', 'sessionSBService', 'userEventsService2'],
   data () {
     return {
       lastId: 3000,
@@ -125,7 +124,8 @@ export default {
   async created () {
     try {
       this.events = await this.eventsService.asyncFindAll()
-      this.user = await this.loginAndRegisterService.asyncFindByEmail(localStorage.getItem('email'))
+      const userAndToken = await this.sessionSBService.asyncFindByEmail(JSON.parse(localStorage.getItem('userDetails')).mail)
+      this.user = userAndToken.body
       const associatedEvents = await this.userEventsService2.asyncFindEventByUser(this.user.id)
       this.signedInEvents = associatedEvents.map((event) => event.id)
     } catch (e) {

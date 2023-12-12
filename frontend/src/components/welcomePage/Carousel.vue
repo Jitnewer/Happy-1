@@ -25,7 +25,6 @@ import { ref, onMounted } from 'vue'
 
 export default {
   name: 'Carousel',
-  emits: ['loginAdmin', 'loginUser'],
   setup () {
     const currentSlide = ref(1)
     const getSlideCount = ref(null)

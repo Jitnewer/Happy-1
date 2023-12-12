@@ -24,7 +24,11 @@ export class UserEventAdapter {
 
   async asyncFindEventByUser (userId) {
     try {
-      const response = await this.fetchJson(`${this.resourceUrl}/userevents/eventsByUser/${userId}`)
+      const response = await this.fetchJson(`${this.resourceUrl}/userevents/eventsByUser/${userId}`, {
+        headers: {
+          Authorization: window.sessionStorage.getItem('token')
+        }
+      })
       return response.map(event => this.copyConstructor(event))
     } catch (error) {
       console.error('Error in asyncFindEventByUser:', error)

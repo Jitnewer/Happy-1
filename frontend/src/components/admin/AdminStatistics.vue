@@ -26,7 +26,7 @@ import { User } from '@/models/user' // Import Chart.js
 
 export default {
   name: 'AdminStatistics',
-  inject: ['usersService'],
+  inject: ['usersServiceAdmin'],
 
   data () {
     return {
@@ -83,9 +83,9 @@ export default {
     }
   },
   async created () {
-    if (localStorage.getItem('admin') === 'false') this.$router.push({ path: '/PageNotFound' })
+    // if (localStorage.getItem('admin') === 'false') this.$router.push({ path: '/PageNotFound' })
 
-    this.users = await this.usersService.asyncFindAll()
+    this.users = await this.usersServiceAdmin.asyncFindAll()
   }
 }
 </script>

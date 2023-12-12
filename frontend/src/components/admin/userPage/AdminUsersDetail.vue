@@ -4,7 +4,6 @@ import { User } from '@/models/user'
 export default {
   name: 'AdminUserDetail',
   props: ['selectedUser', 'create'],
-  emits: ['cancel-edit', 'save-edit', 'loginAdmin', 'loginUser'],
   inject: ['usersService'],
   data () {
     return {

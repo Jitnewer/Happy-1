@@ -3,8 +3,7 @@ import { User } from '@/models/user'
 
 export default {
   name: 'AdminUsersView',
-  inject: ['usersService'],
-  emits: ['loginAdmin', 'loginUser'],
+  inject: ['usersServiceAdmin'],
   data () {
     return {
       filter: {
@@ -43,13 +42,13 @@ export default {
     async unblockUser (user) {
       if (confirm('Are you sure you want to unblock this user')) {
         user.status = User.status.Unbanned
-        await this.usersService.asyncSave(user)
+        await this.usersServiceAdmin.asyncSave(user)
       }
     },
     async blockUser (user) {
       if (confirm('Are you sure you want to block this user?')) {
         user.status = User.status.Banned
-        await this.usersService.asyncSave(user)
+        await this.usersServiceAdmin.asyncSave(user)
       }
     },
     editUser (user) {
@@ -61,7 +60,7 @@ export default {
     },
     async saveUser (user) {
       try {
-        const savedUser = await this.usersService.asyncSave(user)
+        const savedUser = await this.usersServiceAdmin.asyncSave(user)
         // console.log(savedUser)
         if (this.create === true) {
           this.users.push(user)
@@ -82,7 +81,7 @@ export default {
     async deleteUser (user) {
       if (confirm('Are you sure you want to delete this user?')) {
         try {
-          await this.usersService.asyncDeleteById(user.id)
+          await this.usersServiceAdmin.asyncDeleteById(user.id)
           const indexToUpdate = this.users.findIndex(oldUser => oldUser.id === user.id)
 
           if (indexToUpdate >= 0) {
@@ -125,8 +124,8 @@ export default {
     }
   },
   async created () {
-    if (localStorage.getItem('admin') === 'false') this.$router.push({ path: '/PageNotFound' })
-    this.users = await this.usersService.asyncFindAll()
+    // if (localStorage.getItem('admin') === 'false') this.$router.push({ path: '/PageNotFound' })
+    this.users = await this.usersServiceAdmin.asyncFindAll()
     this.users = this.users.filter(user => {
       return user.id !== parseInt(localStorage.getItem('profileId'))
     })

@@ -40,7 +40,6 @@ import research from './Researches.vue'
 export default {
   name: 'ResearchDetails.vue',
   inject: ['researchService'],
-  emits: ['loginAdmin', 'loginUser'],
   data () {
     return {
       research: null

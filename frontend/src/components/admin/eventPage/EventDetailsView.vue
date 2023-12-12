@@ -2,9 +2,8 @@
 import { Event } from '@/models/event'
 export default {
   name: 'EventDetailsView',
-  inject: ['eventsService'],
+  inject: ['eventsServiceAdmin', 'eventsService'],
   props: ['selectedEvent', 'create'],
-  emits: ['deselect-event', 'delete-event', 'save-event', 'loginAdmin', 'loginUser'],
 
   data () {
     return {
@@ -22,7 +21,7 @@ export default {
       if (this.validateFields()) {
         if (confirm('Are you sure you want to save changes to event?')) {
           try {
-            await this.eventsService.asyncSave(this.selectedCopy)
+            await this.eventsServiceAdmin.asyncSave(this.selectedCopy)
             this.$router.push({ name: 'adminEvents' })
           } catch (e) {
             console.error(e)
@@ -33,7 +32,7 @@ export default {
     async deleteEventDetail () {
       if (confirm('Are you sure you want to delete this event?')) {
         try {
-          await this.eventsService.asyncDeleteById(this.selectedCopy.id)
+          await this.eventsServiceAdmin.asyncDeleteById(this.selectedCopy.id)
           this.$router.push({ name: 'adminEvents' })
         } catch (e) {
           console.error(e)

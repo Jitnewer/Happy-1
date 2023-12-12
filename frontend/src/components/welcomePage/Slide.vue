@@ -12,7 +12,6 @@
 <script>
 export default {
   name: 'Slide',
-  emits: ['loginAdmin', 'loginUser'],
   props: {
     slideText: String,
     isCurrent: Boolean

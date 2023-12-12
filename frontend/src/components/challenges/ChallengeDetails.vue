@@ -40,7 +40,6 @@ import challenges from './Challenges.vue'
 export default {
   name: 'ChallengeDetails.vue',
   inject: ['challengeService'],
-  emits: ['loginAdmin', 'loginUser'],
   data () {
     return {
       challenge: null

@@ -24,7 +24,11 @@ export class RESTAdaptorWithFetch {
 
   async asyncFindAll () {
     try {
-      const data = await this.fetchJson(this.resourceUrl)
+      const data = await this.fetchJson(this.resourceUrl, {
+        headers: {
+          Authorization: window.sessionStorage.getItem('token')
+        }
+      })
       return data?.map(d => this.copyConstructor(d))
     } catch (error) {
       console.error('Error in asyncFindAll:', error)
@@ -34,7 +38,11 @@ export class RESTAdaptorWithFetch {
 
   async asyncFindById (id) {
     try {
-      const response = await this.fetchJson(`${this.resourceUrl}/${id}`)
+      const response = await this.fetchJson(`${this.resourceUrl}/${id}`, {
+        headers: {
+          Authorization: window.sessionStorage.getItem('token')
+        }
+      })
       return this.copyConstructor(response)
     } catch (error) {
       console.error('Error in asyncFindById:', error)
@@ -45,7 +53,10 @@ export class RESTAdaptorWithFetch {
   async asyncAddEntityToEntity (id1, id2, url) {
     try {
       const response = await this.fetchJson(`${this.resourceUrl}/${url}/${id1}/${id2}`, {
-        method: 'POST'
+        method: 'POST',
+        headers: {
+          Authorization: window.sessionStorage.getItem('token')
+        }
       })
       return this.copyConstructor(response)
     } catch (error) {
@@ -57,7 +68,10 @@ export class RESTAdaptorWithFetch {
   async asyncRemoveEntityFromEntity (id1, id2, url) {
     try {
       const response = await this.fetchJson(`${this.resourceUrl}/${url}/${id1}/${id2}`, {
-        method: 'DELETE'
+        method: 'DELETE',
+        headers: {
+          Authorization: window.sessionStorage.getItem('token')
+        }
       })
       return true
     } catch (error) {
@@ -101,7 +115,8 @@ export class RESTAdaptorWithFetch {
         response = await this.fetchJson(this.resourceUrl, {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            Authorization: window.sessionStorage.getItem('token')
           },
           body: JSON.stringify(object)
         })
@@ -109,7 +124,9 @@ export class RESTAdaptorWithFetch {
         response = await this.fetchJson(`${this.resourceUrl}/${object.id}`, {
           method: 'PUT',
           headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            Authorization: window.sessionStorage.getItem('token')
+
           },
           body: JSON.stringify(object)
         })
@@ -125,7 +142,10 @@ export class RESTAdaptorWithFetch {
   async asyncDeleteById (id) {
     try {
       const response = await this.fetchJson(`${this.resourceUrl}/${id}`, {
-        method: 'DELETE'
+        method: 'DELETE',
+        headers: {
+          Authorization: window.sessionStorage.getItem('token')
+        }
       })
       return true
     } catch (error) {

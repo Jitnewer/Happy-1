@@ -13,7 +13,7 @@
 <script >
 export default {
   name: 'welcomeAdmin.vue',
-  inject: ['loginAndRegisterService'],
+  inject: ['sessionSBService'],
   emits: ['loginAdmin', 'loginUser'],
   data () {
     return {
@@ -25,7 +25,7 @@ export default {
   },
   async created () {
     try {
-      this.user = await this.loginAndRegisterService.asyncFindByEmail(localStorage.getItem('email'))
+      this.user = await this.sessionSBService.asyncFindByEmail(JSON.parse(localStorage.getItem('userDetails')).mail)
     } catch (e) {
       console.log(e)
     }

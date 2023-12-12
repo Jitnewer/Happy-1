@@ -17,7 +17,7 @@ public class User {
     private long id;
 
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
     @JsonIgnore
     private Set<UserEvent> userEvents = new HashSet<>();
 
@@ -141,6 +141,10 @@ public class User {
 
     public String getLastname() {
         return lastname;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public static User copyConstructor(User user) {
