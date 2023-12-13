@@ -1,7 +1,7 @@
 <script>
 export default {
   name: 'registration.vue',
-  inject: ['loginAndRegisterService'],
+  inject: ['sessionSBService'],
   data () {
     return {
       entrepreneur: false,
@@ -74,15 +74,10 @@ export default {
     goToNextFormEntrepreneur () {
       this.currentEntrepreneurForm++
     },
-    onFileSelected (event) {
-      this.selectedFile = event.target.files[0]
-    },
-    onUpload () {
-    },
     async sendForm () {
       try {
         console.log(this.user)
-        await this.loginAndRegisterService.asyncRegister(this.user)
+        await this.sessionSBService.asyncRegister(this.user)
       } catch (e) {
         console.log(e)
       }
