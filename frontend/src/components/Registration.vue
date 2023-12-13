@@ -52,7 +52,7 @@ export default {
       this.currentForm--
     },
     goToNextForm () {
-      this.currentForm++
+      console.log(this.currentForm)
       if (this.currentForm === 1) {
         if (this.validateFormGP1()) {
           this.currentForm = 2
@@ -87,25 +87,29 @@ export default {
       const companyNameRegex = /^[a-zA-Z0-9\s]{1,40}$/
       console.log(companyNameRegex.test(companyName))
       // Test the company name against the regex
-      return companyNameRegex.test(companyName)
+      this.isCompanyNameValid = companyNameRegex.test(companyName)
+      return this.isCompanyNameValid
     },
     validateFirstName (firstName) {
       const firstNameRegex = /^[A-Za-z]+$/
       console.log(firstNameRegex.test(firstName))
-      return firstNameRegex.test(firstName)
+      this.isFirstnameValid = firstNameRegex.test(firstName)
+      return this.isFirstnameValid
     },
     validateLastName (lastName) {
       const lastNameRegex = /^[A-Za-z]+$/
       console.log(lastNameRegex.test(lastName))
-      return lastNameRegex.test(lastName)
+      this.isLastnameValid = lastNameRegex.test(lastName)
+      return this.isLastnameValid
     },
     validateFormGP1 () {
       // Validate the company name
-      this.isCompanyNameValid = this.validateCompanyName(this.user.companyName)
-      this.isFirstNameValid = this.validateFirstName(this.user.firstname)
-      this.isLastNameValid = this.validateLastName(this.user.lastname)
+      const isCompanyNameValid = this.validateCompanyName(this.user.companyName)
+      const isFirstNameValid = this.validateFirstName(this.user.firstname)
+      const isLastNameValid = this.validateLastName(this.user.lastname)
+
       // Return true only if all validations pass
-      return this.isCompanyNameValid && this.isFirstNameValid && this.isLastNameValid
+      return isCompanyNameValid && isFirstNameValid && isLastNameValid
     },
     validateFormGP2 () {
       // Add regex validation for each field
@@ -228,29 +232,30 @@ export default {
               <div class="check-sign-up">&#10003;</div>
             </div>
           </div>
-          <form class="form-sign-up-1" v-if="currentForm ===1">
+          <form class="form-sign-up-1" v-if="currentForm ===1" @submit.prevent="goToNextForm">
             <div class="sign-up-page">
               <div class="title-sign-up-form">Basic Info:</div>
               <div class="field-sign-up" id="formValidation1">
                 <div class="label-sign-up">Company Name:</div>
-                <input type="text" class="sign-up-input" required v-model="user.companyName" :class="{ 'invalid-input': !isCompanyNameValid, 'valid-input': isCompanyNameValid }"
-                       @input="validateCompanyName">
+                <input type="text" class="sign-up-input" required v-model="user.companyName" :class="{'invalid-input': user.companyName && !isCompanyNameValid,'valid-input': user.companyName && isCompanyNameValid}"
+                       @input="validateCompanyName(user.companyName)"
+                />
               </div>
-              <div class="errorMessageRegistrationForm" v-if="!isCompanyNameValid">Invalid company name</div>
+              <div class="errorMessageRegistrationForm" v-if="!isCompanyNameValid && user.companyName">Invalid company name</div>
               <div class="field-sign-up">
                 <div class="label-sign-up">First Name:</div>
-                <input type="text" class="sign-up-input" required v-model="user.firstname" :class="{ 'invalid-input': !isFirstnameValid, 'valid-input': isFirstnameValid }"
-                       @input="validateFirstName">
+                <input type="text" class="sign-up-input" required v-model="user.firstname" :class="{'invalid-input': user.firstname && !isFirstnameValid, 'valid-input': user.firstname && isFirstnameValid }"
+                       @input="validateFirstName(user.firstname)"/>
               </div>
-              <div class="errorMessageRegistrationForm" v-if="!isFirstnameValid">Invalid first name</div>
+              <div class="errorMessageRegistrationForm" v-if="!isFirstnameValid && user.firstname">Invalid first name</div>
               <div class="field-sign-up">
                 <div class="label-sign-up">Last Name:</div>
-                <input type="text" class="sign-up-input" v-model="user.lastname" required :class="{ 'invalid-input': !isLastnameValid, 'valid-input': isLastnameValid }"
-                       @input="validateLastName">
+                <input type="text" class="sign-up-input" required v-model="user.lastname" :class="{'invalid-input': user.lastname && !isLastnameValid, 'valid-input': user.lastname && isLastnameValid }"
+                       @input="validateLastName(user.lastname)"/>
               </div>
-              <div class="errorMessageRegistrationForm" v-if="!isLastnameValid">Invalid first name</div>
+              <div class="errorMessageRegistrationForm" v-if="!isLastnameValid && user.lastname">Invalid first name</div>
               <div class="field-btn">
-                <button @click.prevent="goToNextForm">Next</button>
+                <button type="submit">Next</button>
               </div>
             </div>
           </form>
@@ -478,11 +483,24 @@ export default {
   border: 1px solid red;
 }
 
+.sign-up-input {
+  outline: none;
+}
+.sign-up-input.invalid-input:focus-visible {
+  outline: none
+}
+
 .errorMessageRegistrationForm{
   color: red;
+  display: flex;
+  font-size: smaller;
 }
 .sign-up-input.valid-input {
   border: 1px solid limegreen;
+}
+
+.sign-up-input.valid-input:focus-visible {
+  outline: none
 }
 
 /* The switch - the box around the slider */
@@ -558,7 +576,6 @@ input:checked + .slider:before {
 }
 
 .container-sign-up {
-  height: 900px;
   width: 400px;
   background: #fff;
   border-radius: 5px;
@@ -576,7 +593,6 @@ input:checked + .slider:before {
 
 .container-sign-up .form-sign-up-1 {
   width: 100%;
-  overflow: hidden;
 }
 
 .form-sign-up-1 form {
@@ -811,7 +827,6 @@ input:checked + .slider:before {
 
 /*Sign up AS form -  */
 .form-sign-up-as-1 form .sign-up-page {
-  height: 400px;
 }
 
 /*Sign up AS button -  */
