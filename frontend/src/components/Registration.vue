@@ -26,15 +26,15 @@ export default {
         companyType: ''
       },
       // Validation GP forms
-      isEmailGPValid: true,
-      isCompanyNameGPValid: true,
+      isEmailGPValid: null,
+      isCompanyNameValid: null,
       isContactNameGPValid: true,
       isPostalCodeGPValid: true,
       isUsernameGPValid: true,
       isPasswordGPValid: true,
       // validation EP forms
-      isFirstnameEPValid: true,
-      isLastnameEPValid: true,
+      isFirstnameValid: null,
+      isLastnameValid: null,
       isEmailEPValid: true,
       isPostalCodeEPValid: true,
       isUsernameEPValid: true,
@@ -53,20 +53,11 @@ export default {
     },
     goToNextForm () {
       this.currentForm++
-      // Validate the form before moving to the next step
-      // if (this.validateFormGP1()) {
-      //   this.currentForm++
-      // } if (this.validateFormGP2()) {
-      //   this.currentForm++
-      // } if (this.validateFormGP4()) {
-      //   this.currentForm++
-      // } if (this.validateFormEP1()) {
-      //   this.currentForm++
-      // } if (this.validateFormEP2()) {
-      //   this.currentForm++
-      // } if (this.validateFormEP4()) {
-      //   this.currentForm++
-      // }
+      if (this.currentForm === 1) {
+        if (this.validateFormGP1()) {
+          this.currentForm = 2
+        }
+      }
     },
     goToPrevFormEntrepreneur () {
       this.currentEntrepreneurForm--
@@ -91,14 +82,30 @@ export default {
         console.log(e)
       }
     },
+    validateCompanyName (companyName) {
+      // Regular expression for validating company name with max length of 40
+      const companyNameRegex = /^[a-zA-Z0-9\s]{1,40}$/
+      console.log(companyNameRegex.test(companyName))
+      // Test the company name against the regex
+      return companyNameRegex.test(companyName)
+    },
+    validateFirstName (firstName) {
+      const firstNameRegex = /^[A-Za-z]+$/
+      console.log(firstNameRegex.test(firstName))
+      return firstNameRegex.test(firstName)
+    },
+    validateLastName (lastName) {
+      const lastNameRegex = /^[A-Za-z]+$/
+      console.log(lastNameRegex.test(lastName))
+      return lastNameRegex.test(lastName)
+    },
     validateFormGP1 () {
-      // Add regex validation for each field
-      if (!/[a-z0-9._%+]+@[a-z0-9.]+\.[a-z]{2,}$/.test(this.user.mail)) {
-        this.isEmailGPValid = false
-        return false
-      }
-      // Add similar validations for other fields
-      return true // If all validations pass
+      // Validate the company name
+      this.isCompanyNameValid = this.validateCompanyName(this.user.companyName)
+      this.isFirstNameValid = this.validateFirstName(this.user.firstname)
+      this.isLastNameValid = this.validateLastName(this.user.lastname)
+      // Return true only if all validations pass
+      return this.isCompanyNameValid && this.isFirstNameValid && this.isLastNameValid
     },
     validateFormGP2 () {
       // Add regex validation for each field
@@ -125,11 +132,11 @@ export default {
     validateFormEP1 () {
       // Add regex validation for each field
       if (!/^[A-Za-z]+$/.test(this.user.firstname)) {
-        this.isFirstnameEPValid = false
+        this.isFirstnameValid = false
         return false
       }
       if (!/^[A-Za-z]+$/.test(this.user.lastname)) {
-        this.isLastnameEPValid = false
+        this.isLastnameValid = false
         return false
       }
       if (!/[a-z0-9._%+]+@[a-z0-9.]+\.[a-z]{2,}$/.test(this.user.mail)) {
@@ -226,19 +233,22 @@ export default {
               <div class="title-sign-up-form">Basic Info:</div>
               <div class="field-sign-up" id="formValidation1">
                 <div class="label-sign-up">Company Name:</div>
-                <input type="text" class="sign-up-input" required v-model="user.companyName">
+                <input type="text" class="sign-up-input" required v-model="user.companyName" :class="{ 'invalid-input': !isCompanyNameValid, 'valid-input': isCompanyNameValid }"
+                       @input="validateCompanyName">
               </div>
-<!--              <div class="errorMessageRegistrationForm" v-if="!isCompanyNameGPValid">Company name must contain no more than 8 characters</div>-->
+              <div class="errorMessageRegistrationForm" v-if="!isCompanyNameValid">Invalid company name</div>
               <div class="field-sign-up">
                 <div class="label-sign-up">First Name:</div>
-                <input type="text" class="sign-up-input" required v-model="user.firstname">
+                <input type="text" class="sign-up-input" required v-model="user.firstname" :class="{ 'invalid-input': !isFirstnameValid, 'valid-input': isFirstnameValid }"
+                       @input="validateFirstName">
               </div>
-<!--              <div class="errorMessageRegistrationForm" v-if="!isFirstnameEPValid">Must only contain letters</div>-->
+              <div class="errorMessageRegistrationForm" v-if="!isFirstnameValid">Invalid first name</div>
               <div class="field-sign-up">
                 <div class="label-sign-up">Last Name:</div>
-                <input type="text" class="sign-up-input" v-model="user.lastname" required>
+                <input type="text" class="sign-up-input" v-model="user.lastname" required :class="{ 'invalid-input': !isLastnameValid, 'valid-input': isLastnameValid }"
+                       @input="validateLastName">
               </div>
-<!--              <div class="errorMessageRegistrationForm" v-if="!isLastnameEPValid">Must only contain letters</div>-->
+              <div class="errorMessageRegistrationForm" v-if="!isLastnameValid">Invalid first name</div>
               <div class="field-btn">
                 <button @click.prevent="goToNextForm">Next</button>
               </div>
@@ -463,10 +473,16 @@ export default {
   right: 10px;
 
 }
+
+.sign-up-input.invalid-input {
+  border: 1px solid red;
+}
+
 .errorMessageRegistrationForm{
   color: red;
-  font-size: 15px;
-  height: 13px;
+}
+.sign-up-input.valid-input {
+  border: 1px solid limegreen;
 }
 
 /* The switch - the box around the slider */
