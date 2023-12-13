@@ -45,6 +45,24 @@ export class SessionSbService {
     }
   }
 
+  async asyncRegister (user) {
+    try {
+      // this.saveTokenIntoBrowserStrorage()
+      const response = await this.fetchJson(`${this.RESOURCES_URL}` + '/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(user)
+      })
+      console.log('Response from asyncRegister:', response)
+      return response
+    } catch (e) {
+      console.error('Error in asyncFindById:', e)
+      return null
+    }
+  }
+
   async asyncFindByEmail (email) {
     try {
       // this.saveTokenIntoBrowserStrorage()
