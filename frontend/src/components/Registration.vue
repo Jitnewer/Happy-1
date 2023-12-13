@@ -22,7 +22,7 @@ export default {
         postalCode: '',
         password: '',
         age: '',
-        status: '',
+        status: 'ACTIVE',
         companyType: ''
       },
       // Validation GP forms
@@ -76,8 +76,17 @@ export default {
     },
     async sendForm () {
       try {
+        if (this.generalPartner) {
+          this.user.userType = 'PARTNER'
+          this.user.tag = 'Chain-Partner'
+        }
+        if (this.entrepreneur) {
+          this.user.userType = 'ENTREPRENEUR'
+          this.user.tag = 'N/A'
+        }
         console.log(this.user)
         await this.sessionSBService.asyncRegister(this.user)
+        this.$router.push({ path: '/login' })
       } catch (e) {
         console.log(e)
       }
@@ -176,17 +185,6 @@ export default {
     <div class="container-sign-up">
       <div class="header-sign-up">Sign Up</div>
       <div class="form-sign-up-as-1">
-        <form action="#">
-          <!--              <div class="sign-up-page">-->
-          <!--                <div class="title-sign-up-form">Here you can sign up as:</div>-->
-          <!--                <div class="field-sign-up">-->
-          <!--                <div class="field-btn-sign-up-as">-->
-          <!--                  <button>Entrepreneur</button>-->
-          <!--                  <button>General Partner</button>-->
-          <!--                </div>-->
-          <!--                </div>-->
-          <!--              </div>-->
-        </form>
         <label class="switch">
           <input type="checkbox" @click="toggleChecked">
           <span class="slider round"></span>
@@ -258,22 +256,6 @@ export default {
               </select>
             </div>
             <div class="field-sign-up">
-              <div class="label-sign-up">Type of partner:</div>
-              <select class="select-gender-sign-up" v-model="user.tag">
-                <option>Chain Partner</option>
-                <option>N/A</option>
-              </select>
-            </div>
-            <div class="field-sign-up">
-              <div class="label-sign-up">Type of user:</div>
-              <select class="select-gender-sign-up" v-model="user.userType">
-                <option>Admin</option>
-                <option>Entrepreneur</option>
-                <option>Partner</option>
-                <option>Superuser</option>
-              </select>
-            </div>
-            <div class="field-sign-up">
               <div class="label-sign-up">Postal code:</div>
               <input type="text" class="sign-up-input" required v-model="user.postalCode">
             </div>
@@ -286,7 +268,7 @@ export default {
           <form class="sign-up-page" id="user_detail3" v-if="currentForm ===3">
             <div class="title-sign-up-form">Date of Birth:</div>
             <div class="field-sign-up">
-              <div class="label-sign-up">Dates:</div>
+              <div class="label-sign-up">Age:</div>
               <input type="number" class="sign-up-input" v-model="user.age">
             </div>
             <div class="field-sign-up">
@@ -297,15 +279,6 @@ export default {
                 <option>Prefer not to tell</option>
               </select>
             </div>
-            <div class="field-sign-up">
-              <div class="label-sign-up">Status:</div>
-              <select class="select-gender-sign-up" v-model="user.status">
-                <option>Active</option>
-                <option>Inactive</option>
-                <option>Banned</option>
-                <option>Unbanned</option>
-              </select>
-            </div>
             <div class="field-btn">
               <button class="prev-2" @click="goToPrevForm">Previous</button>
               <button class="next-2" @click.prevent="goToNextForm">Next</button>
@@ -313,18 +286,6 @@ export default {
           </form>
 <form class="sign-up-page" v-if="currentForm ===4">
             <div class="title-sign-up-form">Login Details:</div>
- ----------------------------------------------------------------------------------------------------
-<!--  <div class="field-sign-up">-->
-<!--&lt;!&ndash;    <div  class="image-card-regform">&ndash;&gt;-->
-<!--&lt;!&ndash;      <div class="label-sign-up">Upload Image:</div>&ndash;&gt;-->
-<!--&lt;!&ndash;      <img src="../assets/images/upload-image-registrationform.jpg" class="upload-image-regform">&ndash;&gt;-->
-<!--&lt;!&ndash;&lt;!&ndash;      <label class="label-upload-image-regform" for="input-file-regform" >Upload image</label>&ndash;&gt;&ndash;&gt;-->
-<!--&lt;!&ndash;      <input type="file" accept="image/jpeg, image/png, image/jpg" id="input-file-regform" @change="onFileSelected">&ndash;&gt;-->
-<!--&lt;!&ndash;      <div class="field-btn">&ndash;&gt;-->
-<!--&lt;!&ndash;      <button @click="onUpload">Upload image</button>&ndash;&gt;-->
-<!--&lt;!&ndash;      </div>&ndash;&gt;-->
-<!--&lt;!&ndash;    </div>&ndash;&gt;-->
-<!--  </div>-->
 <div class="field-sign-up">
   <div class="label-sign-up">Email Address:</div>
   <input type="text" class="sign-up-input" v-model="user.mail" required>
