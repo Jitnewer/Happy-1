@@ -1,12 +1,10 @@
 <template>
     <NavBar></NavBar>
+  <router-view v-if="!loggedInAsAdmin"></router-view>
   <Footer></Footer>
 </template>
 
 <script>
-import NavBarNotLoggedIn from '@/components/navbar/NavBarNotLoggedIn.vue'
-import NavBarLoggedIn from '@/components/navbar/NavBarLoggedIn.vue'
-import NavBarLoggedInAdminAndSuperUser from '@/components/navbar/NavBarLoggedInAdminAndSuperUser.vue'
 import { Event } from '@/models/event.js'
 import CONFIG from '../app-config.js'
 import { RESTAdaptorWithFetch } from '@/services/RESTAdaptorWithFetch'
@@ -19,9 +17,13 @@ import { UserEventAdapter } from '@/services/UserEventAdapter'
 import { shallowReactive } from 'vue'
 import NavBar from '@/components/navbar/NavBar.vue'
 import Footer from '@/components/welcomePage/Footer.vue'
+import { mapState } from 'vuex'
 
 export default {
   name: 'App',
+  computed: {
+    ...mapState(['loggedIn', 'loggedInAsAdmin'])
+  },
   components: {
     NavBar,
     Footer
