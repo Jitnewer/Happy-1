@@ -22,12 +22,12 @@
           <div v-show="currentSlide === index + 1" class="slide">
             <div class="welcomeMsg">
               <h2 class="blue-text"> {{ slide.date }} </h2>
-              <h1 class="yellow-text"> {{ slide.title }}</h1>
+              <h1 class="yellow-text"> {{ slide.text }}</h1>
               <button>
                 <span class="blue-text"> > Lees meer </span>
               </button>
             </div>
-            <img class="carouselImg" :src="require(`@/assets/img/carousel/${slide.image}.jpg`)" alt="">
+            <img :src="require(`../../assets/img/${slide.image}`)" alt="Image">
           </div>
         </Slide>
       </Carousel>
@@ -186,11 +186,26 @@ export default {
   components: { Carousel, Slide },
   data () {
     return {
-      carouselSlides: [
-        { image: 'bg-1', date: '15 December 2023', title: 'Embracing energy transition within hospitality' },
-        { image: 'bg-2', date: '27 December 2023', title: 'Protein within hospitality' },
-        { image: 'bg-3', date: '15 November 2023', title: 'Water embracing tactics' }
-      ]
+      carouselSlides: []
+    }
+  },
+  async created () {
+    try {
+      // Doe een fetch-verzoek naar jouw backend eindpunt om de carouselSlides op te halen
+      const response = await fetch('http://localhost:8085/authentication/carousels')
+
+      // Controleer of het verzoek succesvol was (status 200 OK)
+      if (response.ok) {
+        // Zet de ontvangen gegevens om naar JSON
+        const data = await response.json()
+
+        // Wijs de ontvangen gegevens toe aan carouselSlides
+        this.carouselSlides = data
+      } else {
+        console.error('Error fetching carousel slides:', response.statusText)
+      }
+    } catch (error) {
+      console.error('Error fetching carousel slides:', error)
     }
   }
 }

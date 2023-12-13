@@ -13,6 +13,7 @@ import { SessionSbService } from '@/services/SessionSbService'
 import { UserEvent } from '@/models/UserEvent'
 import { Challenge } from '@/models/challenge'
 import { Research } from '@/models/research'
+import { Carousel } from '@/models/carousel'
 import { UserEventAdapter } from '@/services/UserEventAdapter'
 import { shallowReactive } from 'vue'
 import NavBar from '@/components/navbar/NavBar.vue'
@@ -30,6 +31,7 @@ export default {
   },
   provide () {
     return {
+      carouselService: new RESTAdaptorWithFetch(CONFIG.BACKEND_URL + 'authentication/carousels', Carousel.copyConstructor),
       eventsService: new RESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/events', Event.copyConstructor),
       eventsServiceAdmin: new RESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/events/admin', Event.copyConstructor),
       usersService: new RESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/users', User.copyConstructor),

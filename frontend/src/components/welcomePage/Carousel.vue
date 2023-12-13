@@ -21,15 +21,21 @@
 </template>
 
 <script>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 
 export default {
   name: 'Carousel',
-  setup () {
+  props: {
+    autoPlayEnabled: {
+      type: Boolean,
+      default: true
+    }
+  },
+  setup (props) {
     const currentSlide = ref(1)
     const getSlideCount = ref(null)
-    const autoPlayEnabled = ref(true)
     const timeoutSlide = ref(8000)
+
     const nextSlide = () => {
       if (currentSlide.value === getSlideCount.value) {
         currentSlide.value = 1
@@ -37,6 +43,7 @@ export default {
       }
       currentSlide.value += 1
     }
+
     const prevSlide = () => {
       if (currentSlide.value === 1) {
         currentSlide.value = getSlideCount.value
@@ -44,20 +51,35 @@ export default {
       }
       currentSlide.value -= 1
     }
+
     const goToSlide = (index) => {
       currentSlide.value = index + 1
     }
+
     const autoPlay = () => {
       setInterval(() => {
-        nextSlide()
+        if (currentSlide.value === getSlideCount.value) {
+          currentSlide.value = 1
+        } else {
+          nextSlide()
+        }
       }, timeoutSlide.value)
     }
-    if (autoPlayEnabled.value) {
-      autoPlay()
-    }
+
     onMounted(() => {
       getSlideCount.value = document.querySelectorAll('.slide').length
     })
+
+    watch(currentSlide, (newSlide, oldSlide) => {
+      if (newSlide === getSlideCount.value && oldSlide === getSlideCount.value) {
+        goToSlide(1)
+      }
+    })
+
+    // Auto-play only if enabled and there are slides
+    if (props.autoPlayEnabled && getSlideCount.value > 0) {
+      autoPlay()
+    }
 
     return { currentSlide, nextSlide, prevSlide, getSlideCount, goToSlide }
   }

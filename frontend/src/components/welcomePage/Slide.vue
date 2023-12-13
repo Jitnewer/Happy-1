@@ -20,5 +20,5 @@ export default {
 </script>
 
 <style scoped>
-/* Voeg hier je stijlen toe indien nodig */
+
 </style>
