@@ -12,7 +12,7 @@ export default {
       // GeneralPartner
       user: {
         companyName: '',
-        profilePic: '',
+        profilePic: null,
         firstname: '',
         lastname: '',
         gender: '',
@@ -52,20 +52,21 @@ export default {
       this.currentForm--
     },
     goToNextForm () {
+      this.currentForm++
       // Validate the form before moving to the next step
-      if (this.validateFormGP1()) {
-        this.currentForm++
-      } if (this.validateFormGP2()) {
-        this.currentForm++
-      } if (this.validateFormGP4()) {
-        this.currentForm++
-      } if (this.validateFormEP1()) {
-        this.currentForm++
-      } if (this.validateFormEP2()) {
-        this.currentForm++
-      } if (this.validateFormEP4()) {
-        this.currentForm++
-      }
+      // if (this.validateFormGP1()) {
+      //   this.currentForm++
+      // } if (this.validateFormGP2()) {
+      //   this.currentForm++
+      // } if (this.validateFormGP4()) {
+      //   this.currentForm++
+      // } if (this.validateFormEP1()) {
+      //   this.currentForm++
+      // } if (this.validateFormEP2()) {
+      //   this.currentForm++
+      // } if (this.validateFormEP4()) {
+      //   this.currentForm++
+      // }
     },
     goToPrevFormEntrepreneur () {
       this.currentEntrepreneurForm--
@@ -73,8 +74,18 @@ export default {
     goToNextFormEntrepreneur () {
       this.currentEntrepreneurForm++
     },
+    onFileSelected (event) {
+      this.selectedFile = event.target.files[0]
+    },
+    onUpload () {
+    },
     async sendForm () {
-      await this.loginAndRegisterService.asyncRegister(this.user)
+      try {
+        console.log(this.user)
+        await this.loginAndRegisterService.asyncRegister(this.user)
+      } catch (e) {
+        console.log(e)
+      }
     },
     validateFormGP1 () {
       // Add regex validation for each field
@@ -198,6 +209,13 @@ export default {
               <div class="check-sign-up">&#10003;</div>
             </div>
             <div class="step">
+              <p class="p-sign-up-form">Birth</p>
+              <div class="bullet-sign-up-form">
+                <span class="span-sign-up-form-check">3</span>
+              </div>
+              <div class="check-sign-up">&#10003;</div>
+            </div>
+            <div class="step">
               <p class="p-sign-up-form">Submit</p>
               <div class="bullet-sign-up-form">
                 <span class="span-sign-up-form-check">4</span>
@@ -212,30 +230,17 @@ export default {
                 <div class="label-sign-up">Company Name:</div>
                 <input type="text" class="sign-up-input" required v-model="user.companyName">
               </div>
-              <div class="errorMessageRegistrationForm" v-if="!isCompanyNameGPValid">Company name must contain no more than 8 characters</div>
+<!--              <div class="errorMessageRegistrationForm" v-if="!isCompanyNameGPValid">Company name must contain no more than 8 characters</div>-->
               <div class="field-sign-up">
                 <div class="label-sign-up">First Name:</div>
                 <input type="text" class="sign-up-input" required v-model="user.firstname">
               </div>
-              <div class="errorMessageRegistrationForm" v-if="!isContactNameGPValid">Firstname must contain no more than 8 characters</div>
+<!--              <div class="errorMessageRegistrationForm" v-if="!isFirstnameEPValid">Must only contain letters</div>-->
               <div class="field-sign-up">
                 <div class="label-sign-up">Last Name:</div>
-                <input type="text" class="sign-up-input" required v-model="user.lastname">
+                <input type="text" class="sign-up-input" v-model="user.lastname" required>
               </div>
-              <div class="errorMessageRegistrationForm" v-if="!isContactNameGPValid">Lastname must contain no more than 8 characters</div>
-              <div class="field-sign-up">
-                <div class="label-sign-up">Gender:</div>
-                <select class="select-gender-sign-up" v-model="user.gender">
-                  <option>Male</option>
-                  <option>Female</option>
-                  <option>Prefer not to tell</option>
-                </select>
-              </div>
-              <div class="field-sign-up">
-                <div class="label-sign-up">Email Address:</div>
-                <input type="email" class="sign-up-input" v-model="user.mail" required>
-              </div>
-              <div class="errorMessageRegistrationForm" v-if="!isEmailGPValid">Please enter a valid emailaddress</div>
+<!--              <div class="errorMessageRegistrationForm" v-if="!isLastnameEPValid">Must only contain letters</div>-->
               <div class="field-btn">
                 <button @click.prevent="goToNextForm">Next</button>
               </div>
@@ -246,47 +251,96 @@ export default {
             <div class="title-sign-up-form">Contact Info:</div>
             <div class="field-sign-up">
               <div class="label-sign-up">Type of industry:</div>
-              <select class="select-gender-sign-up" v-model="user.userType">
-                <option>Horeca</option>
-                <option>Bar</option>
-                <option>Restaurant</option>
+              <select class="select-gender-sign-up" v-model="user.companyType">
+                <option>Catering</option>
+                <option>Marketing</option>
+                <option>Finance</option>
               </select>
             </div>
             <div class="field-sign-up">
               <div class="label-sign-up">Type of partner:</div>
               <select class="select-gender-sign-up" v-model="user.tag">
-                <option>Chain partner</option>
-                <option>Knowledge partner</option>
+                <option>Chain Partner</option>
+                <option>N/A</option>
+              </select>
+            </div>
+            <div class="field-sign-up">
+              <div class="label-sign-up">Type of user:</div>
+              <select class="select-gender-sign-up" v-model="user.userType">
+                <option>Admin</option>
+                <option>Entrepreneur</option>
+                <option>Partner</option>
+                <option>Superuser</option>
               </select>
             </div>
             <div class="field-sign-up">
               <div class="label-sign-up">Postal code:</div>
               <input type="text" class="sign-up-input" required v-model="user.postalCode">
             </div>
-            <div class="errorMessageRegistrationForm" v-if="!isPostalCodeGPValid">Please enter a valid Dutch postal code</div>
+<!--            <div class="errorMessageRegistrationForm" v-if="!isPostalCodeGPValid">Please enter a valid Dutch postal code</div>-->
             <div class="field-btn">
               <button class="prev-1" @click="goToPrevForm">Previous</button>
               <button class="next-1" @click.prevent="goToNextForm">Next</button>
             </div>
           </form>
+          <form class="sign-up-page" id="user_detail3" v-if="currentForm ===3">
+            <div class="title-sign-up-form">Date of Birth:</div>
+            <div class="field-sign-up">
+              <div class="label-sign-up">Dates:</div>
+              <input type="number" class="sign-up-input" v-model="user.age">
+            </div>
+            <div class="field-sign-up">
+              <div class="label-sign-up">Gender:</div>
+              <select class="select-gender-sign-up" v-model="user.gender">
+                <option>Male</option>
+                <option>Female</option>
+                <option>Prefer not to tell</option>
+              </select>
+            </div>
+            <div class="field-sign-up">
+              <div class="label-sign-up">Status:</div>
+              <select class="select-gender-sign-up" v-model="user.status">
+                <option>Active</option>
+                <option>Inactive</option>
+                <option>Banned</option>
+                <option>Unbanned</option>
+              </select>
+            </div>
+            <div class="field-btn">
+              <button class="prev-2" @click="goToPrevForm">Previous</button>
+              <button class="next-2" @click.prevent="goToNextForm">Next</button>
+            </div>
+          </form>
 <form class="sign-up-page" v-if="currentForm ===4">
             <div class="title-sign-up-form">Login Details:</div>
+ ----------------------------------------------------------------------------------------------------
+<!--  <div class="field-sign-up">-->
+<!--&lt;!&ndash;    <div  class="image-card-regform">&ndash;&gt;-->
+<!--&lt;!&ndash;      <div class="label-sign-up">Upload Image:</div>&ndash;&gt;-->
+<!--&lt;!&ndash;      <img src="../assets/images/upload-image-registrationform.jpg" class="upload-image-regform">&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;      <label class="label-upload-image-regform" for="input-file-regform" >Upload image</label>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;      <input type="file" accept="image/jpeg, image/png, image/jpg" id="input-file-regform" @change="onFileSelected">&ndash;&gt;-->
+<!--&lt;!&ndash;      <div class="field-btn">&ndash;&gt;-->
+<!--&lt;!&ndash;      <button @click="onUpload">Upload image</button>&ndash;&gt;-->
+<!--&lt;!&ndash;      </div>&ndash;&gt;-->
+<!--&lt;!&ndash;    </div>&ndash;&gt;-->
+<!--  </div>-->
 <div class="field-sign-up">
-              <div class="label-sign-up">Username:</div>
-              <input type="text" class="sign-up-input" required v-model="user.mail">
-            </div>
-            <div class="errorMessageRegistrationForm" v-if="!isUsernameGPValid">Must contain no more than 8 characters</div>
-            <div class="field-sign-up">
+  <div class="label-sign-up">Email Address:</div>
+  <input type="text" class="sign-up-input" v-model="user.mail" required>
+</div>
+<!--  <div class="errorMessageRegistrationForm" v-if="!isEmailGPValid">Please enter a valid emailaddress</div>-->
+  <div class="field-sign-up">
 <div class="label-sign-up">Password:</div>
               <input type="password" class="sign-up-input" required v-model="user.password">
             </div>
-            <div class="errorMessageRegistrationForm" v-if="!isPasswordGPValid">Must contain at least one  number and one uppercase and lowercase letter,
-              and at least 8 or more characters</div>
+<!--            <div class="errorMessageRegistrationForm" v-if="!isPasswordGPValid">Must contain at least one  number and one uppercase and lowercase letter,-->
+<!--              and at least 8 or more characters</div>-->
             <div class="field-sign-up">
               <div class="label-sign-up">Confirm password:</div>
               <input type="password" class="sign-up-input" required>
             </div>
-            <div class="errorMessageRegistrationForm">AAAAAALLLLLEEEERTTT</div>
+<!--            <div class="errorMessageRegistrationForm">AAAAAALLLLLEEEERTTT</div>-->
             <div class="field-btn">
               <button class="prev-3" @click="goToPrevForm">Previous</button>
               <button class="submit" @click="sendForm">Submit</button>
@@ -312,6 +366,13 @@ export default {
             <div class="check-sign-up">&#10003;</div>
           </div>
           <div class="step">
+            <p class="p-sign-up-form">Birth</p>
+            <div class="bullet-sign-up-form">
+              <span class="span-sign-up-form-check">3</span>
+            </div>
+            <div class="check-sign-up">&#10003;</div>
+          </div>
+          <div class="step">
             <p class="p-sign-up-form">Submit</p>
             <div class="bullet-sign-up-form">
               <span class="span-sign-up-form-check">4</span>
@@ -326,12 +387,12 @@ export default {
               <div class="label-sign-up">First Name:</div>
               <input type="text" class="sign-up-input" required v-model="user.firstname">
             </div>
-            <div class="errorMessageRegistrationForm" v-if="!isFirstnameEPValid">Must only contain letters</div>
+<!--            <div class="errorMessageRegistrationForm" v-if="!isFirstnameEPValid">Must only contain letters</div>-->
             <div class="field-sign-up">
               <div class="label-sign-up">Last Name:</div>
               <input type="text" class="sign-up-input" required v-model="user.lastname">
             </div>
-            <div class="errorMessageRegistrationForm" v-if="!isLastnameEPValid">Must only contain letters</div>
+<!--            <div class="errorMessageRegistrationForm" v-if="!isLastnameEPValid">Must only contain letters</div>-->
             <div class="field-sign-up">
               <div class="label-sign-up">Type of industry:</div>
               <select class="select-gender-sign-up" v-model="user.userType">
@@ -340,7 +401,6 @@ export default {
                 <option>Hotel</option>
               </select>
             </div>
-
             <div class="field-btn">
               <button @click.prevent="goToNextFormEntrepreneur">Next</button>
             </div>
@@ -350,15 +410,10 @@ export default {
         <form class="sign-up-page" id="user_detail2" v-if="this.currentEntrepreneurForm === 2">
           <div class="title-sign-up-form">Contact Info:</div>
           <div class="field-sign-up">
-            <div class="label-sign-up">Email Address:</div>
-            <input type="email" class="sign-up-input" v-model="user.mail" required>
-          </div>
-          <div class="errorMessageRegistrationForm" v-if="!isEmailEPValid">Please enter a valid emailaddress</div>
-          <div class="field-sign-up">
             <div class="label-sign-up">Postal code:</div>
             <input type="text" class="sign-up-input" required v-model="user.postalCode">
           </div>
-          <div class="errorMessageRegistrationForm" v-if="!isPostalCodeGPValid"> Please enter a valid Dutch postal code</div>
+<!--          <div class="errorMessageRegistrationForm" v-if="!isPostalCodeGPValid"> Please enter a valid Dutch postal code</div>-->
           <form class="field-sign-up">
             <div class="label-sign-up">Gender:</div>
             <select class="select-gender-sign-up" v-model="user.gender">
@@ -372,26 +427,37 @@ export default {
             <button class="next-1" @click.prevent="goToNextFormEntrepreneur">Next</button>
           </div>
         </form>
+        <form class="sign-up-page" id="user_detail3" v-if="this.currentEntrepreneurForm === 3">
+          <div class="title-sign-up-form">Date of Birth:</div>
+          <div class="field-sign-up">
+            <div class="label-sign-up">Age:</div>
+            <input type="number" class="sign-up-input" v-model="user.age">
+          </div>
+          <div class="field-btn">
+            <button class="prev-2" @click="goToPrevFormEntrepreneur">Previous</button>
+            <button class="next-2" @click.prevent="goToNextFormEntrepreneur">Next</button>
+          </div>
+        </form>
 
         <form class="sign-up-page" v-if="this.currentEntrepreneurForm === 4">
           <div class="title-sign-up-form">Login Details:</div>
           <div class="field-sign-up">
-            <div class="label-sign-up">Username:</div>
-            <input type="email" class="sign-up-input" required v-model="user.mail">
+            <div class="label-sign-up">Email Address:</div>
+            <input type="email" class="sign-up-input" v-model="user.mail" required>
           </div>
-          <div class="errorMessageRegistrationForm" v-if="!isUsernameEPValid">Username must contain between 3 and 20 characters</div>
+<!--          <div class="errorMessageRegistrationForm" v-if="!isEmailEPValid">Please enter a valid emailaddress</div>-->
           <div class="field-sign-up">
             <div class="label-sign-up">Password:</div>
             <input type="password" class="sign-up-input" v-model="user.password" required>
           </div>
-          <div class="errorMessageRegistrationForm" v-if="!isPasswordEPValid">
-            Must contain at least one  number and one uppercase and lowercase letter,
-            and at least 8 or more characters</div>
+<!--          <div class="errorMessageRegistrationForm" v-if="!isPasswordEPValid">-->
+<!--            Must contain at least one  number and one uppercase and lowercase letter,-->
+<!--            and at least 8 or more characters</div>-->
           <div class="field-sign-up">
             <div class="label-sign-up">Confirm password:</div>
             <input type="password" class="sign-up-input" required >
           </div>
-          <div class="errorMessageRegistrationForm">AAAAAALLLLLEEEERTTT</div>
+<!--          <div class="errorMessageRegistrationForm">AAAAAALLLLLEEEERTTT</div>-->
           <div class="field-btn">
             <button class="prev-3" @click="goToPrevFormEntrepreneur">Previous</button>
             <button class="submit" @click="sendForm">Submit</button>
@@ -414,6 +480,28 @@ export default {
 </template>
 
 <style scoped>
+#input-file-regform{
+  display: none;
+}
+.label-upload-image-regform{
+  display: block;
+  width: 200px;
+  background: #e3362c;
+  color: #fff;
+  padding: 12px;
+  margin: 10px ;
+  border-radius: 5px;
+  cursor: pointer
+;
+
+}
+.image-card-regform img{
+  width: 90px;
+  height: 90px;
+  position: absolute;
+  right: 10px;
+
+}
 .errorMessageRegistrationForm{
   color: red;
   font-size: 15px;
@@ -461,11 +549,11 @@ export default {
 }
 
 input:checked + .slider {
-  background-color: #0992A4;
+  background-color: #2196F3;
 }
 
 input:focus + .slider {
-  box-shadow: 0 0 1px #0992A4;
+  box-shadow: 0 0 1px #2196F3;
 }
 
 input:checked + .slider:before {
@@ -493,12 +581,12 @@ input:checked + .slider:before {
 }
 
 .container-sign-up {
+  height: 900px;
   width: 400px;
   background: #fff;
   border-radius: 5px;
   text-align: center;
   padding: 50px 35px 10px 35px;
-  margin-bottom: 3rem;
   box-shadow: 0px 3px 40px #000;
   margin-top: 60px;
 }
@@ -583,7 +671,7 @@ input:checked + .slider:before {
 }
 
 .field-btn button:hover {
-  background: #FECC32;
+  background:#FECC32;
 }
 
 .prev-1 {
@@ -745,6 +833,9 @@ input:checked + .slider:before {
 }
 
 /*Sign up AS form -  */
+.form-sign-up-as-1 form .sign-up-page {
+  height: 400px;
+}
 
 /*Sign up AS button -  */
 .field-btn-sign-up-as button {
@@ -885,6 +976,6 @@ form .button {
 }
 
 form .button input:hover {
-  background: #FECC32;
+  background: black;
 }
 </style>
