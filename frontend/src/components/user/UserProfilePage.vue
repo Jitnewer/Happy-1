@@ -51,16 +51,35 @@ export default {
     }
   },
   async created () {
+    console.log(this.$route)
     if (localStorage.getItem('email') == null) {
       this.$router.push({ route: 'PageNotFound' })
     }
-    this.$router.push({ name: 'profilePageInfo' })
     this.user = await this.usersService.asyncFindById(parseInt(localStorage.getItem('profileId')))
+    this.$router.push({ name: 'profilePageInfo' })
   }
 }
 </script>
 
 <template>
+  <div class="breadcrum" v-if="$route.fullPath === '/profile/info' && user" >
+    <router-link :to="{ name: 'welcome' }">Home</router-link>
+    <p>></p>
+    <a>News</a>
+    <p>></p>
+    <router-link :to="{ name: 'profilePage' }">Profile</router-link>
+    <p>></p>
+    <router-link :to="{ name: 'profilePageInfo', params: { id: user.id } }">Info</router-link>
+  </div>
+  <div class="breadcrum" v-if="$route.fullPath === '/profile/events' && user" >
+    <router-link :to="{ name: 'welcome' }">Home</router-link>
+    <p>></p>
+    <a>News</a>
+    <p>></p>
+    <router-link :to="{ name: 'profilePage' }">Profile</router-link>
+    <p>></p>
+    <router-link :to="{ name: 'profilePageEvents', params: { id: user.id } }">Info</router-link>
+  </div>
   <div class="user-profile-container" v-if="user">
     <div class="profile-banner">
     </div>
@@ -82,8 +101,8 @@ export default {
           <h1 v-if="!edit"> {{ user.firstname }} {{ user.lastname }}</h1>
         </div>
         <div v-if="!edit" class="buttons-view">
-          <button class="info-view selected" @click="infoView">Info</button>
-          <button class="events-view" @click="eventsView">Events</button>
+          <router-link :to="{name: 'profilePageInfo'}"  class="info-view selected">Info</router-link>
+          <router-link :to="{ name: 'profilePageEvents'}" class="events-view">Events</router-link>
         </div>
         <div class="info-right-bottom">
           <router-view v-if="!edit" :user="user"></router-view>

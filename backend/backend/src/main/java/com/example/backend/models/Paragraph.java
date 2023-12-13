@@ -1,14 +1,10 @@
 package com.example.backend.models;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "paragraphs")
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Paragraph {
 
     @Id
@@ -23,8 +19,13 @@ public class Paragraph {
 
     @ManyToOne
     @JoinColumn(name = "challenge_id")
-    @JsonIgnoreProperties("paragraphs") // Add this annotation to exclude 'trips' field from Scooter during serialization
+    @JsonBackReference(value = "challenge-paragraphs")
     private Challenge challenge;
+
+    @ManyToOne
+    @JoinColumn(name = "research_id")
+    @JsonBackReference(value = "research-paragraphs")
+    private Research research;
 
 
     // Constructors, getters, and setters
@@ -33,13 +34,13 @@ public class Paragraph {
     public Paragraph() {
     }
 
-    public Paragraph(String title, String content, Challenge challenge) {
+    public Paragraph(String title, String content, Challenge challenge, Research research) {
         this.title = title;
         this.content = content;
         this.challenge = challenge;
+        this.research = research;
+
     }
-
-
 
     // Getters and Setters
     public Long getId() {
@@ -71,4 +72,22 @@ public class Paragraph {
         return challenge;
     }
 
+    public Research getResearch() {
+        return research;
+    }
+
+    public void setResearch(Research research) {
+        this.research = research;
+    }
+
+    @Override
+    public String toString() {
+        return "Paragraph{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", content='" + content + '\'' +
+                ", challenge=" + challenge +
+                ", research=" + research +
+                '}';
+    }
 }

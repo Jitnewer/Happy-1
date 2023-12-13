@@ -23,14 +23,19 @@
     position: relative;
     display: flex;
     width: auto;
+    bottom: 1px;
 }
 .left {
-    margin-right: 88%;
+    margin-right: 80%;
+    margin-left: 40px;
 }
+
 .toggle-page {
     display: flex;
     flex: 1;
-    margin-top: 38%;
+    margin-top: 40%;
+    bottom: 1px;
+    margin-bottom: 10px;
 }
 
 i.fa-arrow-left {
@@ -53,6 +58,7 @@ i.fa-arrow-left {
     top: calc(50% + 155px);
     left: 50%;
     transform: translate(-50%, -50%);
+    bottom: 15px;
 }
 
 span.carouselPagination {
@@ -62,22 +68,150 @@ span.carouselPagination {
     border-radius: 50%;
     background-color:  var(--main-color);
     box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-}
-
-.active {
     color: var(--main-color-hover);
+    transition: background-color 0.3s, color 0.3s;
+}
+span.carouselPagination.active {
+    background-color: var(--main-color-hover);
+    color: var(--main-text-color);
 }
 /* Footer */
 
-.bottomFooter{
-    background-color: var(--main-color);
-    width: 100%
+.container-footer {
+    width: 100%;
+    background-color: #1F93A5;
+    color: whitesmoke;
 }
+
+.bottomFooter {
+    align-items: center;
+    justify-content: center;
+    background-color: #1F93A5;
+    height: 30px;
+    padding: 15px;
+}
+
 .topFooter {
-    background-color: var(--main-color-hover);
-    width: 100%
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: row;
+    background-color: #FECC30;
+    margin-top: 70px;
 }
-.topFooter p {
+
+.topFooterLeft {
+    text-align: left;
+    margin-left: 5%;
+    margin-top: 10px;
+    width: 40%;
+}
+
+.topFooterRight {
+    width: 60%;
+    text-align: left;
+    display: flex;
+}
+
+.columnFooter {
+    flex: 1;
+    margin-right: 40px; /* Aangepaste marge om kolommen te scheiden */
+    margin-top: 10px;
+    padding-bottom: 50px;
+}
+
+.topFooterRight p {
+    margin: 5px 5px 5px 5px; /* Aangepaste marge voor tussenruimte tussen alinea's */
+}
+.footerInformation {
+    margin-top: 15px;
+}
+
+.subscribeForm {
+    margin-top: 20px;
+    margin-left: 20px;
+    align-items: center;
+    justify-content: center;
+}
+
+.subscribeForm p {
+    margin-bottom: 10px;
+    font-size: 20px;
+}
+
+.subscribeForm form {
+    display: flex;
+}
+
+.subscribeForm input {
+    padding: 8px;
+    margin-right: 10px;
+    width: 25%;
+}
+
+.subscribeButton {
+    padding: 15px;
+    background-color: #1F93A5;
+    color: whitesmoke;
+    border: none;
+    cursor: pointer;
+    outline: none;
+    font-size: 20px;
+}
+
+.subscribeButton:hover {
+    background-color: var(--main-color-hover);
+}
+
+.social-icons {
+    display: flex;
+}
+
+.iconButtonHomepage {
+    border: none;
+    background: none;
+    cursor: pointer;
+    outline: none;
+    padding: 0;
+}
+
+.iconButtonHomepage i {
+    margin-right: 10px;
+    font-size: 1.5rem;
+    background-color: #1F93A5;
+    color: whitesmoke;
+    border-radius: 50%;
+    padding: 10px;
+}
+
+.iconButtonHomepage:hover {
+    transform: scale(1.2);
+    background-color: transparent;
+}
+
+.social-icons i {
+    margin-right: 10px;
+    margin-bottom: 10px;
+    font-size: 1.5rem;
+    background-color: #1F93A5;
+    color: var(--main-color-hover);
+    border-radius: 50%;
+    padding: 10px;
+}
+.footerButton {
+    background: none;
+    border: none;
+    cursor: pointer;
+    outline: none;
+    font-size: 17px;
+    text-align: left;
+    line-height: 25px;
+    font-family: 'Poppins', sans-serif;
+}
+.footerButton:hover{
+    transform: scale(1.08);
+    border: none;
+    background-color: transparent;
 }
 
 .yellow-text {
@@ -86,25 +220,12 @@ span.carouselPagination {
 }
 .blue-text {
     color: var(--main-color);
-    margin-left: 50px;
 }
 .white-text {
     color: var(--main-text-color);
-    margin-left: 50px;
 }
 
-.white-text2 {
-    color: var(--main-text-color);
-}
-/* homePage */
-/*.container {*/
-/*    margin-top: 20px;*/
-/*    margin-bottom: 20px;*/
-/*    position: relative;*/
-/*}*/
 .containerHomepage {
-    /*margin-top: 20px;*/
-    /*margin-bottom: 20px;*/
     position: relative;
     width: 80%;
     margin: 1rem auto auto;
@@ -124,26 +245,52 @@ span.carouselPagination {
 .carousel {
     max-width: 80%;
     margin: auto;
+
 }
 .carouselHolder {
     position: relative;
     margin-top: 100px;
     z-index: 1;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding-left: 15px;
+
 }
 .slide {
     position: absolute;
-    top: 0;
-    left: 0;
     width: 100%;
     max-height: 100%;
-    height: 100%;
+    height: 550px;
+    display: flex;
+    left: 0;
 }
-.homePageImg {
+.welcomeMsg h1,h2,h3 {
+    margin-top: 1px;
+}
+.welcomeMsg button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s;
     width: 100%;
+    font-size: 20px;
+    text-align: left;
+    font-weight: bold;
+}
+
+.carouselImg {
+    width: 65%;
     object-fit: cover;
     aspect-ratio: 21/9;
-    height: 350px;
-    border: 1px solid black;
+    clip-path: polygon(10% 0, 100% 0, 100% 100%, 0 100%)
+}
+.welcomeMsg {
+    width: 35%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    margin-top: 20px;
+    margin-left: 20px;
 }
 .imageHolder img {
     aspect-ratio: 16/9;
@@ -170,6 +317,8 @@ span.carouselPagination {
 }
 .theme h1,h2,h3,h4,h5{
     color: black;
+    margin-left: 5px;
+    margin-right: 5px;
 }
 .pillarText{
     width: 40%;
@@ -192,7 +341,9 @@ span.carouselPagination {
     transition: transform 0.2s;
     width: 100%;
 }
-
+.welcomeMsg button:hover {
+    transform: scale(1.1);
+}
 .pillarContainer button:hover {
     transform: scale(1.1);
 }
@@ -221,14 +372,18 @@ span.carouselPagination {
     width: 30%;
     margin-bottom: 80px;
     margin-top: 10px;
-    height: 300px;
 }
-
+.themeButton {
+    border-radius: 20px;
+    background-color: #fbfbfd;
+}
 .theme button {
     background: none;
     border: none;
     cursor: pointer;
     transition: transform 0.2s;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    height: 350px;
 
 }
 
@@ -237,8 +392,8 @@ span.carouselPagination {
 }
 
 .theme .themeImg {
-    width: 60%;
-    height: 70%;
+    width: 50%;
+    height: 40%;
     object-fit: fill;
     aspect-ratio: 16/9;
     margin-top: 10px; /* Add margin to separate image from text */
@@ -254,27 +409,8 @@ span.carouselPagination {
     margin: 0 20px 20px 20px; /* Adjust margins as needed */
 }
 
-.container-footer {
 
+.yellow-text, .blue-text {
+    display: inline;
 }
 
-.topFooterChild {
-    width: 80%;
-    margin: auto;
-    padding: 1rem;
-    display: flex;
-    gap: 1rem;
-    flex-direction: column;
-}
-
-.topFooterChild p {
-margin: 0
-}
-
-.bottomFooterChild {
-    width: 80%;
-    margin: auto;
-    padding: 1rem;
-    display: flex;
-    gap: 1rem;
-}

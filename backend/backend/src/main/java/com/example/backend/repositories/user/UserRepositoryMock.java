@@ -26,7 +26,7 @@ public class UserRepositoryMock implements UserRepository {
     }
 
     @Override
-    public User getUser(long id) {
+    public User getUserById(long id) {
         for (User user : users) {
             if (user.getId() == id) {
                 return user;
@@ -34,6 +34,7 @@ public class UserRepositoryMock implements UserRepository {
         }
         throw new IllegalArgumentException("User not found");
     }
+
 
     @Override
     public void addUser(User user) {
@@ -49,6 +50,11 @@ public class UserRepositoryMock implements UserRepository {
             }
         }
         throw new IllegalArgumentException("Invalid credentials");
+    }
+
+    @Override
+    public void register(User user) {
+
     }
 
     @Override
@@ -99,5 +105,6 @@ public class UserRepositoryMock implements UserRepository {
     public boolean userWithMailExists(String email) {
         return false;
     }
+
 }
 

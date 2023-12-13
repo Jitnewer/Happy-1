@@ -34,6 +34,7 @@ public class UserEventRepositoryJpa implements UserEventRepository {
 
     }
 
+
     @Override
     @Transactional
     public void addUserEvent(UserEvent userEvent) {

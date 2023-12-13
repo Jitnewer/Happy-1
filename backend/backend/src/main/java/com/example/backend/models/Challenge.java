@@ -1,6 +1,7 @@
 package com.example.backend.models;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 
@@ -12,7 +13,6 @@ import java.util.Set;
 
 @Entity
 @Table(name = "challenges")
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Challenge {
 
     @Id
@@ -35,6 +35,7 @@ public class Challenge {
     private String firstParagraph;
 
     @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference(value = "challenge-paragraphs")
     private Set<Paragraph> paragraphs = new HashSet<>();
 
     // Constructors

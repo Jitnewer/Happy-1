@@ -5,6 +5,7 @@ import com.example.backend.models.User;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -19,6 +20,7 @@ import java.util.Optional;
 @Primary
 public class UserRepositoryJpa implements UserRepository {
 
+    private static final int WORKLOAD = 12;
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -30,7 +32,7 @@ public class UserRepositoryJpa implements UserRepository {
     }
 
     @Override
-    public User getUser(long id) {
+    public User getUserById(long id) {
         return entityManager.find(User.class, id);
 
     }
@@ -44,19 +46,31 @@ public class UserRepositoryJpa implements UserRepository {
 
     @Override
     public User login(String email, String password) {
-        String jpql = "SELECT u FROM User u WHERE u.mail = :email AND u.password = :password";
+        String jpql = "SELECT u FROM User u WHERE u.mail = :email";
         TypedQuery<User> query = entityManager.createQuery(jpql, User.class);
         query.setParameter("email", email);
-        query.setParameter("password", password);
 
         List<User> resultList = query.getResultList();
-
-        // Check if the query returned a user
         if (!resultList.isEmpty()) {
-            return resultList.get(0);
+            User user = resultList.get(0);
+            // Check if the provided password matches the hashed password in the database
+            if (checkPassword(password, user.getPassword())) {
+                return user;
+            }
         }
 
-        return null; // Return null if no user with the given credentials is found
+        return null;
+    }
+
+
+
+    @Override
+    @Transactional
+    public void register(User user) {
+        // Hash the password before storing it
+        String hashedPassword = hashPassword(user.getPassword());
+        user.setPassword(hashedPassword);
+        entityManager.persist(user);
     }
 
 
@@ -101,5 +115,15 @@ public class UserRepositoryJpa implements UserRepository {
             }
         }
         return false;
+    }
+
+
+    public static String hashPassword(String plainTextPassword) {
+        String salt = BCrypt.gensalt(WORKLOAD);
+        return BCrypt.hashpw(plainTextPassword, salt);
+    }
+
+    public static boolean checkPassword(String plainTextPassword, String hashedPassword) {
+        return BCrypt.checkpw(plainTextPassword, hashedPassword);
     }
 }

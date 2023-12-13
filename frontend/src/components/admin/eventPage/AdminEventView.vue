@@ -19,20 +19,6 @@ export default {
     setSelectedEvent (event) {
       this.$router.push({ name: 'adminEventDetail', params: { id: event } })
     },
-    async deleteEvent (eventToDelete) {
-      const indexToDelete = this.events.findIndex(event => event.id === eventToDelete.id)
-      if (indexToDelete !== -1) {
-        this.events.splice(indexToDelete, 1)
-      }
-
-      this.selectedEvent = null // Clear the selected event
-      this.$router.push({ name: 'adminEvents' })
-    },
-    closeEvent () {
-      this.selectedEvent = null
-      this.create = false
-      this.$router.push({ name: 'adminEvents' })
-    },
     activateCreateEvent () {
       this.selectedEvent = new Event()
       this.selectedEvent.id = 0
@@ -40,27 +26,6 @@ export default {
       this.create = true
       // this.$router.push(this.$route.matched[0].path + '/' + this.selectedEvent.id)
       this.$router.push({ name: 'adminEventDetail', params: { id: this.selectedEvent.id } })
-    },
-    async saveEvent (event) {
-      try {
-        const createdEvent = await this.eventsService.asyncSave(event)
-
-        if (this.create === true) {
-          this.events.push(createdEvent)
-        } else {
-          const indexToUpdate = this.events.findIndex(oldEvent => oldEvent.id === event.id)
-
-          if (indexToUpdate >= 0) {
-            this.events.splice(indexToUpdate, 1, createdEvent)
-          }
-        }
-        this.selectedEvent = null
-        this.create = false
-
-        this.$router.push({ name: 'adminEvents' })
-      } catch (e) {
-        console.error(e)
-      }
     },
     formattedPrice (event) {
       if (event.price !== null) {
@@ -99,7 +64,7 @@ export default {
     }
   },
   async created () {
-    if (localStorage.getItem('admin') === 'false') this.$router.push({ path: '/PageNotFound' })
+    // if (localStorage.getItem('admin') === 'false') this.$router.push({ path: '/PageNotFound' })
     this.events = await this.eventsService.asyncFindAll()
   },
   watch: {
@@ -121,6 +86,11 @@ export default {
 
 <template>
   <div class="container-admin admin-event" v-if="!selectedEvent">
+    <div class="breadcrum-admin">
+      <router-link :to="{ name: 'admin' }">Admin</router-link>
+      <p>></p>
+      <router-link :to="{ name: 'adminEvents' }">Events</router-link>
+    </div>
       <div class="title">
         <h1>Events</h1>
       </div>
@@ -133,7 +103,7 @@ export default {
       <div class="events">
         <div class="event" v-for="event in filteredEvents" :key="event.id">
           <div class="event-left">
-            <img :src="require(`../../../assets/images/${event.image}`)" alt="Event Image">
+            <img :src="require(`../../../assets/img/${event.image}`)" alt="Event Image">
           </div>
           <div class="event-right">
             <div class="event-right-main">
@@ -155,9 +125,6 @@ export default {
         </div>
       </div>
     </div>
-    <router-view :create="create" :selectedEvent="selectedEvent" @delete-event="deleteEvent"
-                 @deselect-event="closeEvent" @save-event="saveEvent"
-    />
 </template>
 
 <style scoped>

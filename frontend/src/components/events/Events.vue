@@ -1,4 +1,9 @@
 <template>
+  <div class="breadcrum">
+    <router-link :to="{ name: 'welcome' }">Home</router-link>
+    <p>></p>
+    <router-link :to="{ name: 'events' }">Events</router-link>
+  </div>
   <div class="container">
     <div class="events-main">
       <div class="events-main-left">
@@ -24,7 +29,7 @@
     <div class="events">
       <div class="event" v-for="event in filteredEventsOnDate" :key="event.id">
         <div class="event-left">
-          <img :src="require(`../../assets/images/${event.image}`)" alt="Event Image">
+          <img :src="require(`../../assets/img/${event.image}`)" alt="Event Image">
         </div>
         <div class="event-right">
           <div class="event-right-main">
@@ -95,8 +100,7 @@ import { reactive } from 'vue'
 
 export default {
   name: 'Events.vue',
-  emits: ['loginAdmin', 'loginUser'],
-  inject: ['eventsService', 'usersService', 'userEventsService', 'loginAndRegisterService'],
+  inject: ['eventsService', 'usersService', 'userEventsService', 'sessionSBService', 'userEventsService2'],
   data () {
     return {
       lastId: 3000,
@@ -120,8 +124,10 @@ export default {
   async created () {
     try {
       this.events = await this.eventsService.asyncFindAll()
-      this.user = await this.loginAndRegisterService.asyncFindByEmail(localStorage.getItem('email'))
-      this.signedInEvents = this.user.userEvents.map((userEvent) => userEvent.event.id)
+      const userAndToken = await this.sessionSBService.asyncFindByEmail(JSON.parse(localStorage.getItem('userDetails')).mail)
+      this.user = userAndToken.body
+      const associatedEvents = await this.userEventsService2.asyncFindEventByUser(this.user.id)
+      this.signedInEvents = associatedEvents.map((event) => event.id)
     } catch (e) {
       console.error(e)
     }

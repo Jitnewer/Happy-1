@@ -19,6 +19,9 @@ import ProfilePage from '@/components/admin/userPage/ProfilePage.vue'
 import UserProfileEvents from '@/components/user/UserProfileEvents.vue'
 import Challenges from '@/components/challenges/Challenges.vue'
 import ChallengeDetails from '@/components/challenges/ChallengeDetails.vue'
+import Researches from '@/components/research/Researches.vue'
+import ResearchDetails from '@/components/research/ResearchDetails.vue'
+import welcomeAdmin from '@/components/admin/welcomeAdmin.vue'
 
 const routes = [
   {
@@ -51,24 +54,38 @@ const routes = [
     component: ChallengeDetails
   },
   {
+    path: '/news/research',
+    name: 'researches',
+    component: Researches
+  },
+  {
+    path: '/news/research/:id',
+    name: 'research',
+    component: ResearchDetails
+  },
+  {
     path: '/about',
     name: 'about',
     component: AboutUs
   },
   {
+    path: '/admin',
+    name: 'admin',
+    component: welcomeAdmin
+  },
+  {
     path: '/admin/events',
     name: 'adminEvents',
-    component: AdminEventView,
-    children: [
-      {
-        path: ':id',
-        name: 'adminEventDetail',
-        component: EventDetailsView
-      }
-    ]
+    component: AdminEventView
+  },
+  {
+    path: '/admin/events/:id',
+    name: 'adminEventDetail',
+    component: EventDetailsView
   },
   {
     path: '/admin/statistics',
+    name: 'statistics',
     component: AdminStatistics
   },
   {

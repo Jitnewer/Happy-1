@@ -2,7 +2,7 @@
 export default {
   name: 'ProfileEvents',
   props: ['user'],
-  inject: ['eventsService', 'userEventsService'],
+  inject: ['eventsService', 'userEventsService', 'userEventsService2'],
   data () {
     return {
       userEvents: []
@@ -26,15 +26,20 @@ export default {
     }
   },
   async created () {
-    const test = await this.userEventsService.asyncFindById(this.user.userEvents[0].id)
-    // for (let i = 0; i < this.user.userEvents.length; i++) {
-    //   const event = await this.userEventsService.asyncFindById(this.user.userEvents[i].id)
-    //   console.log(event)
-    //
-    //   if (event !== null) {
-    //     this.userEvents.push(event)
-    //   }
-    // }
+    try {
+      if (this.user.id !== null) {
+        this.userEvents = await this.userEventsService2.asyncFindEventByUser(this.user.id)
+      } else {
+        const userId = this.$route.params.id
+        if (userId) {
+          this.user = await this.userEventsService2.asyncFindEventByUser(userId)
+          this.selectedCopy = { ...this.user }
+          console.log(this.selectedCopy)
+        }
+      }
+    } catch (e) {
+      console.error(e)
+    }
   }
 }
 </script>
@@ -44,7 +49,7 @@ export default {
     <div class="events-user">
       <div class="event" v-for="event in userEvents" :key="event.id">
         <div class="event-left">
-          <img :src="require(`../../assets/images/${event.image}`)" alt="Event Image">
+          <img :src="require(`../../assets/img/${event.image}`)" alt="Event Image">
         </div>
         <div class="event-right">
           <div class="event-right-main">

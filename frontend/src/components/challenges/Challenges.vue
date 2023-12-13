@@ -1,4 +1,11 @@
 <template>
+  <div class="breadcrum">
+    <router-link :to="{ name: 'welcome' }">Home</router-link>
+    <p>></p>
+    <a>News</a>
+    <p>></p>
+    <router-link :to="{ name: 'challenges' }">Challenges</router-link>
+  </div>
   <div class="container">
     <h1 id="challenges-title">Challenges</h1>
     <div class="challenges">

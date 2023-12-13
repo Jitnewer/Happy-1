@@ -1,4 +1,9 @@
 <template>
+  <div class="breadcrum">
+    <router-link :to="{ name: 'welcome' }">Home</router-link>
+    <p>></p>
+    <router-link :to="{ name: 'login' }">Login</router-link>
+  </div>
   <div class="sign-up-body">
     <div class="container-sign-up">
       <div class="header-sign-up">Login:</div>
@@ -31,7 +36,7 @@ import { User } from '@/models/user'
 
 export default {
   name: 'login.vue',
-  inject: ['loginAndRegisterService'],
+  inject: ['sessionSBService'],
   data () {
     return {
       email: '',
@@ -41,21 +46,21 @@ export default {
   methods: {
     async login () {
       try {
-        const user = await this.loginAndRegisterService.asyncLogin(this.email, this.password)
-        if (user !== null) {
-          console.log(user)
-          if (user.userType === User.userTypes.Admin) {
-            localStorage.setItem('email', this.email)
-            localStorage.setItem('admin', 'true')
-            this.$emit('loginAdmin')
+        const user = await this.sessionSBService.asyncSignIn({
+          mail: this.email,
+          password: this.password
+        })
 
-            this.$router.push({ path: '/admin/events' })
+        if (user !== null) {
+          const userType = user.body.userType
+
+          if (userType === User.userTypes.Admin) {
+            this.$store.commit('setLoggedInAsAdmin', true)
+            this.$router.push({ path: '/admin' })
           } else {
-            localStorage.setItem('email', this.email)
-            localStorage.setItem('admin', 'false')
-            localStorage.setItem('profileId', '1')
+            this.$store.commit('setLoggedIn', true)
+
             this.$router.push({ path: '/home' })
-            this.$emit('loginUser')
           }
         }
       } catch (e) {

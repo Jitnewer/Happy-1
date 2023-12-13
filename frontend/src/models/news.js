@@ -34,8 +34,8 @@ export class News {
     return new News(
       id,
       index === 1
-        ? require('../assets/images/plastic-waste.jpg')
-        : require('../assets/images/food-wast.webp'),
+        ? require('../assets/img/plastic-waste.jpg')
+        : require('../assets/img/food-wast.webp'),
       nameSuffix,
       link,
       context,

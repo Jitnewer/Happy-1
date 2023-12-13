@@ -1,27 +1,23 @@
 package com.example.backend.models;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "userEvents")
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class UserEvent {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "user_id")
-    @JsonIgnoreProperties("userEvents") // Add this annotation to exclude 'trips' field from Scooter during serialization
+    @JsonBackReference
     private User user;
 
     @ManyToOne
     @JoinColumn(name = "event_id")
-    @JsonIgnoreProperties("userEvents") // Add this annotation to exclude 'trips' field from Scooter during serialization
+    @JsonBackReference
     private Event event;
 
     public UserEvent() {
