@@ -639,6 +639,12 @@ input:checked + .slider:before {
   padding-left: 10px;
   font-size: 17px;
   font-weight: 500;
+  border: 1px solid lightgrey;
+  border-radius: 5px;
+}
+
+.select-gender-sign-up:focus-visible {
+  outline: none;
 }
 
 .field-btn {
