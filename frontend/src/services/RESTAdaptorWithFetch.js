@@ -115,7 +115,7 @@ export class RESTAdaptorWithFetch {
         })
       }
 
-      return this.copyConstructor(response)
+      return this.copyConstructor(response?.user)
     } catch (error) {
       console.error('Error in asyncUpdate:', error)
       return null

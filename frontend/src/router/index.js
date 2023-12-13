@@ -20,6 +20,9 @@ import Challenges from '@/components/challenges/Challenges.vue'
 import ChallengeDetails from '@/components/challenges/ChallengeDetails.vue'
 import Researches from '@/components/research/Researches.vue'
 import ResearchDetails from '@/components/research/ResearchDetails.vue'
+import SuperUserResearchView from '@/components/admin/superUser/research/SuperUserResearchView.vue'
+import SuperUserChallengeView from '@/components/admin/superUser/challenge/SuperUserChallengeView.vue'
+import SuperUserChallenge from '@/components/admin/superUser/challenge/SuperUserChallenge.vue'
 
 const routes = [
   {
@@ -69,14 +72,12 @@ const routes = [
   {
     path: '/admin/events',
     name: 'adminEvents',
-    component: AdminEventView,
-    children: [
-      {
-        path: ':id',
-        name: 'adminEventDetail',
-        component: EventDetailsView
-      }
-    ]
+    component: AdminEventView
+  },
+  {
+    path: '/admin/events/:id',
+    name: 'adminEventDetail',
+    component: EventDetailsView
   },
   {
     path: '/admin/statistics',
@@ -88,26 +89,26 @@ const routes = [
     component: AdminUsersView,
     children: [
       {
-        path: 'profile/:id',
-        name: 'adminProfileView',
-        component: ProfilePage,
-        children: [
-          {
-            path: 'info',
-            name: 'adminProfileViewInfo',
-            component: UserProfileInfo
-          },
-          {
-            path: 'events',
-            name: 'adminProfileViewEvents',
-            component: UserProfileEvents
-          }
-        ]
-      },
-      {
         path: ':id',
         name: 'userDetail',
         component: AdminUsersDetail
+      }
+    ]
+  },
+  {
+    path: '/profile/:id',
+    name: 'profileView',
+    component: ProfilePage,
+    children: [
+      {
+        path: 'info',
+        name: 'profileInfoView',
+        component: UserProfileInfo
+      },
+      {
+        path: 'events',
+        name: 'profileEventsView',
+        component: UserProfileEvents
       }
     ]
   },
@@ -151,7 +152,7 @@ const routes = [
     component: AboutUs
   },
   {
-    path: '/profile',
+    path: '/myProfile',
     name: 'profilePage',
     component: UserProfilePage,
     children: [

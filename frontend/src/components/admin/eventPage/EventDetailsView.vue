@@ -2,13 +2,14 @@
 import { Event } from '@/models/event'
 export default {
   name: 'EventDetailsView',
-  inject: ['eventsService'],
+  inject: ['eventsService', 'fileUploadService'],
   props: ['selectedEvent', 'create'],
   emits: ['deselect-event', 'delete-event', 'save-event'],
   data () {
     return {
       created: this.create,
-      selectedCopy: null
+      selectedCopy: null,
+      pictureUpload: null
     }
   },
   methods: {
@@ -22,6 +23,8 @@ export default {
         if (confirm('Are you sure you want to save changes to event?')) {
           try {
             await this.eventsService.asyncSave(this.selectedCopy)
+            // await this.fileUploadService.asyncUploadImage(this.pictureUpload, this.selectedCopy)
+
             this.$router.push({ name: 'adminEvents' })
           } catch (e) {
             console.error(e)
@@ -39,11 +42,14 @@ export default {
         }
       }
     },
-    handleImageUpload (event) {
-      const file = event.target.files[0]
-      this.selectedCopy.image = URL.createObjectURL(file)
-      console.log(this.selectedCopy.image)
-    },
+    // async handleImageUpload (event) {
+    //   const file = event.target.files[0]
+    //   this.selectedCopy = URL.createObjectURL(file)
+    //   this.pictureUpload = file
+    // },
+    // activateInput () {
+    //   document.querySelector('#file').click()
+    // },
     clearInputs () {
       this.selectedCopy.name = null
       this.selectedCopy.date = null
@@ -53,9 +59,6 @@ export default {
       this.selectedCopy.city = null
       this.selectedCopy.price = null
       this.selectedCopy.info = null
-    },
-    activateInput () {
-      document.querySelector('#file').click()
     },
     eventNameIsValid () {
       const eventNameIsEmpty = !this.selectedCopy.name || this.selectedCopy.name.trim() === ''

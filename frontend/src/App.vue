@@ -18,6 +18,7 @@ import Footer from '@/components/Footer.vue'
 import { Challenge } from '@/models/challenge'
 import { Research } from '@/models/research'
 import { UserEventAdapter } from '@/services/UserEventAdapter'
+import { FileUploadAdapter } from '@/services/FileUploadAdapter'
 
 export default {
   name: 'App',
@@ -44,7 +45,8 @@ export default {
       userEventsService: new RESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/userevents', UserEvent.copyConstructor),
       loginAndRegisterService: new LoginAndRegisterAdapter(CONFIG.BACKEND_URL, User.copyConstructor),
       researchService: new RESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/researches', Research.copyConstructor),
-      userEventsService2: new UserEventAdapter(CONFIG.BACKEND_URL, Event.copyConstructor)
+      userEventsService2: new UserEventAdapter(CONFIG.BACKEND_URL, Event.copyConstructor),
+      fileUploadService: new FileUploadAdapter(CONFIG.BACKEND_URL + '/upload')
     }
   },
   methods: {

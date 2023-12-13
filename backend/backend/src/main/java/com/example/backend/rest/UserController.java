@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -95,7 +96,7 @@ public class UserController {
                 return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("message", "User with mail:" + user.getMail() + " is already in use"));
             }
 
-            userRepository.addUser(user);
+            User addedUser = userRepository.addUser(user);
 
             URI location = ServletUriComponentsBuilder
                     .fromCurrentRequest()
@@ -103,10 +104,13 @@ public class UserController {
                     .buildAndExpand(user.getId())
                     .toUri();
 
-            return ResponseEntity.created(location).body(Map.of(
-                    "message", "User added successfully",
-                    "status", HttpStatus.CREATED.value(),
-                    "location", location.toString()));
+            Map<String, Object> map = new HashMap<>();
+            map.put("message", "User added successfully");
+            map.put("status", HttpStatus.CREATED.value());
+            map.put("location", location.toString());
+            map.put("user", addedUser);
+
+            return ResponseEntity.created(location).body(map);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("message", "Error adding user", "error", e.getMessage()));
         }
@@ -119,6 +123,7 @@ public class UserController {
                 return ResponseEntity.notFound().build();
             }
             userRepository.updateUser(user);
+
             return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "User updated successfully"));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("message", "Error updating user", "error", e.getMessage()));

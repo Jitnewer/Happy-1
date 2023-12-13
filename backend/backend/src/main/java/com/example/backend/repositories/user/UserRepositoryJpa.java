@@ -37,8 +37,10 @@ public class UserRepositoryJpa implements UserRepository {
 
     @Override
     @Transactional
-    public void addUser(User user) {
+    public User addUser(User user) {
         entityManager.persist(user);
+
+        return user;
     }
 
 

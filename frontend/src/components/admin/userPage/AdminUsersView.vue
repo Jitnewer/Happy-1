@@ -12,7 +12,7 @@ export default {
       },
       selectedUser: null,
       create: false,
-      view: false,
+      edit: false,
       users: []
     }
   },
@@ -22,27 +22,32 @@ export default {
       this.selectedUser = new User(
         0,
         null,
-        'profilepic.png',
+        'assets/img/profilepic.png',
         null,
         null,
         null,
         'N/A',
-        null,
-        null,
-        null,
+        0,
+        'Happy Hospitality',
+        'N/A',
         User.status.Active,
         User.userTypes.Admin,
+        'N/A',
         null,
-        null,
-        null
+        'Happy Hospitality'
       )
 
       this.$router.push({ name: 'userDetail', params: { id: this.selectedUser.id } })
     },
     async unblockUser (user) {
       if (confirm('Are you sure you want to unblock this user')) {
-        user.status = User.status.Unbanned
-        await this.usersService.asyncSave(user)
+        try {
+          await this.usersService.asyncSave(user)
+
+          user.status = User.status.Unbanned
+        } catch (e) {
+          console.log(e.message)
+        }
       }
     },
     async blockUser (user) {
@@ -58,10 +63,8 @@ export default {
       this.create = false
       this.$router.push({ name: 'users' })
     },
-    async saveUser (user) {
+    saveUser (user) {
       try {
-        const savedUser = await this.usersService.asyncSave(user)
-        // console.log(savedUser)
         if (this.create === true) {
           this.users.push(user)
         } else {
@@ -93,15 +96,21 @@ export default {
       }
     },
     viewUser (user) {
-      this.view = true
-      this.$router.push({ name: 'adminProfileView', params: { id: user.id } })
+      this.$router.push({ name: 'profileView', params: { id: user.id } })
     },
     isBanned (user) {
       return user && user.status === User.status.Banned
     },
-    back () {
-      this.view = false
-      this.$router.push({ name: 'users' })
+    selectUserByUrl (routeParam) {
+      if (!routeParam) return
+      if (routeParam === 0) this.createUser()
+      const user = this.users.find(user => user.id === routeParam)
+
+      if (user === undefined) {
+        this.$router.push({ path: '/PageNotFound' })
+      } else {
+        this.selectedUser = user
+      }
     }
   },
   computed: {
@@ -125,30 +134,25 @@ export default {
   },
   async created () {
     if (localStorage.getItem('admin') === 'false') this.$router.push({ path: '/PageNotFound' })
+
     this.users = await this.usersService.asyncFindAll()
+
+    this.selectUserByUrl(parseInt(this.$route.params.id))
+
     this.users = this.users.filter(user => {
       return user.id !== parseInt(localStorage.getItem('profileId'))
     })
   },
   watch: {
-    '$route' (to, from) {
-      console.log(to)
-      const userId = parseInt(to.params.id)
-      if (userId === 0) {
-        return
-      }
-      if (userId) {
-        this.selectedUser = this.users.find(user => user.id === userId)
-      } else {
-        this.selectedUser = null
-      }
+    '$route' (to) {
+      this.selectUserByUrl(parseInt(to.params.id))
     }
   }
 }
 </script>
 
 <template>
-  <div class="container-admin" v-if="!view">
+  <div class="container-admin">
     <div class="title">
       <h1>Users</h1>
     </div>
@@ -198,7 +202,8 @@ export default {
       </table>
     </div>
   </div>
-  <router-view :selectedUser="selectedUser" @cancel-edit="cancelEdit" @save-edit="saveUser" :create="create" @back="back"/>
+  <router-view v-if="selectedUser" :selectedUser="selectedUser" @cancel-edit="cancelEdit" @save-edit="saveUser"
+               :create="create"/>
 </template>
 
 <style scoped>

@@ -24,7 +24,6 @@ export default {
       this.selectedEvent.id = 0
       this.selectedEvent.image = 'imagePlaceholder.jpg'
       this.create = true
-      // this.$router.push(this.$route.matched[0].path + '/' + this.selectedEvent.id)
       this.$router.push({ name: 'adminEventDetail', params: { id: this.selectedEvent.id } })
     },
     formattedPrice (event) {

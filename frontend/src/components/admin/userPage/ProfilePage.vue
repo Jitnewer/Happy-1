@@ -7,27 +7,38 @@ export default {
   data () {
     return {
       user: null,
-      path: null
+      test: -1
     }
   },
   methods: {
     infoView () {
-      this.$router.push({ name: 'adminProfileViewInfo' })
+      this.test--
+      this.$router.push({ name: 'profileInfoView' })
     },
     adminEventsView () {
-      this.$router.push({ name: 'adminProfileViewEvents' })
+      this.test--
+      this.$router.push({ name: 'profileEventsView' })
     },
-    back () {
-      this.$emit('back')
+    previousPage () {
+      this.$router.go(this.test)
+    },
+    async findUserByUrl (urlParam) {
+      if (urlParam < 0) {
+        this.$router.push({ path: '/PageNotFound' })
+        return
+      }
+      this.user = await this.usersService.asyncFindById(urlParam)
+
+      if (this.user === null) {
+        this.$router.push({ path: '/PageNotFound' })
+        return
+      }
+
+      this.infoView()
     }
   },
-  async created () {
-    this.user = await this.usersService.asyncFindById(this.selectedUser.id)
-    if (this.user === null) {
-      this.$router.push(this.$route.mathced[0])
-    }
-    this.path = this.$route.path
-    this.$router.push(this.$route.path + '/info')
+  created () {
+    this.findUserByUrl(parseInt(this.$route.params.id))
   }
 }
 </script>
@@ -38,18 +49,18 @@ export default {
     </div>
     <div class="profile-info">
       <div class="info-left">
-        <img class="profile-pic" src="../../../../src/assets/img/profilepic.png">
+        <img class="profile-pic" src="../../../assets/profilePic/profilepic.png">
         <div class="profile-edit-buttons">
-          <button class="edit-button" @click="back">Back</button>
+          <button class="edit-button" @click="previousPage">Back</button>
         </div>
       </div>
       <div class="info-right">
         <div class="userName">
           <h1> {{ user.firstname }} {{ user.lastname }}</h1>
         </div>
-        <div>
-          <button class="info-view selected" @click="infoView">Info</button>
-          <button class="events-view" @click="adminEventsView">Events</button>
+        <div class="buttons-view">
+          <a class="router-link-active router-link-exact-active info-view selected" @click="infoView">Info</a>
+          <a class="events-view" @click="adminEventsView">Events</a>
         </div>
         <div class="info-right-bottom">
           <router-view :user="user"></router-view>

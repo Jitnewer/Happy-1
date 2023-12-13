@@ -58,7 +58,7 @@ public class User {
 //    @Column(nullable = false)
     private UserStatus status;
 
-    @Column(nullable = false)
+//    @Column(nullable = false)
     private UserType userType;
 
 //    @Column(nullable = false)

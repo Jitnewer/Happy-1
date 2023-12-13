@@ -3,12 +3,14 @@ import { User } from '@/models/user'
 
 export default {
   name: 'UserProfilePage',
-  inject: ['usersService'],
+  inject: ['usersService', 'fileUploadService'],
   data () {
     return {
       user: null,
       edit: false,
-      copyUser: null
+      copyUser: null,
+      pictureUpload: null,
+      newProfilePic: null
     }
   },
   methods: {
@@ -22,9 +24,10 @@ export default {
         this.copyUser = null
       }
     },
-    handleImageUpload (event) {
+    async handleImageUpload (event) {
       const file = event.target.files[0]
-      this.selectedCopy.image = URL.createObjectURL(file)
+      this.newProfilePic = URL.createObjectURL(file)
+      this.pictureUpload = file
     },
     activateInput () {
       if (this.edit) {
@@ -40,10 +43,14 @@ export default {
     async save () {
       if (confirm('Are you sure you wan\'t to save changes?')) {
         try {
+          const profilePicPath = await this.fileUploadService.asyncUploadProfilePic(this.pictureUpload, this.user)
+          this.copyUser.profilePic = profilePicPath.filePath
+          this.newProfilePic = null
+
           await this.usersService.asyncSave(this.copyUser)
+
           this.user = this.copyUser
           this.edit = false
-          this.copyUser = null
         } catch (e) {
           console.log(e)
         }
@@ -56,6 +63,7 @@ export default {
     }
     this.user = await this.usersService.asyncFindById(parseInt(localStorage.getItem('profileId')))
     this.$router.push({ name: 'profilePageInfo' })
+    this.copyUser = User.copyConstructor(this.user)
   }
 }
 </script>
@@ -66,7 +74,8 @@ export default {
     </div>
     <div class="profile-info">
       <div class="info-left">
-        <img class="profile-pic" src="../../../src/assets/img/profilepic.png" @click="activateInput">
+        <img v-if="!newProfilePic" class="profile-pic" :src="require(`../../../src/${copyUser.profilePic}`)" @click="activateInput">
+        <img v-else class="profile-pic" :src="newProfilePic" @click="activateInput">
         <input type="file" accept="image/jpeg, image/png, image/jpg" id="file" @change="handleImageUpload">
         <div v-if="!edit" class="profile-edit-buttons">
           <button class="edit-button" @click="editProfile">Edit</button>
