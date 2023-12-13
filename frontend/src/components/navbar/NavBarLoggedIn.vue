@@ -145,6 +145,10 @@ export default {
       // Initiate the asynchronous operation
       const userAndToken = await this.sessionSBService.asyncFindByEmail(JSON.parse(localStorage.getItem('userDetails')).mail)
       this.user = userAndToken.body
+      if (this.user.profilePic === '') {
+        this.user.profilePic = null
+      }
+      console.log(this.user)
     } catch (e) {
       console.log(e)
     }

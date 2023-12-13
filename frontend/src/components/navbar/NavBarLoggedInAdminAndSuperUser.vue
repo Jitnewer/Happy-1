@@ -95,6 +95,9 @@ export default {
     try {
       const userAndToken = await this.sessionSBService.asyncFindByEmail(JSON.parse(localStorage.getItem('userDetails')).mail)
       this.user = userAndToken.body
+      if (this.user.profilePic === '') {
+        this.user.profilePic = null
+      }
     } catch (e) {
       console.log(e)
     }
