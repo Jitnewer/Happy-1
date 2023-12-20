@@ -1,3 +1,5 @@
+import CustomError from '@/CustomError'
+
 export class SessionSbService {
   BROWSER_STORAGE_ITEM_NAME;
   RESOURCES_URL;
@@ -12,17 +14,31 @@ export class SessionSbService {
     try {
       const response = await fetch(url, options)
       const authorization = response.headers.get('Authorization') // Access the headers
-      console.log(response)
+
       if (response.ok) {
         const body = await response.json()
         return { authorization, body }
       } else {
-        console.log(response, !response.bodyUsed ? await response.text() : '')
-        return null
+        const responseBody = !response.bodyUsed ? await response.text() : ''
+
+        console.log(response)
+
+        if (response.status === 401) {
+          throw new CustomError('Unauthorized: Please log in', response.status, responseBody)
+        } else if (response.status === 403) {
+          throw new CustomError('Forbidden: You don\'t have permission to access this resource', response.status, responseBody)
+        } else {
+          throw new CustomError('Error with response', response.status, responseBody)
+        }
       }
     } catch (error) {
-      console.error('Error fetching JSON:', error)
-      return null
+      if (error.status === 401) {
+        throw new CustomError('Unauthorized: Please log in', error.status, error.message)
+      } else if (error.status === 403) {
+        throw new CustomError('Forbidden: You don\'t have permission to access this resource', error.status, error)
+      } else {
+        throw new CustomError('Error fetching data', error.status || 500, error.message)
+      }
     }
   }
 
@@ -36,42 +52,34 @@ export class SessionSbService {
         },
         body: JSON.stringify(user)
       })
-      console.log('Response from asyncSignIn:', response)
       this.saveTokenIntoBrowserStorage(response.authorization, user)
       return response
-    } catch (e) {
-      console.error('Error in asyncFindById:', e)
-      return null
+    } catch (error) {
+      throw new CustomError('Error in asyncSignIn', error.status || 500, error.message)
     }
   }
 
   async asyncRegister (user) {
     try {
       // this.saveTokenIntoBrowserStrorage()
-      const response = await this.fetchJson(`${this.RESOURCES_URL}` + '/register', {
+      return await this.fetchJson(`${this.RESOURCES_URL}` + '/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify(user)
       })
-      console.log('Response from asyncRegister:', response)
-      return response
-    } catch (e) {
-      console.error('Error in asyncFindById:', e)
-      return null
+    } catch (error) {
+      throw new CustomError('Error in asyncRegister', error.status || 500, error.message)
     }
   }
 
   async asyncFindByEmail (email) {
     try {
       // this.saveTokenIntoBrowserStrorage()
-      const response = await this.fetchJson(`${this.RESOURCES_URL}/${email}`)
-      console.log('Response from asyncFindByEmail:', response)
-      return response
-    } catch (e) {
-      console.error('Error in asyncFindById:', e)
-      return null
+      return await this.fetchJson(`${this.RESOURCES_URL}/${email}`)
+    } catch (error) {
+      throw new CustomError('Error in asyncFindByEmail', error.status || 500, error.message)
     }
   }
 

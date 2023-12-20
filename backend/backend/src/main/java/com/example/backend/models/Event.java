@@ -11,7 +11,7 @@ import java.util.*;
 
 @Entity
 @Table(name = "events")
-public class Event {
+public class Event implements Identifiable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -58,9 +58,14 @@ public class Event {
     public Event() {
 
     }
-
+    @Override
     public long getId() {
         return id;
+    }
+
+    @Override
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getImage() {

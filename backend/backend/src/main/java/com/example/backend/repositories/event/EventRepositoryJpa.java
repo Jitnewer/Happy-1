@@ -1,6 +1,7 @@
 package com.example.backend.repositories.event;
 
 import com.example.backend.models.Event;
+import com.example.backend.repositories.AbstractEntityRepositoryJpa;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
@@ -10,43 +11,38 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@Repository
+@Repository("EVENT.JPA")
 @Primary
-public class EventRepositoryJpa implements EventRepository {
-    @PersistenceContext
-    private EntityManager entityManager;
+public class EventRepositoryJpa extends AbstractEntityRepositoryJpa<Event> {
 
-    @Override
-    public List<Event> getEvents() {
-        String jpql = "SELECT s FROM Event s";
-        TypedQuery<Event> query = entityManager.createQuery(jpql, Event.class);
-        return query.getResultList();
+    public EventRepositoryJpa() {
+        super(Event.class);
     }
 
     @Override
-    public Event getEvent(long id) {
-        return entityManager.find(Event.class, id);
+    public List<Event> findAll() {
+        return super.findAll();
     }
 
     @Override
-    @Transactional
-    public void addEvent(Event event) {
-        entityManager.persist(event);
-
+    public List<Event> findByQuery(String jpqlName, Object... params) {
+        return super.findByQuery(jpqlName, params);
     }
 
     @Override
-    @Transactional
-    public void updateEvent(Event event) {
-        entityManager.merge(event);
+    public Event findById(Long id) {
+        return super.findById(id);
     }
 
     @Override
-    @Transactional
-    public void deleteEvent(long id) {
-        Event event = entityManager.find(Event.class, id);
-        if (event != null) {
-            entityManager.remove(event);
-        }
+    public Event save(Event entity) {
+        return super.save(entity);
     }
+
+    @Override
+    public boolean deleteById(Long id) {
+        return super.deleteById(id);
+    }
+
+
 }

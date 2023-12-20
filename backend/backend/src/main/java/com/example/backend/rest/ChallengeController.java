@@ -3,6 +3,7 @@ package com.example.backend.rest;
 import com.example.backend.models.Challenge;
 import com.example.backend.models.Event;
 import com.example.backend.models.Paragraph;
+import com.example.backend.repositories.EntityRepository;
 import com.example.backend.repositories.challenge.ChallengeRepository;
 import com.example.backend.repositories.paragraph.ParagraphRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.swing.text.html.parser.Entity;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
@@ -22,19 +24,19 @@ import java.util.Optional;
 public class ChallengeController {
 
     @Autowired
-    private ChallengeRepository challengeRepository;
+    private EntityRepository<Challenge> challengeRepository;
     @Autowired
-    private ParagraphRepository paragraphRepository;
+    private EntityRepository<Paragraph> paragraphRepository;
 
     @GetMapping
     public List<Challenge> getAllChallenges() {
-        return challengeRepository.getChallenges();
+        return challengeRepository.findAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Object> getChallengeById(@PathVariable Long id) {
+    public ResponseEntity<Object> getChallengeById(@PathVariable long id) {
         try {
-            Challenge challenge = challengeRepository.getChallenge(id);
+            Challenge challenge = challengeRepository.findById(id);
             if (challenge != null) {
                 return ResponseEntity.ok(challenge);
             } else {
@@ -57,7 +59,7 @@ public class ChallengeController {
             for (Paragraph paragraph : challenge.getParagraphs()) {
                 paragraph.setChallenge(challenge);
             }
-            challengeRepository.addChallenge(challenge);
+            challengeRepository.save(challenge);
 
             URI location = ServletUriComponentsBuilder
                     .fromCurrentRequest()
@@ -81,8 +83,8 @@ public class ChallengeController {
 
 
     @DeleteMapping("/admin/{id}")
-    public ResponseEntity<Void> deleteChallenge(@PathVariable Long id) {
-        challengeRepository.deleteChallenge(id);
+    public ResponseEntity<Void> deleteChallenge(@PathVariable long id) {
+        challengeRepository.deleteById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

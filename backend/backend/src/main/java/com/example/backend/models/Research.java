@@ -11,11 +11,11 @@ import java.util.Set;
 
 @Entity
 @Table(name = "researches")
-public class Research {
+public class Research implements Identifiable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
 
     @Column(nullable = false)
     private String title;
@@ -52,11 +52,12 @@ public class Research {
 
 //    // Getters and setters
 
-    public Long getId() {
+    @Override
+    public long getId() {
         return id;
     }
-
-    public void setId(Long id) {
+    @Override
+    public void setId(long id) {
         this.id = id;
     }
 

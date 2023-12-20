@@ -3,6 +3,7 @@ package com.example.backend.rest;
 import com.example.backend.models.Challenge;
 import com.example.backend.models.Paragraph;
 import com.example.backend.models.Research;
+import com.example.backend.repositories.EntityRepository;
 import com.example.backend.repositories.paragraph.ParagraphRepository;
 import com.example.backend.repositories.research.ResearchRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,19 +23,19 @@ import java.util.Map;
 public class ResearchController {
 
     @Autowired
-    private ResearchRepository researchRepository;
+    private EntityRepository<Research> researchRepository;
     @Autowired
-    private ParagraphRepository paragraphRepository;
+    private EntityRepository<Paragraph> paragraphRepository;
 
     @GetMapping
     public List<Research> getAllResearches() {
-        return researchRepository.getResearches();
+        return researchRepository.findAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Object> getResearchById(@PathVariable Long id) {
+    public ResponseEntity<Object> getResearchById(@PathVariable long id) {
         try {
-            Research research = researchRepository.getResearch(id);
+            Research research = researchRepository.findById(id);
             if (research != null) {
                 return ResponseEntity.ok(research);
             } else {
@@ -55,12 +56,12 @@ public class ResearchController {
 
         try {
             // Save the research entity first to generate a valid ID
-            researchRepository.addResearch(research);
+            researchRepository.save(research);
 
             // Set the research property in each paragraph and persist them
             for (Paragraph paragraph : research.getParagraphs()) {
                 paragraph.setResearch(research);
-                paragraphRepository.addParagraph(paragraph);
+                paragraphRepository.save(paragraph);
             }
 
             URI location = ServletUriComponentsBuilder
@@ -82,8 +83,8 @@ public class ResearchController {
     }
 
     @DeleteMapping("/admin/{id}")
-    public ResponseEntity<Object> deleteResearch(@PathVariable Long id) {
-        researchRepository.deleteResearch(id);
+    public ResponseEntity<Object> deleteResearch(@PathVariable long id) {
+        researchRepository.deleteById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

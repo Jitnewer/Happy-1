@@ -2,6 +2,7 @@ package com.example.backend.rest;
 
 import com.example.backend.exceptions.PreConditionFailedException;
 import com.example.backend.models.Event;
+import com.example.backend.repositories.EntityRepository;
 import com.example.backend.repositories.event.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,12 +20,12 @@ import java.util.Map;
 public class EventController {
 
     @Autowired
-    private EventRepository eventRepository; // Change this line
+    private EntityRepository<Event> eventRepository; // Change this line
 
     @GetMapping()
     public ResponseEntity<Object> getEvents() {
         try {
-            List<Event> events = eventRepository.getEvents();
+            List<Event> events = eventRepository.findAll();
             if (events.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", "Events not found"));
             }
@@ -39,7 +40,7 @@ public class EventController {
     @GetMapping("/{id}")
     public ResponseEntity<Object> getEvent(@PathVariable long id) {
         try {
-            Event event = eventRepository.getEvent(id);
+            Event event = eventRepository.findById(id);
             if (event != null) {
                 return ResponseEntity.ok(event);
             } else {
@@ -55,7 +56,7 @@ public class EventController {
     @PostMapping("/admin")
     public ResponseEntity<Object> addEvent(@RequestBody Event event) {
         try {
-            eventRepository.addEvent(event);
+            eventRepository.save(event);
 
             URI location = ServletUriComponentsBuilder
                     .fromCurrentRequest()
@@ -83,7 +84,7 @@ public class EventController {
                 throw new PreConditionFailedException("Event ID in the path does not match the ID in the request body.");
             }
 
-            eventRepository.updateEvent(event);
+            eventRepository.save(event);
             return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "Event updated successfully"));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
@@ -95,7 +96,7 @@ public class EventController {
     @DeleteMapping("/admin/{id}")
     public ResponseEntity<Object> deleteEvent(@PathVariable long id) {
         try {
-            eventRepository.deleteEvent(id);
+            eventRepository.deleteById(id);
             return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "Event with id " + id + " deleted successfully"));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(

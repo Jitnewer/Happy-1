@@ -3,6 +3,7 @@ package com.example.backend.rest;
 import com.example.backend.APIConfig;
 import com.example.backend.auth.JWToken;
 import com.example.backend.models.User;
+import com.example.backend.repositories.EntityRepository;
 import com.example.backend.repositories.user.UserRepository;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,10 +24,10 @@ public class AuthenticationController {
 
     private JWToken jwToken;
     private APIConfig apiConfig;
-    private UserRepository userRepository;
+    private EntityRepository<User> userRepository;
 
     @Autowired
-    public AuthenticationController(JWToken jwToken, APIConfig apiConfig, UserRepository userRepository) {
+    public AuthenticationController(JWToken jwToken, APIConfig apiConfig, EntityRepository<User> userRepository) {
         this.jwToken = jwToken;
         this.apiConfig = apiConfig;
         this.userRepository = userRepository;
@@ -58,7 +59,7 @@ public class AuthenticationController {
     @GetMapping("/{mail}")
     public ResponseEntity<Object> getUserByMail(@PathVariable String mail) {
         try {
-            User user = userRepository.getUserByMail(mail);
+            User user = userRepository.findByProperty("mail", mail);
             if (user == null) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", "User not found with email: " + mail));
             }
@@ -71,7 +72,7 @@ public class AuthenticationController {
     @PostMapping("/register")
     public ResponseEntity<Object> register(@RequestBody User user) {
         try {
-            if (userRepository.getUserByMail(user.getMail()) != null) {
+            if (userRepository.findByProperty("mail", user.getMail()) != null) {
                 return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("message", "User with mail: " + user.getMail() + " already exists"));
             }
             userRepository.register(user);

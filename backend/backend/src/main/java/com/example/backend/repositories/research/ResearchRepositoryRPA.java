@@ -2,6 +2,7 @@ package com.example.backend.repositories.research;
 
 import com.example.backend.models.Challenge;
 import com.example.backend.models.Research;
+import com.example.backend.repositories.AbstractEntityRepositoryJpa;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
@@ -11,42 +12,37 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@Repository
+@Repository("RESEARCH.JPA")
 @Primary
-public class ResearchRepositoryRPA implements ResearchRepository{
-    @PersistenceContext
-    private EntityManager entityManager;
+public class ResearchRepositoryRPA extends AbstractEntityRepositoryJpa<Research> {
 
-    @Override
-    public List<Research> getResearches() {
-        String jpql = "SELECT r FROM Research r";
-        TypedQuery<Research> query = entityManager.createQuery(jpql, Research.class);
-        return query.getResultList();
+    public ResearchRepositoryRPA() {
+        super(Research.class);
     }
 
     @Override
-    public Research getResearch(long id) {
-        return entityManager.find(Research.class, id);
+    public List<Research> findAll() {
+        return super.findAll();
     }
 
     @Override
-    @Transactional
-    public void addResearch(Research research) {
-        entityManager.persist(research);
+    public List<Research> findByQuery(String jpqlName, Object... params) {
+        return super.findByQuery(jpqlName, params);
     }
 
     @Override
-    @Transactional
-    public void updateResearch(Research research) {
-        entityManager.merge(research);
+    public Research findById(Long id) {
+        return super.findById(id);
     }
 
     @Override
-    @Transactional
-    public void deleteResearch(long id) {
-        Research research = entityManager.find(Research.class, id);
-        if (research != null) {
-            entityManager.remove(research);
-        }
+    public Research save(Research entity) {
+        return super.save(entity);
     }
+
+    @Override
+    public boolean deleteById(Long id) {
+        return super.deleteById(id);
+    }
+
 }
