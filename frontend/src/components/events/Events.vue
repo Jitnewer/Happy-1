@@ -286,15 +286,18 @@ export default {
       return this.userEventsService.entities
     },
     filteredEventsOnDate  () {
-      if (this.events.length > 1) {
-        const sortedEvents = this.events.slice().sort((a, b) => {
-          const dateA = new Date(a.date)
-          const dateB = new Date(b.date)
-          return this.filter === 'asc' ? dateA - dateB : dateB - dateA
-        })
-        return this.search ? this.searchEvent(sortedEvents) : sortedEvents
+      if (Array.isArray(this.events)) {
+        if (this.events.length > 1) {
+          const sortedEvents = this.events.slice().sort((a, b) => {
+            const dateA = new Date(a.date)
+            const dateB = new Date(b.date)
+            return this.filter === 'asc' ? dateA - dateB : dateB - dateA
+          })
+          return this.search ? this.searchEvent(sortedEvents) : sortedEvents
+        }
+        return this.events
       }
-      return this.events
+      return null
     },
     isEventSignedIn () {
       return (event) => {

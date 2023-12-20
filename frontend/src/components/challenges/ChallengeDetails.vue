@@ -2,17 +2,17 @@
   <div class="breadcrum" v-if="challenge">
     <router-link :to="{ name: 'welcome' }">Home</router-link>
     <p>></p>
-    <a>News</a>
+    <router-link :to="{ name: 'news' , query: { sort: filter }   }">News</router-link>
     <p>></p>
-    <router-link :to="{ name: 'challenges' }">Challenges</router-link>
+    <router-link :to="{ name: 'challenges' , query: { sort: filter }  }">Challenges</router-link>
     <p>></p>
-    <router-link :to="{ name: 'challenge', params: { id: challenge.id } }">Challenge / {{ challenge.id }}</router-link>
+    <router-link :to="{ name: 'challenge', params: { id: challenge.id }, query: { sort: filter }   }">Challenge / {{ challenge.id }}</router-link>
   </div>
   <div v-if="challenge" class="container">
     <div class="challenge-main">
       <div class="challenge-title">
         <button @click="back">Back</button>
-        <h1>Challenge</h1>
+        <h1>Challenge Article</h1>
       </div>
       <div class="detail-challenge">
         <div>
@@ -40,6 +40,11 @@ import challenges from './Challenges.vue'
 export default {
   name: 'ChallengeDetails.vue',
   inject: ['challengeService'],
+  data () {
+    return {
+      filter: this.$route.query.sort
+    }
+  },
   methods: {
     getFormattedDate (dateString) {
       const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }
@@ -71,9 +76,12 @@ export default {
       }
     },
     async back () {
-      await this.challengeService.asyncFindAll()
+      if (this.filter === null) {
+        this.$router.push({ name: 'challenges' })
+      } else {
+        this.$router.push({ name: 'challenges', query: { sort: this.filter } })
+      }
 
-      this.$router.push({ name: 'challenges' })
       this.$emit('update-selected-challenge')
     }
   },

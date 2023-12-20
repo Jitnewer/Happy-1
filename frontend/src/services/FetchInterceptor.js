@@ -23,6 +23,7 @@ export class FetchInterceptor {
         if (response.status === 401) {
           // Redirect to '/sign-out' in case of a 401 Unauthorized error
           FetchInterceptor.theInstance.session.saveTokenIntoBrowserStorage(null, null)
+          console.log('Token is outdated maybe')
           FetchInterceptor.theInstance.router.push({ name: 'login' })
         } else if (!response.ok) {
           // Handle other error responses

@@ -2,13 +2,13 @@
   <div class="breadcrum">
     <router-link :to="{ name: 'welcome' }">Home</router-link>
     <p>></p>
-    <a>News</a>
+    <router-link :to="{ name: 'news', query: { sort: filter} }">News</router-link>
     <p>></p>
-    <router-link :to="{ name: 'researches' }">Researches</router-link>
+    <router-link :to="{ name: 'researches', query: { sort: filter} }">Researches</router-link>
   </div>
   <div class="container">
     <div class="title-filter">
-    <h1 id="challenges-title">Research</h1>
+    <h1 id="challenges-title">Research Articles</h1>
       <button class="filter-button" @click="toggleFilter">Filter</button>
       <transition name="filter">
       <div v-if="showFilter" class="research-filter">
@@ -65,13 +65,13 @@ export default {
   inject: ['researchService'],
   data () {
     return {
-      filter: null,
+      filter: this.$route.query.sort,
       showFilter: false
     }
   },
   methods: {
     async selectResearch (research) {
-      this.$router.push({ name: 'research', params: { id: research.id } })
+      this.$router.push({ name: 'research', params: { id: research.id }, query: { sort: this.filter } })
       await this.researchService.asyncFindById(research.id)
     },
     shortenParagraph (paragraph) {
@@ -148,7 +148,7 @@ export default {
   watch: {
     $route (to, from) {
       if (to.fullPath !== from.fullPath) {
-        this.updateChallenges()
+        this.updateResearches()
       }
     }
   },
@@ -157,11 +157,15 @@ export default {
       return this.researchService.entities
     },
     sortedResearch () {
-      return this.researches.slice().sort((a, b) => {
-        const dateA = new Date(a.dateTime)
-        const dateB = new Date(b.dateTime)
-        return dateA - dateB
-      })
+      if (Array.isArray(this.researches)) {
+        console.log(this.researches)
+        return this.researches.slice().sort((a, b) => {
+          const dateA = new Date(a.dateTime)
+          const dateB = new Date(b.dateTime)
+          return dateA - dateB
+        })
+      }
+      return null
     }
   }
 }
