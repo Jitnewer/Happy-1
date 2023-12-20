@@ -1,7 +1,7 @@
 <template>
     <NavBar></NavBar>
   <router-view v-if="!loggedInAsAdmin"></router-view>
-  <Footer></Footer>
+  <Footer v-if="!loggedInAsAdmin"></Footer>
 </template>
 
 <script>
@@ -13,11 +13,12 @@ import { SessionSbService } from '@/services/SessionSbService'
 import { UserEvent } from '@/models/UserEvent'
 import { Challenge } from '@/models/challenge'
 import { Research } from '@/models/research'
-import { shallowReactive } from 'vue'
+import { reactive, shallowReactive } from 'vue'
 import NavBar from '@/components/navbar/NavBar.vue'
 import Footer from '@/components/welcomePage/Footer.vue'
 import { mapState } from 'vuex'
 import { FetchInterceptor } from '@/services/FetchInterceptor'
+import { CachedRESTAdaptorWithFetch } from '@/services/CachedRESTAdaptorWithFetch'
 
 export default {
   name: 'App',
@@ -31,16 +32,15 @@ export default {
   provide () {
     this.theSessionSbService = shallowReactive(new SessionSbService(CONFIG.BACKEND_URL + '/authentication', CONFIG.JWT_STORAGE_ITEM))
     this.theFetchInterceptor = new FetchInterceptor(this.theSessionSbService, this.$router)
-
     return {
-      eventsService: new RESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/events', Event.copyConstructor),
-      eventsServiceAdmin: new RESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/events/admin', Event.copyConstructor),
-      usersService: new RESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/users', User.copyConstructor),
-      challengeService: new RESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/challenges', Challenge.copyConstructor),
-      userEventsService: new RESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/userevents', UserEvent.copyConstructor),
-      usersServiceAdmin: new RESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/users/admin', User.copyConstructor),
+      eventsService: reactive(new CachedRESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/events', Event.copyConstructor)),
+      eventsServiceAdmin: reactive(new CachedRESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/events/admin', Event.copyConstructor)),
+      usersService: reactive(new CachedRESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/users', User.copyConstructor)),
+      challengeService: reactive(new CachedRESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/challenges', Challenge.copyConstructor)),
+      userEventsService: reactive(new CachedRESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/userevents', UserEvent.copyConstructor)),
+      usersServiceAdmin: reactive(new CachedRESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/users/admin', User.copyConstructor)),
       sessionSBService: shallowReactive(new SessionSbService(CONFIG.BACKEND_URL + '/authentication', CONFIG.JWT_STORAGE_ITEM)),
-      researchService: new RESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/researches', Research.copyConstructor)
+      researchService: reactive(new CachedRESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/researches', Research.copyConstructor))
     }
   },
   unmounted () {

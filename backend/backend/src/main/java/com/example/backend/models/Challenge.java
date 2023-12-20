@@ -26,7 +26,16 @@ public class Challenge implements Identifiable{
     @Column(nullable = false)
     private LocalDateTime dateTime;
 
-
+    public enum Theme {
+        FOOD_WASTE,
+        DISTRIBUTION,
+        ENERGY_TRANSITION,
+        SINGLE_USED_PLASTIC,
+        PROTEIN_TRANSITION,
+        WATER
+    }
+    @Column(nullable = false)
+    private Theme theme;
 
     @Column(nullable = false)
     private String image;
@@ -34,7 +43,7 @@ public class Challenge implements Identifiable{
     @Column(columnDefinition = "TEXT")
     private String firstParagraph;
 
-    @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "challenge", orphanRemoval = true)
     @JsonManagedReference(value = "challenge-paragraphs")
     private Set<Paragraph> paragraphs = new HashSet<>();
 
@@ -43,13 +52,21 @@ public class Challenge implements Identifiable{
 
 
     // Constructor with parameters
-    public Challenge(String title, String firstParagraph, Set<Paragraph> paragraphs) {
+    public Challenge(String title, String firstParagraph, Set<Paragraph> paragraphs, Theme theme) {
         this.title = title;
         this.dateTime = LocalDateTime.now();
         this.image = "img.png";
         this.firstParagraph = firstParagraph;
         this.paragraphs = paragraphs;
+        this.theme = theme;
+    }
 
+    public Theme getTheme() {
+        return theme;
+    }
+
+    public void setTheme(Theme theme) {
+        this.theme = theme;
     }
 
     public Challenge() {

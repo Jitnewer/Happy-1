@@ -13,10 +13,10 @@
                 <router-link class="dropdown-content-link" to="/news/challenges">
                   Challenges
                 </router-link>
-                <router-link class="dropdown-content-link" to="/news/research">
+                <router-link class="dropdown-content-link" to="/news/researches">
                   Research
                 </router-link>
-                <router-link class="dropdown-content-link" to="/news/network">
+                <router-link class="dropdown-content-link" to="/news/networks">
                   Network
                 </router-link>
               </div>

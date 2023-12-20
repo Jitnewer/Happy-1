@@ -48,6 +48,23 @@ public class ResearchController {
         }
     }
 
+    @GetMapping("/getByTheme/{theme}")
+    public ResponseEntity<Object> getResearchesByTheme(@PathVariable String theme) {
+        try {
+            Research.Theme themeEnum = Research.Theme.valueOf(theme.toUpperCase());
+
+            List<Research> researches = researchRepository.findMultipleByProperty("theme", themeEnum);
+            if (researches != null) {
+                return ResponseEntity.ok(researches);
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", "Researches not found with theme: " + theme));
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
+                    "message", "Error retrieving challenge",
+                    "error", e.getMessage()));
+        }
+    }
     @PostMapping("/admin")
     public ResponseEntity<Object> createResearch(@RequestBody Research research) {
         if (research.getTitle() == null || research.getTitle().isEmpty()) {

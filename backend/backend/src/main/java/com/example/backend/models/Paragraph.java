@@ -17,12 +17,12 @@ public class Paragraph implements Identifiable{
     @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "challenge_id")
     @JsonBackReference(value = "challenge-paragraphs")
     private Challenge challenge;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "research_id")
     @JsonBackReference(value = "research-paragraphs")
     private Research research;
