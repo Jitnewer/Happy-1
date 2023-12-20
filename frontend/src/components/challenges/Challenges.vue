@@ -4,7 +4,7 @@
     <div class="challenges">
       <div class="challenge" v-for="challenge in sortedChallenges" :key="challenge.id" @click="selectChallenge(challenge)">
         <div class="challenge-left">
-          <img :src="require(`../../assets/img/${challenge.image}`)" alt="Challenge Image"/>
+          <img :src="require(`../../${challenge.image}`)" alt="Challenge Image"/>
         </div>
         <div class="challenge-right">
           <p class="challenge-time">{{ formattedDateTime(challenge.dateTime) }}</p>

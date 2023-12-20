@@ -3,13 +3,13 @@ import { Event } from '@/models/event'
 export default {
   name: 'EventDetailsView',
   inject: ['eventsService', 'fileUploadService'],
-  props: ['selectedEvent', 'create'],
-  emits: ['deselect-event', 'delete-event', 'save-event'],
   data () {
     return {
       created: this.create,
       selectedCopy: null,
-      pictureUpload: null
+      pictureUpload: null,
+      newEventPic: null,
+      event: null
     }
   },
   methods: {
@@ -22,8 +22,10 @@ export default {
       if (this.validateFields()) {
         if (confirm('Are you sure you want to save changes to event?')) {
           try {
+            const profilePicPath = await this.fileUploadService.asyncUploadEventPic(this.pictureUpload, this.selectedCopy.id)
+            this.selectedCopy.image = profilePicPath.filePath
+
             await this.eventsService.asyncSave(this.selectedCopy)
-            // await this.fileUploadService.asyncUploadImage(this.pictureUpload, this.selectedCopy)
 
             this.$router.push({ name: 'adminEvents' })
           } catch (e) {
@@ -36,20 +38,22 @@ export default {
       if (confirm('Are you sure you want to delete this event?')) {
         try {
           await this.eventsService.asyncDeleteById(this.selectedCopy.id)
+          await this.fileUploadService.asyncDeleteImage(this.selectedCopy.image)
+
           this.$router.push({ name: 'adminEvents' })
         } catch (e) {
           console.error(e)
         }
       }
     },
-    // async handleImageUpload (event) {
-    //   const file = event.target.files[0]
-    //   this.selectedCopy = URL.createObjectURL(file)
-    //   this.pictureUpload = file
-    // },
-    // activateInput () {
-    //   document.querySelector('#file').click()
-    // },
+    handleImageUpload (event) {
+      const file = event.target.files[0]
+      this.newEventPic = URL.createObjectURL(file)
+      this.pictureUpload = file
+    },
+    activateInput () {
+      document.querySelector('#file').click()
+    },
     clearInputs () {
       this.selectedCopy.name = null
       this.selectedCopy.date = null
@@ -123,7 +127,15 @@ export default {
       return true
     },
     async loadEvent () {
-      const eventId = this.$route.params.id
+      const eventId = parseInt(this.$route.params.id)
+      if (eventId === 0) {
+        this.event = new Event()
+        this.event.id = 0
+        this.event.image = 'assets/eventPic/imagePlaceholder.jpg'
+        this.selectedCopy = Event.copyConstructor(this.event)
+        return
+      }
+
       if (eventId) {
         try {
           this.event = await this.eventsService.asyncFindById(eventId)
@@ -191,7 +203,7 @@ export default {
 </script>
 
 <template>
-  <div class="container" v-if="selectedCopy">
+  <div class="container" v-if="event">
     <div class="events-title">
       <button @click="closeEventDetail" class="back-button">Back</button>
       <h3>Event</h3>
@@ -199,7 +211,8 @@ export default {
     <form class="event-details">
       <div class="event-image-container">
         <input type="file" accept="image/jpeg, image/png, image/jpg" id="file" @change="handleImageUpload">
-        <img :src="require(`../../../assets/images/${selectedCopy.image}`)" alt="event image" class="event-image" @click="activateInput">
+        <img v-if="!newEventPic" :src="require(`../../../${selectedCopy.image}`)" alt="event image" class="event-image" @click="activateInput">
+        <img v-else :src="newEventPic" alt="event image" class="event-image" @click="activateInput">
       </div>
       <div class="info-inputs">
         <input type="text" placeholder="Event name" v-model="selectedCopy.name" id="edit-event-name">

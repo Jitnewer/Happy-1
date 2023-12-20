@@ -47,37 +47,40 @@ public class ChallengeController {
         }
     }
 
-    @PostMapping
+    @PostMapping()
     public ResponseEntity<Object> createChallenge(@RequestBody Challenge challenge) {
-        if (challenge.getTitle() == null || challenge.getTitle().isEmpty()) {
-            return ResponseEntity.badRequest().body(Map.of("message", "Title is required"));
-        }
+//        if (challenge.getTitle() == null || challenge.getTitle().isEmpty()) {
+//            return ResponseEntity.badRequest().body(Map.of("message", "Title is required"));
+//        }
 
-        try {
-            for (Paragraph paragraph : challenge.getParagraphs()) {
-                paragraph.setChallenge(challenge);
-            }
-            challengeRepository.addChallenge(challenge);
-
-            URI location = ServletUriComponentsBuilder
-                    .fromCurrentRequest()
-                    .path("/{id}")
-                    .buildAndExpand(challenge.getId())
-                    .toUri();
-
-            return ResponseEntity.created(location).body(Map.of(
-                    "message", "Challenge added successfully",
-                    "status", HttpStatus.CREATED.value(),
-                    "location", location.toString()));
-        } catch (Exception e) {
-            Map<String, Object> errorResponse = new HashMap<>();
-            errorResponse.put("message", "Error adding the challenge");
-            errorResponse.put("error", e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
-        }
+        return ResponseEntity.ok().body(challenge);
+//        try {
+////            for (Paragraph paragraph : challenge.getParagraphs()) {
+////                paragraph.setChallenge(challenge);
+////                paragraphRepository.addParagraph(paragraph);
+////            }
+////            challengeRepository.addChallenge(challenge);
+////
+////            URI location = ServletUriComponentsBuilder
+////                    .fromCurrentRequest()
+////                    .path("/{id}")
+////                    .buildAndExpand(challenge.getId())
+////                    .toUri();
+//
+//            return ResponseEntity.created(location).body(Map.of(
+//                    "message", "Challenge added successfully",
+//                    "status", HttpStatus.CREATED.value(),
+//                    "location", location.toString()));
+//        } catch (Exception e) {
+//            Map<String, Object> errorResponse = new HashMap<>();
+//            errorResponse.put("message", "Error adding the challenge");
+//            errorResponse.put("error", e.getMessage());
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+//        }
     }
 
-
+//    @PutMapping("/{id}")
+//
 
 
     @DeleteMapping("/{id}")

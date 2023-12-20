@@ -43,10 +43,10 @@ public class Challenge {
 
 
     // Constructor with parameters
-    public Challenge(String title, String firstParagraph, Set<Paragraph> paragraphs) {
+    public Challenge(String title, String firstParagraph, String image, Set<Paragraph> paragraphs) {
         this.title = title;
         this.dateTime = LocalDateTime.now();
-        this.image = "img.png";
+        this.image = image;
         this.firstParagraph = firstParagraph;
         this.paragraphs = paragraphs;
 

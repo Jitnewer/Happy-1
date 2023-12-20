@@ -3,7 +3,7 @@ import { User } from '@/models/user'
 
 export default {
   name: 'AdminUsersView',
-  inject: ['usersService'],
+  inject: ['usersService', 'fileUploadService'],
   data () {
     return {
       filter: {
@@ -85,6 +85,8 @@ export default {
       if (confirm('Are you sure you want to delete this user?')) {
         try {
           await this.usersService.asyncDeleteById(user.id)
+          await this.fileUploadService.asyncDeleteImage(user.profilePic)
+
           const indexToUpdate = this.users.findIndex(oldUser => oldUser.id === user.id)
 
           if (indexToUpdate >= 0) {

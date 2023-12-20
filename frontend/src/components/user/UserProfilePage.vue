@@ -24,7 +24,7 @@ export default {
         this.copyUser = null
       }
     },
-    async handleImageUpload (event) {
+    handleImageUpload (event) {
       const file = event.target.files[0]
       this.newProfilePic = URL.createObjectURL(file)
       this.pictureUpload = file
@@ -61,6 +61,7 @@ export default {
     if (localStorage.getItem('email') == null) {
       this.$router.push({ route: 'PageNotFound' })
     }
+
     this.user = await this.usersService.asyncFindById(parseInt(localStorage.getItem('profileId')))
     this.$router.push({ name: 'profilePageInfo' })
     this.copyUser = User.copyConstructor(this.user)
