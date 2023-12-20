@@ -25,20 +25,19 @@ export default {
         status: 'ACTIVE',
         companyType: ''
       },
+      confirmedPassword: '',
       // Validation GP forms
-      isEmailGPValid: null,
+      isEmailValid: null,
       isCompanyNameValid: null,
-      isContactNameGPValid: true,
-      isPostalCodeGPValid: true,
-      isUsernameGPValid: true,
-      isPasswordGPValid: true,
+      isContactNameGPValid: null,
+      isPostalCodeValid: null,
+      isUsernameValid: null,
+      isPasswordValid: null,
       // validation EP forms
       isFirstnameValid: null,
       isLastnameValid: null,
-      isEmailEPValid: true,
-      isPostalCodeEPValid: true,
-      isUsernameEPValid: true,
-      isPasswordEPValid: true
+      isAgeValid: null,
+      isConfirmedPasswordValid: null
     }
   },
   methods: {
@@ -54,8 +53,23 @@ export default {
     goToNextForm () {
       console.log(this.currentForm)
       if (this.currentForm === 1) {
-        if (this.validateFormGP1()) {
+        if (this.validateForm1()) {
           this.currentForm = 2
+        }
+      }
+      if (this.currentForm === 2) {
+        if (this.validateForm2()) {
+          this.currentForm = 3
+        }
+      }
+      if (this.currentForm === 3) {
+        if (this.validateForm3()) {
+          this.currentForm = 4
+        }
+      }
+      if (this.currentForm === 4) {
+        if (this.validateForm4()) {
+          this.$router.push({ name: 'welcome' })
         }
       }
     },
@@ -102,73 +116,63 @@ export default {
       this.isLastnameValid = lastNameRegex.test(lastName)
       return this.isLastnameValid
     },
-    validateFormGP1 () {
+    validatePostalCode (postalCode) {
+      const postalCodeRegex = /^[1-9][0-9]{3}\s?[a-zA-Z]{2}$/
+      console.log(postalCodeRegex.test(postalCode))
+      this.isPostalCodeValid = postalCodeRegex.test(postalCode)
+      return this.isPostalCodeValid
+    },
+    validateAge (age) {
+      const ageRegex = /^(1[8-9]|[2-9][0-9]|100)$/
+      console.log(ageRegex.test(age))
+      this.isAgeValid = ageRegex.test(age)
+      return this.isAgeValid
+    },
+    validateEmail (mail) {
+      const emailRegex = /[a-z0-9._%+]+@[a-z0-9.]+\.[a-z]{2,}$/
+      console.log(emailRegex.test(mail))
+      this.isEmailValid = emailRegex.test(mail)
+      return this.isEmailValid
+    },
+    validatePassword (password) {
+      const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
+      console.log(passwordRegex.test(password))
+      this.isPasswordValid = passwordRegex.test(password)
+      return this.isPasswordValid
+    },
+    validateConfirmedPassword (confirmedPassword) {
+      this.isConfirmedPasswordValid = (this.user.password === confirmedPassword)
+
+      return this.isConfirmedPasswordValid
+    },
+    validateForm1 () {
       // Validate the company name
       const isCompanyNameValid = this.validateCompanyName(this.user.companyName)
       const isFirstNameValid = this.validateFirstName(this.user.firstname)
       const isLastNameValid = this.validateLastName(this.user.lastname)
-
       // Return true only if all validations pass
       return isCompanyNameValid && isFirstNameValid && isLastNameValid
     },
-    validateFormGP2 () {
-      // Add regex validation for each field
-      if (!/^[1-9][0-9]{3}\s?[a-zA-Z]{2}$/.test(this.user.postalCode)) {
-        this.isPostalCodeGPValid = false
-        return false
-      }
-      // Add similar validations for other fields
-      return true // If all validations pass
+    validateForm2 () {
+      // Validate the company name
+      const isPostalCodeValid = this.validatePostalCode(this.user.postalCode)
+      // Return true only if all validations pass
+      return isPostalCodeValid
     },
-    validateFormGP4 () {
-      // Add regex validation for each field
-      if (!/.{8,}$/.test(this.user.mail)) {
-        this.isUsernameGPValid = false
-        return false
-      }
-      if (!/ (?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/.test(this.user.password)) {
-        this.isPasswordGPValid = false
-        return false
-      }
-      // Add similar validations for other fields
-      return true // If all validations pass
+    validateForm3 () {
+      // Validate the company name
+      const isAgeValid = this.validateAge(this.user.age)
+      // Return true only if all validations pass
+      return isAgeValid
     },
-    validateFormEP1 () {
-      // Add regex validation for each field
-      if (!/^[A-Za-z]+$/.test(this.user.firstname)) {
-        this.isFirstnameValid = false
-        return false
-      }
-      if (!/^[A-Za-z]+$/.test(this.user.lastname)) {
-        this.isLastnameValid = false
-        return false
-      }
-      if (!/[a-z0-9._%+]+@[a-z0-9.]+\.[a-z]{2,}$/.test(this.user.mail)) {
-        this.isEmailEPValid = false
-        return false
-      }
-      // Add similar validations for other fields
-      return true // If all validations pass
-    },
-    validateFormEP2 () {
-      // Add regex validation for each field
-      if (!/^[1-9][0-9]{3}\s?[a-zA-Z]{2}$/.test(this.user.postalCode)) {
-        this.isPostalCodeEPValid = false
-        return false
-      }
-      // Add similar validations for other fields
-      return true // If all validations pass
-    },
-    validateFormEP4 () {
-      // Add regex validation for each field
-      if (!/^[a-zA-Z0-9_]{3,20}$/.test(this.user.mail)) {
-        this.isUsernameEPValid = false
-        return false
-      }
-      if (!/ (?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/.test(this.user.password)) {
-        this.isPasswordEPValid = false
-        return false
-      }
+    validateForm4 () {
+      // Validate the company name
+      const isEmailValid = this.validateEmail(this.user.mail)
+      const isPasswordValid = this.validatePassword(this.user.password)
+      const isConfirmedPasswordValid = this.validateConfirmedPassword(this.confirmedPassword)
+
+      // Return true only if all validations pass
+      return isEmailValid && isPasswordValid && isConfirmedPasswordValid
     }
   },
   watch: {
@@ -272,9 +276,10 @@ export default {
             </div>
             <div class="field-sign-up">
               <div class="label-sign-up">Postal code:</div>
-              <input type="text" class="sign-up-input" required v-model="user.postalCode">
+              <input type="text" class="sign-up-input" required v-model="user.postalCode" :class="{'invalid-input': user.postalCode && !isPostalCodeValid,'valid-input': user.postalCode && isPostalCodeValid}"
+                     @input="validatePostalCode(user.postalCode)">
             </div>
-<!--            <div class="errorMessageRegistrationForm" v-if="!isPostalCodeGPValid">Please enter a valid Dutch postal code</div>-->
+            <div class="errorMessageRegistrationForm" v-if="!isPostalCodeValid && user.postalCode">Please enter a valid Dutch postal code</div>
             <div class="field-btn">
               <button class="prev-1" @click="goToPrevForm">Previous</button>
               <button class="next-1" @click.prevent="goToNextForm">Next</button>
@@ -284,8 +289,11 @@ export default {
             <div class="title-sign-up-form">Date of Birth:</div>
             <div class="field-sign-up">
               <div class="label-sign-up">Age:</div>
-              <input type="number" class="sign-up-input" v-model="user.age">
+              <input type="number" class="sign-up-input" v-model="user.age" :class="{'invalid-input': user.age && !isAgeValid,'valid-input': user.age && isAgeValid}"
+                     @input="validateAge(user.age)">
             </div>
+            <div class="errorMessageRegistrationForm" v-if="!isAgeValid && user.age">Please enter a valid age. You must be 18 or older </div>
+
             <div class="field-sign-up">
               <div class="label-sign-up">Gender:</div>
               <select class="select-gender-sign-up" v-model="user.gender">
@@ -303,20 +311,23 @@ export default {
             <div class="title-sign-up-form">Login Details:</div>
 <div class="field-sign-up">
   <div class="label-sign-up">Email Address:</div>
-  <input type="text" class="sign-up-input" v-model="user.mail" required>
+  <input type="text" class="sign-up-input" v-model="user.mail" required :class="{'invalid-input': user.mail && !isEmailValid, 'valid-input': user.mail && isEmailValid }"
+         @input="validateEmail(user.mail)"/>
 </div>
-<!--  <div class="errorMessageRegistrationForm" v-if="!isEmailGPValid">Please enter a valid emailaddress</div>-->
+  <div class="errorMessageRegistrationForm" v-if="!isEmailValid && user.mail">Please enter a valid emailaddress</div>
   <div class="field-sign-up">
 <div class="label-sign-up">Password:</div>
-              <input type="password" class="sign-up-input" required v-model="user.password">
+              <input type="password" class="sign-up-input" required v-model="user.password" :class="{'invalid-input': user.password && !isPasswordValid, 'valid-input': user.password && isPasswordValid }"
+                     @input="validatePassword(user.password)"/>
             </div>
-<!--            <div class="errorMessageRegistrationForm" v-if="!isPasswordGPValid">Must contain at least one  number and one uppercase and lowercase letter,-->
-<!--              and at least 8 or more characters</div>-->
+            <div class="errorMessageRegistrationForm" v-if="!isPasswordValid && user.password">Must contain at least one  number and one uppercase and lowercase letter,
+              and at least 8 or more characters</div>
             <div class="field-sign-up">
               <div class="label-sign-up">Confirm password:</div>
-              <input type="password" class="sign-up-input" required>
+              <input type="password" class="sign-up-input" required v-model="confirmedPassword" :class="{'invalid-input': confirmedPassword && !isConfirmedPasswordValid, 'valid-input':confirmedPassword && isConfirmedPasswordValid }"
+                     @input="validateConfirmedPassword(confirmedPassword)"/>
             </div>
-<!--            <div class="errorMessageRegistrationForm">AAAAAALLLLLEEEERTTT</div>-->
+  <div class="errorMessageRegistrationForm" v-if="!isConfirmedPasswordValid && confirmedPassword">Password must be the same</div>
             <div class="field-btn">
               <button class="prev-3" @click="goToPrevForm">Previous</button>
               <button class="submit" @click="sendForm">Submit</button>
@@ -361,14 +372,16 @@ export default {
             <div class="title-sign-up-form">Basic Info:</div>
             <div class="field-sign-up">
               <div class="label-sign-up">First Name:</div>
-              <input type="text" class="sign-up-input" required v-model="user.firstname">
+              <input type="text" class="sign-up-input" required v-model="user.firstname" :class="{'invalid-input': user.firstname && !isFirstnameValid, 'valid-input': user.firstname && isFirstnameValid }"
+                     @input="validateFirstName(user.firstname)"/>
             </div>
-<!--            <div class="errorMessageRegistrationForm" v-if="!isFirstnameEPValid">Must only contain letters</div>-->
+            <div class="errorMessageRegistrationForm" v-if="!isFirstnameValid && user.firstname">Invalid first name</div>
             <div class="field-sign-up">
               <div class="label-sign-up">Last Name:</div>
-              <input type="text" class="sign-up-input" required v-model="user.lastname">
+              <input type="text" class="sign-up-input" required v-model="user.lastname" :class="{'invalid-input': user.lastname && !isLastnameValid, 'valid-input': user.lastname && isLastnameValid }"
+                     @input="validateLastName(user.lastname)"/>
             </div>
-<!--            <div class="errorMessageRegistrationForm" v-if="!isLastnameEPValid">Must only contain letters</div>-->
+            <div class="errorMessageRegistrationForm" v-if="!isLastnameValid && user.lastname">Invalid first name</div>
             <div class="field-sign-up">
               <div class="label-sign-up">Type of industry:</div>
               <select class="select-gender-sign-up" v-model="user.userType">
@@ -387,9 +400,10 @@ export default {
           <div class="title-sign-up-form">Contact Info:</div>
           <div class="field-sign-up">
             <div class="label-sign-up">Postal code:</div>
-            <input type="text" class="sign-up-input" required v-model="user.postalCode">
+            <input type="text" class="sign-up-input" required v-model="user.postalCode" :class="{'invalid-input': user.postalCode && !isPostalCodeValid,'valid-input': user.postalCode && isPostalCodeValid}"
+                   @input="validatePostalCode(user.postalCode)">
           </div>
-<!--          <div class="errorMessageRegistrationForm" v-if="!isPostalCodeGPValid"> Please enter a valid Dutch postal code</div>-->
+          <div class="errorMessageRegistrationForm" v-if="!isPostalCodeValid && user.postalCode">Please enter a valid Dutch postal code</div>
           <form class="field-sign-up">
             <div class="label-sign-up">Gender:</div>
             <select class="select-gender-sign-up" v-model="user.gender">
@@ -407,8 +421,11 @@ export default {
           <div class="title-sign-up-form">Date of Birth:</div>
           <div class="field-sign-up">
             <div class="label-sign-up">Age:</div>
-            <input type="number" class="sign-up-input" v-model="user.age">
+            <input type="number" class="sign-up-input" v-model="user.age" :class="{'invalid-input': user.age && !isAgeValid,'valid-input': user.age && isAgeValid}"
+                   @input="validateAge(user.age)">
           </div>
+          <div class="errorMessageRegistrationForm" v-if="!isAgeValid && user.age">Please enter a valid age. You must be 18 or older </div>
+
           <div class="field-btn">
             <button class="prev-2" @click="goToPrevFormEntrepreneur">Previous</button>
             <button class="next-2" @click.prevent="goToNextFormEntrepreneur">Next</button>
@@ -419,21 +436,22 @@ export default {
           <div class="title-sign-up-form">Login Details:</div>
           <div class="field-sign-up">
             <div class="label-sign-up">Email Address:</div>
-            <input type="email" class="sign-up-input" v-model="user.mail" required>
+            <input type="email" class="sign-up-input" v-model="user.mail" required :class="{'invalid-input': user.mail && !isEmailValid, 'valid-input': user.mail && isEmailValid }"
+                   @input="validateEmail(user.mail)"/>
           </div>
-<!--          <div class="errorMessageRegistrationForm" v-if="!isEmailEPValid">Please enter a valid emailaddress</div>-->
+          <div class="errorMessageRegistrationForm" v-if="!isEmailValid && user.mail">Please enter a valid emailaddress</div>
           <div class="field-sign-up">
             <div class="label-sign-up">Password:</div>
-            <input type="password" class="sign-up-input" v-model="user.password" required>
+            <input type="password" class="sign-up-input" v-model="user.password" required :class="{'invalid-input': user.password && !isPasswordValid, 'valid-input': user.password && isPasswordValid }"
+                   @input="validatePassword(user.password)"/>
           </div>
-<!--          <div class="errorMessageRegistrationForm" v-if="!isPasswordEPValid">-->
-<!--            Must contain at least one  number and one uppercase and lowercase letter,-->
-<!--            and at least 8 or more characters</div>-->
+          <div class="errorMessageRegistrationForm" v-if="!isPasswordValid && user.password">Must contain at least one  number and one uppercase and lowercase letter,</div>
           <div class="field-sign-up">
             <div class="label-sign-up">Confirm password:</div>
-            <input type="password" class="sign-up-input" required >
+            <input type="password" class="sign-up-input" required :class="{'invalid-input': confirmedPassword && !isConfirmedPasswordValid, 'valid-input':confirmedPassword && isConfirmedPasswordValid }"
+                   @input="validateConfirmedPassword(confirmedPassword)"/>
           </div>
-<!--          <div class="errorMessageRegistrationForm">AAAAAALLLLLEEEERTTT</div>-->
+          <div class="errorMessageRegistrationForm" v-if="!isConfirmedPasswordValid && confirmedPassword">Password must be the same</div>
           <div class="field-btn">
             <button class="prev-3" @click="goToPrevFormEntrepreneur">Previous</button>
             <button class="submit" @click="sendForm">Submit</button>
@@ -441,17 +459,6 @@ export default {
         </form>
       </div>
     </div>
-    <form action="#">
-      <!--              <div class="sign-up-page">-->
-      <!--                <div class="title-sign-up-form">Here you can sign up as:</div>-->
-      <!--                <div class="field-sign-up">-->
-      <!--                <div class="field-btn-sign-up-as">-->
-      <!--                  <button>Entrepreneur</button>-->
-      <!--                  <button>General Partner</button>-->
-      <!--                </div>-->
-      <!--                </div>-->
-      <!--              </div>-->
-    </form>
   </div>
 </template>
 
