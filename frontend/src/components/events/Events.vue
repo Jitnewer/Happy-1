@@ -1,9 +1,4 @@
 <template>
-  <div class="breadcrum">
-    <router-link :to="{ name: 'welcome' }">Home</router-link>
-    <p>></p>
-    <router-link :to="{ name: 'events' }">Events</router-link>
-  </div>
   <div class="container">
     <div class="events-main">
       <div class="events-main-left">
@@ -27,7 +22,7 @@
       </div>
     </div>
     <div class="events">
-      <div class="event" v-for="event in filteredEventsOnDate" :key="event.id">
+      <div class="event" v-for="event in filteredEventsOnDate" :key="event">
         <div class="event-left">
           <img :src="require(`../../${event.image}`)" alt="Event Image">
         </div>
@@ -100,13 +95,14 @@ import { reactive } from 'vue'
 
 export default {
   name: 'Events.vue',
-  inject: ['eventsService', 'usersService', 'userEventsService', 'sessionSBService'],
+  emits: ['loginAdmin', 'loginUser'],
+  inject: ['eventsService', 'usersService', 'userEventsService', 'loginAndRegisterService', 'userEventsService2'],
   data () {
     return {
       lastId: 3000,
       events: [],
       search: null,
-      filter: null,
+      filter: 'asc',
       showFilter: false,
       signedIn: false,
       showSignIn: false,
@@ -123,16 +119,10 @@ export default {
   },
   async created () {
     try {
-      this.filter = this.$route.query.sort
-      if (this.filter == null) {
-        this.filter = 'asc'
-      }
-      this.$router.push({ name: 'events', query: { sort: this.filter } })
-      await this.eventsService.asyncFindAll()
-      const userAndToken = await this.sessionSBService.asyncFindByEmail(JSON.parse(localStorage.getItem('userDetails')).mail)
-      this.user = userAndToken.body
-
-      this.signedInEvents = this.associatedEvents.map((event) => event.id)
+      this.events = await this.eventsService.asyncFindAll()
+      this.user = await this.loginAndRegisterService.asyncFindByEmail(localStorage.getItem('email'))
+      const associatedEvents = await this.userEventsService2.asyncFindEventByUser(this.user.id)
+      this.signedInEvents = associatedEvents.map((event) => event.id)
     } catch (e) {
       console.error(e)
     }
@@ -238,13 +228,8 @@ export default {
         }, 3000)
       }, 7000)
     },
-    async selectEventMoreInfo (event) {
-      this.$router.push({
-        name: 'event',
-        params: { id: event.id },
-        query: { sort: this.filter }
-      })
-      await this.eventsService.asyncFindById(event.id)
+    selectEventMoreInfo (event) {
+      this.$router.push({ name: 'event', params: { id: event.id } })
     },
     searchEvent () {
       return this.events.filter(event => {
@@ -279,23 +264,15 @@ export default {
       }
     }
   },
+
   computed: {
-    events () {
-      return this.eventsService.entities
-    },
-    associatedEvents () {
-      return this.userEventsService.entities
-    },
-    filteredEventsOnDate  () {
-      if (this.events.length > 1) {
-        const sortedEvents = this.events.slice().sort((a, b) => {
-          const dateA = new Date(a.date)
-          const dateB = new Date(b.date)
-          return this.filter === 'asc' ? dateA - dateB : dateB - dateA
-        })
-        return this.search ? this.searchEvent(sortedEvents) : sortedEvents
-      }
-      return this.events
+    filteredEventsOnDate () {
+      const sortedEvents = this.events.slice().sort((a, b) => {
+        const dateA = new Date(a.date)
+        const dateB = new Date(b.date)
+        return this.filter === 'asc' ? dateA - dateB : dateB - dateA
+      })
+      return this.search ? this.searchEvent(sortedEvents) : sortedEvents
     },
     isEventSignedIn () {
       return (event) => {

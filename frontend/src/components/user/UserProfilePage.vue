@@ -58,7 +58,6 @@ export default {
     }
   },
   async created () {
-    console.log(this.$route)
     if (localStorage.getItem('email') == null) {
       this.$router.push({ route: 'PageNotFound' })
     }
@@ -71,24 +70,6 @@ export default {
 </script>
 
 <template>
-  <div class="breadcrum" v-if="$route.fullPath === '/profile/info' && user" >
-    <router-link :to="{ name: 'welcome' }">Home</router-link>
-    <p>></p>
-    <a>News</a>
-    <p>></p>
-    <router-link :to="{ name: 'profilePage' }">Profile</router-link>
-    <p>></p>
-    <router-link :to="{ name: 'profilePageInfo', params: { id: user.id } }">Info</router-link>
-  </div>
-  <div class="breadcrum" v-if="$route.fullPath === '/profile/events' && user" >
-    <router-link :to="{ name: 'welcome' }">Home</router-link>
-    <p>></p>
-    <a>News</a>
-    <p>></p>
-    <router-link :to="{ name: 'profilePage' }">Profile</router-link>
-    <p>></p>
-    <router-link :to="{ name: 'profilePageEvents', params: { id: user.id } }">Info</router-link>
-  </div>
   <div class="user-profile-container" v-if="user">
     <div class="profile-banner">
     </div>

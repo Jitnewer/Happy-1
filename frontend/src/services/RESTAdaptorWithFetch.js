@@ -1,5 +1,3 @@
-import CustomError from '@/CustomError'
-
 export class RESTAdaptorWithFetch {
   resourceUrl;
   copyConstructor;
@@ -12,38 +10,25 @@ export class RESTAdaptorWithFetch {
   async fetchJson (url, options = null) {
     try {
       const response = await fetch(url, options)
-
       if (response.ok) {
         return await response.json()
       } else {
-        const responseBody = !response.bodyUsed ? await response.text() : ''
-
-        if (response.status === 401) {
-          throw new CustomError('Unauthorized: Please log in', response.status, responseBody)
-        } else if (response.status === 403) {
-          throw new CustomError('Forbidden: You don\'t have permission to access this resource', response.status, responseBody)
-        } else {
-          throw new CustomError('Error with response', response.status, responseBody)
-        }
+        console.log(response, !response.bodyUsed ? await response.text() : '')
+        return null
       }
     } catch (error) {
-      if (error.status === 401) {
-        throw new CustomError('Unauthorized: Please log in', error.status, error.message)
-      } else if (error.status === 403) {
-        throw new CustomError('Forbidden: You don\'t have permission to access this resource', error.status, error.message)
-      } else {
-        throw new CustomError('Error fetching data', error.status || 500, error.message)
-      }
+      console.error('Error fetching JSON:', error)
+      return null
     }
   }
 
   async asyncFindAll () {
     try {
-      const data = await this.fetchJson(this.resourceUrl, {
-      })
+      const data = await this.fetchJson(this.resourceUrl)
       return data?.map(d => this.copyConstructor(d))
     } catch (error) {
-      throw new CustomError('Error in asyncFindAll', error.status || 500, error.message)
+      console.error('Error in asyncFindAll:', error)
+      return null
     }
   }
 
@@ -52,7 +37,8 @@ export class RESTAdaptorWithFetch {
       const response = await this.fetchJson(`${this.resourceUrl}/${id}`)
       return this.copyConstructor(response)
     } catch (error) {
-      throw new CustomError('Error in asyncFindById', error.status || 500, error.message)
+      console.error('Error in asyncFindById:', error)
+      return null
     }
   }
 
@@ -63,7 +49,8 @@ export class RESTAdaptorWithFetch {
       })
       return this.copyConstructor(response)
     } catch (error) {
-      throw new CustomError('Error in asyncAddEntityToEntity', error.status || 500, error.message)
+      console.error('Error in asyncAddEntityToEntity:', error)
+      return null
     }
   }
 
@@ -74,7 +61,8 @@ export class RESTAdaptorWithFetch {
       })
       return true
     } catch (error) {
-      throw new CustomError('Error in asyncRemoveEntityFromEntity', error.status || 500, error.message)
+      console.error('Error in asyncRemoveEntityToEntity:', error)
+      return null
     }
   }
 
@@ -83,7 +71,8 @@ export class RESTAdaptorWithFetch {
       const response = await this.fetchJson(`${this.resourceUrl}/${url}/${column}`)
       return this.copyConstructor(response)
     } catch (error) {
-      throw new CustomError('Error in asyncFindByColumn', error.status || 500, error.message)
+      console.error('Error in asyncAddEntityToEntity:', error)
+      return null
     }
   }
 
@@ -91,7 +80,7 @@ export class RESTAdaptorWithFetch {
     try {
       return await this.fetchJson(`${this.resourceUrl}/${url}/${id1}`)
     } catch (error) {
-      console.error('Error in asyncAddEntityToEntity:', error.message)
+      console.error('Error in asyncAddEntityToEntity:', error)
       return null
     }
   }
@@ -111,18 +100,25 @@ export class RESTAdaptorWithFetch {
       if (object.id === 0) {
         response = await this.fetchJson(this.resourceUrl, {
           method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
           body: JSON.stringify(object)
         })
       } else {
         response = await this.fetchJson(`${this.resourceUrl}/${object.id}`, {
           method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json'
+          },
           body: JSON.stringify(object)
         })
       }
 
       return this.copyConstructor(response?.user)
     } catch (error) {
-      throw new CustomError('Error in asyncSave', error.status || 500, error.message)
+      console.error('Error in asyncUpdate:', error)
+      return null
     }
   }
 
@@ -133,15 +129,8 @@ export class RESTAdaptorWithFetch {
       })
       return true
     } catch (error) {
-      throw new CustomError('Error in asyncDeleteById', error.status || 500, error.message)
-    }
-  }
-
-  async asyncFindByProperty (propertyId, url) {
-    try {
-      return await this.fetchJson(`${this.resourceUrl}/${url}/${propertyId}`)
-    } catch (error) {
-      throw new CustomError('Error in asyncFindByProperty', error.status || 500, error.message)
+      console.error('Error in asyncDeleteById:', error)
+      return false
     }
   }
 }

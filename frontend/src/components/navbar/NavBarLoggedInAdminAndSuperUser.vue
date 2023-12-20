@@ -1,20 +1,16 @@
 <template>
-  <nav  id="admin" v-if="user">
-    <img id="logo" src="../../assets/img/happy-hospitality-collective.png" height="119" width="310" alt=""/>
+  <nav  id="admin">
+    <img id="logo" src="../../assets/images/happy-hospitality-collective.png" height="119" width="310" alt=""/>
       <div class="nav-links-admin">
         <div class="nav-links-left-admin">
           <svg @click="toggleDasboard" id="hamburger-admin" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Pro 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg>
         </div>
         <div class="nav-links-right-admin">
           <div class="dropdown-profile" @click="toggleProfile">
-            <div class="profile-d">
-              <img v-if="user.profilePic != null" :src='require(`../../assets/img/${user.profilePic}`)' class="profile" width="45" height="45" alt="Event Image">
-              <canvas v-if="user.profilePic == null" ref="profileCanvas" class="profile" width="45" height="45"></canvas>
-              <p id="profile-name">{{ user.firstname }} {{ user.lastname }}</p>
-              <div class="caret">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Pro 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M182.6 137.4c-12.5-12.5-32.8-12.5-45.3 0l-128 128c-9.2 9.2-11.9 22.9-6.9 34.9s16.6 19.8 29.6 19.8H288c12.9 0 24.6-7.8 29.6-19.8s2.2-25.7-6.9-34.9l-128-128z"/></svg>
-              </div>
-            </div>
+            <canvas ref="profileCanvas" class="profile" width="33" height="33"></canvas>
+            <p id="profile-name">{{ user.firstname }} {{ user.lastname }}</p>
+            <div class="caret">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512"><!--! Font Awesome Pro 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M246.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-128-128c-9.2-9.2-22.9-11.9-34.9-6.9s-19.8 16.6-19.8 29.6l0 256c0 12.9 7.8 24.6 19.8 29.6s25.7 2.2 34.9-6.9l128-128z"/></svg>            </div>
             <transition name="dropdownProfile">
               <div class="dropdown-profile-content" v-show="showProfile">
                 <router-link  to="/myProfile">
@@ -23,7 +19,7 @@
                 <router-link to="/profile/settings">
                   Settings
                 </router-link>
-                <a @click="handleLogout">
+                <a @click="logout">
                   Logout
                 </a>
               </div>
@@ -34,10 +30,9 @@
   </nav>
   <div class="dashboard-container">
   <transition name="dashboard-big">
-  <div v-if="user" class="dashboard" v-show="showDashboard && !smallVersionDasboard">
+  <div class="dashboard" v-show="showDashboard && !smallVersionDasboard">
     <div class="profile-dashboard" >
-      <img v-if="user.profilePic != null" :src='require(`../../assets/img/${user.profilePic}`)' class="profile" width="45" height="45" alt="Event Image">
-      <canvas v-if="user.profilePic == null" ref="profileCanvas" class="profile" width="45" height="45"></canvas>
+      <canvas ref="profileCanvasDashboard" class="profile-photo-dashboard" width="45" height="45"></canvas>
       <p id="profile-dashboard-name">{{ user.firstname }} {{ user.lastname }}</p>
       <p id="profile-dashboard-role">Admin</p>
     </div>
@@ -77,13 +72,11 @@
 
 <script>
 export default {
-  name: 'NavBarLoggedInAdminAndSuperUser.vue',
-  emits: ['logout'],
-  inject: ['sessionSBService'],
-
+  name: 'NavBar.vue',
+  inject: ['loginAndRegisterService'],
   data () {
     return {
-      user: null,
+      user: this.loginAndRegisterService.asyncFindByEmail(localStorage.getItem('email')),
       showDropdown: false,
       showProfile: false,
       smallVersionDasboard: false,
@@ -93,13 +86,9 @@ export default {
   },
   async created () {
     try {
-      const userAndToken = await this.sessionSBService.asyncFindByEmail(JSON.parse(localStorage.getItem('userDetails')).mail)
-      this.user = userAndToken.body
-      if (this.user.profilePic === '') {
-        this.user.profilePic = null
-      }
+      this.user = await this.loginAndRegisterService.asyncFindByEmail(localStorage.getItem('email'))
     } catch (e) {
-      console.error(e)
+      console.log(e)
     }
     const fullname = `${this.user.firstname} ${this.user.lastname}`
     let initials = ''
@@ -116,10 +105,9 @@ export default {
     this.updateShowNav()
   },
   methods: {
-    handleLogout () {
-      this.sessionSBService.signOut()
-      this.$store.commit('setLoggedInAsAdmin', false)
-
+    logout () {
+      this.$emit('handleLogout')
+      localStorage.removeItem('email')
       this.$router.push({ path: '/home' })
     },
     toggleDropdown (event) {

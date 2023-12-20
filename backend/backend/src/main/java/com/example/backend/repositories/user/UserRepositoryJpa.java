@@ -1,64 +1,106 @@
 package com.example.backend.repositories.user;
 
+import com.example.backend.models.Event;
 import com.example.backend.models.User;
-import com.example.backend.repositories.AbstractEntityRepositoryJpa;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.TypedQuery;
 import org.springframework.context.annotation.Primary;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-
-@Repository("USER.JPA")
+import java.util.Objects;
+import java.util.Optional;
+@Repository
 @Primary
-public class UserRepositoryJpa extends AbstractEntityRepositoryJpa<User> {
+public class UserRepositoryJpa implements UserRepository {
 
-    private static final int WORKLOAD = 12;
     @PersistenceContext
     private EntityManager entityManager;
 
-    public UserRepositoryJpa() {
-        super(User.class);
+    @Override
+    public List<User> getUsers() {
+        String jpql = "SELECT u FROM User u";
+        TypedQuery<User> query = entityManager.createQuery(jpql, User.class);
+        return query.getResultList();
     }
 
     @Override
-    public List<User> findAll() {
-        return super.findAll();
+    public User getUserById(long id) {
+        return entityManager.find(User.class, id);
+
     }
 
     @Override
-    public List<User> findByQuery(String jpqlName, Object... params) {
-        return super.findByQuery(jpqlName, params);
+    @Transactional
+    public User addUser(User user) {
+        entityManager.persist(user);
+
+        return user;
     }
 
-    @Override
-    public User findById(Long id) {
-        return super.findById(id);
-    }
-
-
-    @Override
-    public User save(User entity) {
-        return super.save(entity);
-    }
-
-    @Override
-    public boolean deleteById(Long id) {
-        return super.deleteById(id);
-    }
-
-    @Override
-    public boolean entityWithEntityExist(String propertyName, Object value) {
-        return super.entityWithEntityExist(propertyName, value);
-    }
 
     @Override
     public User login(String email, String password) {
-        return super.login(email, password);
+        String jpql = "SELECT u FROM User u WHERE u.mail = :email AND u.password = :password";
+        TypedQuery<User> query = entityManager.createQuery(jpql, User.class);
+        query.setParameter("email", email);
+        query.setParameter("password", password);
+
+        List<User> resultList = query.getResultList();
+
+        // Check if the query returned a user
+        if (!resultList.isEmpty()) {
+            return resultList.get(0);
+        }
+
+        return null; // Return null if no user with the given credentials is found
     }
 
     @Override
-    public void register(User user) {
-        super.register(user);
+    @Transactional
+    public void updateUser(User user) {
+        entityManager.merge(user);
+    }
+
+    @Override
+    @Transactional
+    public void deleteUser(long id) {
+        User user = entityManager.find(User.class, id);
+        if (user != null) {
+            entityManager.remove(user);
+        }
+    }
+
+    @Override
+    public User getUserByMail(String email) {
+        String jpql = "SELECT u FROM User u";
+        TypedQuery<User> query = entityManager.createQuery(jpql, User.class);
+        for (User user : query.getResultList()) {
+            if (Objects.equals(user.getMail(), email)) {
+                return user;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public boolean userWithMailExists(String email) {
+        String jpql = "SELECT u FROM User u WHERE u.mail = ?1";
+        TypedQuery<User> query = entityManager.createQuery(jpql, User.class);
+        query.setParameter(1, email);
+
+        List<User> users = query.getResultList();
+
+        for (User user : users) {
+            if (user.getMail() == email) {
+                return true;
+            }
+        }
+        return false;
     }
 }

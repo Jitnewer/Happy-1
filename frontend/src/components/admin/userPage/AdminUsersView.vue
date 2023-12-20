@@ -3,7 +3,7 @@ import { User } from '@/models/user'
 
 export default {
   name: 'AdminUsersView',
-  inject: ['usersServiceAdmin', 'fileUploadService'],
+  inject: ['usersService', 'fileUploadService'],
   data () {
     return {
       filter: {
@@ -41,14 +41,19 @@ export default {
     },
     async unblockUser (user) {
       if (confirm('Are you sure you want to unblock this user')) {
-        user.status = User.status.Unbanned
-        await this.usersServiceAdmin.asyncSave(user)
+        try {
+          await this.usersService.asyncSave(user)
+
+          user.status = User.status.Unbanned
+        } catch (e) {
+          console.log(e.message)
+        }
       }
     },
     async blockUser (user) {
       if (confirm('Are you sure you want to block this user?')) {
         user.status = User.status.Banned
-        await this.usersServiceAdmin.asyncSave(user)
+        await this.usersService.asyncSave(user)
       }
     },
     editUser (user) {
@@ -58,10 +63,8 @@ export default {
       this.create = false
       this.$router.push({ name: 'users' })
     },
-    async saveUser (user) {
+    saveUser (user) {
       try {
-        const savedUser = await this.usersServiceAdmin.asyncSave(user)
-        // console.log(savedUser)
         if (this.create === true) {
           this.users.push(user)
         } else {
@@ -81,7 +84,7 @@ export default {
     async deleteUser (user) {
       if (confirm('Are you sure you want to delete this user?')) {
         try {
-          await this.usersServiceAdmin.asyncDeleteById(user.id)
+          await this.usersService.asyncDeleteById(user.id)
           await this.fileUploadService.asyncDeleteImage(user.profilePic)
 
           const indexToUpdate = this.users.findIndex(oldUser => oldUser.id === user.id)
@@ -132,8 +135,9 @@ export default {
     }
   },
   async created () {
-    // if (localStorage.getItem('admin') === 'false') this.$router.push({ path: '/PageNotFound' })
-    this.users = await this.usersServiceAdmin.asyncFindAll()
+    if (localStorage.getItem('admin') === 'false') this.$router.push({ path: '/PageNotFound' })
+
+    this.users = await this.usersService.asyncFindAll()
 
     this.selectUserByUrl(parseInt(this.$route.params.id))
 
@@ -151,11 +155,6 @@ export default {
 
 <template>
   <div class="container-admin">
-    <div class="breadcrum-admin breadcrum-admin-margin">
-      <router-link :to="{ name: 'admin' }">Admin</router-link>
-      <p>></p>
-      <router-link :to="{ name: 'users' }">Users</router-link>
-    </div>
     <div class="title">
       <h1>Users</h1>
     </div>

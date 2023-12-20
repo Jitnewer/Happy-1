@@ -20,7 +20,6 @@ import Challenges from '@/components/challenges/Challenges.vue'
 import ChallengeDetails from '@/components/challenges/ChallengeDetails.vue'
 import Researches from '@/components/research/Researches.vue'
 import ResearchDetails from '@/components/research/ResearchDetails.vue'
-import welcomeAdmin from '@/components/admin/welcomeAdmin.vue'
 import SuperUserResearchView from '@/components/admin/superUser/research/SuperUserResearchView.vue'
 import SuperUserChallengeView from '@/components/admin/superUser/challenge/SuperUserChallengeView.vue'
 import SuperUserChallenge from '@/components/admin/superUser/challenge/SuperUserChallenge.vue'
@@ -56,12 +55,12 @@ const routes = [
     component: ChallengeDetails
   },
   {
-    path: '/news/researches',
+    path: '/news/research',
     name: 'researches',
     component: Researches
   },
   {
-    path: '/news/researches/:id',
+    path: '/news/research/:id',
     name: 'research',
     component: ResearchDetails
   },
@@ -69,11 +68,6 @@ const routes = [
     path: '/about',
     name: 'about',
     component: AboutUs
-  },
-  {
-    path: '/admin',
-    name: 'admin',
-    component: welcomeAdmin
   },
   {
     path: '/admin/events',
@@ -87,7 +81,6 @@ const routes = [
   },
   {
     path: '/admin/statistics',
-    name: 'statistics',
     component: AdminStatistics
   },
   {

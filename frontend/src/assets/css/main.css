@@ -51,9 +51,7 @@ nav {
     background-color: var(--main-color);
     display: flex;
     align-items: center;
-    position: sticky;
-    z-index: 1000;
-    top: 0;
+    position: relative;
 }
 
 
@@ -610,14 +608,14 @@ a.router-link-active:hover {
     transition: 0.5s;
 }
 
-.events-main-right input {
+.events-main input {
     padding: 0.5rem 1.5rem;
     width: 480px;
     box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
     border: none;
 }
 
-.events-main-right input:focus {
+.events-main input:focus {
     outline: none;
 }
 
@@ -763,7 +761,6 @@ a.router-link-active:hover {
     box-shadow: none;
     padding: 0;
     width: 23px;
-    margin: 0;
 
 }
 
@@ -834,13 +831,10 @@ a.router-link-active:hover {
         margin-block: 3rem;
         justify-content: space-around;
     }
-    .events-main-right input {
+    .events-main input {
         width: 400px;
     }
     .event-filter input {
-        width: 23px;
-    }
-    .challenge-filter input {
         width: 23px;
     }
 }
@@ -852,10 +846,10 @@ a.router-link-active:hover {
         margin-block: 3rem;
         justify-content: center;
     }
-    .events-main-right input {
+    .events-main input {
         width: 280px;
     }
-    .challenge-filter input {
+    .event-filter input {
         width: 23px;
     }
 }
@@ -867,13 +861,13 @@ a.router-link-active:hover {
         margin-block: 3rem;
         justify-content: center;
     }
-    .events-main-right input {
+    .events-main input {
         width: 230px;
     }
     .events-main button{
         padding: 0.75rem 1.25rem;
     }
-    .challenge-filter input {
+    .event-filter input {
         width: 23px;
     }
 
@@ -891,7 +885,7 @@ a.router-link-active:hover {
         margin-block: 3rem;
         justify-content: center;
     }
-    .events-main-right input {
+    .events-main input {
         width: 150px;
         padding: 0.35rem 1.25rem;
     }
@@ -928,7 +922,7 @@ a.router-link-active:hover {
         margin: 0;
         font-size: 14px
     }
-    .events-main-right input::placeholder {
+    .events-main input::placeholder {
         font-size: 10px
     }
     .event-filter input {
@@ -938,15 +932,6 @@ a.router-link-active:hover {
         padding: 1rem;
     }
     .event-filter p {
-        font-size: 14px
-    }
-    .challenge-filter input {
-        width: 23px;
-    }
-    .challenge-filter {
-        padding: 1rem;
-    }
-    .challenge-filter p {
         font-size: 14px
     }
 
@@ -1056,13 +1041,6 @@ a.router-link-active:hover {
         padding: 0.75rem;
     }
 
-    .challenge-filter p {
-        font-size: 10px
-    }
-    .challenge-filter {
-        padding: 0.75rem;
-    }
-
     .filter-enter-active,
     .filter-leave-active {
         .filter-asc {
@@ -1156,19 +1134,6 @@ a.router-link-active:hover {
         gap: 0.5rem;
         flex-direction: column;
     }
-
-    .challenge-filter p {
-        font-size: 8px;
-        width: 46px;
-    }
-    .challenge-filter {
-        padding: 0.5rem;
-        top: 34px;
-        left: 224px;
-        display: flex;
-        gap: 0.5rem;
-        flex-direction: column;
-    }
     .filter-enter-active,
     .filter-leave-active {
         .filter-asc {
@@ -1201,7 +1166,6 @@ a.router-link-active:hover {
 .detail-event {
     box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
     display: flex;
-    width: max-content;
 }
 
 .detail-event-left {
@@ -1938,183 +1902,4 @@ a.router-link-active:hover {
         right: 8px;
         top: 38px;
     }
-}
-
-/* BreadCrum */
-.breadcrum {
-    width: 80%;
-    margin: 1rem auto 1rem auto;
-    display: flex;
-    gap: 0.5rem;
-}
-
-.breadcrum-admin {
-    display: flex;
-    gap: 0.5rem;
-    margin: 1rem auto 1rem auto;
-}
-
-.breadcrum-admin a {
-    text-decoration: none;
-    color: black;
-    opacity: 80%;
-}
-
-.breadcrum-admin p {
-    color: black;
-    margin: 0;
-    font-weight: bold;
-}
-
-.breadcrum-admin a:hover {
-    opacity: 100%;
-    color: black;
-    font-weight: bold;
-    background-color: transparent;
-}
-
-.breadcrum-admin a.router-link-active {
-    opacity: 100%;
-    color: black;
-    font-weight: bold;
-    background-color: transparent;
-}
-
-.breadcrum-admin a.router-link-active:hover {
-    opacity: 80%;
-    color: black;
-    font-weight: normal;
-    background-color: transparent;
-}
-
-.breadcrum a {
-    text-decoration: none;
-    color: black;
-    opacity: 80%;
-}
-
-.breadcrum p {
-    color: black;
-    margin: 0;
-    font-weight: bold;
-}
-
-.breadcrum a:hover {
-    opacity: 100%;
-    color: black;
-    font-weight: bold;
-    background-color: transparent;
-}
-
-.breadcrum a.router-link-active {
-    opacity: 100%;
-    color: black;
-    font-weight: bold;
-    background-color: transparent;
-}
-
-.breadcrum a.router-link-active:hover {
-    opacity: 80%;
-    color: black;
-    font-weight: normal;
-    background-color: transparent;
-}
-
-.breadcrum-admin-margin {
-    margin-left: 1rem;
-}
-
-/* Welcome Admin */
-.welcome-admin {
-margin-left: 1rem;
-}
-
-.welcome-admin h1 {
-    color: black
-}
-
-.title-filter {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    position: relative;
-}
-
-.title-filter button {
-    background: var(--main-color-hover);
-    color: var(--main-text-color);
-    border-style: none;
-    padding: 1rem 1.5rem;
-    font-size: 18px;
-    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
-    cursor: pointer;
-    transition: 0.5s;
-}
-
-.challenge-filter {
-    position: absolute;
-    display: flex;
-    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
-    padding: 2rem;
-    z-index: 15;
-    top: 78px;
-    left: 189px;
-    gap: 2rem;
-    background-color: white;
-}
-
-.research-filter {
-    position: absolute;
-    display: flex;
-    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
-    padding: 2rem;
-    z-index: 15;
-    top: 78px;
-    left: 157px;
-    gap: 2rem;
-    background-color: white;
-}
-
-.title-filter button:hover {
-    background-color: var(--main-color-hover-admin);
-
-}
-
-.challenge-filter input {
-    box-shadow: none;
-    padding: 0;
-    width: 23px;
-    margin: 0;
-}
-
-
-
-.challenge-filter p {
-    color: black
-}
-
-.research-filter input {
-    box-shadow: none;
-    padding: 0;
-    width: 23px;
-    margin: 0;
-}
-
-
-
-.research-filter p {
-    color: black
-}
-
-.filter-child {
-    display: flex;
-    align-items: center;
-}
-
-.filter-up {
-
-}
-
-.filter-down {
-
 }

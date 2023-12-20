@@ -1,7 +1,6 @@
 package com.example.backend.rest;
 
 import com.example.backend.models.User;
-import com.example.backend.repositories.EntityRepository;
 import com.example.backend.repositories.user.UserRepository;
 import com.example.backend.repositories.user.UserRepositoryJpa;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,14 +10,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("users")
-
 public class UserController {
 
     @Autowired
@@ -95,11 +91,11 @@ public class UserController {
     @PostMapping("/users")
     public ResponseEntity<Object> addUser(@RequestBody User user) {
         try {
-            if (userRepository.entityWithEntityExist("mail", user.getMail())) {
+            if (userRepository.userWithMailExists(user.getMail())) {
                 return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("message", "User with mail:" + user.getMail() + " is already in use"));
             }
 
-            userRepository.save(user);
+            userRepository.addUser(user);
 
             URI location = ServletUriComponentsBuilder
                     .fromCurrentRequest()
@@ -107,22 +103,19 @@ public class UserController {
                     .buildAndExpand(user.getId())
                     .toUri();
 
-            Map<String, Object> map = new HashMap<>();
-            map.put("message", "User added successfully");
-            map.put("status", HttpStatus.CREATED.value());
-            map.put("location", location.toString());
-            map.put("user", addedUser);
-
-            return ResponseEntity.created(location).body(map);
+            return ResponseEntity.created(location).body(Map.of(
+                    "message", "User added successfully",
+                    "status", HttpStatus.CREATED.value(),
+                    "location", location.toString()));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("message", "Error adding user", "error", e.getMessage()));
         }
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/users/{id}")
     public ResponseEntity<Object> updateUser(@RequestBody User user, @PathVariable Long id) {
         try {
-            if (userRepository.findById(id) == null) {
+            if (userRepository.getUserById(id) == null) {
                 return ResponseEntity.notFound().build();
             }
             userRepository.updateUser(user);
@@ -132,12 +125,12 @@ public class UserController {
         }
     }
 
-    @DeleteMapping("/admin/{id}")
+    @DeleteMapping("/users/{id}")
     public ResponseEntity<Object> deleteUser(@PathVariable long id) {
         try {
-            User user = userRepository.findById(id);
+            User user = userRepository.getUserById(id);
             if (user != null) {
-                userRepository.deleteById(id);
+                userRepository.deleteUser(id);
                 return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "User with id " + id + " deleted successfully"));
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", "User not found with id: " + id));

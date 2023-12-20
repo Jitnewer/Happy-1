@@ -3,6 +3,7 @@ export default {
   name: 'ProfilePage',
   inject: ['usersService'],
   props: ['selectedUser'],
+  emits: ['back'],
   data () {
     return {
       user: null,
@@ -44,13 +45,6 @@ export default {
 
 <template>
   <div class="user-profile-container" v-if="user">
-    <div class="breadcrum-admin breadcrum-admin-margin">
-      <router-link :to="{ name: 'admin' }">Admin</router-link>
-      <p>></p>
-      <router-link :to="{ name: 'users' }">User</router-link>
-      <p>></p>
-      <router-link :to="{ name: 'adminProfileView', params: { id: user.id } }">User / {{ user.id }}</router-link>
-    </div>
     <div class="profile-banner">
     </div>
     <div class="profile-info">

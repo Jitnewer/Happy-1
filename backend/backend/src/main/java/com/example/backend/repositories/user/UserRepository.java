@@ -11,12 +11,9 @@ public interface UserRepository {
 
     User addUser(User user);
     User login(String email, String password);
-    void register (User user);
     void updateUser(User user);
     void deleteUser(long id);
 
     User getUserByMail(String email);
-
-    boolean userWithMailExists (String email);
-
+    boolean userWithMailExists(String email);
 }

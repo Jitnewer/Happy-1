@@ -4,6 +4,7 @@ import { Research } from '@/models/research'
 export default {
   name: 'SuperUserResearch',
   props: ['selectedNews', 'create'],
+  emits: ['deselect-news', 'delete-news', 'save-news'],
   data () {
     return {
       copySelected: null,

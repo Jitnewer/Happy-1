@@ -3,12 +3,10 @@ package com.example.backend.rest;
 import com.example.backend.models.Challenge;
 import com.example.backend.models.Paragraph;
 import com.example.backend.models.Research;
-import com.example.backend.repositories.EntityRepository;
 import com.example.backend.repositories.paragraph.ParagraphRepository;
 import com.example.backend.repositories.research.ResearchRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -23,19 +21,19 @@ import java.util.Map;
 public class ResearchController {
 
     @Autowired
-    private EntityRepository<Research> researchRepository;
+    private ResearchRepository researchRepository;
     @Autowired
-    private EntityRepository<Paragraph> paragraphRepository;
+    private ParagraphRepository paragraphRepository;
 
     @GetMapping
     public List<Research> getAllResearches() {
-        return researchRepository.findAll();
+        return researchRepository.getResearches();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Object> getResearchById(@PathVariable long id) {
+    public ResponseEntity<Object> getResearchById(@PathVariable Long id) {
         try {
-            Research research = researchRepository.findById(id);
+            Research research = researchRepository.getResearch(id);
             if (research != null) {
                 return ResponseEntity.ok(research);
             } else {
@@ -48,24 +46,7 @@ public class ResearchController {
         }
     }
 
-    @GetMapping("/getByTheme/{theme}")
-    public ResponseEntity<Object> getResearchesByTheme(@PathVariable String theme) {
-        try {
-            Research.Theme themeEnum = Research.Theme.valueOf(theme.toUpperCase());
-
-            List<Research> researches = researchRepository.findMultipleByProperty("theme", themeEnum);
-            if (researches != null) {
-                return ResponseEntity.ok(researches);
-            } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", "Researches not found with theme: " + theme));
-            }
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
-                    "message", "Error retrieving challenge",
-                    "error", e.getMessage()));
-        }
-    }
-    @PostMapping("/admin")
+    @PostMapping
     public ResponseEntity<Object> createResearch(@RequestBody Research research) {
         if (research.getTitle() == null || research.getTitle().isEmpty()) {
             return ResponseEntity.badRequest().body(Map.of("message", "Title is required"));
@@ -73,12 +54,12 @@ public class ResearchController {
 
         try {
             // Save the research entity first to generate a valid ID
-            researchRepository.save(research);
+            researchRepository.addResearch(research);
 
             // Set the research property in each paragraph and persist them
             for (Paragraph paragraph : research.getParagraphs()) {
                 paragraph.setResearch(research);
-                paragraphRepository.save(paragraph);
+                paragraphRepository.addParagraph(paragraph);
             }
 
             URI location = ServletUriComponentsBuilder
@@ -99,9 +80,9 @@ public class ResearchController {
         }
     }
 
-    @DeleteMapping("/admin/{id}")
-    public ResponseEntity<Object> deleteResearch(@PathVariable long id) {
-        researchRepository.deleteById(id);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Object> deleteResearch(@PathVariable Long id) {
+        researchRepository.deleteResearch(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

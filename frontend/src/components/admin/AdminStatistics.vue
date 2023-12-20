@@ -1,10 +1,5 @@
 <template>
   <div class="container-admin">
-    <div class="breadcrum-admin breadcrum-admin-margin">
-      <router-link :to="{ name: 'admin' }">Admin</router-link>
-      <p>></p>
-      <router-link :to="{ name: 'statistics' }">Statistics</router-link>
-    </div>
     <div class="users-amount-container">
       <div class="legend">
         <p class="total">Total Users: {{ totalUsers }}</p>
@@ -26,8 +21,7 @@ import { User } from '@/models/user' // Import Chart.js
 
 export default {
   name: 'AdminStatistics',
-  inject: ['usersServiceAdmin'],
-
+  inject: ['usersService'],
   data () {
     return {
       users: [],
@@ -83,9 +77,9 @@ export default {
     }
   },
   async created () {
-    // if (localStorage.getItem('admin') === 'false') this.$router.push({ path: '/PageNotFound' })
+    if (localStorage.getItem('admin') === 'false') this.$router.push({ path: '/PageNotFound' })
 
-    this.users = await this.usersServiceAdmin.asyncFindAll()
+    this.users = await this.usersService.asyncFindAll()
   }
 }
 </script>
