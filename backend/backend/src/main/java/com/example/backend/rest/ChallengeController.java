@@ -53,7 +53,7 @@ public class ChallengeController {
 //            return ResponseEntity.badRequest().body(Map.of("message", "Title is required"));
 //        }
 
-            return ResponseEntity.badRequest().body(Map.of("message", "Title is required"));
+        return ResponseEntity.ok().body(challenge);
 //        try {
 ////            for (Paragraph paragraph : challenge.getParagraphs()) {
 ////                paragraph.setChallenge(challenge);

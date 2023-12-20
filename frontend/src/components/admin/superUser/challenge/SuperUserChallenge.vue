@@ -30,7 +30,6 @@ export default {
             }
           }
 
-          console.log(this.copyChallenge)
           await this.challengeService.asyncSave(this.copyChallenge)
 
           // this.back()

@@ -22,7 +22,7 @@
       </div>
     </div>
     <div class="events">
-      <div class="event" v-for="event in filteredEventsOnDate" :key="event">
+      <div class="event" v-for="event in filteredEventsOnDate" :key="event.id">
         <div class="event-left">
           <img :src="require(`../../${event.image}`)" alt="Event Image">
         </div>
