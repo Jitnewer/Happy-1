@@ -148,9 +148,8 @@ export default {
       if (this.user.profilePic === '') {
         this.user.profilePic = null
       }
-      console.log(this.user)
     } catch (e) {
-      console.log(e)
+      console.error(e)
     }
 
     const fullname = `${this.user.firstname} ${this.user.lastname}`

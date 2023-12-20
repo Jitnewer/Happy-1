@@ -99,7 +99,7 @@ export default {
         this.user.profilePic = null
       }
     } catch (e) {
-      console.log(e)
+      console.error(e)
     }
     const fullname = `${this.user.firstname} ${this.user.lastname}`
     let initials = ''

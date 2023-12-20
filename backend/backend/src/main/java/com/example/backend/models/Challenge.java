@@ -13,11 +13,11 @@ import java.util.Set;
 
 @Entity
 @Table(name = "challenges")
-public class Challenge {
+public class Challenge implements Identifiable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
 
     @Column(nullable = false)
     private String title;
@@ -83,8 +83,14 @@ public class Challenge {
     }
 
     // Getter methods
-    public Long getId() {
+    @Override
+    public long getId() {
         return id;
+    }
+
+    @Override
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getTitle() {

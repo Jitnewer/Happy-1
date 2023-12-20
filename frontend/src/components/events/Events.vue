@@ -100,7 +100,7 @@ import { reactive } from 'vue'
 
 export default {
   name: 'Events.vue',
-  inject: ['eventsService', 'usersService', 'userEventsService', 'sessionSBService', 'userEventsService2'],
+  inject: ['eventsService', 'usersService', 'userEventsService', 'sessionSBService'],
   data () {
     return {
       lastId: 3000,
@@ -126,7 +126,7 @@ export default {
       this.events = await this.eventsService.asyncFindAll()
       const userAndToken = await this.sessionSBService.asyncFindByEmail(JSON.parse(localStorage.getItem('userDetails')).mail)
       this.user = userAndToken.body
-      const associatedEvents = await this.userEventsService2.asyncFindEventByUser(this.user.id)
+      const associatedEvents = await this.userEventsService.asyncFindByProperty(this.user.id, 'eventsByUser')
       this.signedInEvents = associatedEvents.map((event) => event.id)
     } catch (e) {
       console.error(e)

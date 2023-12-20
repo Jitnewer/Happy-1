@@ -5,11 +5,11 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "paragraphs")
-public class Paragraph {
+public class Paragraph implements Identifiable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
 
     @Column(nullable = false)
     private String title;
@@ -43,8 +43,14 @@ public class Paragraph {
     }
 
     // Getters and Setters
-    public Long getId() {
+    @Override
+    public long getId() {
         return id;
+    }
+
+    @Override
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getTitle() {

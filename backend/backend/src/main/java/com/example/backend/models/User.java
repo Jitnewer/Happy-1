@@ -10,7 +10,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames = "mail")})
-public class User {
+public class User implements Identifiable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonProperty("id")
@@ -20,6 +20,16 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
     @JsonIgnore
     private Set<UserEvent> userEvents = new HashSet<>();
+
+    @Override
+    public long getId() {
+        return this.id;
+    }
+
+    @Override
+    public void setId(long id) {
+        this.id = id;
+    }
 
     public enum UserType {
         ADMIN,
@@ -73,9 +83,6 @@ public class User {
 
     }
 
-    public long getId() {
-        return id;
-    }
 
     public String getProfilePic() {
         return profilePic;
