@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -16,170 +15,50 @@ import java.util.Map;
 
 
 @Controller
-@RequestMapping("image")
 public class FileUploadController {
-    private final String ASSETS_FOLDER = "frontend/src/";
 
-
-    @PostMapping("/profilePic")
-    public ResponseEntity<Object> uploadProfilePic(
+    @PostMapping("/upload/profilePic")
+    public ResponseEntity<Object> handleFileUpload(
             @RequestPart("file") MultipartFile file,
             @RequestPart("userName") String userName,
             @RequestPart("userId") String userId
     ) {
-        try {
-            if (file.isEmpty()) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Please select a file to upload");
-            }
-
-            String customFileName = uploadFile(file, userName, userId, "/profilePic");
-            return ResponseEntity.status(HttpStatus.OK).body(
-                    Map.of(
-                            "message", "Image uploaded successfully",
-                            "filePath", "assets/profilePic/" + customFileName
-                    )
-            );
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to upload the file");
-        }
-    }
-
-    @PostMapping("/eventPic")
-    public ResponseEntity<Object> uploadEventPic (
-            @RequestPart("file") MultipartFile file,
-            @RequestPart("eventId") String eventId
-    ) {
         if (file.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Please select a file to upload");
+            return ResponseEntity.badRequest().body("Please select a file to upload");
         }
 
         try {
-            String customFileName = uploadFile(file, "event", eventId, "/eventPic");
-            return ResponseEntity.status(HttpStatus.OK).body(
-                    Map.of(
-                            "message", "Event image uploaded successfully",
-                            "filePath", "assets/eventPic/" + customFileName
-                    )
-            );
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to upload the file");
-        }
-    }
+            // Get the absolute path where image will be stored
+            String uploadFolderPath = "frontend/src/assets/profilePic";
 
-    @PostMapping("/researchPic")
-    public ResponseEntity<Object> uploadResearchPic (
-            @RequestPart("file") MultipartFile file,
-            @RequestPart("researchId") String researchId
-    ) {
-        if (file.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Please select a file to upload");
-        }
-
-        try {
-            String customFileName = uploadFile(file, "research", researchId, "/researchPic");
-            return ResponseEntity.status(HttpStatus.OK).body(
-                    Map.of(
-                            "message", "Research image uploaded successfully",
-                            "filePath", "assets/researchPic/" + customFileName
-                    )
-            );
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to upload the file");
-        }
-    }
-
-    @PostMapping("/challengePic")
-    public ResponseEntity<Object> uploadChallengePic (
-            @RequestPart("file") MultipartFile file,
-            @RequestPart("challengeId") String challengeId
-    ) {
-        if (file.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Please select a file to upload");
-        }
-
-        try {
-            String customFileName = uploadFile(file, "research", challengeId, "/challengePic");
-            return ResponseEntity.status(HttpStatus.OK).body(
-                    Map.of(
-                            "message", "Challenge image uploaded successfully",
-                            "filePath", "assets/challengePic/" + customFileName
-                    )
-            );
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to upload the file");
-        }
-    }
-
-    @PostMapping("/networkPic")
-    public ResponseEntity<Object> uploadNetworkPic (
-            @RequestPart("file") MultipartFile file,
-            @RequestPart("networkId") String networkId
-    ) {
-        if (file.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Please select a file to upload");
-        }
-
-        try {
-            String customFileName = uploadFile(file, "network", networkId, "/networkPic");
-            return ResponseEntity.status(HttpStatus.OK).body(
-                    Map.of(
-                            "message", "Challenge image uploaded successfully",
-                            "filePath", "assets/networkPic/" + customFileName
-                    )
-            );
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to upload the file");
-        }
-    }
-
-
-    @DeleteMapping("/delete")
-    public ResponseEntity<Object> deletePicture (@RequestPart("imagePath") String imagePath) {
-        if (imagePath == null || imagePath.trim().isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message", "Cannot delete image from file path: " + imagePath));
-        }
-
-        try {
-            String path = ASSETS_FOLDER + imagePath;
-            File imageFile = new File(path);
-
-            boolean test = imageFile.delete();
-
-            return ResponseEntity.status(HttpStatus.OK).body(
-                    Map.of(
-                            "message", "Image deleted successfully"
-                    )
-            );
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to delete image: " + e);
-        }
-    }
-
-    private String uploadFile(MultipartFile file, String name, String id, String folder) {
-        try {
-            String uploadFolderPath = ASSETS_FOLDER + "assets/" + folder;
-
+            // Create the folder if it doesn't exist
             File uploadFolder = new File(uploadFolderPath);
             if (!uploadFolder.exists()) {
                 uploadFolder.mkdirs();
             }
 
+            // Extract the file extension from the content type
             String fileExtension = getFileExtension(file.getOriginalFilename());
 
             // Generate a custom filename using user's first name and ID
-            String customFileName = name + "_" + id + fileExtension;
+            String customFilename = userName + "_" + userId + fileExtension;
 
             // Save the file to the upload folder
-            Path filePath = Paths.get(uploadFolderPath, customFileName);
+            Path filePath = Paths.get(uploadFolderPath, customFilename);
             Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
 
-            return customFileName;
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    Map.of(
+                            "message", "Profile image uploaded successfully",
+                            "filePath", "assets/profilePic/" + customFilename
+                    )
+            );
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to upload the file");
         }
     }
 
-    private static String getFileExtension(String fileName) {
+    public static String getFileExtension(String fileName) {
         // Find the last occurrence of dot in the file name
         int lastDotIndex = fileName.lastIndexOf('.');
 

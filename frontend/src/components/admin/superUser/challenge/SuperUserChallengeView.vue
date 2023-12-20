@@ -1,23 +1,27 @@
 <script>
-
 export default {
   name: 'SuperUserView',
   inject: ['challengeService'],
   data () {
     return {
       challenges: [],
+      selectedChallenge: null,
       filter: {
         date: null,
         search: ''
-      }
+      },
+      isSelected: false,
+      create: true
     }
   },
   methods: {
-    selectChallenge (challenge) {
-      this.$router.push({ name: 'SuperUserChallengeDetail', params: { id: challenge.id } })
+    back () {
+      this.isSelected = false
+      this.$router.push({ name: 'SuperUserChallenges' })
     },
-    createChallenge () {
-      this.$router.push({ name: 'SuperUserChallengeDetail', params: { id: 0 } })
+    selectChallenge (challenge) {
+      this.isSelected = true
+      this.$router.push({ name: 'SuperUserChallengeDetail', params: { id: challenge.id } })
     },
     shortenParagraph (paragraph) {
       const maxChars = 150
@@ -39,24 +43,39 @@ export default {
   },
   async created () {
     this.challenges = await this.challengeService.asyncFindAll()
+  },
+  watch: {
+    '$route' (to, from) {
+      const challengeId = parseInt(to.params.id)
+      if (challengeId === 0) {
+        return
+      }
+      if (challengeId) {
+        this.isSelected = true
+        this.selectedChallenge = this.challenges.find(challenge => challenge.id === challengeId)
+      } else {
+        this.isSelected = false
+        this.selectedUser = null
+      }
+    }
   }
 }
 
 </script>
 
 <template>
-  <div class="container">
+  <div class="container" v-if="!isSelected">
     <h1 id="challenges-title">Challenges</h1>
     <div class="filters">
       <input type="text" class="search-filter" id="nameFilter" placeholder="Search for events.." title="Type in a name"
              v-model="filter.search">
       <input class="date-filter" type="date" id="dateFilter" v-model="filter.date">
-      <button class="create-btn" @click="createChallenge">Create</button>
+      <button class="create-btn">Create</button>
     </div>
     <div class="challenges">
-      <div class="challenge" v-for="challenge in challenges" :key="challenge" @click="selectChallenge(challenge)">
+      <div class="challenge" v-for="challenge in challenges" :key="challenge.id" @click="selectChallenge(challenge)">
         <div class="challenge-left">
-          <img :src="require(`../../../../${challenge.image}`)" alt="Challenge Image"/>
+          <img :src="require(`../../../../assets/images/${challenge.image}`)" alt="Challenge Image"/>
         </div>
         <div class="challenge-right">
           <p class="challenge-time">{{ formattedDateTime(challenge.dateTime) }}</p>
@@ -66,6 +85,7 @@ export default {
       </div>
     </div>
   </div>
+  <router-view class="news-details-view" :selectedChallenge="selectedChallenge" @back="back" :create="create"/>
 </template>
 
 <style scoped>

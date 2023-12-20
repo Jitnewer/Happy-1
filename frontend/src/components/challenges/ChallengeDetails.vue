@@ -7,7 +7,7 @@
       </div>
       <div class="detail-challenge">
         <div>
-          <img :src="require(`../../${challenge.image}`)" alt="">
+          <img :src="require(`../../assets/images/${challenge.image}`)" alt="">
         </div>
         <div class="content">
           <div>

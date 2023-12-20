@@ -46,7 +46,7 @@ export default {
       loginAndRegisterService: new LoginAndRegisterAdapter(CONFIG.BACKEND_URL, User.copyConstructor),
       researchService: new RESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/researches', Research.copyConstructor),
       userEventsService2: new UserEventAdapter(CONFIG.BACKEND_URL, Event.copyConstructor),
-      fileUploadService: new FileUploadAdapter(CONFIG.BACKEND_URL + '/image')
+      fileUploadService: new FileUploadAdapter(CONFIG.BACKEND_URL + '/upload')
     }
   },
   methods: {

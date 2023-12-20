@@ -49,7 +49,7 @@ export default {
     </div>
     <div class="profile-info">
       <div class="info-left">
-        <img class="profile-pic" :src="require(`../../../${user.profilePic}`)">
+        <img class="profile-pic" src="../../../assets/profilePic/profilepic.png">
         <div class="profile-edit-buttons">
           <button class="edit-button" @click="previousPage">Back</button>
         </div>

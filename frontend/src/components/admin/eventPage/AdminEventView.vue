@@ -22,7 +22,8 @@ export default {
     activateCreateEvent () {
       this.selectedEvent = new Event()
       this.selectedEvent.id = 0
-      this.selectedEvent.image = 'assets/eventPic/imagePlaceholder.jpg'
+      this.selectedEvent.image = 'imagePlaceholder.jpg'
+      this.create = true
       this.$router.push({ name: 'adminEventDetail', params: { id: this.selectedEvent.id } })
     },
     formattedPrice (event) {
@@ -96,7 +97,7 @@ export default {
       <div class="events">
         <div class="event" v-for="event in filteredEvents" :key="event.id">
           <div class="event-left">
-            <img :src="require(`../../../${event.image}`)" alt="Event Image">
+            <img :src="require(`../../../assets/images/${event.image}`)" alt="Event Image">
           </div>
           <div class="event-right">
             <div class="event-right-main">

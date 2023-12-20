@@ -127,12 +127,14 @@ const routes = [
   {
     path: '/superuser/challenges',
     name: 'SuperUserChallenges',
-    component: SuperUserChallengeView
-  },
-  {
-    path: '/superuser/challenges/:id',
-    name: 'SuperUserChallengeDetail',
-    component: SuperUserChallenge
+    component: SuperUserChallengeView,
+    children: [
+      {
+        path: ':id',
+        name: 'SuperUserChallengeDetail',
+        component: SuperUserChallenge
+      }
+    ]
   },
   {
     path: '/register',

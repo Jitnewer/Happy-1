@@ -7,7 +7,7 @@
       </div>
       <div class="detail-event">
         <div class="detail-event-left">
-          <img :src="require(`../../${event.image}`)" alt="Image">
+          <img :src="require(`../../assets/images/${event.image}`)" alt="Image">
         </div>
         <div class="detail-event-right-main">
           <div class="detail-event-right">
