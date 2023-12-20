@@ -1,0 +1,124 @@
+.container-admin {
+
+}
+
+.breadcrum-admin {
+    margin-bottom: 20px;
+    background-color: white;
+}
+
+.container-admin button {
+    border: none;
+    color: var(--main-text-color);
+    padding: 0.5rem 1rem;
+    font-size: 18px;
+    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+    cursor: pointer;
+    transition: 0.5s;
+}
+
+.challenges-admin {
+    width: 80%; /* Adjust the width as needed */
+    box-sizing: border-box;
+}
+
+.paragraphs-admin {
+    width: 40%;
+    height: 82%;
+    box-sizing: border-box;
+    top: -50px
+}
+
+.challenges-admin h1 {
+    color: black;
+}
+
+.paragraphs-admin table {
+    box-shadow: var(--shadow);
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.challenges-admin table {
+    box-shadow: var(--shadow);
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+
+.challenges-admin table button {
+    font-size: 14px
+}
+
+
+.challenges-admin table img {
+    object-fit: cover;
+    width: 100px;
+    height: 60px;
+}
+
+
+.paragraphs-admin table th,
+.paragraphs-admin table td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: left;
+}
+
+
+.challenges-admin table th,
+.challenges-admin table td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: left;
+}
+
+.table-buttons {
+    display: flex;
+    gap: 1rem;
+}
+
+.edit {
+    background-color: #076507;
+}
+
+.edit:hover {
+    background-color: #011a01;
+}
+
+.delete {
+    background-color: darkred;
+}
+
+.delete:hover {
+    background-color: #250101;
+}
+
+.title-button {
+    display:flex;
+    gap: 1rem
+}
+
+.title-button h1 {
+    margin: 0
+}
+
+.relation {
+    background-color: white;
+    color: black !important;
+}
+
+.relation:hover {
+    background-color: black;
+    color: white !important;
+}
+
+.paragraphs {
+    position: fixed;
+    top: 55%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    overflow: scroll;
+}

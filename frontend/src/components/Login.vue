@@ -77,7 +77,6 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 100vh;
 }
 
 .container-sign-up {
@@ -87,7 +86,6 @@ export default {
   text-align: center;
   padding: 50px 35px 10px 35px;
   box-shadow: 0px 3px 40px #000;
-  margin-top: 60px;
 }
 
 .header-sign-up {

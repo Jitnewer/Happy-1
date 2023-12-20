@@ -6,6 +6,7 @@
 @import "statistc.css";
 @import "challenge.css";
 @import "welcomePageAndFooter.css";
+@import "challenges-admin.css";
 :root {
     --main-color: #0991a3;
     --main-color-admin: #0a454d;
@@ -2058,7 +2059,7 @@ margin-left: 1rem;
     padding: 2rem;
     z-index: 15;
     top: 78px;
-    left: 189px;
+    left: 298px;
     gap: 2rem;
     background-color: white;
 }
@@ -2070,7 +2071,7 @@ margin-left: 1rem;
     padding: 2rem;
     z-index: 15;
     top: 78px;
-    left: 157px;
+    left: 283px;
     gap: 2rem;
     background-color: white;
 }

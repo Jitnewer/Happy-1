@@ -23,6 +23,7 @@ import Researches from '@/components/research/Researches.vue'
 import ResearchDetails from '@/components/research/ResearchDetails.vue'
 import welcomeAdmin from '@/components/admin/welcomeAdmin.vue'
 import News from '@/components/News.vue'
+import ChallengesAdmin from '@/components/admin/challenges/ChallengesAdmin.vue'
 
 const routes = [
   {
@@ -88,6 +89,11 @@ const routes = [
     path: '/admin/events/:id',
     name: 'adminEventDetail',
     component: EventDetailsView
+  },
+  {
+    path: '/admin/challenges',
+    name: 'adminChallenges',
+    component: ChallengesAdmin
   },
   {
     path: '/admin/statistics',

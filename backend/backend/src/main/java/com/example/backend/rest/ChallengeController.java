@@ -1,5 +1,6 @@
 package com.example.backend.rest;
 
+import com.example.backend.exceptions.PreConditionFailedException;
 import com.example.backend.models.Challenge;
 import com.example.backend.models.Event;
 import com.example.backend.models.Paragraph;
@@ -92,6 +93,27 @@ public class ChallengeController {
         } catch (Exception e) {
             Map<String, Object> errorResponse = new HashMap<>();
             errorResponse.put("message", "Error adding the challenge");
+            errorResponse.put("error", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+        }
+    }
+
+    @PutMapping("/admin/{id}")
+    public ResponseEntity<Object> updateChallenge(@RequestBody Challenge challenge, @PathVariable Long id) {
+        try {
+            if (!id.equals(challenge.getId())) {
+                throw new PreConditionFailedException("Event ID in the path does not match the ID in the request body.");
+            }
+            for (Paragraph paragraph : challenge.getParagraphs()) {
+                paragraph.setChallenge(challenge);
+            }
+            challengeRepository.save(challenge);
+
+
+            return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "Challenge updated successfully"));
+        } catch (Exception e) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("message", "Error updating the challenge");
             errorResponse.put("error", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }

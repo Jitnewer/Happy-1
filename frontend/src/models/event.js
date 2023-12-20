@@ -1,6 +1,6 @@
 
 export class Event {
-  constructor (id, userEvents, image, name, city, date, timeBegin, timeEnd, price, location, info, size, participants) {
+  constructor (id, userEvents, image, name, city, date, timeBegin, timeEnd, price, location, info, size) {
     this.id = id
     this.userEvents = userEvents
     this.image = image
