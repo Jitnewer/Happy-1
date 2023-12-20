@@ -1,4 +1,13 @@
 <template>
+  <div class="breadcrum" v-if="challenge">
+    <router-link :to="{ name: 'welcome' }">Home</router-link>
+    <p>></p>
+    <a>News</a>
+    <p>></p>
+    <router-link :to="{ name: 'challenges' }">Challenges</router-link>
+    <p>></p>
+    <router-link :to="{ name: 'challenge', params: { id: challenge.id } }">Challenge / {{ challenge.id }}</router-link>
+  </div>
   <div v-if="challenge" class="container">
     <div class="challenge-main">
       <div class="challenge-title">
@@ -31,11 +40,6 @@ import challenges from './Challenges.vue'
 export default {
   name: 'ChallengeDetails.vue',
   inject: ['challengeService'],
-  data () {
-    return {
-      challenge: null
-    }
-  },
   methods: {
     getFormattedDate (dateString) {
       const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }
@@ -66,21 +70,23 @@ export default {
         return `${this.getFormattedDate(dateTime)}, ${formattedTime}`
       }
     },
-    back () {
+    async back () {
+      await this.challengeService.asyncFindAll()
+
       this.$router.push({ name: 'challenges' })
       this.$emit('update-selected-challenge')
     }
   },
   async created () {
     try {
-      this.challenge = await this.challengeService.asyncFindById(this.$route.params.id)
+      await this.challengeService.asyncFindById(this.$route.params.id)
     } catch (e) {
       console.error(e)
     }
   },
   computed: {
-    challenges () {
-      return challenges
+    challenge () {
+      return this.challengeService.entities
     },
     sortedChallenges () {
       return this.challenges.slice().sort((a, b) => {

@@ -1,13 +1,22 @@
 <template>
+  <div class="breadcrum" v-if="research">
+    <router-link :to="{ name: 'welcome' }">Home</router-link>
+    <p>></p>
+    <a>News</a>
+    <p>></p>
+    <router-link :to="{ name: 'researches' }">Researches</router-link>
+    <p>></p>
+    <router-link :to="{ name: 'research', params: { id: research.id } }">Research / {{ research.id }}</router-link>
+  </div>
   <div v-if="research" class="container">
     <div class="challenge-main">
       <div class="challenge-title">
         <button @click="back">Back</button>
-        <h1>Challenge</h1>
+        <h1>Research</h1>
       </div>
       <div class="detail-challenge">
         <div>
-          <img :src="require(`../../assets/images/${research.image}`)" alt="">
+          <img :src="require(`../../assets/img/${research.image}`)" alt="">
         </div>
         <div class="content">
           <div>
@@ -66,7 +75,8 @@ export default {
         return `${this.getFormattedDate(dateTime)}, ${formattedTime}`
       }
     },
-    back () {
+    async back () {
+      await this.researchService.asyncFindAll()
       this.$router.push({ name: 'researches' })
       this.$emit('update-selected-reserach')
     }

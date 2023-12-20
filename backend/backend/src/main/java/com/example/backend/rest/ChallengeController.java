@@ -3,6 +3,7 @@ package com.example.backend.rest;
 import com.example.backend.models.Challenge;
 import com.example.backend.models.Event;
 import com.example.backend.models.Paragraph;
+import com.example.backend.repositories.EntityRepository;
 import com.example.backend.repositories.challenge.ChallengeRepository;
 import com.example.backend.repositories.paragraph.ParagraphRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.swing.text.html.parser.Entity;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
@@ -22,19 +24,19 @@ import java.util.Optional;
 public class ChallengeController {
 
     @Autowired
-    private ChallengeRepository challengeRepository;
+    private EntityRepository<Challenge> challengeRepository;
     @Autowired
-    private ParagraphRepository paragraphRepository;
+    private EntityRepository<Paragraph> paragraphRepository;
 
     @GetMapping
     public List<Challenge> getAllChallenges() {
-        return challengeRepository.getChallenges();
+        return challengeRepository.findAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Object> getChallengeById(@PathVariable Long id) {
+    public ResponseEntity<Object> getChallengeById(@PathVariable long id) {
         try {
-            Challenge challenge = challengeRepository.getChallenge(id);
+            Challenge challenge = challengeRepository.findById(id);
             if (challenge != null) {
                 return ResponseEntity.ok(challenge);
             } else {
@@ -47,45 +49,42 @@ public class ChallengeController {
         }
     }
 
-    @PostMapping()
+    @PostMapping
     public ResponseEntity<Object> createChallenge(@RequestBody Challenge challenge) {
-//        if (challenge.getTitle() == null || challenge.getTitle().isEmpty()) {
-//            return ResponseEntity.badRequest().body(Map.of("message", "Title is required"));
-//        }
+        if (challenge.getTitle() == null || challenge.getTitle().isEmpty()) {
+            return ResponseEntity.badRequest().body(Map.of("message", "Title is required"));
+        }
 
-        return ResponseEntity.ok().body(challenge);
-//        try {
-////            for (Paragraph paragraph : challenge.getParagraphs()) {
-////                paragraph.setChallenge(challenge);
-////                paragraphRepository.addParagraph(paragraph);
-////            }
-////            challengeRepository.addChallenge(challenge);
-////
-////            URI location = ServletUriComponentsBuilder
-////                    .fromCurrentRequest()
-////                    .path("/{id}")
-////                    .buildAndExpand(challenge.getId())
-////                    .toUri();
-//
-//            return ResponseEntity.created(location).body(Map.of(
-//                    "message", "Challenge added successfully",
-//                    "status", HttpStatus.CREATED.value(),
-//                    "location", location.toString()));
-//        } catch (Exception e) {
-//            Map<String, Object> errorResponse = new HashMap<>();
-//            errorResponse.put("message", "Error adding the challenge");
-//            errorResponse.put("error", e.getMessage());
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
-//        }
+        try {
+            for (Paragraph paragraph : challenge.getParagraphs()) {
+                paragraph.setChallenge(challenge);
+            }
+            challengeRepository.save(challenge);
+
+            URI location = ServletUriComponentsBuilder
+                    .fromCurrentRequest()
+                    .path("/{id}")
+                    .buildAndExpand(challenge.getId())
+                    .toUri();
+
+            return ResponseEntity.created(location).body(Map.of(
+                    "message", "Challenge added successfully",
+                    "status", HttpStatus.CREATED.value(),
+                    "location", location.toString()));
+        } catch (Exception e) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("message", "Error adding the challenge");
+            errorResponse.put("error", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+        }
     }
 
-//    @PutMapping("/{id}")
-//
 
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteChallenge(@PathVariable Long id) {
-        challengeRepository.deleteChallenge(id);
+
+    @DeleteMapping("/admin/{id}")
+    public ResponseEntity<Void> deleteChallenge(@PathVariable long id) {
+        challengeRepository.deleteById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

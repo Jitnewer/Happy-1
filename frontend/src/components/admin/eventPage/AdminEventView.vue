@@ -84,6 +84,11 @@ export default {
 
 <template>
   <div class="container-admin admin-event" v-if="!selectedEvent">
+    <div class="breadcrum-admin">
+      <router-link :to="{ name: 'admin' }">Admin</router-link>
+      <p>></p>
+      <router-link :to="{ name: 'adminEvents' }">Events</router-link>
+    </div>
       <div class="title">
         <h1>Events</h1>
       </div>

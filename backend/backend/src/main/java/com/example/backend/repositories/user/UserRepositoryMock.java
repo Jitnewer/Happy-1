@@ -54,6 +54,11 @@ public class UserRepositoryMock implements UserRepository {
     }
 
     @Override
+    public void register(User user) {
+
+    }
+
+    @Override
     public void updateUser(User updatedUser) {
         Optional<User> existingUser = Optional.empty();
         for (User user : users) {
@@ -101,5 +106,6 @@ public class UserRepositoryMock implements UserRepository {
     public boolean userWithMailExists(String email) {
         return false;
     }
+
 }
 

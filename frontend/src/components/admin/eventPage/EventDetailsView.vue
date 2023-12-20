@@ -2,7 +2,7 @@
 import { Event } from '@/models/event'
 export default {
   name: 'EventDetailsView',
-  inject: ['eventsService', 'fileUploadService'],
+  inject: ['eventsServiceAdmin', 'fileUploadService'],
   data () {
     return {
       created: this.create,
@@ -25,7 +25,7 @@ export default {
             const profilePicPath = await this.fileUploadService.asyncUploadEventPic(this.pictureUpload, this.selectedCopy.id)
             this.selectedCopy.image = profilePicPath.filePath
 
-            await this.eventsService.asyncSave(this.selectedCopy)
+            await this.eventsServiceAdmin.asyncSave(this.selectedCopy)
 
             this.$router.push({ name: 'adminEvents' })
           } catch (e) {
@@ -37,7 +37,7 @@ export default {
     async deleteEventDetail () {
       if (confirm('Are you sure you want to delete this event?')) {
         try {
-          await this.eventsService.asyncDeleteById(this.selectedCopy.id)
+          await this.eventsServiceAdmin.asyncDeleteById(this.selectedCopy.id)
           await this.fileUploadService.asyncDeleteImage(this.selectedCopy.image)
 
           this.$router.push({ name: 'adminEvents' })
@@ -204,6 +204,13 @@ export default {
 
 <template>
   <div class="container" v-if="event">
+    <div class="breadcrum-admin breadcrum-admin-margin">
+      <router-link :to="{ name: 'admin' }">Admin</router-link>
+      <p>></p>
+      <router-link :to="{ name: 'adminEvents' }">Events</router-link>
+      <p>></p>
+      <router-link :to="{ name: 'adminEventDetail', params: { id: selectedCopy.id } }">Event / {{ selectedCopy.id }}</router-link>
+    </div>
     <div class="events-title">
       <button @click="closeEventDetail" class="back-button">Back</button>
       <h3>Event</h3>

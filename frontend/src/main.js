@@ -3,6 +3,7 @@ import App from './App.vue'
 import router from './router'
 import '../src/assets/css/main.css'
 import './assets/css/welcomePageAndFooter.css'
+import store from './store'
 /* import the fontawesome core */
 import { library, config } from '@fortawesome/fontawesome-svg-core'
 
@@ -27,5 +28,6 @@ config.styleDefault = 'duotone'
 app.config.productionTip = false
 
 app.use(router)
+app.use(store)
 app.use(AOS.init)
 app.mount('#app')
