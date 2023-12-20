@@ -3,7 +3,6 @@
     <transition name="slide">
       <div v-show="isCurrent">
         <slot/>
-        <p v-if="slideText">{{ slideText }}</p>
       </div>
     </transition>
   </div>

@@ -22,6 +22,7 @@ import ChallengeDetails from '@/components/challenges/ChallengeDetails.vue'
 import Researches from '@/components/research/Researches.vue'
 import ResearchDetails from '@/components/research/ResearchDetails.vue'
 import welcomeAdmin from '@/components/admin/welcomeAdmin.vue'
+import AdminCarouselView from '@/components/admin/carouselPage/AdminCarouselView.vue'
 
 const routes = [
   {
@@ -77,6 +78,11 @@ const routes = [
     path: '/admin/events',
     name: 'adminEvents',
     component: AdminEventView
+  },
+  {
+    path: '/admin/carousel',
+    name: 'adminCarousel',
+    component: AdminCarouselView
   },
   {
     path: '/admin/events/:id',

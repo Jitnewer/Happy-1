@@ -16,18 +16,18 @@
       </p>
     </div>
     <div class="carouselHolder">
-      <Carousel class="carousel" v-slot="{ currentSlide }">
+      <Carousel class="carousel" v-slot="{ currentSlide }" :slideCount="carouselSlides.length">
         <Slide v-for="(slide, index) in carouselSlides" :key="index" :slide-text="slide.text"
                :is-current="index + 1 === currentSlide">
           <div v-show="currentSlide === index + 1" class="slide">
             <div class="welcomeMsg">
-              <h2 class="blue-text"> {{ slide.date }} </h2>
-              <h1 class="yellow-text"> {{ slide.text }}</h1>
+              <h2 class="blue-text"> {{ new Date(slide.date).toLocaleDateString('nl-NL') }} </h2>
+              <h2 class="yellow-text"> {{ slide.text }}</h2>
               <button>
                 <span class="blue-text"> > Lees meer </span>
               </button>
             </div>
-            <img :src="require(`../../assets/img/${slide.image}`)" alt="Image">
+            <img class="carouselImg" :src="require(`../../assets/img/${slide.image}`)" alt="Image">
           </div>
         </Slide>
       </Carousel>
