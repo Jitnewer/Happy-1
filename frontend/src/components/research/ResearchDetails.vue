@@ -75,7 +75,8 @@ export default {
         return `${this.getFormattedDate(dateTime)}, ${formattedTime}`
       }
     },
-    back () {
+    async back () {
+      await this.researchService.asyncFindAll()
       this.$router.push({ name: 'researches' })
       this.$emit('update-selected-reserach')
     }

@@ -16,7 +16,7 @@
       </div>
       <div class="detail-challenge">
         <div>
-          <img :src="require(`../../assets/img/${challenge.image}`)" alt="">
+          <img :src="challenge.image ? require(`../../assets/img/${challenge.image}`) : ''" alt="Challenge Image">
         </div>
         <div class="content">
           <div>
@@ -40,11 +40,6 @@ import challenges from './Challenges.vue'
 export default {
   name: 'ChallengeDetails.vue',
   inject: ['challengeService'],
-  data () {
-    return {
-      challenge: null
-    }
-  },
   methods: {
     getFormattedDate (dateString) {
       const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }
@@ -75,21 +70,23 @@ export default {
         return `${this.getFormattedDate(dateTime)}, ${formattedTime}`
       }
     },
-    back () {
+    async back () {
+      await this.challengeService.asyncFindAll()
+
       this.$router.push({ name: 'challenges' })
       this.$emit('update-selected-challenge')
     }
   },
   async created () {
     try {
-      this.challenge = await this.challengeService.asyncFindById(this.$route.params.id)
+      await this.challengeService.asyncFindById(this.$route.params.id)
     } catch (e) {
       console.error(e)
     }
   },
   computed: {
-    challenges () {
-      return challenges
+    challenge () {
+      return this.challengeService.entities
     },
     sortedChallenges () {
       return this.challenges.slice().sort((a, b) => {

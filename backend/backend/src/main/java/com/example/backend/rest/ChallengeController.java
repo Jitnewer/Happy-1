@@ -49,6 +49,24 @@ public class ChallengeController {
         }
     }
 
+    @GetMapping("/getByTheme/{theme}")
+    public ResponseEntity<Object> getChallengesByTheme(@PathVariable String theme) {
+        try {
+            Challenge.Theme themeEnum = Challenge.Theme.valueOf(theme.toUpperCase());
+
+            List<Challenge> challenges = challengeRepository.findMultipleByProperty("theme", themeEnum);
+            if (challenges != null) {
+                return ResponseEntity.ok(challenges);
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", "Challenges not found with theme: " + theme));
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
+                    "message", "Error retrieving challenge",
+                    "error", e.getMessage()));
+        }
+    }
+
     @PostMapping("/admin")
     public ResponseEntity<Object> createChallenge(@RequestBody Challenge challenge) {
         if (challenge.getTitle() == null || challenge.getTitle().isEmpty()) {

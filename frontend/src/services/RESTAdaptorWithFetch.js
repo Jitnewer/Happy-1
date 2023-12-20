@@ -49,11 +49,7 @@ export class RESTAdaptorWithFetch {
 
   async asyncFindById (id) {
     try {
-      const response = await this.fetchJson(`${this.resourceUrl}/${id}`, {
-        headers: {
-          Authorization: window.sessionStorage.getItem('token')
-        }
-      })
+      const response = await this.fetchJson(`${this.resourceUrl}/${id}`)
       return this.copyConstructor(response)
     } catch (error) {
       throw new CustomError('Error in asyncFindById', error.status || 500, error.message)
@@ -74,10 +70,7 @@ export class RESTAdaptorWithFetch {
   async asyncRemoveEntityFromEntity (id1, id2, url) {
     try {
       const response = await this.fetchJson(`${this.resourceUrl}/${url}/${id1}/${id2}`, {
-        method: 'DELETE',
-        headers: {
-          Authorization: window.sessionStorage.getItem('token')
-        }
+        method: 'DELETE'
       })
       return true
     } catch (error) {

@@ -35,6 +35,7 @@ public abstract class AbstractEntityRepositoryJpa<E extends Identifiable> implem
     @Override
     public List<E> findByQuery(String jpqlName, Object... params) {
         TypedQuery<E> query = entityManager.createNamedQuery(jpqlName, theEntityClass);
+        System.out.println(query);
 
         int i = 1;
         for (Object param : params) {
@@ -130,6 +131,15 @@ public abstract class AbstractEntityRepositoryJpa<E extends Identifiable> implem
         }
 
         return null;
+    }
+
+    @Override
+    public List<E> findMultipleByProperty(String propertyName, Object value) {
+        String jpql = "SELECT e FROM " + theEntityClass.getSimpleName() + " e WHERE e." + propertyName + " = :value";
+        TypedQuery<E> query = entityManager.createQuery(jpql, theEntityClass);
+        query.setParameter("value", value);
+
+        return query.getResultList();
     }
 
 }

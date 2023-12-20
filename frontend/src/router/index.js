@@ -54,12 +54,12 @@ const routes = [
     component: ChallengeDetails
   },
   {
-    path: '/news/research',
+    path: '/news/researches',
     name: 'researches',
     component: Researches
   },
   {
-    path: '/news/research/:id',
+    path: '/news/researches/:id',
     name: 'research',
     component: ResearchDetails
   },
