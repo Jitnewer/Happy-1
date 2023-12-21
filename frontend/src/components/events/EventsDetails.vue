@@ -14,7 +14,7 @@
       </div>
       <div class="detail-event">
         <div class="detail-event-left">
-          <img :src="event.image ? require(`../../assets/img/eventPic/${event.image}`) : ''" alt="Image">
+          <img :src="event.image ? require(`../../${event.image}`) : ''" alt="Image">
         </div>
         <div class="detail-event-right-main">
           <div class="detail-event-right">

@@ -9,22 +9,25 @@
     </div>
     <div class="challenge-create">
       <div class="title-button-create">
-      <h1>Create Challenge</h1>
-      <button @click="back()">Back</button>
+        <h1>Create Challenge</h1>
+        <button @click="back()">Back</button>
       </div>
       <div>
-        <form @submit.prevent="create" class="challenge-create-form">
+        <form @submit.prevent="create" class="challenge-create-form" v-if="challenge">
           <div class="form-label">
             <p>Title</p>
-            <input type="text" v-model="challenge.title">
+            <input type="text" v-model="challenge.title" :class="{'invalid-input': challenge.title && !isTitleValid,'valid-input': challenge.title && isTitleValid}" @input="validateTitle(challenge.title)">
+            <p class="errorMessage" v-if="!isTitleValid && challenge.title">Invalid title, no special symbols allowed</p>
           </div>
           <div class="form-label">
             <p>First Paragraph</p>
-            <input type="text" v-model="challenge.firstParagraph">
+            <input type="text" v-model="challenge.firstParagraph" :class="{'invalid-input': challenge.firstParagraph && !isFirstParagraphValid,'valid-input': challenge.firstParagraph && isFirstParagraphValid}" @input="validateFirstParagraph(challenge.firstParagraph)">
+            <p class="errorMessage" v-if="!isFirstParagraphValid && challenge.firstParagraph">Invalid first paragraph, no special symbols allowed</p>
           </div>
           <div class="form-label">
             <p>DateTime</p>
-            <input type="datetime-local" v-model="challenge.dateTime">
+            <input type="datetime-local" v-model="challenge.dateTime" :class="{'invalid-input': challenge.dateTime && !isDateTimeValid,'valid-input': challenge.dateTime && isDateTimeValid}" @input="validateDateTime(challenge.dateTime)">
+            <p class="errorMessage" v-if="!isDateTimeValid && challenge.dateTime">Invalid datetime, needs te be now or in the future</p>
           </div>
           <div class="form-label">
             <p>Theme</p>
@@ -39,7 +42,8 @@
           </div>
           <div class="form-label">
             <p>Image</p>
-            <input type="file"  @change="handleFileChange">
+            <input type="file"  @change="handleFileChange" :class="{'invalid-input': image && !isImageValid,'valid-input': image && isImageValid}" @input="validateImage(image)">
+            <p class="errorMessage" v-if="!isImageValid && image">{{ imageError }}</p>
           </div>
           <div class="paragraphs-amount">
             <p>Paragraphs</p>
@@ -47,20 +51,22 @@
             <div @click="decrementParagraphs"><p>-</p></div>
             <div @click="incrementParagraphs"><p>+</p></div>
           </div>
-            <div class="paragraphs-inputs" v-if="paragraphsAmount !== 0">
-              <div class="paragraph" v-for="(paragraph, index) in challenge.paragraphs" :key="index">
-                <p>Paragraph {{ index + 1 }}</p>
-                <div class="form-label">
+          <div class="paragraphs-inputs" v-if="paragraphsAmount !== 0">
+            <div class="paragraph" v-for="(paragraph, index) in challenge.paragraphs" :key="index">
+              <p>Paragraph {{ index + 1 }}</p>
+              <div class="form-label">
                 <p>Title</p>
-                  <input type="text" v-model="paragraph.title">
-                </div>
-                <div class="form-label">
-                  <p>Content</p>
-                  <input type="text" v-model="paragraph.content">
-                </div>
+                <input type="text" v-model="paragraph.title" :class="{'invalid-input': paragraph.title && !isParagraphTitleValid[index],'valid-input': paragraph.title && isParagraphTitleValid[index]}" @input="validateParagraphTitle(paragraph.title, index)">
+                <p class="errorMessage" v-if="!isParagraphTitleValid[index] && paragraph.title">Invalid paragraph title, no special symbols allowed</p>
+              </div>
+              <div class="form-label">
+                <p>Content</p>
+                <input type="text" v-model="paragraph.content" :class="{'invalid-input': paragraph.content && !isParagraphContentValid[index],'valid-input': paragraph.content && isParagraphContentValid[index]}" @input="validateParagraphContent(paragraph.content, index)">
+                <p class="errorMessage" v-if="!isParagraphContentValid[index] && paragraph.content">Invalid paragraph content, no special symbols allowed</p>
               </div>
             </div>
-          <button type="submit">Create</button>
+          </div>
+          <button type="submit" :disabled="!challengeEdited && !validateForm()">Save</button>
         </form>
       </div>
     </div>
@@ -86,22 +92,80 @@ export default {
         paragraphs: []
       },
       image: null,
-      paragraphsAmount: 0
+      paragraphsAmount: 0,
+      challengeEdited: false,
+      isTitleValid: null,
+      isFirstParagraphValid: null,
+      isDateTimeValid: null,
+      isParagraphTitleValid: [],
+      isParagraphContentValid: [],
+      isSaved: false,
+      imageError: null,
+      isImageValid: null
     }
   },
   methods: {
+    validateTitle (title) {
+      const titleRegex = /^[a-zA-Z0-9\s\-!\\?.$€&,:'"ëéèêàáâûüúöóôçīńł]+$/u
+
+      this.isTitleValid = titleRegex.test(title)
+      return this.isTitleValid
+    },
+    validateFirstParagraph (firstParagraph) {
+      const firstParagraphRegex = /^[a-zA-Z0-9\s\-!\\?.$€&,:'"ëéèêàáâûüúöóôçīńł]+$/u
+
+      this.isFirstParagraphValid = firstParagraphRegex.test(firstParagraph)
+      return this.isFirstParagraphValid
+    },
+    validateDateTime (dateTime) {
+      const inputDate = new Date(dateTime)
+      // Get the current date
+      const currentDate = new Date()
+
+      // Check if the date is today or in the future
+      this.isDateTimeValid = inputDate >= currentDate
+
+      return this.isDateTimeValid
+    },
+    validateImage (file) {
+      if (file !== null) {
+        // Check if the file is an image
+        const isImage = /^image\//.test(file.type)
+        console.log(isImage)
+
+        // Check if the file size is within the allowed limit (in bytes)
+        const maxSize = 5 * 1024 * 1024 // 5MB
+        const isSizeValid = file.size <= maxSize
+
+        this.isImageValid = isImage && isSizeValid
+      }
+      return this.isImageValid
+    },
+    validateParagraphTitle (paragraphTitle, index) {
+      const paragraphTitleRegex = /^[a-zA-Z0-9\s\-!\\?.$€&,:'"ëéèêàáâûüúöóôçīńł]+$/u
+
+      this.isParagraphTitleValid[index] = paragraphTitleRegex.test(paragraphTitle)
+      return this.isParagraphTitleValid[index]
+    },
+    validateParagraphContent (paragraphContent, index) {
+      const paragraphContentRegex = /^[a-zA-Z0-9\s\-!\\?.$€&,:'"ëéèêàáâûüúöóôçīńł]+$/u
+
+      this.isParagraphContentValid[index] = paragraphContentRegex.test(paragraphContent)
+      return this.isParagraphContentValid[index]
+    },
     async create () {
-      this.challenge.dateTime = new Date(this.challenge.dateTime).toISOString()
-      try {
-        const challenge = await this.challengeServiceAdmin.asyncSave(this.challenge)
-        console.log(challenge)
-        const file = await this.fileUploadService.asyncUploadChallengePic(this.image, challenge.id)
-        challenge.image = file.filePath
-        const challenge2 = await this.challengeServiceAdmin.asyncSave(challenge)
-        console.log(challenge2)
-        this.$router.push({ name: 'adminChallenges' })
-      } catch (e) {
-        console.error(e)
+      if (this.validateForm()) {
+        this.challenge.dateTime = new Date(this.challenge.dateTime).toISOString()
+        try {
+          const challenge = await this.challengeServiceAdmin.asyncSave(this.challenge)
+          const file = await this.fileUploadService.asyncUploadChallengePic(this.image, challenge.id)
+          challenge.image = file.filePath
+          await this.challengeServiceAdmin.asyncSave(challenge)
+          this.isSaved = true
+          this.$router.push({ name: 'adminChallenges' })
+        } catch (e) {
+          console.error(e)
+        }
       }
     },
     paragraphs (challenge) {
@@ -135,15 +199,51 @@ export default {
       }
     },
     handleFileChange (event) {
-      // Update the challenge.image property when a file is selected
-      this.image = event.target.files[0]
-    },
-    async updateChallenges () {
-      try {
-        await this.challengeService.asyncFindAll()
-      } catch (e) {
-        console.error(e)
+      const file = event.target.files[0]
+
+      if (file) {
+        // Validate the image file
+        this.isImageValid = this.validateImage(file)
+
+        if (this.isImageValid) {
+          // Update the challenge.image property when a valid file is selected
+          this.image = file
+        } else {
+          this.image = file
+          // Reset the input field and show an error message
+          event.target.value = null
+          this.imageError = 'Invalid image file. Please select a valid image (up to 5MB).'
+        }
       }
+    },
+    validateForm () {
+      // Validate title
+      const isTitleValid = this.validateTitle(this.challenge.title)
+
+      // Validate first paragraph
+      const isFirstParagraphValid = this.validateFirstParagraph(this.challenge.firstParagraph)
+
+      // Validate date and time
+      const isDateTimeValid = this.validateDateTime(this.challenge.dateTime)
+
+      const isImageValid = this.isImageValid
+
+      // Validate paragraphs
+      let areParagraphsValid = true
+      for (let i = 0; i < this.challenge.paragraphs.length; i++) {
+        const paragraph = this.challenge.paragraphs[i]
+        const isParagraphTitleValid = this.validateParagraphTitle(paragraph.title, i)
+        const isParagraphContentValid = this.validateParagraphContent(paragraph.content, i)
+
+        // If any paragraph is not valid, set areParagraphsValid to false
+        if (!isParagraphTitleValid || !isParagraphContentValid) {
+          areParagraphsValid = false
+          break
+        }
+      }
+
+      // Form is valid if all individual validations pass
+      return isTitleValid && isFirstParagraphValid && isDateTimeValid && isImageValid && areParagraphsValid
     },
     getFormattedDate (dateString) {
       const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }
@@ -175,26 +275,19 @@ export default {
       }
     }
   },
-  async created () {
-    await this.updateChallenges()
-  },
-  watch: {
-    $route (to, from) {
-      if (to.fullPath !== from.fullPath) {
-        this.updateChallenges()
-      }
-    }
-  },
   computed: {
     challenges () {
       return this.challengeService.entities
-    },
-    sortedParagraphs () {
-      if (this.selectedChallenge) {
-        // Sort paragraphs based on id
-        return this.selectedChallenge.paragraphs.slice().sort((a, b) => a.id - b.id)
-      }
-      return []
+    }
+  },
+  beforeRouteUpdate (to, from, next) {
+    if (!this.isSaved) {
+      this.conformationAlert(() => {
+        // Continue with the route update
+        next()
+      }, 'Are you sure you want to leave with unsaved changes?')
+    } else {
+      next()
     }
   }
 }
