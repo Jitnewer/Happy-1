@@ -20,6 +20,7 @@
 .challenges-admin {
     width: 80%; /* Adjust the width as needed */
     box-sizing: border-box;
+    margin-bottom: 5rem;
 }
 
 .paragraphs-admin {
@@ -252,7 +253,7 @@
 .challenge-create-form input,
 .challenge-create-form select {
     outline: none;
-    width: 100%;
+    width: auto;
     padding: 0.5rem;
     font-size: 12px;
     border: none;
@@ -282,3 +283,8 @@
     box-shadow: var(--shadow), 0 0 0 2px limegreen; /* Add the limegreen border and box shadow on valid input */
 }
 
+.paragraph {
+    gap: 1rem;
+    display: flex;
+    flex-direction: column;
+}

@@ -10,14 +10,10 @@ import com.example.backend.repositories.paragraph.ParagraphRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.swing.text.html.parser.Entity;
-import java.io.File;
-import java.io.IOException;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
@@ -38,6 +34,11 @@ public class ChallengeController {
         return challengeRepository.findAll();
     }
 
+    @GetMapping("/admin")
+    public List<Challenge> getAllChallengesAdmin() {
+        return challengeRepository.findAll();
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Object> getChallengeById(@PathVariable long id) {
         try {
@@ -53,6 +54,8 @@ public class ChallengeController {
                     "error", e.getMessage()));
         }
     }
+
+
 
     @GetMapping("/getByTheme/{theme}")
     public ResponseEntity<Object> getChallengesByTheme(@PathVariable String theme) {
@@ -72,30 +75,21 @@ public class ChallengeController {
         }
     }
 
-
-
     @PostMapping("/admin")
-    public ResponseEntity<Object> createChallenge(
-            @RequestParam("image") MultipartFile image,
-            @RequestParam("challenge") Challenge challenge) {
+    public ResponseEntity<Object> createChallenge(@RequestBody Challenge challenge) {
+
+        if (challenge.getTitle() == null || challenge.getTitle().isEmpty()) {
+            return ResponseEntity.badRequest().body(Map.of("message", "Title is required"));
+        }
+
         try {
+            challengeRepository.save(challenge);
 
-            // Handle image upload
-            if (image != null && !image.isEmpty()) {
-                // Modify the path according to your project structure
-                String imagePath = "frontend/src/assets/img/" + challenge.getId() + "_" + image.getOriginalFilename();
-
-                // Copy the image file to the specified path
-                FileCopyUtils.copy(image.getBytes(), new File(imagePath));
-
-                // Set the image path in the challenge object
-                challenge.setImage(imagePath);
-            }
-
+            // Now you can save the paragraphs with the associated challenge
             for (Paragraph paragraph : challenge.getParagraphs()) {
                 paragraph.setChallenge(challenge);
+                paragraphRepository.save(paragraph);
             }
-            challengeRepository.save(challenge);
 
             URI location = ServletUriComponentsBuilder
                     .fromCurrentRequest()
@@ -106,8 +100,9 @@ public class ChallengeController {
             return ResponseEntity.created(location).body(Map.of(
                     "message", "Challenge added successfully",
                     "status", HttpStatus.CREATED.value(),
-                    "location", location.toString()));
-        } catch (IOException e) {
+                    "location", location.toString(),
+                    "challenge", challenge));
+        } catch (Exception e) {
             Map<String, Object> errorResponse = new HashMap<>();
             errorResponse.put("message", "Error adding the challenge");
             errorResponse.put("error", e.getMessage());
@@ -121,13 +116,16 @@ public class ChallengeController {
             if (!id.equals(challenge.getId())) {
                 throw new PreConditionFailedException("Event ID in the path does not match the ID in the request body.");
             }
-            for (Paragraph paragraph : challenge.getParagraphs()) {
-                paragraph.setChallenge(challenge);
-            }
             challengeRepository.save(challenge);
 
+            for (Paragraph paragraph : challenge.getParagraphs()) {
+                paragraph.setChallenge(challenge);
+                paragraphRepository.save(paragraph);
 
-            return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "Challenge updated successfully"));
+            }
+
+
+            return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "Challenge updated successfully", "challenge", challenge));
         } catch (Exception e) {
             Map<String, Object> errorResponse = new HashMap<>();
             errorResponse.put("message", "Error updating the challenge");
@@ -140,9 +138,9 @@ public class ChallengeController {
 
 
     @DeleteMapping("/admin/{id}")
-    public ResponseEntity<Void> deleteChallenge(@PathVariable long id) {
+    public ResponseEntity<Object> deleteChallenge(@PathVariable long id) {
         challengeRepository.deleteById(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "Challenge deleted successfully", "status", HttpStatus.OK));
     }
 
 }

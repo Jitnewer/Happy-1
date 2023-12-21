@@ -103,7 +103,7 @@ export default {
       <div class="events">
         <div class="event" v-for="event in filteredEvents" :key="event.id">
           <div class="event-left">
-            <img :src="require(`../../../assets/img/${event.image}`)" alt="Event Image">
+            <img :src="require(`../../../assets/img/eventPic/${event.image}`)" alt="Event Image">
           </div>
           <div class="event-right">
             <div class="event-right-main">

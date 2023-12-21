@@ -5,7 +5,7 @@
       <span> > </span>
       <router-link :to="{ name: 'adminChallenges' }">Challenges</router-link>
       <span>></span>
-      <router-link :to="{ name: 'adminChallengeCreate' }">Create</router-link>
+      <router-link :to="{ name: 'adminChallengeEdit', query: { id: $route.params.id } }">Edit / {{ challenge.id}}</router-link>
     </div>
     <div class="challenge-create">
       <div class="title-button-create">
@@ -13,7 +13,7 @@
       <button @click="back()">Back</button>
       </div>
       <div>
-        <form @submit.prevent="create" class="challenge-create-form">
+        <form @submit.prevent="edit" class="challenge-create-form">
           <div class="form-label">
             <p>Title</p>
             <input type="text" v-model="challenge.title">
@@ -24,7 +24,7 @@
           </div>
           <div class="form-label">
             <p>DateTime</p>
-            <input type="datetime-local" v-model="challenge.dateTime">
+            <input type="datetime-local" v-model="formattedDateTimeInput">
           </div>
           <div class="form-label">
             <p>Theme</p>
@@ -60,7 +60,7 @@
                 </div>
               </div>
             </div>
-          <button type="submit">Create</button>
+          <button type="submit">Save</button>
         </form>
       </div>
     </div>
@@ -69,7 +69,7 @@
 
 <script>
 export default {
-  name: 'ChallengeAdminCreate.vue',
+  name: 'ChallengeAdminEdit.vue',
   inject: ['challengeService', 'challengeServiceAdmin', 'fileUploadService'],
   data () {
     return {
@@ -77,40 +77,30 @@ export default {
       showFilter: false,
       showParagraphs: false,
       selectedChallenge: null,
-      challenge: {
-        title: '',
-        firstParagraph: '',
-        dateTime: '',
-        theme: '',
-        image: null,
-        paragraphs: []
-      },
       image: null,
       paragraphsAmount: 0
     }
   },
   methods: {
-    async create () {
+    async edit () {
       this.challenge.dateTime = new Date(this.challenge.dateTime).toISOString()
       try {
-        const challenge = await this.challengeServiceAdmin.asyncSave(this.challenge)
-        console.log(challenge)
-        const file = await this.fileUploadService.asyncUploadChallengePic(this.image, challenge.id)
-        challenge.image = file.filePath
-        const challenge2 = await this.challengeServiceAdmin.asyncSave(challenge)
-        console.log(challenge2)
+        if (this.image !== null) {
+          const file = await this.fileUploadService.asyncUploadChallengePic(this.image, this.challenge.id)
+          this.challenge.image = file.filePath
+          await this.challengeServiceAdmin.asyncSave(this.challenge)
+        } else {
+          await this.challengeServiceAdmin.asyncSave(this.challenge)
+        }
         this.$router.push({ name: 'adminChallenges' })
       } catch (e) {
         console.error(e)
       }
     },
-    paragraphs (challenge) {
-      this.showParagraphs = !this.showParagraphs
-      this.selectedChallenge = challenge
-    },
     back () {
       this.$router.push({ name: 'adminChallenges' })
     },
+
     formatDateTimeWithoutSeconds (dateTime) {
       const date = new Date(dateTime)
       const year = date.getFullYear()
@@ -140,7 +130,9 @@ export default {
     },
     async updateChallenges () {
       try {
-        await this.challengeService.asyncFindAll()
+        await this.challengeService.asyncFindById(this.$route.params.id)
+        this.paragraphsAmount = this.challenge.paragraphs.length
+        console.log(this.paragraphsAmount)
       } catch (e) {
         console.error(e)
       }
@@ -177,6 +169,7 @@ export default {
   },
   async created () {
     await this.updateChallenges()
+    console.log(this.challenge)
   },
   watch: {
     $route (to, from) {
@@ -186,8 +179,18 @@ export default {
     }
   },
   computed: {
-    challenges () {
+    challenge () {
       return this.challengeService.entities
+    },
+    formattedDateTimeInput: {
+      get () {
+        // Format challenge.dateTime for datetime-local input
+        return this.formatDateTimeWithoutSeconds(this.challenge.dateTime)
+      },
+      set (value) {
+        // Parse the input value back to ISO format
+        this.challenge.dateTime = new Date(value).toISOString()
+      }
     },
     sortedParagraphs () {
       if (this.selectedChallenge) {

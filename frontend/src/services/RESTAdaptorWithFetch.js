@@ -32,6 +32,7 @@ export class RESTAdaptorWithFetch {
       } else if (error.status === 403) {
         throw new CustomError('Forbidden: You don\'t have permission to access this resource', error.status, error.message)
       } else {
+        console.log(error)
         throw new CustomError('Error fetching data', error.status || 500, error.message)
       }
     }
@@ -107,21 +108,30 @@ export class RESTAdaptorWithFetch {
 
   async asyncSave (object) {
     let response
+    console.log(object)
     try {
-      if (object.id === 0 || object.id == null) {
+      if (object.id == null) {
         response = await this.fetchJson(this.resourceUrl, {
           method: 'POST',
-          body: JSON.stringify(object)
+          body: JSON.stringify(object),
+          headers: {
+            'Content-Type': 'application/json'
+          }
         })
       } else {
+        console.log('test')
         response = await this.fetchJson(`${this.resourceUrl}/${object.id}`, {
           method: 'PUT',
-          body: JSON.stringify(object)
+          body: JSON.stringify(object),
+          headers: {
+            'Content-Type': 'application/json'
+          }
         })
       }
 
-      return this.copyConstructor(response)
+      return this.copyConstructor(response.challenge)
     } catch (error) {
+      console.log(error)
       throw new CustomError('Error in asyncSave', error.status || 500, error.message)
     }
   }
@@ -131,7 +141,6 @@ export class RESTAdaptorWithFetch {
       const response = await this.fetchJson(`${this.resourceUrl}/${id}`, {
         method: 'DELETE'
       })
-      return true
     } catch (error) {
       throw new CustomError('Error in asyncDeleteById', error.status || 500, error.message)
     }

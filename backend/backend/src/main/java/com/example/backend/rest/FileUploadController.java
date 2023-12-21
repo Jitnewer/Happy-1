@@ -98,7 +98,7 @@ public class FileUploadController {
         }
 
         try {
-            String customFileName = uploadFile(file, "research", challengeId, "/challengePic");
+            String customFileName = uploadFile(file, "challenge", challengeId, "/challengePic");
             return ResponseEntity.status(HttpStatus.OK).body(
                     Map.of(
                             "message", "Challenge image uploaded successfully",

@@ -10,11 +10,12 @@
       <h1>Challenges</h1>
       <button @click="create()">Create</button>
       </div>
-      <table>
+      <table v-if="challenges">
         <thead>
         <tr>
           <th>Id</th>
           <th>Title</th>
+          <th>First Paragraph</th>
           <th>DateTime</th>
           <th>Theme</th>
           <th>Image</th>
@@ -26,14 +27,15 @@
         <tr v-for="challenge in challenges" :key="challenge.id">
           <td>{{ challenge.id }}</td>
           <td>{{ challenge.title }}</td>
+          <td>{{ challenge.firstParagraph }}</td>
           <td>{{ formattedDateTime(challenge.dateTime) }}</td>
           <td>{{ challenge.theme }}</td>
-          <td><img :src="challenge.image ? require(`../../../assets/img/${challenge.image}`) : ''" alt="Challenge Image"></td>
+          <td><img :src="challenge.image ? require(`../../../${challenge.image}`) : ''" alt="Challenge Image"></td>
           <td><button class="relation" @click="paragraphs(challenge)">Check Paragraphs</button></td>
           <td>
             <div class="table-buttons">
-     <button class="edit" @click="edit()">Edit</button>
-         <button class="delete" @click="remove()">Delete</button>
+     <button class="edit" @click="edit(challenge.id)">Edit</button>
+         <button class="delete" @click="remove(challenge)">Delete</button>
             </div>
           </td>
         </tr>
@@ -66,7 +68,7 @@
 <script>
 export default {
   name: 'ChallengesAdmin.vue',
-  inject: ['challengeService'],
+  inject: ['challengeService', 'challengeServiceAdmin', 'fileUploadService'],
   data () {
     return {
       filter: this.$route.query.sort,
@@ -86,12 +88,24 @@ export default {
     back () {
       this.showParagraphs = false
     },
+    async remove (challenge) {
+      try {
+        await this.challengeServiceAdmin.asyncDeleteById(challenge.id)
+        await this.fileUploadService.asyncDeleteImage(challenge.image)
+        await this.challengeService.asyncFindAll()
+      } catch (e) {
+        console.error(e)
+      }
+    },
     async updateChallenges () {
       try {
         await this.challengeService.asyncFindAll()
       } catch (e) {
         console.error(e)
       }
+    },
+    edit (id) {
+      this.$router.push({ name: 'adminChallengeEdit', params: { id: id } })
     },
     getFormattedDate (dateString) {
       const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }

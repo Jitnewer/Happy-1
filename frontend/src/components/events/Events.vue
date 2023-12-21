@@ -29,7 +29,7 @@
     <div class="events">
       <div class="event" v-for="event in filteredEventsOnDate" :key="event.id">
         <div class="event-left">
-          <img :src="event.image ? require(`../../assets/img/${event.image}`) : ''" alt="Image">
+          <img :src="event.image ? require(`../../assets/img/eventPic/${event.image}`) : ''" alt="Image">
         </div>
         <div class="event-right">
           <div class="event-right-main">

@@ -6,7 +6,7 @@
     <p>></p>
     <router-link :to="{ name: 'challenges' , query: { sort: filter }  }">Challenges</router-link>
     <p>></p>
-    <router-link :to="{ name: 'challenge', params: { id: challenge.id }, query: { sort: filter }   }">Challenge / {{ challenge.id }}</router-link>
+    <router-link :to="{ name: 'challenge', params: { id: this.challenge.id }, query: { sort: filter }   }">Challenge / {{ challenge.id }}</router-link>
   </div>
   <div v-if="challenge" class="container">
     <div class="challenge-main">
@@ -16,7 +16,7 @@
       </div>
       <div class="detail-challenge">
         <div>
-          <img :src="challenge.image ? require(`../../assets/img/${challenge.image}`) : ''" alt="Challenge Image">
+          <img :src="challenge.image ? require(`../../${challenge.image}`) : ''" alt="Challenge Image">
         </div>
         <div class="content">
           <div>

@@ -203,7 +203,7 @@ export default {
     <form class="event-details">
       <div class="event-image-container">
         <input type="file" accept="image/jpeg, image/png, image/jpg" id="file" @change="handleImageUpload">
-        <img :src="require(`../../../assets/img/${selectedCopy.image}`)" alt="event image" class="event-image" @click="activateInput">
+        <img :src="require(`../../../assets/img/eventPic/${selectedCopy.image}`)" alt="event image" class="event-image" @click="activateInput">
       </div>
       <div class="info-inputs">
         <input type="text" placeholder="Event name" v-model="selectedCopy.name" id="edit-event-name">
