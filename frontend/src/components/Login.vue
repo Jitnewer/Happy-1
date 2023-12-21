@@ -33,14 +33,19 @@
 
 <script>
 import { User } from '@/models/user'
+import { mapState } from 'vuex'
 
 export default {
   name: 'login.vue',
   inject: ['sessionSBService'],
+  computed: {
+    ...mapState(['loggedIn', 'loggedInAsAdmin'])
+  },
   data () {
     return {
       email: '',
-      password: ''
+      password: '',
+      signOut: this.$route.query.signOut
     }
   },
   methods: {
@@ -66,6 +71,12 @@ export default {
       } catch (e) {
         console.error(e)
       }
+    }
+  },
+  created () {
+    if (this.signOut) {
+      this.$store.commit('setLoggedInAsAdmin', false)
+      this.$store.commit('setLoggedIn', false)
     }
   }
 }

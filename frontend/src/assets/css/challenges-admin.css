@@ -122,3 +122,163 @@
     background-color: white;
     overflow: scroll;
 }
+
+.challenge-create {
+    width: 30%;
+}
+
+.challenge-create-form {
+    margin-top: 1rem;
+    box-shadow: var(--shadow);
+    padding: 3rem;
+    gap: 1rem;
+    display: flex;
+    flex-direction: column;
+}
+
+
+.challenge-create-form p {
+    color: black;
+    margin: 0;
+}
+
+.title-button-create {
+    display: flex;
+    gap: 1rem;
+    justify-content: space-between;
+
+}
+
+.challenge-create-form button {
+    margin-top:1rem;
+}
+
+.form-label {
+    display: flex;
+    gap: 0.25rem;
+    flex-direction: column;
+}
+
+
+
+.challenge-create h1 {
+    color: black;
+    margin: 0;
+}
+
+.challenge-create-form input.invalid-input {
+    border: 1px solid red;
+
+}
+
+.challenge-create-form input {
+    outline: none;
+    width: 100%;
+    padding: 0.5rem;
+    font-size: 12px;
+    box-shadow: var();
+}
+
+.challenge-create-form input.invalid-input:focus-visible {
+    outline: none
+}
+
+
+.challenge-create-form input.valid-input {
+    border: 1px solid limegreen;
+}
+
+.challenge-create-form select {
+    outline: none;
+    width: 100%;
+    padding: 0.5rem;
+    font-size: 12px
+}
+
+
+.challenge-create-form select:focus-visible {
+    outline: none;
+}
+
+.challenge-create-form input.valid-input:focus-visible {
+    outline: none
+}
+
+.challenge-create-form input:focus-visible {
+    outline: none
+}
+
+.paragraphs-amount {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.paragraphs-amount input {
+    user-select: none;
+
+    width: 2% !important;
+}
+
+.paragraphs-amount input[readonly] {
+    cursor: auto /* Change the cursor to indicate that the input is not editable */
+}
+
+.paragraphs-amount div {
+    cursor: pointer; /* Make the buttons look clickable */
+}
+
+.paragraphs-amount div {
+    user-select: none;
+    padding-inline: 0.75rem;
+    box-shadow: var(--shadow);
+    padding-block: 0.25rem;
+}
+
+.paragraphs-amount div p {
+
+}
+
+.paragraphs-inputs {
+    gap: 1rem;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Add the following styles to your existing CSS */
+
+/* Add the following styles to your existing CSS */
+
+.challenge-create-form input,
+.challenge-create-form select {
+    outline: none;
+    width: 100%;
+    padding: 0.5rem;
+    font-size: 12px;
+    border: none;
+    box-shadow: var(--shadow); /* Add the box shadow here */
+}
+
+/* Add the following styles to include the focus-visible state for text inputs */
+
+.challenge-create-form input:focus-visible,
+.challenge-create-form select:focus-visible {
+    outline: none;
+}
+
+/* For the invalid input state */
+
+.challenge-create-form input.invalid-input,
+.challenge-create-form select.invalid-input {
+    border: 1px solid red;
+    box-shadow: var(--shadow), 0 0 0 2px red; /* Add the red border and box shadow on invalid input */
+}
+
+/* For the valid input state */
+
+.challenge-create-form input.valid-input,
+.challenge-create-form select.valid-input {
+    border: 1px solid limegreen;
+    box-shadow: var(--shadow), 0 0 0 2px limegreen; /* Add the limegreen border and box shadow on valid input */
+}
+

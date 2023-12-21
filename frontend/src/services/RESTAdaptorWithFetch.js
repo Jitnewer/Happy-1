@@ -108,7 +108,7 @@ export class RESTAdaptorWithFetch {
   async asyncSave (object) {
     let response
     try {
-      if (object.id === 0) {
+      if (object.id === 0 || object.id == null) {
         response = await this.fetchJson(this.resourceUrl, {
           method: 'POST',
           body: JSON.stringify(object)

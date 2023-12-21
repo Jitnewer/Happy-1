@@ -10,10 +10,14 @@ import com.example.backend.repositories.paragraph.ParagraphRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.swing.text.html.parser.Entity;
+import java.io.File;
+import java.io.IOException;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
@@ -68,13 +72,26 @@ public class ChallengeController {
         }
     }
 
-    @PostMapping("/admin")
-    public ResponseEntity<Object> createChallenge(@RequestBody Challenge challenge) {
-        if (challenge.getTitle() == null || challenge.getTitle().isEmpty()) {
-            return ResponseEntity.badRequest().body(Map.of("message", "Title is required"));
-        }
 
+
+    @PostMapping("/admin")
+    public ResponseEntity<Object> createChallenge(
+            @RequestParam("image") MultipartFile image,
+            @RequestParam("challenge") Challenge challenge) {
         try {
+
+            // Handle image upload
+            if (image != null && !image.isEmpty()) {
+                // Modify the path according to your project structure
+                String imagePath = "frontend/src/assets/img/" + challenge.getId() + "_" + image.getOriginalFilename();
+
+                // Copy the image file to the specified path
+                FileCopyUtils.copy(image.getBytes(), new File(imagePath));
+
+                // Set the image path in the challenge object
+                challenge.setImage(imagePath);
+            }
+
             for (Paragraph paragraph : challenge.getParagraphs()) {
                 paragraph.setChallenge(challenge);
             }
@@ -90,7 +107,7 @@ public class ChallengeController {
                     "message", "Challenge added successfully",
                     "status", HttpStatus.CREATED.value(),
                     "location", location.toString()));
-        } catch (Exception e) {
+        } catch (IOException e) {
             Map<String, Object> errorResponse = new HashMap<>();
             errorResponse.put("message", "Error adding the challenge");
             errorResponse.put("error", e.getMessage());

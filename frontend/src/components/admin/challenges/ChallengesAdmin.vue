@@ -2,13 +2,13 @@
   <div class="container-admin">
     <div class="breadcrum-admin">
       <router-link :to="{ name: 'welcome' }">Admin</router-link>
-      <span> > </span>
+      <span>></span>
       <router-link :to="{ name: 'adminChallenges' }">Challenges</router-link>
     </div>
     <div class="challenges-admin">
       <div class="title-button">
       <h1>Challenges</h1>
-      <button>Create</button>
+      <button @click="create()">Create</button>
       </div>
       <table>
         <thead>
@@ -32,8 +32,8 @@
           <td><button class="relation" @click="paragraphs(challenge)">Check Paragraphs</button></td>
           <td>
             <div class="table-buttons">
-     <button class="edit">Edit</button>
-         <button class="delete">Delete</button>
+     <button class="edit" @click="edit()">Edit</button>
+         <button class="delete" @click="remove()">Delete</button>
             </div>
           </td>
         </tr>
@@ -76,12 +76,8 @@ export default {
     }
   },
   methods: {
-    async selectChallenge (challenge) {
-      this.$router.push({ name: 'challenge', params: { id: challenge.id }, query: { sort: this.filter } })
-      await this.challengeService.asyncFindById(challenge.id)
-    },
-    toggleFilter () {
-      this.showFilter = !this.showFilter
+    create () {
+      this.$router.push({ name: 'adminChallengeCreate' })
     },
     paragraphs (challenge) {
       this.showParagraphs = !this.showParagraphs
@@ -90,27 +86,12 @@ export default {
     back () {
       this.showParagraphs = false
     },
-    updateFilter (filterValue) {
-      if (this.filter === filterValue) {
-        // If the same filter is clicked again, deselect it
-        this.filter = null
-        this.$router.push({ name: 'challenges' })
-      } else {
-        // Otherwise, set the selected filter
-        this.filter = filterValue
-        this.$router.push({ name: 'challenges', query: { sort: this.filter } })
-      }
-    },
     async updateChallenges () {
       try {
         await this.challengeService.asyncFindAll()
       } catch (e) {
         console.error(e)
       }
-    },
-    shortenParagraph (paragraph) {
-      const maxChars = 150 // Pas dit aan naar de gewenste lengte
-      return paragraph.length > maxChars ? paragraph.slice(0, maxChars) + '...' : paragraph
     },
     getFormattedDate (dateString) {
       const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }
