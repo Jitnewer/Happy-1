@@ -22,7 +22,7 @@ export default {
       this.selectedUser = new User(
         0,
         null,
-        'assets/img/profilepic.png',
+        'assets/profilePic/profilepic.png',
         null,
         null,
         null,
