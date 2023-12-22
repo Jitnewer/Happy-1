@@ -15,10 +15,10 @@
         <tr>
           <th>Id</th>
           <th>Title</th>
-          <th>First Paragraph</th>
-          <th>DateTime</th>
-          <th>Theme</th>
-          <th>Image</th>
+          <th class="firstParagraph">First Paragraph</th>
+          <th class="datetime">DateTime</th>
+          <th class="theme_small">Theme</th>
+          <th class="image">Image</th>
           <th>Paragraphs</th>
           <th></th>
         </tr>
@@ -27,10 +27,10 @@
         <tr v-for="challenge in challenges" :key="challenge.id">
           <td>{{ challenge.id }}</td>
           <td>{{ challenge.title }}</td>
-          <td>{{ challenge.firstParagraph }}</td>
-          <td>{{ formattedDateTime(challenge.dateTime) }}</td>
-          <td>{{ challenge.theme }}</td>
-          <td><img :src="challenge.image ? require(`../../../${challenge.image}`) : ''" alt="Challenge Image"></td>
+          <td class="firstParagraph">{{ challenge.firstParagraph }}</td>
+          <td class="datetime">{{ formattedDateTime(challenge.dateTime) }}</td>
+          <td class="theme_small">{{ challenge.theme }}</td>
+          <td class="image"><img :src="challenge.image ? require(`../../../${challenge.image}`) : ''" alt="Challenge Image"></td>
           <td><button class="relation" @click="paragraphs(challenge)">Check Paragraphs</button></td>
           <td>
             <div class="table-buttons">

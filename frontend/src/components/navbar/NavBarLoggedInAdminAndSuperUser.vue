@@ -97,6 +97,9 @@ export default {
   },
   async created () {
     try {
+      if (window.innerWidth <= 860) {
+        this.showDashboard = false
+      }
       const userAndToken = await this.sessionSBService.asyncFindByEmail(JSON.parse(localStorage.getItem('userDetails')).mail)
       this.user = userAndToken.body
       if (this.user.profilePic === '') {
@@ -140,8 +143,8 @@ export default {
         this.showDashboard = true
         this.smallVersionDasboard = !this.smallVersionDasboard
       } else if (window.innerWidth <= 860) {
-        this.smallVersionDasboard = false
-        this.showDashboard = !this.showDashboard
+        this.smallVersionDasboard = !this.smallVersionDasboard
+        this.showDashboard = false
       }
     },
     checkDashboard () {
@@ -149,8 +152,8 @@ export default {
         this.showDashboard = true
         this.smallVersionDasboard = false
       } else if (window.innerWidth <= 860) {
-        this.smallVersionDasboard = false
         this.showDashboard = false
+        this.smallVersionDasboard = false
       }
     },
     updateShowNav () {

@@ -62,10 +62,12 @@ export default {
           if (userType === User.userTypes.Admin) {
             this.$store.commit('setLoggedInAsAdmin', true)
             this.$router.push({ path: '/admin' })
+            this.$forceUpdate()
           } else {
             this.$store.commit('setLoggedIn', true)
 
             this.$router.push({ path: '/home' })
+            this.$forceUpdate()
           }
         }
       } catch (e) {
