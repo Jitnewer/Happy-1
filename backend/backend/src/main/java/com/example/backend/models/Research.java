@@ -77,6 +77,14 @@ public class Research implements Identifiable {
         return title;
     }
 
+    public Theme getTheme() {
+        return theme;
+    }
+
+    public void setTheme(Theme theme) {
+        this.theme = theme;
+    }
+
     public void setTitle(String title) {
         this.title = title;
     }

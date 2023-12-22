@@ -4,7 +4,7 @@
     <p>></p>
     <router-link :to="{ name: 'news', query: { sort: filter }  }">News</router-link>
     <p>></p>
-    <router-link :to="{ name: 'challenges' , query: { sort: filter }  }">Challenges</router-link>
+    <router-link :to="{ name: 'challenges' , query: { sort: filter }  }">Challenge Articles</router-link>
   </div>
   <div class="container">
     <div class="title-filter">

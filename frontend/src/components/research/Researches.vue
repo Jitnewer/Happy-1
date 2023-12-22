@@ -4,7 +4,7 @@
     <p>></p>
     <router-link :to="{ name: 'news', query: { sort: filter} }">News</router-link>
     <p>></p>
-    <router-link :to="{ name: 'researches', query: { sort: filter} }">Researches</router-link>
+    <router-link :to="{ name: 'researches', query: { sort: filter} }">Research Articles</router-link>
   </div>
   <div class="container">
     <div class="title-filter">
@@ -46,7 +46,7 @@
     <div class="challenges">
       <div class="challenge" v-for="research in sortedResearch" :key="research.id" @click="selectResearch(research)">
         <div class="challenge-left">
-          <img :src="research.image ? require(`../../assets/img/${research.image}`) : ''" alt="Research Image">
+          <img :src="research.image ? require(`../../${research.image}`) : ''" alt="Research Image">
         </div>
         <div class="challenge-right">
           <p class="challenge-time">{{ formattedDateTime(research.dateTime) }}</p>
