@@ -282,11 +282,9 @@ td, th {
 
 .edit-inputs {
     margin-top: 20px;
-    max-height: 300px;
     gap: 20px;
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: auto auto auto;
     color: black;
     margin-bottom: 1rem;
 }
@@ -318,11 +316,19 @@ td, th {
         width: 150px;
         height: 150px;
     }
+
+    .info-grid {
+        grid-template-columns: auto auto;
+    }
 }
 
 @media (max-width: 920px) {
     .info-right-bottom {
         max-height: 375px;
+    }
+
+    .edit-inputs {
+        grid-template-columns: auto auto;
     }
 }
 
@@ -359,6 +365,15 @@ td, th {
         height: 100px;
     }
 
+    .edit-inputs {
+        grid-template-columns: auto;
+    }
+}
+
+@media (max-width: 550px) {
+    .info-grid {
+        grid-template-columns: auto;
+    }
 }
 
 @media (max-width: 450px) {
@@ -378,5 +393,4 @@ td, th {
     .info-right-bottom .usertype-tag {
         font-size: 10px;
     }
-
 }
