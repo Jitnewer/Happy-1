@@ -7,15 +7,6 @@
     width: 20%;
 }
 
-.notification {
-    padding: 12px;
-    background-color: var(--main-color);
-    border: none;
-    border-radius: 10px;
-    font-size: 18px;
-    color: var(--main-text-color);
-}
-
 td, th {
     padding: 5px;
     font-size: 12px;
@@ -26,8 +17,7 @@ td, th {
     margin-left: 20px;
     overflow: auto;
     width:90%;
-    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
-
+    box-shadow: rgba(0, 0, 0, 0.19) 0 10px 20px, rgba(0, 0, 0, 0.23) 0 6px 6px;
 }
 
 .banned {
@@ -53,7 +43,7 @@ td, th {
     color: var(--main-text-color);
 }
 
-.buttons button, .create-btn, .profile-edit-buttons button, .info-right button{
+.admin-users button, .edit-user-btn button, .user-profile-container button, .buttons-view a{
     border: none;
     color: var(--main-text-color);
     padding: 0.5rem 1rem;
@@ -68,11 +58,6 @@ td, th {
     display: flex;
     justify-content: left;
 }
-
-button:hover {
-    cursor: pointer;
-}
-
 
 .block-button, .edit-user-btn .cancel, .delete-button {
     background-color: red;
@@ -173,18 +158,6 @@ button:hover {
     padding: 10px;
 }
 
-.edit-user-btn button {
-    border-radius: 5px;
-    border: none;
-    color: var(--main-text-color);
-    background: var(--main-color-hover);
-    padding: 0.5rem 1rem;
-    font-size: 18px;
-    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
-    cursor: pointer;
-    transition: 0.5s;
-}
-
 /* User profile page */
 .user-profile-container {
     width: 100%;
@@ -241,62 +214,33 @@ button:hover {
     gap: 10px;
 }
 
-.selected {
-    background-color: var(--main-color-hover);
-}
-.buttons-view a {
-    text-decoration: none;
-    color: var(--main-text-color);
-    padding: 8px 24px;
-    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
-    border-radius: 10%;
-    transition: 0.5s;
-    display: flex;
-    justify-content: center;
-    background-color: var(--main-color)
-}
-
-.buttons-view a:hover {
-    background-color: var(--main-color-hover);
-}
-
-.edit-button {
-    background-color:  var(--main-color-hover);
-    padding: 8px 24px;
-    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
-    border-radius: 10%;
-    transition: 0.5s;
-}
-
-.save-button {
-    background-color:  var(--main-color-hover);
-    padding: 8px 24px;
-    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
-    border-radius: 10%;
-    transition: 0.5s;
-}
-
-.buttons-view a.router-link-active {
-    text-decoration: none;
-    color: var(--main-text-color);
-    padding: 8px 24px;
-    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
-    border-radius: 10%;
-    transition: 0.5s;
-    display: flex;
-    justify-content: center;
-    background-color: var(--main-color-hover);
-
-}
-
-
-.buttons-view a.router-link-active:hover {
+.info-view, .events-view {
     background-color: var(--main-color);
-
 }
+
+.selected, .admin-edit, .admin-save, .admin-create, .back-button, .profile-edit-button, .save-button{
+    background-color: var(--main-color-hover);
+}
+
+.selected:hover, .admin-edit:hover, .admin-save:hover, .admin-create:hover, .back-button:hover, .profile-edit-button:hover, .save-button:hover{
+    background-color: var(--main-color-hover-admin);
+}
+
+.admin-view {
+    background-color: var(--main-color);
+}
+
+.admin-view:hover {
+    background-color: var(--main-color-admin);
+}
+
 .buttons-view {
     display: flex;
     gap: 1rem;
+}
+
+.info-view, .events-view {
+    text-decoration: none;
 }
 
 .info-right-bottom {
@@ -357,6 +301,12 @@ button:hover {
     padding: 0.5em 1em;
     border-bottom: 1px solid var(--main-text-color);
     box-shadow: rgba(0, 0, 0, 0.19) 0 10px 20px, rgba(0, 0, 0, 0.23) 0 6px 6px;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    gap: 10px;
 }
 
 @media (max-width: 1250px) {

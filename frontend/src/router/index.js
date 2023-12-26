@@ -21,8 +21,6 @@ import ChallengeDetails from '@/components/challenges/ChallengeDetails.vue'
 import Researches from '@/components/research/Researches.vue'
 import ResearchDetails from '@/components/research/ResearchDetails.vue'
 import SuperUserResearchView from '@/components/admin/superUser/research/SuperUserResearchView.vue'
-import SuperUserChallengeView from '@/components/admin/superUser/challenge/SuperUserChallengeView.vue'
-import SuperUserChallenge from '@/components/admin/superUser/challenge/SuperUserChallenge.vue'
 
 const routes = [
   {
@@ -123,16 +121,6 @@ const routes = [
         component: SuperUserDetail
       }
     ]
-  },
-  {
-    path: '/superuser/challenges',
-    name: 'SuperUserChallenges',
-    component: SuperUserChallengeView
-  },
-  {
-    path: '/superuser/challenges/:id',
-    name: 'SuperUserChallengeDetail',
-    component: SuperUserChallenge
   },
   {
     path: '/register',

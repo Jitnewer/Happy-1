@@ -21,7 +21,8 @@ export default {
     cancel () {
       if (confirm('Are you sure you wan\'t to delete changes?')) {
         this.edit = false
-        this.copyUser = null
+        this.copyUser = User.copyConstructor(this.user)
+        this.newProfilePic = null
       }
     },
     handleImageUpload (event) {
@@ -34,17 +35,13 @@ export default {
         document.querySelector('#file').click()
       }
     },
-    infoView () {
-      this.$router.push({ name: 'profilePageInfo' })
-    },
-    eventsView () {
-      this.$router.push({ name: 'profilePageEvents' })
-    },
     async save () {
       if (confirm('Are you sure you wan\'t to save changes?')) {
         try {
-          const profilePicPath = await this.fileUploadService.asyncUploadProfilePic(this.pictureUpload, this.user)
-          this.copyUser.profilePic = profilePicPath.filePath
+          if (this.pictureUpload) {
+            const profilePicPath = await this.fileUploadService.asyncUploadProfilePic(this.pictureUpload, this.user)
+            this.copyUser.profilePic = profilePicPath.filePath
+          }
           this.newProfilePic = null
 
           await this.usersService.asyncSave(this.copyUser)
@@ -58,10 +55,6 @@ export default {
     }
   },
   async created () {
-    if (localStorage.getItem('email') == null) {
-      this.$router.push({ route: 'PageNotFound' })
-    }
-
     this.user = await this.usersService.asyncFindById(parseInt(localStorage.getItem('profileId')))
     this.$router.push({ name: 'profilePageInfo' })
     this.copyUser = User.copyConstructor(this.user)
@@ -79,7 +72,7 @@ export default {
         <img v-else class="profile-pic" :src="newProfilePic" @click="activateInput">
         <input type="file" accept="image/jpeg, image/png, image/jpg" id="file" @change="handleImageUpload">
         <div v-if="!edit" class="profile-edit-buttons">
-          <button class="edit-button" @click="editProfile">Edit</button>
+          <button class="profile-edit-button" @click="editProfile">Edit</button>
           <button class="delete-button">Delete</button>
         </div>
         <div v-else class="profile-edit-buttons">
@@ -92,8 +85,8 @@ export default {
           <h1 v-if="!edit"> {{ user.firstname }} {{ user.lastname }}</h1>
         </div>
         <div v-if="!edit" class="buttons-view">
-          <router-link :to="{name: 'profilePageInfo'}"  class="info-view selected">Info</router-link>
-          <router-link :to="{ name: 'profilePageEvents'}" class="events-view">Events</router-link>
+          <router-link :to="{name: 'profilePageInfo'}"  class="info-view" active-class="selected">Info</router-link>
+          <router-link :to="{ name: 'profilePageEvents'}" class="events-view" active-class="selected">Events</router-link>
         </div>
         <div class="info-right-bottom">
           <router-view v-if="!edit" :user="user"></router-view>

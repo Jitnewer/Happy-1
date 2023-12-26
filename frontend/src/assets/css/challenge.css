@@ -73,7 +73,7 @@
     color: black;
 }
 
-.challenge-title button, .add-paragraph, .delete-paragraph, .challenge-edit-buttons .delete {
+.challenge-title button {
     background-color: var(--main-color-hover);
     color: var(--main-text-color);
     border-style: none;

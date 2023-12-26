@@ -3,7 +3,6 @@ export default {
   name: 'ProfilePage',
   inject: ['usersService'],
   props: ['selectedUser'],
-  emits: ['back'],
   data () {
     return {
       user: null,
@@ -35,10 +34,25 @@ export default {
       }
 
       this.infoView()
+    },
+    setSelected (newSelectedElementClass, oldSelectedElementClass) {
+      document.querySelector(oldSelectedElementClass).classList.remove('selected')
+      document.querySelector(newSelectedElementClass).classList.add('selected')
     }
   },
   created () {
     this.findUserByUrl(parseInt(this.$route.params.id))
+  },
+  watch: {
+    '$route' (to) {
+      if (!to) return
+      if (to.path.includes('events')) {
+        this.setSelected('.events-view', '.info-view')
+      }
+      if (to.path.includes('info')) {
+        this.setSelected('.info-view', '.events-view')
+      }
+    }
   }
 }
 </script>
@@ -51,7 +65,7 @@ export default {
       <div class="info-left">
         <img class="profile-pic" :src="require(`../../../${user.profilePic}`)">
         <div class="profile-edit-buttons">
-          <button class="edit-button" @click="previousPage">Back</button>
+          <button class="back-button" @click="previousPage">Back</button>
         </div>
       </div>
       <div class="info-right">

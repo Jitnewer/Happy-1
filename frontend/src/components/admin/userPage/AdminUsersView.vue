@@ -8,7 +8,7 @@ export default {
     return {
       filter: {
         search: null,
-        userType: null
+        userType: ''
       },
       selectedUser: null,
       create: false,
@@ -135,8 +135,6 @@ export default {
     }
   },
   async created () {
-    if (localStorage.getItem('admin') === 'false') this.$router.push({ path: '/PageNotFound' })
-
     this.users = await this.usersService.asyncFindAll()
 
     this.selectUserByUrl(parseInt(this.$route.params.id))
@@ -154,7 +152,7 @@ export default {
 </script>
 
 <template>
-  <div class="container-admin">
+  <div class="container-admin admin-users">
     <div class="title">
       <h1>Users</h1>
     </div>
@@ -168,8 +166,7 @@ export default {
         <option value="PARTNER">Partner</option>
         <option value="SUPERUSER">Superuser</option>
       </select>
-      <button class="create-btn" @click="createUser">Create</button>
-      <button class="notification"><i class="fa-regular fa-bell"></i></button>
+      <button class="admin-create" @click="createUser">Create</button>
     </div>
     <div class="users-list">
       <table class="users-table">
@@ -193,11 +190,11 @@ export default {
           <td> {{ user.tag }}</td>
           <td> {{ user.status }}</td>
           <td class="buttons">
-            <button class="view-button" @click="viewUser(user)">View</button>
-            <button class="edit-button" @click="editUser(user)">Edit</button>
+            <button class="admin-view" @click="viewUser(user)">View</button>
+            <button class="admin-edit" @click="editUser(user)">Edit</button>
             <button v-if="!isBanned(user)" class="block-button" @click="blockUser(user)">Block</button>
             <button v-if="isBanned(user)" class="block-button" @click="unblockUser(user)">Unblock</button>
-            <button class="delete-button" @click="deleteUser(user)">Delete</button>
+            <button class="admin-delete" @click="deleteUser(user)">Delete</button>
           </td>
           </tr>
         </tbody>
@@ -212,10 +209,5 @@ export default {
 .container-admin {
   margin-top: 1rem;
   width:80%
-}
-
-h1, h2, h3, h4, h5, h6, p {
-  color: black;
-  margin: 0;
 }
 </style>
