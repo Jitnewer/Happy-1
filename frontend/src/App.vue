@@ -19,6 +19,7 @@ import Footer from '@/components/welcomePage/Footer.vue'
 import { mapState } from 'vuex'
 import { FetchInterceptor } from '@/services/FetchInterceptor'
 import { CachedRESTAdaptorWithFetch } from '@/services/CachedRESTAdaptorWithFetch'
+import { Network } from '@/models/network.js'
 
 export default {
   name: 'App',
@@ -40,7 +41,8 @@ export default {
       userEventsService: reactive(new CachedRESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/userevents', UserEvent.copyConstructor)),
       usersServiceAdmin: reactive(new CachedRESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/users/admin', User.copyConstructor)),
       sessionSBService: shallowReactive(new SessionSbService(CONFIG.BACKEND_URL + '/authentication', CONFIG.JWT_STORAGE_ITEM)),
-      researchService: reactive(new CachedRESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/researches', Research.copyConstructor))
+      researchService: reactive(new CachedRESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/researches', Research.copyConstructor)),
+      networkService: reactive(new CachedRESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/networks', Network.copyConstructor))
     }
   },
   unmounted () {

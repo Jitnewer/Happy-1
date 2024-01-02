@@ -27,6 +27,11 @@ public class Paragraph implements Identifiable{
     @JsonBackReference(value = "research-paragraphs")
     private Research research;
 
+    @ManyToOne(cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "network_id")
+    @JsonBackReference(value = "network-paragraphs")
+    private Network network;
+
 
     // Constructors, getters, and setters
 
@@ -84,6 +89,14 @@ public class Paragraph implements Identifiable{
 
     public void setResearch(Research research) {
         this.research = research;
+    }
+
+    public Network getNetwork() {
+        return network;
+    }
+
+    public void setNetwork(Network network) {
+        this.network = network;
     }
 
     @Override

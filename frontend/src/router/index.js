@@ -22,6 +22,8 @@ import ChallengeDetails from '@/components/challenges/ChallengeDetails.vue'
 import Researches from '@/components/research/Researches.vue'
 import ResearchDetails from '@/components/research/ResearchDetails.vue'
 import welcomeAdmin from '@/components/admin/welcomeAdmin.vue'
+import NetworksDetails from '@/components/networks/NetworkDetails.vue'
+import Networks from '@/components/networks/Networks.vue'
 
 const routes = [
   {
@@ -62,6 +64,16 @@ const routes = [
     path: '/news/researches/:id',
     name: 'research',
     component: ResearchDetails
+  },
+  {
+    path: '/news/networks',
+    name: 'networks',
+    component: Networks
+  },
+  {
+    path: '/news/networks/:id',
+    name: 'network',
+    component: NetworksDetails
   },
   {
     path: '/about',
