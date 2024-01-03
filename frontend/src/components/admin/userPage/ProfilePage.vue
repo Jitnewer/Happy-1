@@ -6,7 +6,7 @@ export default {
   data () {
     return {
       user: null,
-      test: -1
+      previousRoute: null
     }
   },
   methods: {
@@ -19,7 +19,12 @@ export default {
       this.$router.push({ name: 'profileEventsView' })
     },
     previousPage () {
-      this.$router.go(this.test)
+      console.log(this.previousRoute)
+      if (this.previousRoute.path === '/') {
+        this.$router.push({ name: 'users' })
+      } else {
+        this.$router.push(this.previousRoute.path)
+      }
     },
     async findUserByUrl (urlParam) {
       if (urlParam < 0) {
@@ -53,6 +58,11 @@ export default {
         this.setSelected('.info-view', '.events-view')
       }
     }
+  },
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
+      vm.previousRoute = from
+    })
   }
 }
 </script>
