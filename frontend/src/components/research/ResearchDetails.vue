@@ -4,9 +4,9 @@
     <p>></p>
     <router-link :to="{ name: 'news', query: { sort: filter }  }">News</router-link>
     <p>></p>
-    <router-link :to="{ name: 'researches' , query: { sort: filter }   }">Researches</router-link>
+    <router-link :to="{ name: 'researches' , query: { sort: filter }   }">Research Articles</router-link>
     <p>></p>
-    <router-link :to="{ name: 'research', params: { id: research.id } , query: { sort: filter }  }">Research / {{ research.id }}</router-link>
+    <router-link :to="{ name: 'research', params: { id: research.id } , query: { sort: filter }  }">Research Article / {{ research.id }}</router-link>
   </div>
   <div v-if="research" class="container">
     <div class="challenge-main">
@@ -16,7 +16,7 @@
       </div>
       <div class="detail-challenge">
         <div>
-          <img :src="require(`../../assets/img/${research.image}`)" alt="">
+          <img :src="require(`../../${research.image}`)" alt="">
         </div>
         <div class="content">
           <div>

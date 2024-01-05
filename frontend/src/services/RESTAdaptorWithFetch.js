@@ -128,8 +128,9 @@ export class RESTAdaptorWithFetch {
           }
         })
       }
+      console.log(response)
 
-      return this.copyConstructor(response.challenge)
+      return response
     } catch (error) {
       console.log(error)
       throw new CustomError('Error in asyncSave', error.status || 500, error.message)

@@ -26,6 +26,9 @@ import News from '@/components/News.vue'
 import ChallengesAdmin from '@/components/admin/challenges/ChallengesAdmin.vue'
 import ChallengeAdminCreate from '@/components/admin/challenges/ChallengeAdminCreate.vue'
 import ChallengeAdminEdit from '@/components/admin/challenges/ChallengeAdminEdit.vue'
+import ResearchesAdmin from '@/components/admin/researches/ResearchesAdmin.vue'
+import ResearchAdminCreate from '@/components/admin/researches/ResearchAdminCreate.vue'
+import ResearchAdminEdit from '@/components/admin/researches/ResearchAdminEdit.vue'
 
 const routes = [
   {
@@ -106,6 +109,21 @@ const routes = [
     path: '/admin/challenges/edit/:id',
     name: 'adminChallengeEdit',
     component: ChallengeAdminEdit
+  },
+  {
+    path: '/admin/researches',
+    name: 'adminResearches',
+    component: ResearchesAdmin
+  },
+  {
+    path: '/admin/researches/create',
+    name: 'adminResearchCreate',
+    component: ResearchAdminCreate
+  },
+  {
+    path: '/admin/researches/edit/:id',
+    name: 'adminResearchEdit',
+    component: ResearchAdminEdit
   },
   {
     path: '/admin/statistics',

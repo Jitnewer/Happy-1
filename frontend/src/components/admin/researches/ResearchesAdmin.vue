@@ -3,14 +3,14 @@
     <div class="breadcrum-admin">
       <router-link :to="{ name: 'admin' }">Admin</router-link>
       <span>></span>
-      <router-link :to="{ name: 'adminChallenges' }">Challenge Articles</router-link>
+      <router-link :to="{ name: 'adminResearches' }">Research Articles</router-link>
     </div>
     <div class="challenges-admin">
       <div class="title-button">
-      <h1>Challenge Articles</h1>
+      <h1>Research Articles</h1>
       <button @click="create()">Create</button>
       </div>
-      <table v-if="challenges">
+      <table v-if="researches">
         <thead>
         <tr>
           <th>Id</th>
@@ -24,18 +24,18 @@
         </tr>
         </thead>
         <tbody>
-        <tr v-for="challenge in challenges" :key="challenge.id">
-          <td>{{ challenge.id }}</td>
-          <td>{{ challenge.title }}</td>
-          <td class="firstParagraph">{{ challenge.firstParagraph }}</td>
-          <td class="datetime">{{ formattedDateTime(challenge.dateTime) }}</td>
-          <td class="theme_small">{{ challenge.theme }}</td>
-          <td class="image"><img :src="challenge.image ? require(`../../../${challenge.image}`) : ''" alt="Challenge Image"></td>
-          <td><button class="relation" @click="paragraphs(challenge)">Check Paragraphs</button></td>
+        <tr v-for="research in researches" :key="research.id">
+          <td>{{ research.id }}</td>
+          <td>{{ research.title }}</td>
+          <td class="firstParagraph">{{ research.firstParagraph }}</td>
+          <td class="datetime">{{ formattedDateTime(research.dateTime) }}</td>
+          <td class="theme_small">{{ research.theme }}</td>
+          <td class="image"><img :src="research.image ? require(`../../../${research.image}`) : ''" alt="Research Image"></td>
+          <td><button class="relation" @click="paragraphs(research)">Check Paragraphs</button></td>
           <td>
             <div class="table-buttons">
-     <button class="edit" @click="edit(challenge.id)">Edit</button>
-         <button class="delete" @click="remove(challenge)">Delete</button>
+     <button class="edit" @click="edit(research.id)">Edit</button>
+         <button class="delete" @click="remove(research)">Delete</button>
             </div>
           </td>
         </tr>
@@ -67,45 +67,45 @@
 
 <script>
 export default {
-  name: 'ChallengesAdmin.vue',
-  inject: ['challengeService', 'challengeServiceAdmin', 'fileUploadService'],
+  name: 'ResearchesAdmin.vue',
+  inject: ['researchService', 'researchServiceAdmin', 'fileUploadService'],
   data () {
     return {
       filter: this.$route.query.sort,
       showFilter: false,
       showParagraphs: false,
-      selectedChallenge: null
+      selectedResearch: null
     }
   },
   methods: {
     create () {
-      this.$router.push({ name: 'adminChallengeCreate' })
+      this.$router.push({ name: 'adminResearchCreate' })
     },
-    paragraphs (challenge) {
+    paragraphs (research) {
       this.showParagraphs = !this.showParagraphs
-      this.selectedChallenge = challenge
+      this.selectedResearch = research
     },
     back () {
       this.showParagraphs = false
     },
-    async remove (challenge) {
+    async remove (research) {
       try {
-        await this.challengeServiceAdmin.asyncDeleteById(challenge.id)
-        await this.fileUploadService.asyncDeleteImage(challenge.image)
-        await this.challengeService.asyncFindAll()
+        await this.researchServiceAdmin.asyncDeleteById(research.id)
+        await this.fileUploadService.asyncDeleteImage(research.image)
+        await this.researchService.asyncFindAll()
       } catch (e) {
         console.error(e)
       }
     },
-    async updateChallenges () {
+    async updateResearches () {
       try {
-        await this.challengeService.asyncFindAll()
+        await this.researchService.asyncFindAll()
       } catch (e) {
         console.error(e)
       }
     },
     edit (id) {
-      this.$router.push({ name: 'adminChallengeEdit', params: { id: id } })
+      this.$router.push({ name: 'adminResearchEdit', params: { id: id } })
     },
     getFormattedDate (dateString) {
       const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }
@@ -138,24 +138,23 @@ export default {
     }
   },
   async created () {
-    await this.updateChallenges()
-    console.log(this.challenges)
+    await this.updateResearches()
   },
   watch: {
     $route (to, from) {
       if (to.fullPath !== from.fullPath) {
-        this.updateChallenges()
+        this.updateResearches()
       }
     }
   },
   computed: {
-    challenges () {
-      return this.challengeService.entities
+    researches () {
+      return this.researchService.entities
     },
     sortedParagraphs () {
-      if (this.selectedChallenge) {
+      if (this.selectedResearch) {
         // Sort paragraphs based on id
-        return this.selectedChallenge.paragraphs.slice().sort((a, b) => a.id - b.id)
+        return this.selectedResearch.paragraphs.slice().sort((a, b) => a.id - b.id)
       }
       return []
     }

@@ -3,35 +3,35 @@
     <div class="breadcrum-admin">
       <router-link :to="{ name: 'admin' }">Admin</router-link>
       <span> > </span>
-      <router-link :to="{ name: 'adminChallenges' }">Challenge Articles</router-link>
+      <router-link :to="{ name: 'adminResearches' }">Research Articles</router-link>
       <span>></span>
-      <router-link :to="{ name: 'adminChallengeCreate' }">Create</router-link>
+      <router-link :to="{ name: 'adminResearchCreate' }">Create</router-link>
     </div>
     <div class="challenge-create">
       <div class="title-button-create">
-        <h1>Create Challenge</h1>
+        <h1>Create Research</h1>
         <button @click="back()">Back</button>
       </div>
       <div>
-        <form @submit.prevent="create" class="challenge-create-form" v-if="challenge">
+        <form @submit.prevent="create" class="challenge-create-form" v-if="research">
           <div class="form-label">
             <p>Title</p>
-            <input type="text" v-model="challenge.title" :class="{'invalid-input': challenge.title && !isTitleValid,'valid-input': challenge.title && isTitleValid}" @input="validateTitle(challenge.title)">
-            <p class="errorMessage" v-if="!isTitleValid && challenge.title">Invalid title, no special symbols allowed</p>
+            <input type="text" v-model="research.title" :class="{'invalid-input': research.title && !isTitleValid,'valid-input': research.title && isTitleValid}" @input="validateTitle(research.title)">
+            <p class="errorMessage" v-if="!isTitleValid && research.title">Invalid title, no special symbols allowed</p>
           </div>
           <div class="form-label">
             <p>First Paragraph</p>
-            <input type="text" v-model="challenge.firstParagraph" :class="{'invalid-input': challenge.firstParagraph && !isFirstParagraphValid,'valid-input': challenge.firstParagraph && isFirstParagraphValid}" @input="validateFirstParagraph(challenge.firstParagraph)">
-            <p class="errorMessage" v-if="!isFirstParagraphValid && challenge.firstParagraph">Invalid first paragraph, no special symbols allowed</p>
+            <input type="text" v-model="research.firstParagraph" :class="{'invalid-input': research.firstParagraph && !isFirstParagraphValid,'valid-input': research.firstParagraph && isFirstParagraphValid}" @input="validateFirstParagraph(research.firstParagraph)">
+            <p class="errorMessage" v-if="!isFirstParagraphValid && research.firstParagraph">Invalid first paragraph, no special symbols allowed</p>
           </div>
           <div class="form-label">
             <p>DateTime</p>
-            <input type="datetime-local" v-model="challenge.dateTime" :class="{'invalid-input': challenge.dateTime && !isDateTimeValid,'valid-input': challenge.dateTime && isDateTimeValid}" @input="validateDateTime(challenge.dateTime)">
-            <p class="errorMessage" v-if="!isDateTimeValid && challenge.dateTime">Invalid datetime, needs te be now or in the future</p>
+            <input type="datetime-local" v-model="research.dateTime" :class="{'invalid-input': research.dateTime && !isDateTimeValid,'valid-input': research.dateTime && isDateTimeValid}" @input="validateDateTime(research.dateTime)">
+            <p class="errorMessage" v-if="!isDateTimeValid && research.dateTime">Invalid datetime, needs te be now or in the future</p>
           </div>
           <div class="form-label">
             <p>Theme</p>
-            <select v-model="challenge.theme">
+            <select v-model="research.theme">
               <option value="FOOD_WASTE">FOOD_WASTE</option>
               <option value="DISTRIBUTION">DISTRIBUTION</option>
               <option value="ENERGY_TRANSITION">ENERGY_TRANSITION</option>
@@ -52,7 +52,7 @@
             <div @click="incrementParagraphs"><p>+</p></div>
           </div>
           <div class="paragraphs-inputs" v-if="paragraphsAmount !== 0">
-            <div class="paragraph" v-for="(paragraph, index) in challenge.paragraphs" :key="index">
+            <div class="paragraph" v-for="(paragraph, index) in research.paragraphs" :key="index">
               <p>Paragraph {{ index + 1 }}</p>
               <div class="form-label">
                 <p>Title</p>
@@ -66,7 +66,7 @@
               </div>
             </div>
           </div>
-          <button type="submit" :disabled="!challengeEdited && !validateForm()">Save</button>
+          <button type="submit" :disabled="!researchEdited && !validateForm()">Save</button>
         </form>
       </div>
     </div>
@@ -75,15 +75,15 @@
 
 <script>
 export default {
-  name: 'ChallengeAdminCreate.vue',
-  inject: ['challengeService', 'challengeServiceAdmin', 'fileUploadService'],
+  name: 'ResearchAdminCreate.vue',
+  inject: ['researchService', 'researchServiceAdmin', 'fileUploadService'],
   data () {
     return {
       filter: this.$route.query.sort,
       showFilter: false,
       showParagraphs: false,
       selectedChallenge: null,
-      challenge: {
+      research: {
         title: '',
         firstParagraph: '',
         dateTime: '',
@@ -93,7 +93,7 @@ export default {
       },
       image: null,
       paragraphsAmount: 0,
-      challengeEdited: false,
+      researchEdited: false,
       isTitleValid: null,
       isFirstParagraphValid: null,
       isDateTimeValid: null,
@@ -155,48 +155,40 @@ export default {
     },
     async create () {
       if (this.validateForm()) {
-        this.challenge.dateTime = new Date(this.challenge.dateTime).toISOString()
+        this.research.dateTime = new Date(this.research.dateTime).toISOString()
         try {
-          const response = await this.challengeServiceAdmin.asyncSave(this.challenge)
-          const challenge = response.challenge
-          const file = await this.fileUploadService.asyncUploadChallengePic(this.image, challenge.id)
-          challenge.image = file.filePath
-          await this.challengeServiceAdmin.asyncSave(challenge)
+          const response = await this.researchServiceAdmin.asyncSave(this.research)
+          console.log(response)
+
+          const research = response.research
+          const file = await this.fileUploadService.asyncUploadResearchPic(this.image, research.id)
+          research.image = file.filePath
+          await this.researchServiceAdmin.asyncSave(research)
           this.isSaved = true
-          this.$router.push({ name: 'adminChallenges' })
+          this.$router.push({ name: 'adminResearches' })
         } catch (e) {
           console.error(e)
         }
       }
     },
-    paragraphs (challenge) {
+    paragraphs (research) {
       this.showParagraphs = !this.showParagraphs
-      this.selectedChallenge = challenge
+      this.selectedResearch = research
     },
     back () {
-      this.$router.push({ name: 'adminChallenges' })
-    },
-    formatDateTimeWithoutSeconds (dateTime) {
-      const date = new Date(dateTime)
-      const year = date.getFullYear()
-      const month = `0${date.getMonth() + 1}`.slice(-2)
-      const day = `0${date.getDate()}`.slice(-2)
-      const hours = `0${date.getHours()}`.slice(-2)
-      const minutes = `0${date.getMinutes()}`.slice(-2)
-
-      return `${year}-${month}-${day}T${hours}:${minutes}`
+      this.$router.push({ name: 'adminResearches' })
     },
     incrementParagraphs () {
       // Increment the number of paragraphs
       this.paragraphsAmount++
-      this.challenge.paragraphs.push({ title: '', content: '' })
+      this.research.paragraphs.push({ title: '', content: '' })
     },
     decrementParagraphs () {
       // Ensure the number of paragraphs doesn't go below 0
       if (this.paragraphsAmount > 0) {
         this.paragraphsAmount--
         // Remove the last paragraph when decrementing
-        this.challenge.paragraphs.pop()
+        this.research.paragraphs.pop()
       }
     },
     handleFileChange (event) {
@@ -219,20 +211,20 @@ export default {
     },
     validateForm () {
       // Validate title
-      const isTitleValid = this.validateTitle(this.challenge.title)
+      const isTitleValid = this.validateTitle(this.research.title)
 
       // Validate first paragraph
-      const isFirstParagraphValid = this.validateFirstParagraph(this.challenge.firstParagraph)
+      const isFirstParagraphValid = this.validateFirstParagraph(this.research.firstParagraph)
 
       // Validate date and time
-      const isDateTimeValid = this.validateDateTime(this.challenge.dateTime)
+      const isDateTimeValid = this.validateDateTime(this.research.dateTime)
 
       const isImageValid = this.isImageValid
 
       // Validate paragraphs
       let areParagraphsValid = true
-      for (let i = 0; i < this.challenge.paragraphs.length; i++) {
-        const paragraph = this.challenge.paragraphs[i]
+      for (let i = 0; i < this.research.paragraphs.length; i++) {
+        const paragraph = this.research.paragraphs[i]
         const isParagraphTitleValid = this.validateParagraphTitle(paragraph.title, i)
         const isParagraphContentValid = this.validateParagraphContent(paragraph.content, i)
 
@@ -250,45 +242,20 @@ export default {
       const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }
       return new Date(dateString).toLocaleDateString('nl-NL', options)
     },
-    formattedDateTime (dateTime) {
-      const today = new Date()
-      const challengeDate = new Date(dateTime)
-
-      const formattedTime = challengeDate.toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' })
-
-      if (
-        challengeDate.getDate() === today.getDate() &&
-        challengeDate.getMonth() === today.getMonth() &&
-        challengeDate.getFullYear() === today.getFullYear()
-      ) {
-        // Vandaag, (tijd)
-        return `Vandaag, ${formattedTime}`
-      } else if (
-        challengeDate.getDate() === today.getDate() - 1 &&
-        challengeDate.getMonth() === today.getMonth() &&
-        challengeDate.getFullYear() === today.getFullYear()
-      ) {
-        // Gisteren, (tijd)
-        return `Gisteren, ${formattedTime}`
-      } else {
-        // Maandag, (tijd), Donderdag (tijd)
-        return `${this.getFormattedDate(dateTime)}, ${formattedTime}`
+    computed: {
+      researches () {
+        return this.researchService.entities
       }
-    }
-  },
-  computed: {
-    challenges () {
-      return this.challengeService.entities
-    }
-  },
-  beforeRouteUpdate (to, from, next) {
-    if (!this.isSaved) {
-      this.conformationAlert(() => {
-        // Continue with the route update
+    },
+    beforeRouteUpdate (to, from, next) {
+      if (!this.isSaved) {
+        this.conformationAlert(() => {
+          // Continue with the route update
+          next()
+        }, 'Are you sure you want to leave with unsaved changes?')
+      } else {
         next()
-      }, 'Are you sure you want to leave with unsaved changes?')
-    } else {
-      next()
+      }
     }
   }
 }

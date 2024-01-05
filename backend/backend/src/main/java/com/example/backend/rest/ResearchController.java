@@ -1,5 +1,6 @@
 package com.example.backend.rest;
 
+import com.example.backend.exceptions.PreConditionFailedException;
 import com.example.backend.models.Challenge;
 import com.example.backend.models.Paragraph;
 import com.example.backend.models.Research;
@@ -73,6 +74,8 @@ public class ResearchController {
 
         try {
             // Save the research entity first to generate a valid ID
+
+            System.out.println(research.getTheme());
             researchRepository.save(research);
 
             // Set the research property in each paragraph and persist them
@@ -90,7 +93,8 @@ public class ResearchController {
             return ResponseEntity.created(location).body(Map.of(
                     "message", "Research added successfully",
                     "status", HttpStatus.CREATED.value(),
-                    "location", location.toString()));
+                    "location", location.toString(),
+                    "research", research));
         } catch (Exception e) {
             Map<String, Object> errorResponse = new HashMap<>();
             errorResponse.put("message", "Error adding the research");
@@ -99,10 +103,34 @@ public class ResearchController {
         }
     }
 
+    @PutMapping("/admin/{id}")
+    public ResponseEntity<Object> updateResearch(@RequestBody Research research, @PathVariable Long id) {
+        try {
+            if (!id.equals(research.getId())) {
+                throw new PreConditionFailedException("Event ID in the path does not match the ID in the request body.");
+            }
+            researchRepository.save(research);
+
+            for (Paragraph paragraph : research.getParagraphs()) {
+                paragraph.setResearch(research);
+                paragraphRepository.save(paragraph);
+
+            }
+
+
+            return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "Research updated successfully", "research", research));
+        } catch (Exception e) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("message", "Error updating the research");
+            errorResponse.put("error", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+        }
+    }
+
     @DeleteMapping("/admin/{id}")
     public ResponseEntity<Object> deleteResearch(@PathVariable long id) {
         researchRepository.deleteById(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "Research deleted successfully", "status", HttpStatus.OK));
     }
 
 

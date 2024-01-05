@@ -6,7 +6,7 @@
     <p>></p>
     <router-link :to="{ name: 'challenges' , query: { sort: filter }  }">Challenges</router-link>
     <p>></p>
-    <router-link :to="{ name: 'challenge', params: { id: this.challenge.id }, query: { sort: filter }   }">Challenge / {{ challenge.id }}</router-link>
+    <router-link :to="{ name: 'challenge', params: { id: this.challenge.id }, query: { sort: filter }   }">Challenge Article / {{ challenge.id }}</router-link>
   </div>
   <div v-if="challenge" class="container">
     <div class="challenge-main">
