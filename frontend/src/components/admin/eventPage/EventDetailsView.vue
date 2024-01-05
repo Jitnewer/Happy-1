@@ -42,10 +42,16 @@ export default {
     },
     async deleteEventDetail () {
       if (confirm('Are you sure you want to delete this event?')) {
-        await this.eventsServiceAdmin.asyncDeleteById(this.selectedCopy.id)
-        await this.fileUploadService.asyncDeleteImage(this.selectedCopy.image)
+        try {
+          await this.eventsServiceAdmin.asyncDeleteById(this.selectedCopy.id)
+          if (this.event.image !== 'assets/img/imagePlaceholder.jpg') {
+            await this.fileUploadService.asyncDeleteImage(this.selectedCopy.image)
+          }
 
-        this.back()
+          this.back()
+        } catch (e) {
+          console.log(e)
+        }
       }
     },
     handleImageUpload (event) {
@@ -175,11 +181,19 @@ export default {
       }
     }
   }
+
 }
 </script>
 
 <template>
   <div class="container admin-event-details" v-if="event">
+    <div class="breadcrum-admin breadcrum-admin-margin">
+      <router-link :to="{ name: 'admin' }">Admin</router-link>
+      <p>></p>
+      <router-link :to="{ name: 'adminEvents' }">Events</router-link>
+      <p>></p>
+      <router-link :to="{ name: 'adminEventDetail', params: { id: selectedCopy.id } }">Event / {{ selectedCopy.id }}</router-link>
+    </div>
     <div class="events-title">
       <button @click="closeEventDetail" class="back-button">Back</button>
       <h3>Event</h3>

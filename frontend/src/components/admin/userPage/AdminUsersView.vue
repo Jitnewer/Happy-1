@@ -1,9 +1,8 @@
 <script>
 import { User } from '@/models/user'
-
 export default {
   name: 'AdminUsersView',
-  inject: ['usersService', 'fileUploadService'],
+  inject: ['usersServiceAdmin', 'fileUploadService'],
   data () {
     return {
       filter: {
@@ -12,7 +11,6 @@ export default {
       },
       selectedUser: null,
       create: false,
-      edit: false,
       users: []
     }
   },
@@ -42,9 +40,8 @@ export default {
     async unblockUser (user) {
       if (confirm('Are you sure you want to unblock this user')) {
         try {
-          await this.usersService.asyncSave(user)
-
           user.status = User.status.Unbanned
+          await this.usersService.asyncSave(user)
         } catch (e) {
           console.log(e.message)
         }
@@ -65,8 +62,10 @@ export default {
     },
     saveUser (user) {
       try {
-        if (this.create === true) {
-          this.users.push(user)
+        const savedUser = await this.usersServiceAdmin.asyncSave(user)
+
+        if (this.create) {
+          this.users.push(savedUser)
         } else {
           const indexToUpdate = this.users.findIndex(oldUser => oldUser.id === user.id)
 
@@ -84,9 +83,10 @@ export default {
     async deleteUser (user) {
       if (confirm('Are you sure you want to delete this user?')) {
         try {
-          await this.usersService.asyncDeleteById(user.id)
-          await this.fileUploadService.asyncDeleteImage(user.profilePic)
-
+          await this.usersServiceAdmin.asyncDeleteById(user.id)
+          if (user.profilePic !== 'assets/profilPic/profilepic.png') {
+            await this.fileUploadService.asyncDeleteImage(user.profilePic)
+          }
           const indexToUpdate = this.users.findIndex(oldUser => oldUser.id === user.id)
 
           if (indexToUpdate >= 0) {
@@ -135,7 +135,7 @@ export default {
     }
   },
   async created () {
-    this.users = await this.usersService.asyncFindAll()
+    this.users = await this.usersServiceAdmin.asyncFindAll()
 
     this.selectUserByUrl(parseInt(this.$route.params.id))
 
@@ -152,7 +152,12 @@ export default {
 </script>
 
 <template>
-  <div class="container-admin admin-users">
+  <div class="container-admin">
+    <div class="breadcrum-admin breadcrum-admin-margin">
+      <router-link :to="{ name: 'admin' }">Admin</router-link>
+      <p>></p>
+      <router-link :to="{ name: 'users' }">Users</router-link>
+    </div>
     <div class="title">
       <h1>Users</h1>
     </div>
@@ -201,8 +206,7 @@ export default {
       </table>
     </div>
   </div>
-  <router-view v-if="selectedUser" :selectedUser="selectedUser" @cancel-edit="cancelEdit" @save-edit="saveUser"
-               :create="create"/>
+  <router-view v-if="selectedUser" :selectedUser="selectedUser" @cancel-edit="cancelEdit" @save-edit="saveUser" :create="create"/>
 </template>
 
 <style scoped>

@@ -44,7 +44,7 @@ export default {
       sessionSBService: shallowReactive(new SessionSbService(CONFIG.BACKEND_URL + '/authentication', CONFIG.JWT_STORAGE_ITEM)),
       researchService: reactive(new CachedRESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/researches', Research.copyConstructor)),
       researchServiceAdmin: reactive(new CachedRESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/researches/admin', Research.copyConstructor)),
-      fileUploadService: new FileUploadAdapter(CONFIG.BACKEND_URL + '/image')
+      fileUploadService: reactive(new FileUploadAdapter(CONFIG.BACKEND_URL + '/upload'))
     }
   },
   unmounted () {

@@ -130,7 +130,7 @@ export class RESTAdaptorWithFetch {
       }
       console.log(response)
 
-      return response
+      return this.copyConstructor(response.entity)
     } catch (error) {
       console.log(error)
       throw new CustomError('Error in asyncSave', error.status || 500, error.message)

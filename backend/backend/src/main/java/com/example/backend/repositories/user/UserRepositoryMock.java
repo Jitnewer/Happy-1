@@ -37,8 +37,9 @@ public class UserRepositoryMock implements UserRepository {
 
 
     @Override
-    public void addUser(User user) {
+    public User addUser(User user) {
         users.add(user);
+        return user;
     }
 
 

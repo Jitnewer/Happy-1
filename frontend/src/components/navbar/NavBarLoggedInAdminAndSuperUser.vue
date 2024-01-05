@@ -8,7 +8,7 @@
       <div class="nav-links-right-admin">
         <div class="dropdown-profile" @click="toggleProfile">
           <div class="profile-d">
-            <img v-if="user.profilePic != null" :src='require(`../../assets/img/${user.profilePic}`)' class="profile" width="45" height="45" alt="Event Image">
+            <img v-if="user.profilePic != null" :src='require(`../../${user.profilePic}`)' class="profile" width="45" height="45" alt="Event Image">
             <canvas v-if="user.profilePic == null" ref="profileCanvas" class="profile" width="45" height="45"></canvas>
             <p id="profile-name">{{ user.firstname }} {{ user.lastname }}</p>
             <div class="caret">
@@ -36,7 +36,7 @@
     <transition name="dashboard-big">
       <div v-if="user" class="dashboard" v-show="showDashboard && !smallVersionDasboard">
         <div class="profile-dashboard" >
-          <img v-if="user.profilePic != null" :src='require(`../../assets/img/${user.profilePic}`)' class="profile" width="45" height="45" alt="Event Image">
+          <img v-if="user.profilePic != null" :src='require(`../../${user.profilePic}`)' class="profile" width="45" height="45" alt="Event Image">
           <canvas v-if="user.profilePic == null" ref="profileCanvas" class="profile" width="45" height="45"></canvas>
           <p id="profile-dashboard-name">{{ user.firstname }} {{ user.lastname }}</p>
           <p id="profile-dashboard-role">Admin</p>

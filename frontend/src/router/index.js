@@ -134,23 +134,6 @@ const routes = [
     component: AdminUsersView,
     children: [
       {
-        path: 'profile/:id',
-        name: 'adminProfileView',
-        component: ProfilePage,
-        children: [
-          {
-            path: 'info',
-            name: 'adminProfileViewInfo',
-            component: UserProfileInfo
-          },
-          {
-            path: 'events',
-            name: 'adminProfileViewEvents',
-            component: UserProfileEvents
-          }
-        ]
-      },
-      {
         path: ':id',
         name: 'userDetail',
         component: AdminUsersDetail
@@ -158,6 +141,22 @@ const routes = [
     ]
   },
   {
+    path: '/profile/:id',
+    name: 'profileView',
+    component: ProfilePage,
+    children: [
+      {
+        path: 'info',
+        name: 'profileInfoView',
+        component: UserProfileInfo
+      },
+      {
+        path: 'events',
+        name: 'profileEventsView',
+        component: UserProfileEvents
+      }
+    ]
+  }
     path: '/register',
     name: 'register',
     component: Registration
@@ -173,7 +172,7 @@ const routes = [
     component: AboutUs
   },
   {
-    path: '/profile',
+    path: '/myProfile',
     name: 'profilePage',
     component: UserProfilePage,
     children: [

@@ -1,4 +1,3 @@
-/*AdminEventView */
 .title {
     height: 30px;
     margin-bottom: 20px;
@@ -16,12 +15,37 @@
     margin-left: 20px;
 }
 
-button:hover {
+.admin-event .filters .admin-create:hover, .admin-save:hover, .admin-clear:hover,
+.admin-event-details .events-title button:hover {
     background-color: var(--main-color-hover-admin);
 }
 
-button {
-    background-color: var(--main-color-hover)
+.admin-event .filters .admin-create, .admin-save, .admin-clear, .admin-event-details .events-title button {
+    background-color: var(--main-color-hover);
+}
+
+.event-right-bottom {
+    display: flex;
+    flex-direction: row;
+    justify-content: right;
+}
+
+.admin-event:where(h1, h2, h3, h4, h5, h6, p)  {
+    color: black;
+}
+
+.admin-event .events .event {
+    max-width: 450px;
+}
+
+.admin-event .events {
+    z-index: 1;
+    display: flex;
+    padding: 0 10px;
+    flex-wrap: wrap;
+    flex-direction: row;
+    gap: 10px;
+    justify-content: left;
 }
 
 /* AdminEventDetail*/
@@ -87,7 +111,7 @@ button {
 textarea {
     height: 35%;
     font-family: 'Poppins', serif;
-    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+    box-shadow: rgba(0, 0, 0, 0.19) 0 10px 20px, rgba(0, 0, 0, 0.23) 0 6px 6px;
 }
 
 .title h1 {
@@ -117,9 +141,40 @@ textarea {
     row-gap: 1rem;
 }
 
+
+.admin-event-details .buttons-container button, .admin-event-details .events-title button, .admin-create{
+    color: var(--main-text-color);
+    border-style: none;
+    padding: 1rem 1.5rem;
+    font-size: 18px;
+    box-shadow: rgba(0, 0, 0, 0.19) 0 10px 20px, rgba(0, 0, 0, 0.23) 0 6px 6px;
+    cursor: pointer;
+    transition: 0.5s;
+    border-radius: 0;
+}
+
+.admin-delete {
+    background-color: red;
+}
+
+.admin-delete:hover {
+    background-color: #be0000;
+}
+
+.admin-event-details {
+    margin-top: 0;
+    margin-right: 0;
+    width: 100%;
+}
+
 @media (max-width: 1024px) {
     .time-container {
         width: 90%;
+    }
+
+    .container-admin .events {
+        padding: 0;
+        margin-bottom: 0;
     }
 }
 

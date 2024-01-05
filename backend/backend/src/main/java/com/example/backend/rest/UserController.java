@@ -58,7 +58,7 @@ public class UserController {
                 return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("message", "User with mail:" + user.getMail() + " is already in use"));
             }
 
-            userRepository.save(user);
+            User addedUser = userRepository.save(user);
 
             URI location = ServletUriComponentsBuilder
                     .fromCurrentRequest()
@@ -69,11 +69,18 @@ public class UserController {
             return ResponseEntity.created(location).body(Map.of(
                     "message", "User added successfully",
                     "status", HttpStatus.CREATED.value(),
-                    "location", location.toString()));
+                    "location", location.toString(),
+                    "entity", addedUser));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("message", "Error adding user", "error", e.getMessage()));
         }
     }
+
+    @PutMapping("/admin/{id}")
+    public ResponseEntity<Object> adminUpdateUser(@RequestBody User user, @PathVariable Long id) {
+       return this.updateUser(user, id);
+    }
+
 
     @PutMapping("/{id}")
     public ResponseEntity<Object> updateUser(@RequestBody User user, @PathVariable Long id) {
@@ -81,8 +88,11 @@ public class UserController {
             if (userRepository.findById(id) == null) {
                 return ResponseEntity.notFound().build();
             }
-            userRepository.save(user);
-            return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "User updated successfully"));
+            User updatedUser = userRepository.save(user);
+            return ResponseEntity.status(HttpStatus.OK).body(Map.of(
+                    "message", "User updated successfully",
+                    "entity", updatedUser
+                    ));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("message", "Error updating user", "error", e.getMessage()));
         }
