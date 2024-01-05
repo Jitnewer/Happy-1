@@ -1,7 +1,9 @@
 package com.example.backend.rest;
 
+import com.example.backend.exceptions.PreConditionFailedException;
 import com.example.backend.models.Network;
 import com.example.backend.models.Paragraph;
+import com.example.backend.models.Research;
 import com.example.backend.repositories.EntityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -9,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.io.Serializable;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
@@ -65,10 +68,12 @@ public class NetworkController {
         }
 
         try {
+            networkRepository.save(network);
+
             for (Paragraph paragraph : network.getParagraphs()) {
                 paragraph.setNetwork(network);
+                paragraphRepository.save(paragraph);
             }
-            networkRepository.save(network);
             URI location = ServletUriComponentsBuilder
                     .fromCurrentRequest()
                     .path("/{id}")
@@ -78,7 +83,8 @@ public class NetworkController {
             return ResponseEntity.created(location).body(Map.of(
                     "message", "Challenge added successfully",
                     "status", HttpStatus.CREATED.value(),
-                    "location", location.toString()));
+                    "location", location.toString(),
+                    "network", network));
         } catch (Exception e) {
             Map<String, Object> errorResponse = new HashMap<>();
             errorResponse.put("message", "Error adding the network");
@@ -87,10 +93,34 @@ public class NetworkController {
         }
     }
 
+    @PutMapping("/admin/{id}")
+    public ResponseEntity<Object> updateNetwork(@RequestBody Network network, @PathVariable Long id) {
+        try {
+            if (!id.equals(network.getId())) {
+                throw new PreConditionFailedException("Network ID in the path does not match the ID in the request body.");
+            }
+            networkRepository.save(network);
+
+            for (Paragraph paragraph : network.getParagraphs()) {
+                paragraph.setNetwork(network);
+                paragraphRepository.save(paragraph);
+
+            }
+
+
+            return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "Network updated successfully", "network", network));
+        } catch (Exception e) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("message", "Error updating the network");
+            errorResponse.put("error", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+        }
+    }
+
     @DeleteMapping("/admin/{id}")
-    public ResponseEntity<Void> deleteNetwork(@PathVariable long id) {
+    public ResponseEntity<Map<String, Serializable>> deleteNetwork(@PathVariable long id) {
         networkRepository.deleteById(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "Network deleted successfully", "status", HttpStatus.OK));
     }
 
 }

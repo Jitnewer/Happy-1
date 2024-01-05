@@ -75,7 +75,6 @@ public class ResearchController {
         try {
             // Save the research entity first to generate a valid ID
 
-            System.out.println(research.getTheme());
             researchRepository.save(research);
 
             // Set the research property in each paragraph and persist them
@@ -107,7 +106,7 @@ public class ResearchController {
     public ResponseEntity<Object> updateResearch(@RequestBody Research research, @PathVariable Long id) {
         try {
             if (!id.equals(research.getId())) {
-                throw new PreConditionFailedException("Event ID in the path does not match the ID in the request body.");
+                throw new PreConditionFailedException("Network ID in the path does not match the ID in the request body.");
             }
             researchRepository.save(research);
 
