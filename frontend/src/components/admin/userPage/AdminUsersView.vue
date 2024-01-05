@@ -41,7 +41,7 @@ export default {
       if (confirm('Are you sure you want to unblock this user')) {
         try {
           user.status = User.status.Unbanned
-          await this.usersService.asyncSave(user)
+          await this.usersServiceAdmin.asyncSave(user)
         } catch (e) {
           console.log(e.message)
         }
@@ -50,7 +50,7 @@ export default {
     async blockUser (user) {
       if (confirm('Are you sure you want to block this user?')) {
         user.status = User.status.Banned
-        await this.usersService.asyncSave(user)
+        await this.usersServiceAdmin.asyncSave(user)
       }
     },
     editUser (user) {
@@ -60,7 +60,7 @@ export default {
       this.create = false
       this.$router.push({ name: 'users' })
     },
-    saveUser (user) {
+    async saveUser (user) {
       try {
         const savedUser = await this.usersServiceAdmin.asyncSave(user)
 
@@ -84,9 +84,9 @@ export default {
       if (confirm('Are you sure you want to delete this user?')) {
         try {
           await this.usersServiceAdmin.asyncDeleteById(user.id)
-          if (user.profilePic !== 'assets/profilPic/profilepic.png') {
-            await this.fileUploadService.asyncDeleteImage(user.profilePic)
-          }
+          // if (user.profilePic !== 'assets/profilePic/profilepic.png') {
+          //   await this.fileUploadService.asyncDeleteImage(user.profilePic)
+          // }
           const indexToUpdate = this.users.findIndex(oldUser => oldUser.id === user.id)
 
           if (indexToUpdate >= 0) {

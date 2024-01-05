@@ -27,14 +27,16 @@ export default {
     },
     async saveEventDetail () {
       if (!Event.equals(this.event, this.selectedCopy) || this.newEventPic) {
+        const newEvent = await this.eventsServiceAdmin.asyncSave(this.selectedCopy)
+
         if (this.validateFields) {
           if (confirm('Do you want to save the changes to this event?')) {
             if (this.pictureUpload) {
-              const profilePicPath = await this.fileUploadService.asyncUploadEventPic(this.pictureUpload, this.selectedCopy.id)
-              this.selectedCopy.image = profilePicPath.filePath
+              const profilePicPath = await this.fileUploadService.asyncUploadEventPic(this.pictureUpload, newEvent.id)
+              newEvent.image = profilePicPath.filePath
             }
 
-            await this.eventsServiceAdmin.asyncSave(this.selectedCopy)
+            await this.eventsServiceAdmin.asyncSave(newEvent)
             this.back()
           }
         }

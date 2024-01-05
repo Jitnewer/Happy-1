@@ -84,8 +84,11 @@ public class EventController {
                 throw new PreConditionFailedException("Event ID in the path does not match the ID in the request body.");
             }
 
-            eventRepository.save(event);
-            return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "Event updated successfully"));
+            Event updateEvent = eventRepository.save(event);
+            return ResponseEntity.status(HttpStatus.OK).body(Map.of(
+                    "message", "Event updated successfully",
+                    "entity", event
+            ));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
                     "message", "Error updating the event",

@@ -37,6 +37,7 @@ export class CachedRESTAdaptorWithFetch extends RESTAdaptorWithFetch {
 
   async asyncSave (data) {
     try {
+      console.log(data)
       const newEntity = await super.asyncSave(data)
 
       // Add the new entity to the cache
@@ -145,7 +146,6 @@ export class CachedRESTAdaptorWithFetch extends RESTAdaptorWithFetch {
     try {
       // Fetch data from the server if not in the cache
       const response = await super.asyncFindByProperty(propertyId, url)
-
       // Update the cache
       this.entities = response
 

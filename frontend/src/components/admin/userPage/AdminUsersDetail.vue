@@ -24,17 +24,7 @@ export default {
     async save () {
       if (this.validateFields) {
         if (confirm('Are you sure you want to change the access of this user?')) {
-          try {
-            const response = await this.usersService.asyncSave(this.selectedCopy)
-
-            if (response) {
-              this.$emit('save-edit', response)
-            } else {
-              this.$emit('save-edit', this.selectedCopy)
-            }
-          } catch (e) {
-            console.log(e)
-          }
+          this.$emit('save-edit', this.selectedCopy)
         }
       }
     },
@@ -80,13 +70,6 @@ export default {
       const emailFieldIsEmpty = !this.selectedCopy.mail || this.selectedCopy.mail.trim() === ''
       return !emailFieldIsEmpty && /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(this.selectedCopy.mail)
     },
-    isAdminOrSuperUser () {
-      if (this.selectedUser.userType === User.userTypes.Admin) return true
-      if (this.selectedUser.userType === User.userTypes.SuperUser) return true
-      return false
-    }
-  },
-  computed: {
     isAdminOrSuperUser () {
       if (this.selectedUser.userType === User.userTypes.Admin) return true
       if (this.selectedUser.userType === User.userTypes.SuperUser) return true

@@ -110,7 +110,7 @@ export class RESTAdaptorWithFetch {
     let response
     console.log(object)
     try {
-      if (object.id == null) {
+      if (object.id === 0) {
         response = await this.fetchJson(this.resourceUrl, {
           method: 'POST',
           body: JSON.stringify(object),

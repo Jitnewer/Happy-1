@@ -41,10 +41,10 @@ export default {
     async save () {
       if (confirm('Are you sure you wan\'t to save changes?')) {
         try {
-          // if (this.pictureUpload) {
-          //   const profilePicPath = await this.fileUploadService.asyncUploadProfilePic(this.pictureUpload, this.user)
-          //   this.copyUser.profilePic = profilePicPath.filePath
-          // }
+          if (this.pictureUpload) {
+            const profilePicPath = await this.fileUploadService.asyncUploadProfilePic(this.pictureUpload, this.user)
+            this.copyUser.profilePic = profilePicPath.filePath
+          }
           this.newProfilePic = null
 
           console.log(this.copyUser)
