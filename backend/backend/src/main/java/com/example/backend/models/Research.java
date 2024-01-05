@@ -11,11 +11,11 @@ import java.util.Set;
 
 @Entity
 @Table(name = "researches")
-public class Research {
+public class Research implements Identifiable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
 
     @Column(nullable = false)
     private String title;
@@ -31,17 +31,29 @@ public class Research {
     private String firstParagraph;
 
     @OneToMany(mappedBy = "research", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JsonManagedReference
+    @JsonManagedReference(value = "research-paragraphs")
     private Set<Paragraph> paragraphs = new HashSet<>();
 
+    public enum Theme {
+        FOOD_WASTE,
+        DISTRIBUTION,
+        ENERGY_TRANSITION,
+        SINGLE_USED_PLASTIC,
+        PROTEIN_TRANSITION,
+        WATER
+    }
+
+    @Column(nullable = false)
+    private Theme theme;
+
     // Constructors
-    public Research(String title, String firstParagraph, Set<Paragraph> paragraphs) {
+    public Research(String title, String firstParagraph, Set<Paragraph> paragraphs, Theme theme) {
         this.title = title;
         this.dateTime = LocalDateTime.now();
         this.image = "img.png";
         this.firstParagraph = firstParagraph;
         this.paragraphs = paragraphs;
-
+        this.theme = theme;
     }
 
     public Research() {
@@ -52,11 +64,12 @@ public class Research {
 
 //    // Getters and setters
 
-    public Long getId() {
+    @Override
+    public long getId() {
         return id;
     }
-
-    public void setId(Long id) {
+    @Override
+    public void setId(long id) {
         this.id = id;
     }
 
