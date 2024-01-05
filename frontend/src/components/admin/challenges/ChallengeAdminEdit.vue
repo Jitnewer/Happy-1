@@ -122,7 +122,7 @@ export default {
     },
     validateImage (file) {
       if (file !== null) {
-      // Check if the file is an image
+        // Check if the file is an image
         const isImage = /^image\//.test(file.type)
         console.log(isImage)
 

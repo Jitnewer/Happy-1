@@ -7,8 +7,8 @@
     </div>
     <div class="challenges-admin">
       <div class="title-button">
-      <h1>Challenge Articles</h1>
-      <button @click="create()">Create</button>
+        <h1>Challenge Articles</h1>
+        <button @click="create()">Create</button>
       </div>
       <table v-if="challenges">
         <thead>
@@ -34,8 +34,8 @@
           <td><button class="relation" @click="paragraphs(challenge)">Check Paragraphs</button></td>
           <td>
             <div class="table-buttons">
-     <button class="edit" @click="edit(challenge.id)">Edit</button>
-         <button class="delete" @click="remove(challenge)">Delete</button>
+              <button class="edit" @click="edit(challenge.id)">Edit</button>
+              <button class="delete" @click="remove(challenge)">Delete</button>
             </div>
           </td>
         </tr>

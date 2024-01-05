@@ -5,7 +5,6 @@ import AdminStatistics from '@/components/admin/AdminStatistics.vue'
 import Events from '@/components/events/Events.vue'
 import EventsDetails from '@/components/events/EventsDetails.vue'
 import WelcomePage from '@/components/welcomePage/Welcome.vue'
-import SuperUserDetail from '@/components/admin/superUser/research/SuperUserResearch.vue'
 import AdminUsersView from '@/components/admin/userPage/AdminUsersView.vue'
 import AdminUsersDetail from '@/components/admin/userPage/AdminUsersDetail.vue'
 import Registration from '@/components/Registration.vue'
@@ -28,7 +27,6 @@ import ChallengeAdminEdit from '@/components/admin/challenges/ChallengeAdminEdit
 import ResearchesAdmin from '@/components/admin/researches/ResearchesAdmin.vue'
 import ResearchAdminCreate from '@/components/admin/researches/ResearchAdminCreate.vue'
 import ResearchAdminEdit from '@/components/admin/researches/ResearchAdminEdit.vue'
-import SuperUserResearchView from '@/components/admin/superUser/research/SuperUserResearchView.vue'
 
 const routes = [
   {
@@ -81,6 +79,11 @@ const routes = [
     component: AboutUs
   },
   {
+    path: '/admin',
+    name: 'admin',
+    component: welcomeAdmin
+  },
+  {
     path: '/admin/events',
     name: 'adminEvents',
     component: AdminEventView
@@ -122,6 +125,7 @@ const routes = [
   },
   {
     path: '/admin/statistics',
+    name: 'statistics',
     component: AdminStatistics
   },
   {
@@ -130,38 +134,26 @@ const routes = [
     component: AdminUsersView,
     children: [
       {
+        path: 'profile/:id',
+        name: 'adminProfileView',
+        component: ProfilePage,
+        children: [
+          {
+            path: 'info',
+            name: 'adminProfileViewInfo',
+            component: UserProfileInfo
+          },
+          {
+            path: 'events',
+            name: 'adminProfileViewEvents',
+            component: UserProfileEvents
+          }
+        ]
+      },
+      {
         path: ':id',
         name: 'userDetail',
         component: AdminUsersDetail
-      }
-    ]
-  },
-  {
-    path: '/profile/:id',
-    name: 'profileView',
-    component: ProfilePage,
-    children: [
-      {
-        path: 'info',
-        name: 'profileInfoView',
-        component: UserProfileInfo
-      },
-      {
-        path: 'events',
-        name: 'profileEventsView',
-        component: UserProfileEvents
-      }
-    ]
-  },
-  {
-    path: '/superuser/research',
-    name: 'SuperUserResearch',
-    component: SuperUserResearchView,
-    children: [
-      {
-        path: ':id',
-        name: 'SuperUserResearchDetail',
-        component: SuperUserDetail
       }
     ]
   },
@@ -181,7 +173,7 @@ const routes = [
     component: AboutUs
   },
   {
-    path: '/myProfile',
+    path: '/profile',
     name: 'profilePage',
     component: UserProfilePage,
     children: [

@@ -8,40 +8,40 @@
   </div>
   <div class="container">
     <div class="title-filter">
-    <h1 id="challenges-title">Research Articles</h1>
+      <h1 id="challenges-title">Research Articles</h1>
       <button class="filter-button" @click="toggleFilter">Filter</button>
       <transition name="filter">
-      <div v-if="showFilter" class="research-filter">
-        <div class="filter-up">
-          <div class="filter-child">
-            <p>Food Waste</p>
-            <input class="food-waste" name="sort" type="radio" value="FOOD_WASTE" v-model="filter" @click="updateFilter('FOOD_WASTE')">
+        <div v-if="showFilter" class="research-filter">
+          <div class="filter-up">
+            <div class="filter-child">
+              <p>Food Waste</p>
+              <input class="food-waste" name="sort" type="radio" value="FOOD_WASTE" v-model="filter" @click="updateFilter('FOOD_WASTE')">
+            </div>
+            <div class="filter-child">
+              <p>Distribution</p>
+              <input class="distribution"  name="sort" type="radio" value="DISTRIBUTION" v-model="filter" @click="updateFilter('DISTRIBUTION')">
+            </div>
+            <div class="filter-child">
+              <p>Energy Transition</p>
+              <input class="energy-transition"  name="sort" type="radio" value="ENERGY_TRANSITION" v-model="filter" @click="updateFilter('ENERGY_TRANSITION')">
+            </div>
           </div>
-          <div class="filter-child">
-            <p>Distribution</p>
-            <input class="distribution"  name="sort" type="radio" value="DISTRIBUTION" v-model="filter" @click="updateFilter('DISTRIBUTION')">
-          </div>
-          <div class="filter-child">
-            <p>Energy Transition</p>
-            <input class="energy-transition"  name="sort" type="radio" value="ENERGY_TRANSITION" v-model="filter" @click="updateFilter('ENERGY_TRANSITION')">
+          <div class="filter-down">
+            <div class="filter-child">
+              <p>Single Used Plastic</p>
+              <input class="single-used-plastic"  name="sort" type="radio" value="SINGLE_USED_PLASTIC" v-model="filter" @click="updateFilter('SINGLE_USED_PLASTIC')">
+            </div>
+            <div class="filter-child">
+              <p>Protein Transition</p>
+              <input class="protein-transition"  name="sort" type="radio" value="PROTEIN_TRANSITION" v-model="filter" @click="updateFilter('PROTEIN_TRANSITION')">
+            </div>
+            <div class="filter-child">
+              <p>Water</p>
+              <input class="water"  name="sort" type="radio" value="WATER" v-model="filter" @click="updateFilter('WATER')">
+            </div>
           </div>
         </div>
-        <div class="filter-down">
-          <div class="filter-child">
-            <p>Single Used Plastic</p>
-            <input class="single-used-plastic"  name="sort" type="radio" value="SINGLE_USED_PLASTIC" v-model="filter" @click="updateFilter('SINGLE_USED_PLASTIC')">
-          </div>
-          <div class="filter-child">
-            <p>Protein Transition</p>
-            <input class="protein-transition"  name="sort" type="radio" value="PROTEIN_TRANSITION" v-model="filter" @click="updateFilter('PROTEIN_TRANSITION')">
-          </div>
-          <div class="filter-child">
-            <p>Water</p>
-            <input class="water"  name="sort" type="radio" value="WATER" v-model="filter" @click="updateFilter('WATER')">
-          </div>
-        </div>
-      </div>
-    </transition>
+      </transition>
     </div>
     <div class="challenges">
       <div class="challenge" v-for="research in sortedResearch" :key="research.id" @click="selectResearch(research)">

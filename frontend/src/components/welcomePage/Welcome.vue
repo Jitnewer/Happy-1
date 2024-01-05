@@ -1,7 +1,4 @@
 <template>
-  <div class="breadcrum">
-    <router-link :to="{ name: 'welcome' }">Home</router-link>
-  </div>
   <div class="containerHomepage">
     <div>
       <h1 class="welcomeH1">
@@ -101,7 +98,7 @@
       </p>
       <div class="themeContainer">
         <div class="theme" data-aos="fade-up">
-          <button class="themeButton" @click="foodWasteArticle()">
+          <button class="themeButton">
             <h2>
               <span class="yellow-text">Food</span> <span class="blue-text">Waste</span>
             </h2>
@@ -111,7 +108,7 @@
           </button>
         </div>
         <div class="theme" data-aos="fade-up">
-          <button class="themeButton" @click="distributionArticle()">
+          <button class="themeButton">
             <h2>
               <span class="yellow-text">Distrib</span><span class="blue-text">ution</span></h2>
             <h4 class="themeH4">Enhance hospitality sustainability with optimized supply chains, reduced carbon footprints,
@@ -120,7 +117,7 @@
           </button>
         </div>
         <div class="theme" data-aos="fade-up">
-          <button class="themeButton" @click="energyTransitionArticle()">
+          <button class="themeButton">
             <h2><span class="yellow-text">Energy</span> <span class="blue-text">Transition</span></h2>
             <h4 class="themeH4">Embrace energy transition in hospitality through renewables, energy-efficient tech, and
               sustainable practices for a greener future.</h4>
@@ -128,7 +125,7 @@
           </button>
         </div>
         <div class="theme" data-aos="fade-up">
-          <button class="themeButton" @click="singleUsedPlasticArticle()">
+          <button class="themeButton">
             <h2><span class="yellow-text">Single Us</span><span class="blue-text">ed Plastic</span></h2>
             <h4 class="themeH4">Combatting hospitality's single-use plastic issue involves reducing reliance, adopting eco-friendly
               alternatives, and minimizing plastic pollution commitment.</h4>
@@ -136,7 +133,7 @@
           </button>
         </div>
         <div class="theme" data-aos="fade-up">
-          <button class="themeButton" @click="proteinTransitionArticle()">
+          <button class="themeButton">
             <h2><span class="yellow-text">Protein</span> <span class="blue-text">Transition</span></h2>
             <h4 class="themeH4">Hospitality's protein transition emphasizes sustainable, plant-based options, reducing reliance on
               traditional meat, and promoting eco-friendly alternatives.</h4>
@@ -144,7 +141,7 @@
           </button>
         </div>
         <div class="theme" data-aos="fade-up">
-          <button class="themeButton" @click="waterArticle()">
+          <button class="themeButton">
             <h2>
               <span class="yellow-text">Wat</span><span class="blue-text">er</span>
             </h2>
@@ -191,26 +188,6 @@ export default {
         { image: 'bg-2', date: '27 December 2023', title: 'Protein within hospitality' },
         { image: 'bg-3', date: '15 November 2023', title: 'Water embracing tactics' }
       ]
-    }
-  },
-  methods: {
-    foodWasteArticle () {
-      this.$router.push({ name: 'news', query: { sort: 'FOOD_WASTE' } })
-    },
-    distributionArticle () {
-      this.$router.push({ name: 'news', query: { sort: 'DISTRIBUTION' } })
-    },
-    energyTransitionArticle () {
-      this.$router.push({ name: 'news', query: { sort: 'ENERGY_TRANSITION' } })
-    },
-    singleUsedPlasticArticle () {
-      this.$router.push({ name: 'news', query: { sort: 'SINGLE_USED_PLASTIC' } })
-    },
-    proteinTransitionArticle () {
-      this.$router.push({ name: 'news', query: { sort: 'PROTEIN_TRANSITION' } })
-    },
-    waterArticle () {
-      this.$router.push({ name: 'news', query: { sort: 'WATER' } })
     }
   }
 }

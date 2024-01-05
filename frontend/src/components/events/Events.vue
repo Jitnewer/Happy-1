@@ -89,7 +89,7 @@
           <div class="icon-fix"></div>
         </div>
       </div>
-      </div>
+    </div>
   </div>
 </template>
 
@@ -126,6 +126,7 @@ export default {
       if (this.filter == null) {
         this.filter = 'asc'
       }
+      console.log(this.events)
       this.$router.push({ name: 'events', query: { sort: this.filter } })
       await this.eventsService.asyncFindAll()
       const userAndToken = await this.sessionSBService.asyncFindByEmail(JSON.parse(localStorage.getItem('userDetails')).mail)
@@ -286,6 +287,7 @@ export default {
       return this.userEventsService.entities
     },
     filteredEventsOnDate  () {
+      console.log(this.event)
       if (Array.isArray(this.events)) {
         if (this.events.length > 1) {
           const sortedEvents = this.events.slice().sort((a, b) => {

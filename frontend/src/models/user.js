@@ -55,7 +55,7 @@ export class User {
 
   static createSampleUser () {
     const id = Math.floor((Math.random() * 100) + 1)
-    const image = require('../assets/profilePic/profilepic.png')
+    const image = require('./../assets/img/profilepic.png')
 
     const firstname = ['Tim', 'Mylo', 'Pim', 'Eva']
     const lastname = ['Groot', 'Commandeur', 'Voortuin', 'Mase']

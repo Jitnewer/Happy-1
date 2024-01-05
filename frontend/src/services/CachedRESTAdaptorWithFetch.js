@@ -14,6 +14,7 @@ export class CachedRESTAdaptorWithFetch extends RESTAdaptorWithFetch {
   async asyncFindAll () {
     try {
       this.entities = await super.asyncFindAll()
+      console.log(this.entities)
       return this.entities
     } catch (error) {
       throw new CustomError('Error in asyncFindAll', error.status || 500, error.message)

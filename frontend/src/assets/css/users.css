@@ -7,6 +7,15 @@
     width: 20%;
 }
 
+.notification {
+    padding: 12px;
+    background-color: var(--main-color);
+    border: none;
+    border-radius: 10px;
+    font-size: 18px;
+    color: var(--main-text-color);
+}
+
 td, th {
     padding: 5px;
     font-size: 12px;
@@ -17,7 +26,8 @@ td, th {
     margin-left: 20px;
     overflow: auto;
     width:90%;
-    box-shadow: rgba(0, 0, 0, 0.19) 0 10px 20px, rgba(0, 0, 0, 0.23) 0 6px 6px;
+    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+
 }
 
 .banned {
@@ -43,7 +53,7 @@ td, th {
     color: var(--main-text-color);
 }
 
-.admin-users button, .edit-user-btn button, .user-profile-container button, .buttons-view a{
+.buttons button, .create-btn, .profile-edit-buttons button, .info-right button{
     border: none;
     color: var(--main-text-color);
     padding: 0.5rem 1rem;
@@ -58,6 +68,11 @@ td, th {
     display: flex;
     justify-content: left;
 }
+
+button:hover {
+    cursor: pointer;
+}
+
 
 .block-button, .edit-user-btn .cancel, .delete-button {
     background-color: red;
@@ -158,13 +173,25 @@ td, th {
     padding: 10px;
 }
 
+.edit-user-btn button {
+    border-radius: 5px;
+    border: none;
+    color: var(--main-text-color);
+    background: var(--main-color-hover);
+    padding: 0.5rem 1rem;
+    font-size: 18px;
+    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+    cursor: pointer;
+    transition: 0.5s;
+}
+
 /* User profile page */
 .user-profile-container {
     width: 100%;
 }
 
 .profile-banner {
-    background-image: url("../images/profile-banner.webp");
+    background-image: url("../img/profile-banner.webp");
     width: 100%;
     height: 220px;
     background-repeat: no-repeat;
@@ -214,33 +241,62 @@ td, th {
     gap: 10px;
 }
 
-.info-view, .events-view {
-    background-color: var(--main-color);
+.selected {
+    background-color: var(--main-color-hover);
+}
+.buttons-view a {
+    text-decoration: none;
+    color: var(--main-text-color);
+    padding: 8px 24px;
+    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+    border-radius: 10%;
+    transition: 0.5s;
+    display: flex;
+    justify-content: center;
+    background-color: var(--main-color)
 }
 
-.selected, .admin-edit, .admin-save, .admin-create, .back-button, .profile-edit-button, .save-button{
+.buttons-view a:hover {
     background-color: var(--main-color-hover);
 }
 
-.selected:hover, .admin-edit:hover, .admin-save:hover, .admin-create:hover, .back-button:hover, .profile-edit-button:hover, .save-button:hover{
-    background-color: var(--main-color-hover-admin);
+.edit-button {
+    background-color:  var(--main-color-hover);
+    padding: 8px 24px;
+    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+    border-radius: 10%;
+    transition: 0.5s;
 }
 
-.admin-view {
+.save-button {
+    background-color:  var(--main-color-hover);
+    padding: 8px 24px;
+    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+    border-radius: 10%;
+    transition: 0.5s;
+}
+
+.buttons-view a.router-link-active {
+    text-decoration: none;
+    color: var(--main-text-color);
+    padding: 8px 24px;
+    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+    border-radius: 10%;
+    transition: 0.5s;
+    display: flex;
+    justify-content: center;
+    background-color: var(--main-color-hover);
+
+}
+
+
+.buttons-view a.router-link-active:hover {
     background-color: var(--main-color);
-}
 
-.admin-view:hover {
-    background-color: var(--main-color-admin);
 }
-
 .buttons-view {
     display: flex;
     gap: 1rem;
-}
-
-.info-view, .events-view {
-    text-decoration: none;
 }
 
 .info-right-bottom {
@@ -282,9 +338,11 @@ td, th {
 
 .edit-inputs {
     margin-top: 20px;
+    max-height: 300px;
     gap: 20px;
-    display: grid;
-    grid-template-columns: auto auto auto;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
     color: black;
     margin-bottom: 1rem;
 }
@@ -301,12 +359,6 @@ td, th {
     box-shadow: rgba(0, 0, 0, 0.19) 0 10px 20px, rgba(0, 0, 0, 0.23) 0 6px 6px;
 }
 
-.info-grid {
-    display: grid;
-    grid-template-columns: auto auto auto;
-    gap: 10px;
-}
-
 @media (max-width: 1250px) {
     .info-left {
         top: -75px;
@@ -316,19 +368,11 @@ td, th {
         width: 150px;
         height: 150px;
     }
-
-    .info-grid {
-        grid-template-columns: auto auto;
-    }
 }
 
 @media (max-width: 920px) {
     .info-right-bottom {
         max-height: 375px;
-    }
-
-    .edit-inputs {
-        grid-template-columns: auto auto;
     }
 }
 
@@ -365,15 +409,6 @@ td, th {
         height: 100px;
     }
 
-    .edit-inputs {
-        grid-template-columns: auto;
-    }
-}
-
-@media (max-width: 550px) {
-    .info-grid {
-        grid-template-columns: auto;
-    }
 }
 
 @media (max-width: 450px) {
@@ -393,4 +428,5 @@ td, th {
     .info-right-bottom .usertype-tag {
         font-size: 10px;
     }
+
 }

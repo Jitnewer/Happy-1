@@ -1,4 +1,9 @@
 <template>
+  <div class="breadcrum">
+    <router-link :to="{ name: 'welcome' }">Home</router-link>
+    <p>></p>
+    <router-link :to="{ name: 'about' }">About Us</router-link>
+  </div>
   <div class="aboutUsContainer">
     <div class="aboutUsContent">
       <h1 class="aboutLanding">
@@ -8,7 +13,7 @@
         <span class="yellow-text"> US </span>
       </h1>
       <div class="aboutBanner">
-       <img src="../assets/img/forestscreen.jpg" width="6000" height="1701" alt="About Us Banner">
+        <img src="../assets/img/forestscreen.jpg" width="6000" height="1701" alt="About Us Banner">
       </div>
 
       <div class="aboutArticle" data-aos="fade-up" data-aos-once="false">

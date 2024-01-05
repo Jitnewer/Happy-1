@@ -1,5 +1,5 @@
 <template>
-    <NavBar></NavBar>
+  <NavBar></NavBar>
   <router-view v-if="!loggedInAsAdmin"></router-view>
   <Footer v-if="!loggedInAsAdmin"></Footer>
 </template>
