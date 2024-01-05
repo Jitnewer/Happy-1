@@ -67,7 +67,6 @@ export default {
       return `${day}-${month}-${year}`
     },
     async back () {
-      await this.eventsService.asyncFindAll()
       this.$router.push({ name: 'events', query: { sort: this.filter } })
     }
   },

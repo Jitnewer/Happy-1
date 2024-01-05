@@ -22,6 +22,7 @@ import ChallengeDetails from '@/components/challenges/ChallengeDetails.vue'
 import Researches from '@/components/research/Researches.vue'
 import ResearchDetails from '@/components/research/ResearchDetails.vue'
 import welcomeAdmin from '@/components/admin/welcomeAdmin.vue'
+import News from '@/components/News.vue'
 
 const routes = [
   {
@@ -47,6 +48,11 @@ const routes = [
     path: '/news/challenges',
     name: 'challenges',
     component: Challenges
+  },
+  {
+    path: '/news',
+    name: 'news',
+    component: News
   },
   {
     path: '/news/challenges/:id',

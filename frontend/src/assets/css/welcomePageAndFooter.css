@@ -319,6 +319,8 @@ span.carouselPagination.active {
     color: black;
     margin-left: 5px;
     margin-right: 5px;
+    font-family: 'Poppins', sans-serif;
+
 }
 .pillarText{
     width: 40%;
@@ -394,7 +396,7 @@ span.carouselPagination.active {
 .theme .themeImg {
     width: 50%;
     height: 40%;
-    object-fit: fill;
+    object-fit: cover;
     aspect-ratio: 16/9;
     margin-top: 10px; /* Add margin to separate image from text */
 }

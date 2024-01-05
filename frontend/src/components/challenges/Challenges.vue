@@ -2,13 +2,13 @@
   <div class="breadcrum">
     <router-link :to="{ name: 'welcome' }">Home</router-link>
     <p>></p>
-    <a>News</a>
+    <router-link :to="{ name: 'news', query: { sort: filter }  }">News</router-link>
     <p>></p>
-    <router-link :to="{ name: 'challenges' }">Challenges</router-link>
+    <router-link :to="{ name: 'challenges' , query: { sort: filter }  }">Challenges</router-link>
   </div>
   <div class="container">
     <div class="title-filter">
-    <h1 id="challenges-title">Challenges</h1>
+    <h1 id="challenges-title">Challenge Articles</h1>
     <button class="filter-button" @click="toggleFilter">Filter</button>
     <transition name="filter">
       <div v-if="showFilter" class="challenge-filter">
@@ -64,13 +64,13 @@ export default {
   inject: ['challengeService'],
   data () {
     return {
-      filter: null,
+      filter: this.$route.query.sort,
       showFilter: false
     }
   },
   methods: {
     async selectChallenge (challenge) {
-      this.$router.push({ name: 'challenge', params: { id: challenge.id } })
+      this.$router.push({ name: 'challenge', params: { id: challenge.id }, query: { sort: this.filter } })
       await this.challengeService.asyncFindById(challenge.id)
     },
     toggleFilter () {
@@ -92,8 +92,8 @@ export default {
         if (this.filter == null) {
           await this.challengeService.asyncFindAll()
         } else {
-          this.$router.push({ name: 'challenges', query: { sort: this.filter } })
           await this.challengeService.asyncFindByProperty(this.filter, 'getByTheme')
+          this.$router.push({ name: 'challenges', query: { sort: this.filter } })
         }
       } catch (e) {
         console.error(e)
@@ -151,11 +151,14 @@ export default {
       return this.challengeService.entities
     },
     sortedChallenges () {
-      return this.challenges.slice().sort((a, b) => {
-        const dateA = new Date(a.dateTime)
-        const dateB = new Date(b.dateTime)
-        return dateA - dateB
-      })
+      if (Array.isArray(this.challenges)) {
+        return this.challenges.slice().sort((a, b) => {
+          const dateA = new Date(a.dateTime)
+          const dateB = new Date(b.dateTime)
+          return dateA - dateB
+        })
+      }
+      return null
     }
   }
 }
