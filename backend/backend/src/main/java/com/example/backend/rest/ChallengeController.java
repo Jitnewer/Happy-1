@@ -1,5 +1,6 @@
 package com.example.backend.rest;
 
+import com.example.backend.exceptions.PreConditionFailedException;
 import com.example.backend.models.Challenge;
 import com.example.backend.models.Event;
 import com.example.backend.models.Paragraph;
@@ -33,6 +34,11 @@ public class ChallengeController {
         return challengeRepository.findAll();
     }
 
+    @GetMapping("/admin")
+    public List<Challenge> getAllChallengesAdmin() {
+        return challengeRepository.findAll();
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Object> getChallengeById(@PathVariable long id) {
         try {
@@ -48,6 +54,8 @@ public class ChallengeController {
                     "error", e.getMessage()));
         }
     }
+
+
 
     @GetMapping("/getByTheme/{theme}")
     public ResponseEntity<Object> getChallengesByTheme(@PathVariable String theme) {
@@ -69,15 +77,19 @@ public class ChallengeController {
 
     @PostMapping("/admin")
     public ResponseEntity<Object> createChallenge(@RequestBody Challenge challenge) {
+
         if (challenge.getTitle() == null || challenge.getTitle().isEmpty()) {
             return ResponseEntity.badRequest().body(Map.of("message", "Title is required"));
         }
 
         try {
+            challengeRepository.save(challenge);
+
+            // Now you can save the paragraphs with the associated challenge
             for (Paragraph paragraph : challenge.getParagraphs()) {
                 paragraph.setChallenge(challenge);
+                paragraphRepository.save(paragraph);
             }
-            challengeRepository.save(challenge);
 
             URI location = ServletUriComponentsBuilder
                     .fromCurrentRequest()
@@ -88,10 +100,35 @@ public class ChallengeController {
             return ResponseEntity.created(location).body(Map.of(
                     "message", "Challenge added successfully",
                     "status", HttpStatus.CREATED.value(),
-                    "location", location.toString()));
+                    "location", location.toString(),
+                    "challenge", challenge));
         } catch (Exception e) {
             Map<String, Object> errorResponse = new HashMap<>();
             errorResponse.put("message", "Error adding the challenge");
+            errorResponse.put("error", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+        }
+    }
+
+    @PutMapping("/admin/{id}")
+    public ResponseEntity<Object> updateChallenge(@RequestBody Challenge challenge, @PathVariable Long id) {
+        try {
+            if (!id.equals(challenge.getId())) {
+                throw new PreConditionFailedException("Event ID in the path does not match the ID in the request body.");
+            }
+            challengeRepository.save(challenge);
+
+            for (Paragraph paragraph : challenge.getParagraphs()) {
+                paragraph.setChallenge(challenge);
+                paragraphRepository.save(paragraph);
+
+            }
+
+
+            return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "Challenge updated successfully", "challenge", challenge));
+        } catch (Exception e) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("message", "Error updating the challenge");
             errorResponse.put("error", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
@@ -101,9 +138,9 @@ public class ChallengeController {
 
 
     @DeleteMapping("/admin/{id}")
-    public ResponseEntity<Void> deleteChallenge(@PathVariable long id) {
+    public ResponseEntity<Object> deleteChallenge(@PathVariable long id) {
         challengeRepository.deleteById(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "Challenge deleted successfully", "status", HttpStatus.OK));
     }
 
 }

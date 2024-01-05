@@ -37,7 +37,7 @@ public class Challenge implements Identifiable{
     @Column(nullable = false)
     private Theme theme;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String image;
 
     @Column(columnDefinition = "TEXT")
@@ -71,7 +71,7 @@ public class Challenge implements Identifiable{
 
     public Challenge() {
         this.dateTime = LocalDateTime.now();
-        this.image = "img.png";
+        this.image = "assets/challengePic/imagePlaceholder.jpg";
 
     }
 

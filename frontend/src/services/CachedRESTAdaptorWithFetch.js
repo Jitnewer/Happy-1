@@ -3,10 +3,12 @@ import CustomError from '@/CustomError'
 
 export class CachedRESTAdaptorWithFetch extends RESTAdaptorWithFetch {
   entities;
+  entity
 
   constructor (resourceUrl, copyConstructor) {
     super(resourceUrl, copyConstructor)
     this.entities = []
+    this.entity = null
   }
 
   async asyncFindAll () {
@@ -47,14 +49,8 @@ export class CachedRESTAdaptorWithFetch extends RESTAdaptorWithFetch {
 
   async asyncDeleteById (id) {
     try {
-      const isDeleted = await super.asyncDeleteById(id)
-
-      // Remove the entity from the cache if it was successfully deleted
-      if (isDeleted) {
-        this.entities = this.entities.filter(e => e.id !== id)
-      }
-
-      return isDeleted
+      // Delete the entity from the server
+      await super.asyncDeleteById(id)
     } catch (error) {
       throw new CustomError('Error in asyncDeleteById', error.status || 500, error.message)
     }

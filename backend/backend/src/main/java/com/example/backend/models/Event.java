@@ -17,7 +17,7 @@ public class Event implements Identifiable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "event", orphanRemoval = true)
     @JsonIgnore
     private Set<UserEvent> userEvents = new HashSet<>();
     @Column(nullable = false)

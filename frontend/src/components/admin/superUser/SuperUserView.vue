@@ -20,7 +20,7 @@ export default {
       this.selectedNews = new News()
       this.selectedNews.id = (this.idUse + 1)
       this.idUse++
-      this.selectedNews.image = require('../../../assets/img/imagePlaceholder.jpg')
+      this.selectedNews.image = require('../../../assets/challengePic/imagePlaceholder.jpg')
       this.createNews = true
       this.isSelected = !this.isSelected
       this.$router.push(this.$route.matched[0].path + '/' + this.selectedNews.id)

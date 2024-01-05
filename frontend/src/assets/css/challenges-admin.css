@@ -1,0 +1,461 @@
+.container-admin {
+    max-width: 1280px;
+}
+
+.breadcrum-admin {
+    margin-bottom: 20px;
+    background-color: white;
+}
+
+.container-admin button {
+    border: none;
+    color: var(--main-text-color);
+    padding: 0.5rem 1rem;
+    font-size: 18px;
+    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+    cursor: pointer;
+    transition: 0.5s;
+}
+
+.challenges-admin {
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 5rem;
+}
+
+.paragraphs-admin {
+    width: 40%;
+    height: 82%;
+    box-sizing: border-box;
+    top: -50px
+}
+
+.challenges-admin h1 {
+    color: black;
+}
+
+.paragraphs-admin table {
+    box-shadow: var(--shadow);
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.challenges-admin table {
+    box-shadow: var(--shadow);
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+
+.challenges-admin table button {
+    font-size: 14px
+}
+
+
+.challenges-admin table img {
+    object-fit: cover;
+    width: 100px;
+    height: 60px;
+}
+
+
+.paragraphs-admin table th,
+.paragraphs-admin table td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: left;
+}
+
+
+.challenges-admin table th,
+.challenges-admin table td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: left;
+}
+
+.table-buttons {
+    display: flex;
+    gap: 1rem;
+}
+
+.edit {
+    background-color: #076507;
+}
+
+.edit:hover {
+    background-color: #011a01;
+}
+
+.delete {
+    background-color: darkred;
+}
+
+.delete:hover {
+    background-color: #250101;
+}
+
+.title-button {
+    display:flex;
+    gap: 1rem
+}
+
+.title-button h1 {
+    margin: 0
+}
+
+.relation {
+    background-color: white;
+    color: black !important;
+}
+
+.relation:hover {
+    background-color: black;
+    color: white !important;
+}
+
+.paragraphs {
+    position: fixed;
+    top: 55%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    overflow: scroll;
+}
+
+.challenge-create {
+    width: 30%;
+}
+
+.challenge-create-form {
+    margin-top: 1rem;
+    box-shadow: var(--shadow);
+    padding: 3rem;
+    gap: 1rem;
+    display: flex;
+    flex-direction: column;
+}
+
+
+.challenge-create-form p {
+    color: black;
+    margin: 0;
+}
+
+.title-button-create {
+    display: flex;
+    gap: 1rem;
+    justify-content: space-between;
+
+}
+
+.challenge-create-form button {
+    margin-top:1rem;
+}
+
+.form-label {
+    display: flex;
+    gap: 0.25rem;
+    flex-direction: column;
+}
+
+
+
+.challenge-create h1 {
+    color: black;
+    margin: 0;
+}
+
+.challenge-create-form input.invalid-input {
+    border: 1px solid red;
+
+}
+
+.challenge-create-form input {
+    outline: none;
+    width: 100%;
+    padding: 0.5rem;
+    font-size: 12px;
+    box-shadow: var(--shadow);
+}
+
+.challenge-create-form input.invalid-input:focus-visible {
+    outline: none
+}
+
+
+.challenge-create-form input.valid-input {
+    border: 1px solid limegreen;
+}
+
+.challenge-create-form select {
+    outline: none;
+    width: 100%;
+    padding: 0.5rem;
+    font-size: 12px
+}
+
+
+.challenge-create-form select:focus-visible {
+    outline: none;
+}
+
+.challenge-create-form input.valid-input:focus-visible {
+    outline: none
+}
+
+.challenge-create-form input:focus-visible {
+    outline: none
+}
+
+.paragraphs-amount {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.paragraphs-amount input {
+    user-select: none;
+
+    width: 2% !important;
+}
+
+.paragraphs-amount input[readonly] {
+    cursor: auto /* Change the cursor to indicate that the input is not editable */
+}
+
+.paragraphs-amount div {
+    cursor: pointer; /* Make the buttons look clickable */
+}
+
+.paragraphs-amount div {
+    user-select: none;
+    padding-inline: 0.75rem;
+    box-shadow: var(--shadow);
+    padding-block: 0.25rem;
+}
+
+.paragraphs-amount div p {
+
+}
+
+.paragraphs-inputs {
+    gap: 1rem;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Add the following styles to your existing CSS */
+
+/* Add the following styles to your existing CSS */
+
+.challenge-create-form input,
+.challenge-create-form select {
+    outline: none;
+    width: auto;
+    padding: 0.5rem;
+    font-size: 12px;
+    border: none;
+    box-shadow: var(--shadow); /* Add the box shadow here */
+}
+
+/* Add the following styles to include the focus-visible state for text inputs */
+
+.challenge-create-form input:focus-visible,
+.challenge-create-form select:focus-visible {
+    outline: none;
+}
+
+/* For the invalid input state */
+
+.challenge-create-form input.invalid-input,
+.challenge-create-form select.invalid-input {
+    border: 1px solid red;
+    box-shadow: var(--shadow), 0 0 0 2px red; /* Add the red border and box shadow on invalid input */
+}
+
+/* For the valid input state */
+
+.challenge-create-form input.valid-input,
+.challenge-create-form select.valid-input {
+    border: 1px solid limegreen;
+    box-shadow: var(--shadow), 0 0 0 2px limegreen; /* Add the limegreen border and box shadow on valid input */
+}
+
+.paragraph {
+    gap: 1rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.container-admin button:disabled {
+    color: #333;
+    background-color: white;
+    padding: 6px;
+    cursor: default;
+    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+}
+
+.errorMessage {
+    color: darkred !important;
+    font-size: 12px
+}
+
+@media only screen and (max-width: 1780px) {
+    .challenges-admin {
+        width: 98%;
+        box-sizing: border-box;
+        margin-bottom: 5rem;
+    }
+}
+
+@media only screen and (max-width: 1650px) {
+    .challenges-admin {
+        width: 98%;
+        box-sizing: border-box;
+        margin-bottom: 5rem;
+    }
+}
+
+@media only screen and (max-width: 1280px) {
+    .challenges-admin {
+        width: 91%;
+        box-sizing: border-box;
+        margin-bottom: 5rem;
+    }
+    .firstParagraph {
+        display: none
+    }
+
+    .dashboard {
+        display: flex;
+        flex-direction: column;
+        width: 26%;
+        z-index: 99;
+    }
+}
+
+
+@media only screen and (max-width: 1080px) {
+    .challenges-admin {
+        width: 98%;
+        box-sizing: border-box;
+        margin-bottom: 5rem;
+    }
+    .image {
+        display: none
+    }
+    .dashboard {
+        display: flex;
+        flex-direction: column;
+        width: 28%;
+        z-index: 99;
+    }
+}
+
+@media only screen and (max-width: 900px) {
+    .challenges-admin {
+        width: 97%;
+        box-sizing: border-box;
+        margin-bottom: 5rem;
+    }
+    .datetime {
+        display: none
+    }
+    .dashboard {
+        display: flex;
+        flex-direction: column;
+        width: 29%;
+        z-index: 99;
+    }
+
+}
+
+@media only screen and (max-width: 768px) {
+    .challenges-admin {
+        width: 95%;
+        box-sizing: border-box;
+        margin-bottom: 5rem;
+    }
+    .dashboard {
+        display: flex;
+        flex-direction: column;
+        width: 20%;
+        z-index: 99;
+    }
+}
+
+@media only screen and (max-width: 640px) {
+    .challenges-admin {
+        width: 117%;
+        box-sizing: border-box;
+        margin-bottom: 5rem;
+    }
+    .theme_small {
+        display: none
+    }
+    .dashboard {
+        display: flex;
+        flex-direction: column;
+        width: 20%;
+        z-index: 99;
+    }
+
+    .topFooterRight {
+         width: 100%;
+        text-align: left;
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+@media only screen and (max-width: 550px) {
+    #admin {
+        width: fit-content;
+    }
+    .dropdown-profile {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        cursor: pointer;
+        margin-left: 1rem;
+    }
+}
+
+@media only screen and (max-width: 520px) {
+    .challenges-admin {
+        width: 98%;
+        box-sizing: border-box;
+        margin-bottom: 5rem;
+    }
+    .dashboard {
+        display: flex;
+        flex-direction: column;
+        width: 20%;
+        z-index: 99;
+    }
+
+}
+
+
+/* Styles for the table on smaller screens */
+@media only screen and (max-width: 1280px) {
+    .challenges-admin table {
+        font-size: 14px; /* Adjust font size */
+    }
+
+    .challenges-admin table th,
+    .challenges-admin table td {
+        padding: 8px; /* Adjust cell padding */
+    }
+
+    .challenges-admin table img {
+        width: 80px; /* Adjust image size */
+        height: 50px;
+    }
+
+    .table-buttons button {
+        font-size: 12px; /* Adjust button font size */
+    }
+}

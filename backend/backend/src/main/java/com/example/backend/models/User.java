@@ -17,7 +17,7 @@ public class User implements Identifiable{
     private long id;
 
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", orphanRemoval = true)
     @JsonIgnore
     private Set<UserEvent> userEvents = new HashSet<>();
 
