@@ -19,6 +19,7 @@ import Footer from '@/components/welcomePage/Footer.vue'
 import { mapState } from 'vuex'
 import { FetchInterceptor } from '@/services/FetchInterceptor'
 import { CachedRESTAdaptorWithFetch } from '@/services/CachedRESTAdaptorWithFetch'
+import { Network } from '@/models/network.js'
 import { FileUploadAdapter } from '@/services/FileUploadAdapter'
 
 export default {
@@ -44,7 +45,8 @@ export default {
       sessionSBService: shallowReactive(new SessionSbService(CONFIG.BACKEND_URL + '/authentication', CONFIG.JWT_STORAGE_ITEM)),
       researchService: reactive(new CachedRESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/researches', Research.copyConstructor)),
       researchServiceAdmin: reactive(new CachedRESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/researches/admin', Research.copyConstructor)),
-      fileUploadService: new FileUploadAdapter(CONFIG.BACKEND_URL + '/image')
+      fileUploadService: new FileUploadAdapter(CONFIG.BACKEND_URL + '/image'),
+      networkService: reactive(new CachedRESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/networks', Network.copyConstructor))
     }
   },
   unmounted () {
