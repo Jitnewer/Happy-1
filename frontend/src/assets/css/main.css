@@ -7,6 +7,7 @@
 @import "challenge.css";
 @import "welcomePageAndFooter.css";
 @import "challenges-admin.css";
+@import "superUser.css";
 :root {
     --main-color: #0991a3;
     --main-color-admin: #0a454d;

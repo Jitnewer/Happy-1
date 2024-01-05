@@ -1,22 +1,22 @@
 <template>
-  <nav v-if="user">
-    <img id="logo" src="../../assets/img/happy-hospitality-collective.png" height="119" width="310" alt=""/>
+  <nav>
+    <img id="logo" src="../../assets/images/happy-hospitality-collective.png" height="119" width="310" alt=""/>
     <svg id="hamburger" @click="toggleNav" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Pro 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg>
     <transition name="nav">
       <div class="nav-links" v-show="showNav">
         <div class="nav-links-left">
           <router-link to="/home">Home</router-link>
           <div class="dropdown">
-            <a @click="toggleDropdown">News</a>
+            <a @click="toggleDropdown">Research</a>
             <transition name="dropdown">
               <div class="dropdown-content" v-show="showDropdown">
                 <router-link class="dropdown-content-link" to="/news/challenges">
                   Challenges
                 </router-link>
-                <router-link class="dropdown-content-link" to="/news/researches">
+                <router-link class="dropdown-content-link" to="/news/research">
                   Research
                 </router-link>
-                <router-link class="dropdown-content-link" to="/news/networks">
+                <router-link class="dropdown-content-link" to="/news/network">
                   Network
                 </router-link>
               </div>
@@ -32,7 +32,7 @@
         <div class="nav-links-right">
           <div class="dropdown-profile" @click="toggleProfile">
             <div class="profile-d">
-              <img v-if="user.profilePic != null" :src='require(`../../assets/img/${user.profilePic}`)' class="profile" width="45" height="45" alt="Event Image">
+              <img v-if="user.profilePic != null" :src='require(`../../${user.profilePic}`)' class="profile" width="45" height="45" alt="Event Image">
               <canvas v-if="user.profilePic == null" ref="profileCanvas" class="profile" width="45" height="45"></canvas>
                 <p id="profile-name">{{ user.firstname }} {{ user.lastname }}</p>
               <div class="caret">
@@ -41,13 +41,13 @@
             </div>
             <transition name="dropdownProfile">
               <div class="dropdown-profile-content" v-show="showProfile">
-                <router-link class="dropdown-profile-content-link"  to="/profile">
+                <router-link class="dropdown-profile-content-link"  to="/myProfile">
                   Profile
                 </router-link>
                 <router-link class="dropdown-profile-content-link" to="/profile/settings">
                   Settings
                 </router-link >
-                <a class="dropdown-profile-content-link" @click="handleLogout">
+                <a class="dropdown-profile-content-link" @click="logout">
                   Logout
                 </a>
               </div>
@@ -63,25 +63,24 @@
 import { mapGetters, mapMutations } from 'vuex'
 
 export default {
-  name: 'NavBarLoggedIn.vue',
-  emits: ['logout'],
-  inject: ['sessionSBService'],
+  name: 'NavBar.vue',
+  inject: ['loginAndRegisterService'],
+
   data () {
     return {
-      user: null,
+      user: this.loginAndRegisterService.asyncFindByEmail(localStorage.getItem('email')),
       showNav: false,
       showDropdown: false,
       showProfile: false,
       randomColor: '',
       fullName: null,
-      picture: null,
-      mail: null
+      picture: null
     }
   },
   methods: {
-    handleLogout () {
-      this.sessionSBService.signOut()
-      this.$store.commit('setLoggedIn', false)
+    logout () {
+      this.$emit('handleLogout')
+      localStorage.removeItem('email')
       this.$router.push({ path: '/home' })
     },
     toggleNav () {
@@ -143,15 +142,13 @@ export default {
   async created () {
     try {
       // Initiate the asynchronous operation
-      const userAndToken = await this.sessionSBService.asyncFindByEmail(JSON.parse(localStorage.getItem('userDetails')).mail)
-      this.user = userAndToken.body
-      if (this.user.profilePic === '') {
-        this.user.profilePic = null
-      }
+      this.user = await this.loginAndRegisterService.asyncFindByEmail(localStorage.getItem('email'))
     } catch (e) {
-      console.error(e)
+      console.log(e)
     }
 
+    console.log(this.user)
+    console.log((`../../assets/img/${this.user.profilePic}`))
     const fullname = `${this.user.firstname} ${this.user.lastname}`
 
     let initials = ''

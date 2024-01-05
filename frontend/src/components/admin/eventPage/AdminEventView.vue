@@ -1,13 +1,9 @@
 <script>
-import { Event } from '@/models/event'
-
 export default {
   name: 'AdminEventView',
   inject: ['eventsService'],
   data () {
     return {
-      selectedEvent: null,
-      create: false,
       filter: {
         search: '',
         date: null
@@ -16,16 +12,11 @@ export default {
     }
   },
   methods: {
-    setSelectedEvent (event) {
-      this.$router.push({ name: 'adminEventDetail', params: { id: event } })
+    createEvent () {
+      this.$router.push({ name: 'adminEventDetail', params: { id: 0 } })
     },
-    activateCreateEvent () {
-      this.selectedEvent = new Event()
-      this.selectedEvent.id = 0
-      this.selectedEvent.image = 'imagePlaceholder.jpg'
-      this.create = true
-      // this.$router.push(this.$route.matched[0].path + '/' + this.selectedEvent.id)
-      this.$router.push({ name: 'adminEventDetail', params: { id: this.selectedEvent.id } })
+    editEvent (eventId) {
+      this.$router.push({ name: 'adminEventDetail', params: { id: eventId } })
     },
     formattedPrice (event) {
       if (event.price !== null) {
@@ -53,7 +44,7 @@ export default {
       // Filter events based on date and/or search filter
       return this.events.filter(event => {
         // Check if the event date matches the date filter (if set)
-        const dateMatch = !this.filter.date || event.date === this.filter.date
+        const dateMatch = !this.filter.date || this.parseDate(event.date) === this.parseDate(this.filter.date)
 
         // Check if the event name contains the search filter (if set)
         const searchMatch = !this.filter.search || event.name.toLowerCase().includes(this.filter.search.toLowerCase())
@@ -64,33 +55,13 @@ export default {
     }
   },
   async created () {
-    // if (localStorage.getItem('admin') === 'false') this.$router.push({ path: '/PageNotFound' })
     this.events = await this.eventsService.asyncFindAll()
-  },
-  watch: {
-    '$route' (to, from) {
-      console.log(to)
-      const eventId = parseInt(to.params.id)
-      if (eventId === 0) {
-        return
-      }
-      if (eventId) {
-        this.selectedEvent = this.events.find(event => event.id === eventId)
-      } else {
-        this.selectedEvent = null
-      }
-    }
   }
 }
 </script>
 
 <template>
-  <div class="container-admin admin-event" v-if="!selectedEvent">
-    <div class="breadcrum-admin">
-      <router-link :to="{ name: 'admin' }">Admin</router-link>
-      <p>></p>
-      <router-link :to="{ name: 'adminEvents' }">Events</router-link>
-    </div>
+  <div class="container-admin admin-event">
       <div class="title">
         <h1>Events</h1>
       </div>
@@ -98,7 +69,7 @@ export default {
         <input type="text" class="search-filter" id="nameFilter" placeholder="Search for events.." title="Type in a name"
              v-model="filter.search">
         <input class="date-filter" type="date" id="dateFilter" v-model="filter.date">
-        <button class="create-btn" @click="activateCreateEvent">Create</button>
+        <button class="admin-create" @click="createEvent">Create</button>
       </div>
       <div class="events">
         <div class="event" v-for="event in filteredEvents" :key="event.id">
@@ -119,7 +90,7 @@ export default {
               </div>
             </div>
             <div class="event-right-bottom">
-              <button @click="setSelectedEvent(event.id)">Edit</button>
+              <button @click="editEvent(event.id)">Edit</button>
             </div>
           </div>
         </div>
@@ -132,36 +103,5 @@ export default {
   margin-left: 1rem;
   margin-top: 1rem;
   width:100%
-}
-
-.events {
-  z-index: 1;
-  display: flex;
-  padding: 0 10px;
-  flex-wrap: wrap;
-  flex-direction: row;
-  gap: 10px;
-  justify-content: left;
-}
-
-.admin-event:where(h1, h2, h3, h4, h5, h6, p)  {
-  color: black;
-}
-
-.event {
-  max-width: 450px;
-}
-
-.event-right-bottom {
-  display: flex;
-  flex-direction: row;
-  justify-content: right;
-}
-
-@media (max-width: 1030px) {
-  .events {
-    padding: 0;
-    margin-bottom: 0;
-  }
 }
 </style>

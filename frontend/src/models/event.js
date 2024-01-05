@@ -191,4 +191,17 @@ export class Event {
       event.size
     )
   }
+
+  static equals (event, eventCopy) {
+    return (
+      eventCopy.name === event.name &&
+      eventCopy.city === event.city &&
+      eventCopy.date === event.date &&
+      eventCopy.timeBegin === event.timeBegin &&
+      eventCopy.timeEnd === event.timeEnd &&
+      eventCopy.price === event.price &&
+      eventCopy.location === event.location &&
+      eventCopy.info === event.info
+    )
+  }
 }

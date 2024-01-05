@@ -5,17 +5,17 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "userEvents")
-public class UserEvent implements Identifiable {
+public class UserEvent {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
-    @ManyToOne(cascade = CascadeType.MERGE)
+    @ManyToOne
     @JoinColumn(name = "user_id")
     @JsonBackReference
     private User user;
 
-    @ManyToOne(cascade = CascadeType.MERGE)
+    @ManyToOne
     @JoinColumn(name = "event_id")
     @JsonBackReference
     private Event event;
@@ -24,8 +24,9 @@ public class UserEvent implements Identifiable {
 
     }
 
-
-
+    public Long getId() {
+        return id;
+    }
 
     public User getUser() {
         return user;
@@ -38,15 +39,5 @@ public class UserEvent implements Identifiable {
     public UserEvent(User user, Event event) {
         this.user = user;
         this.event = event;
-    }
-
-    @Override
-    public long getId() {
-        return this.id;
-    }
-
-    @Override
-    public void setId(long id) {
-        this.id = id;
     }
 }

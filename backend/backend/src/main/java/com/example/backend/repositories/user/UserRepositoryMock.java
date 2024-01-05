@@ -37,8 +37,9 @@ public class UserRepositoryMock implements UserRepository {
 
 
     @Override
-    public void addUser(User user) {
+    public User addUser(User user) {
         users.add(user);
+        return user;
     }
 
 
@@ -50,11 +51,6 @@ public class UserRepositoryMock implements UserRepository {
             }
         }
         throw new IllegalArgumentException("Invalid credentials");
-    }
-
-    @Override
-    public void register(User user) {
-
     }
 
     @Override
@@ -105,6 +101,5 @@ public class UserRepositoryMock implements UserRepository {
     public boolean userWithMailExists(String email) {
         return false;
     }
-
 }
 

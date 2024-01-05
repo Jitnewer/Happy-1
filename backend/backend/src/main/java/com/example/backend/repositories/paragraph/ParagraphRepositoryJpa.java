@@ -3,7 +3,6 @@ package com.example.backend.repositories.paragraph;
 import com.example.backend.models.Challenge;
 import com.example.backend.models.Event;
 import com.example.backend.models.Paragraph;
-import com.example.backend.repositories.AbstractEntityRepositoryJpa;
 import com.example.backend.repositories.challenge.ChallengeRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -14,37 +13,44 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@Repository("PARAGRAPH.JPA")
+@Repository
 @Primary
-public class ParagraphRepositoryJpa extends AbstractEntityRepositoryJpa<Paragraph> {
+public class ParagraphRepositoryJpa implements ParagraphRepository {
+    @PersistenceContext
+    private EntityManager entityManager;
 
-    public ParagraphRepositoryJpa() {
-        super(Paragraph.class);
+
+    @Override
+    public List<Paragraph> getParagraphs() {
+        String jpql = "SELECT p FROM Paragraph p";
+        TypedQuery<Paragraph> query = entityManager.createQuery(jpql, Paragraph.class);
+        return query.getResultList();
     }
 
     @Override
-    public List<Paragraph> findAll() {
-        return super.findAll();
+    public Paragraph getParagraph(long id) {
+        return entityManager.find(Paragraph.class, id);
     }
 
     @Override
-    public List<Paragraph> findByQuery(String jpqlName, Object... params) {
-        return super.findByQuery(jpqlName, params);
+    @Transactional
+    public void addParagraph(Paragraph paragraph) {
+        entityManager.persist(paragraph);
     }
 
     @Override
-    public Paragraph findById(Long id) {
-        return super.findById(id);
+    @Transactional
+    public void updateParagraph(Paragraph paragraph) {
+        entityManager.merge(paragraph);
+
     }
 
     @Override
-    public Paragraph save(Paragraph entity) {
-        return super.save(entity);
+    @Transactional
+    public void deleteParagraph(long id) {
+        Paragraph paragraph = entityManager.find(Paragraph.class, id);
+        if (paragraph != null) {
+            entityManager.remove(paragraph);
+        }
     }
-
-    @Override
-    public boolean deleteById(Long id) {
-        return super.deleteById(id);
-    }
-
 }

@@ -13,11 +13,11 @@ import java.util.Set;
 
 @Entity
 @Table(name = "challenges")
-public class Challenge implements Identifiable{
+public class Challenge {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Column(nullable = false)
     private String title;
@@ -26,16 +26,7 @@ public class Challenge implements Identifiable{
     @Column(nullable = false)
     private LocalDateTime dateTime;
 
-    public enum Theme {
-        FOOD_WASTE,
-        DISTRIBUTION,
-        ENERGY_TRANSITION,
-        SINGLE_USED_PLASTIC,
-        PROTEIN_TRANSITION,
-        WATER
-    }
-    @Column(nullable = false)
-    private Theme theme;
+
 
     @Column(nullable = true)
     private String image;
@@ -43,8 +34,8 @@ public class Challenge implements Identifiable{
     @Column(columnDefinition = "TEXT")
     private String firstParagraph;
 
-    @OneToMany(mappedBy = "challenge", orphanRemoval = true)
-    @JsonManagedReference(value = "challenge-paragraphs")
+    @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private Set<Paragraph> paragraphs = new HashSet<>();
 
     // Constructors
@@ -52,21 +43,13 @@ public class Challenge implements Identifiable{
 
 
     // Constructor with parameters
-    public Challenge(String title, String firstParagraph, Set<Paragraph> paragraphs, Theme theme) {
+    public Challenge(String title, String firstParagraph, String image, Set<Paragraph> paragraphs) {
         this.title = title;
         this.dateTime = LocalDateTime.now();
-        this.image = "img.png";
+        this.image = image;
         this.firstParagraph = firstParagraph;
         this.paragraphs = paragraphs;
-        this.theme = theme;
-    }
 
-    public Theme getTheme() {
-        return theme;
-    }
-
-    public void setTheme(Theme theme) {
-        this.theme = theme;
     }
 
     public Challenge() {
@@ -100,14 +83,8 @@ public class Challenge implements Identifiable{
     }
 
     // Getter methods
-    @Override
-    public long getId() {
+    public Long getId() {
         return id;
-    }
-
-    @Override
-    public void setId(long id) {
-        this.id = id;
     }
 
     public String getTitle() {

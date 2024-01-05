@@ -1,52 +1,54 @@
 package com.example.backend.repositories.challenge;
 
 import com.example.backend.models.Challenge;
-import com.example.backend.models.User;
-import com.example.backend.repositories.AbstractEntityRepositoryJpa;
+import com.example.backend.models.Event;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.TypedQuery;
 import org.springframework.context.annotation.Primary;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@Repository("CHALLANGE.JPA")
+@Repository
 @Primary
-public class ChallengeRepositoryJpa extends AbstractEntityRepositoryJpa<Challenge> {
-
-
-    public ChallengeRepositoryJpa() {
-        super(Challenge.class);
+public class ChallengeRepositoryJpa implements ChallengeRepository {
+    @PersistenceContext
+    private EntityManager entityManager;
+    @Override
+    public List<Challenge> getChallenges() {
+        String jpql = "SELECT c FROM Challenge c";
+        TypedQuery<Challenge> query = entityManager.createQuery(jpql, Challenge.class);
+        return query.getResultList();
     }
 
     @Override
-    public List<Challenge> findAll() {
-        return super.findAll();
+    public Challenge getChallenge(long id) {
+        return entityManager.find(Challenge.class, id);
     }
 
     @Override
-    public List<Challenge> findByQuery(String jpqlName, Object... params) {
-        return super.findByQuery(jpqlName, params);
+    @Transactional
+    public void addChallenge(Challenge challenge) {
+        entityManager.persist(challenge);
+
     }
 
     @Override
-    public Challenge findById(Long id) {
-        return super.findById(id);
+    @Transactional
+    public void updateChallenge(Challenge challenge) {
+        entityManager.merge(challenge);
+
     }
 
     @Override
-    public Challenge save(Challenge entity) {
-        return super.save(entity);
+    @Transactional
+    public void deleteChallenge(long id) {
+        Challenge challenge = entityManager.find(Challenge.class, id);
+        if (challenge != null) {
+            entityManager.remove(challenge);
+        }
     }
-
-    @Override
-    public boolean deleteById(Long id) {
-        return super.deleteById(id);
-    }
-
-
-
-    @Override
-    public boolean entityWithEntityExist(String propertyName, Object value) {
-        return super.entityWithEntityExist(propertyName, value);
-    }
-
 }

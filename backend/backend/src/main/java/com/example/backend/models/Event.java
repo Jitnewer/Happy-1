@@ -11,8 +11,7 @@ import java.util.*;
 
 @Entity
 @Table(name = "events")
-@NamedQuery(name = "UserEvent.findByUserAndEvent", query = "SELECT ue FROM UserEvent ue WHERE ue.user = :user AND ue.event = :event")
-public class Event implements Identifiable {
+public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -59,14 +58,9 @@ public class Event implements Identifiable {
     public Event() {
 
     }
-    @Override
+
     public long getId() {
         return id;
-    }
-
-    @Override
-    public void setId(long id) {
-        this.id = id;
     }
 
     public String getImage() {

@@ -3,12 +3,14 @@ import { User } from '@/models/user'
 
 export default {
   name: 'UserProfilePage',
-  inject: ['usersService'],
+  inject: ['usersService', 'fileUploadService'],
   data () {
     return {
       user: null,
       edit: false,
-      copyUser: null
+      copyUser: null,
+      pictureUpload: null,
+      newProfilePic: null
     }
   },
   methods: {
@@ -19,31 +21,33 @@ export default {
     cancel () {
       if (confirm('Are you sure you wan\'t to delete changes?')) {
         this.edit = false
-        this.copyUser = null
+        this.copyUser = User.copyConstructor(this.user)
+        this.newProfilePic = null
       }
     },
     handleImageUpload (event) {
       const file = event.target.files[0]
-      this.selectedCopy.image = URL.createObjectURL(file)
+      this.newProfilePic = URL.createObjectURL(file)
+      this.pictureUpload = file
     },
     activateInput () {
       if (this.edit) {
         document.querySelector('#file').click()
       }
     },
-    infoView () {
-      this.$router.push({ name: 'profilePageInfo' })
-    },
-    eventsView () {
-      this.$router.push({ name: 'profilePageEvents' })
-    },
     async save () {
       if (confirm('Are you sure you wan\'t to save changes?')) {
         try {
+          if (this.pictureUpload) {
+            const profilePicPath = await this.fileUploadService.asyncUploadProfilePic(this.pictureUpload, this.user)
+            this.copyUser.profilePic = profilePicPath.filePath
+          }
+          this.newProfilePic = null
+
           await this.usersService.asyncSave(this.copyUser)
+
           this.user = this.copyUser
           this.edit = false
-          this.copyUser = null
         } catch (e) {
           console.log(e)
         }
@@ -51,44 +55,24 @@ export default {
     }
   },
   async created () {
-    console.log(this.$route)
-    if (localStorage.getItem('email') == null) {
-      this.$router.push({ route: 'PageNotFound' })
-    }
     this.user = await this.usersService.asyncFindById(parseInt(localStorage.getItem('profileId')))
     this.$router.push({ name: 'profilePageInfo' })
+    this.copyUser = User.copyConstructor(this.user)
   }
 }
 </script>
 
 <template>
-  <div class="breadcrum" v-if="$route.fullPath === '/profile/info' && user" >
-    <router-link :to="{ name: 'welcome' }">Home</router-link>
-    <p>></p>
-    <a>News</a>
-    <p>></p>
-    <router-link :to="{ name: 'profilePage' }">Profile</router-link>
-    <p>></p>
-    <router-link :to="{ name: 'profilePageInfo', params: { id: user.id } }">Info</router-link>
-  </div>
-  <div class="breadcrum" v-if="$route.fullPath === '/profile/events' && user" >
-    <router-link :to="{ name: 'welcome' }">Home</router-link>
-    <p>></p>
-    <a>News</a>
-    <p>></p>
-    <router-link :to="{ name: 'profilePage' }">Profile</router-link>
-    <p>></p>
-    <router-link :to="{ name: 'profilePageEvents', params: { id: user.id } }">Info</router-link>
-  </div>
   <div class="user-profile-container" v-if="user">
     <div class="profile-banner">
     </div>
     <div class="profile-info">
       <div class="info-left">
-        <img class="profile-pic" src="../../../src/assets/img/profilepic.png" @click="activateInput">
+        <img v-if="!newProfilePic" class="profile-pic" :src="require(`../../../src/${copyUser.profilePic}`)" @click="activateInput">
+        <img v-else class="profile-pic" :src="newProfilePic" @click="activateInput">
         <input type="file" accept="image/jpeg, image/png, image/jpg" id="file" @change="handleImageUpload">
         <div v-if="!edit" class="profile-edit-buttons">
-          <button class="edit-button" @click="editProfile">Edit</button>
+          <button class="profile-edit-button" @click="editProfile">Edit</button>
           <button class="delete-button">Delete</button>
         </div>
         <div v-else class="profile-edit-buttons">
@@ -101,8 +85,8 @@ export default {
           <h1 v-if="!edit"> {{ user.firstname }} {{ user.lastname }}</h1>
         </div>
         <div v-if="!edit" class="buttons-view">
-          <router-link :to="{name: 'profilePageInfo'}"  class="info-view selected">Info</router-link>
-          <router-link :to="{ name: 'profilePageEvents'}" class="events-view">Events</router-link>
+          <router-link :to="{name: 'profilePageInfo'}"  class="info-view" active-class="selected">Info</router-link>
+          <router-link :to="{ name: 'profilePageEvents'}" class="events-view" active-class="selected">Events</router-link>
         </div>
         <div class="info-right-bottom">
           <router-view v-if="!edit" :user="user"></router-view>

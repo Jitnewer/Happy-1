@@ -5,11 +5,11 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "paragraphs")
-public class Paragraph implements Identifiable{
+public class Paragraph {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Column(nullable = false)
     private String title;
@@ -19,12 +19,12 @@ public class Paragraph implements Identifiable{
 
     @ManyToOne
     @JoinColumn(name = "challenge_id")
-    @JsonBackReference(value = "challenge-paragraphs")
+    @JsonBackReference
     private Challenge challenge;
 
     @ManyToOne
     @JoinColumn(name = "research_id")
-    @JsonBackReference(value = "research-paragraphs")
+    @JsonBackReference
     private Research research;
 
 
@@ -43,14 +43,8 @@ public class Paragraph implements Identifiable{
     }
 
     // Getters and Setters
-    @Override
-    public long getId() {
+    public Long getId() {
         return id;
-    }
-
-    @Override
-    public void setId(long id) {
-        this.id = id;
     }
 
     public String getTitle() {

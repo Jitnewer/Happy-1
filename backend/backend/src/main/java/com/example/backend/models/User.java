@@ -10,7 +10,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames = "mail")})
-public class User implements Identifiable{
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonProperty("id")
@@ -20,16 +20,6 @@ public class User implements Identifiable{
     @OneToMany(mappedBy = "user", orphanRemoval = true)
     @JsonIgnore
     private Set<UserEvent> userEvents = new HashSet<>();
-
-    @Override
-    public long getId() {
-        return this.id;
-    }
-
-    @Override
-    public void setId(long id) {
-        this.id = id;
-    }
 
     public enum UserType {
         ADMIN,
@@ -68,7 +58,7 @@ public class User implements Identifiable{
 //    @Column(nullable = false)
     private UserStatus status;
 
-    @Column(nullable = false)
+//    @Column(nullable = false)
     private UserType userType;
 
 //    @Column(nullable = false)
@@ -83,6 +73,9 @@ public class User implements Identifiable{
 
     }
 
+    public long getId() {
+        return id;
+    }
 
     public String getProfilePic() {
         return profilePic;
@@ -148,10 +141,6 @@ public class User implements Identifiable{
 
     public String getLastname() {
         return lastname;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public static User copyConstructor(User user) {
