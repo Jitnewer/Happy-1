@@ -66,7 +66,7 @@ public class ResearchController {
                     "error", e.getMessage()));
         }
     }
-    @PostMapping("/admin")
+    @PostMapping("/superuser")
     public ResponseEntity<Object> createResearch(@RequestBody Research research) {
         if (research.getTitle() == null || research.getTitle().isEmpty()) {
             return ResponseEntity.badRequest().body(Map.of("message", "Title is required"));
@@ -102,7 +102,7 @@ public class ResearchController {
         }
     }
 
-    @PutMapping("/admin/{id}")
+    @PutMapping("/superuser/{id}")
     public ResponseEntity<Object> updateResearch(@RequestBody Research research, @PathVariable Long id) {
         try {
             if (!id.equals(research.getId())) {
@@ -126,7 +126,7 @@ public class ResearchController {
         }
     }
 
-    @DeleteMapping("/admin/{id}")
+    @DeleteMapping("/superuser/{id}")
     public ResponseEntity<Object> deleteResearch(@PathVariable long id) {
         researchRepository.deleteById(id);
         return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "Research deleted successfully", "status", HttpStatus.OK));

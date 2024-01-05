@@ -55,12 +55,17 @@ export default {
           mail: this.email,
           password: this.password
         })
+        console.log(user)
 
         if (user !== null) {
           const userType = user.body.userType
 
           if (userType === User.userTypes.Admin) {
             this.$store.commit('setLoggedInAsAdmin', true)
+            this.$router.push({ path: '/admin' })
+            this.$forceUpdate()
+          } else if (userType === User.userTypes.SuperUser) {
+            this.$store.commit('setLoggedInAsSuperUser', true)
             this.$router.push({ path: '/admin' })
             this.$forceUpdate()
           } else {

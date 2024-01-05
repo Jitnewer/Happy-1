@@ -53,7 +53,7 @@ public class EventController {
         }
     }
 
-    @PostMapping("/admin")
+    @PostMapping("/superuser")
     public ResponseEntity<Object> addEvent(@RequestBody Event event) {
         try {
             eventRepository.save(event);
@@ -76,7 +76,7 @@ public class EventController {
     }
 
 
-    @PutMapping("/admin/{id}")
+    @PutMapping("/superuser/{id}")
     public ResponseEntity<Object> updateEvent(@RequestBody Event event, @PathVariable Long id) {
         try {
             // Ensure the ID in the path matches the ID in the request body
@@ -93,7 +93,7 @@ public class EventController {
         }
     }
 
-    @DeleteMapping("/admin/{id}")
+    @DeleteMapping("/superuser/{id}")
     public ResponseEntity<Object> deleteEvent(@PathVariable long id) {
         try {
             eventRepository.deleteById(id);

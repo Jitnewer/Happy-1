@@ -2,7 +2,7 @@
 import { Event } from '@/models/event'
 export default {
   name: 'EventDetailsView',
-  inject: ['eventsServiceAdmin', 'eventsService', 'fileUploadService'],
+  inject: ['eventsServiceSuperUser', 'eventsService', 'fileUploadService'],
   data () {
     return {
       create: false,

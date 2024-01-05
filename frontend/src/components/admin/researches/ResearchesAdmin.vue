@@ -68,7 +68,7 @@
 <script>
 export default {
   name: 'ResearchesAdmin.vue',
-  inject: ['researchService', 'researchServiceAdmin', 'fileUploadService'],
+  inject: ['researchService', 'researchServiceSuperUser', 'fileUploadService'],
   data () {
     return {
       filter: this.$route.query.sort,

@@ -51,7 +51,7 @@ public class JWTRequestFilter extends OncePerRequestFilter {
                 // Access control based on UserType
                 User.UserType userType = User.UserType.valueOf(jwToken.getRole());
                 if (!hasAccess(userType, servletPath)) {
-                    response.sendError(HttpServletResponse.SC_FORBIDDEN, "Access forbidden.");
+                    response.sendError(HttpServletResponse.SC_FORBIDDEN, "Access forbidden. Test");
                     return;
                 }
             } catch (RuntimeException e) {
@@ -71,7 +71,7 @@ public class JWTRequestFilter extends OncePerRequestFilter {
                     true;
             case SUPERUSER ->
                 // Superuser can access paths with superuser and authentication
-                    servletPath.contains("superuser") && !servletPath.contains("admin");
+                    !servletPath.contains("admin");
             case PARTNER, ENTREPRENEUR ->
                 // Partners and Entrepreneurs can access paths for normal users and authentication
                     !servletPath.contains("admin") && !servletPath.contains("superuser");

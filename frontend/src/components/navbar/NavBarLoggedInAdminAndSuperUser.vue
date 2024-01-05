@@ -39,7 +39,7 @@
           <img v-if="user.profilePic != null" :src='require(`../../assets/img/${user.profilePic}`)' class="profile" width="45" height="45" alt="Event Image">
           <canvas v-if="user.profilePic == null" ref="profileCanvas" class="profile" width="45" height="45"></canvas>
           <p id="profile-dashboard-name">{{ user.firstname }} {{ user.lastname }}</p>
-          <p id="profile-dashboard-role">Admin</p>
+          <p id="profile-dashboard-role">{{ user.userType }}</p>
         </div>
         <div class="dashboard-links">
           <router-link  to="/admin/users">

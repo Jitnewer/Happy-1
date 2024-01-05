@@ -1,8 +1,8 @@
 <template>
   <div>
-    <NavBarLoggedInAdminAndSuperUser v-if="!loggedIn && loggedInAsAdmin" @logout="handleLogout"></NavBarLoggedInAdminAndSuperUser>
-    <NavBarLoggedIn v-if="loggedIn && !loggedInAsAdmin"></NavBarLoggedIn>
-    <NavBarNotLoggedIn v-if="!loggedInAsAdmin && !loggedIn"></NavBarNotLoggedIn>
+    <NavBarLoggedInAdminAndSuperUser v-if="!loggedIn && loggedInAsAdmin && !loggedInAsSuperUser || !loggedIn && !loggedInAsAdmin && loggedInAsSuperUser" @logout="handleLogout"></NavBarLoggedInAdminAndSuperUser>
+    <NavBarLoggedIn v-if="loggedIn && !loggedInAsAdmin && !loggedInAsSuperUser"></NavBarLoggedIn>
+    <NavBarNotLoggedIn v-if="!loggedInAsAdmin && !loggedIn && !loggedInAsSuperUser"></NavBarNotLoggedIn>
   </div>
 </template>
 
@@ -22,7 +22,7 @@ export default {
     NavBarNotLoggedIn
   },
   computed: {
-    ...mapState(['loggedIn', 'loggedInAsAdmin'])
+    ...mapState(['loggedIn', 'loggedInAsAdmin', 'loggedInAsSuperUser'])
   },
   methods: {
     handleLogout () {
@@ -40,9 +40,15 @@ export default {
           if (this.user.body.userType === User.userTypes.Admin) {
             this.$store.commit('setLoggedIn', false)
             this.$store.commit('setLoggedInAsAdmin', true)
+            this.$store.commit('setLoggedInAsSuperUser', false)
+          } else if (this.user.body.userType === User.userTypes.SuperUser) {
+            this.$store.commit('setLoggedInAsAdmin', false)
+            this.$store.commit('setLoggedIn', false)
+            this.$store.commit('setLoggedInAsSuperUser', true)
           } else {
             this.$store.commit('setLoggedInAsAdmin', false)
             this.$store.commit('setLoggedIn', true)
+            this.$store.commit('setLoggedInAsSuperUser', false)
           }
         } catch (e) {
           console.error(e)

@@ -42,7 +42,7 @@ public class Network implements Identifiable {
     }
 
     @Column(nullable = false)
-    private Challenge.Theme theme;
+    private Theme theme;
 
     public Network() {
         this.dateTime = LocalDateTime.now();
@@ -57,6 +57,14 @@ public class Network implements Identifiable {
     @Override
     public void setId(long id) {
         this.id = id;
+    }
+
+    public Theme getTheme() {
+        return theme;
+    }
+
+    public void setTheme(Theme theme) {
+        this.theme = theme;
     }
 
     public String getTitle() {

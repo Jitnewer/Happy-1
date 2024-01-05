@@ -68,7 +68,7 @@
 <script>
 export default {
   name: 'ChallengesAdmin.vue',
-  inject: ['challengeService', 'challengeServiceAdmin', 'fileUploadService'],
+  inject: ['challengeService', 'challengeServiceSuperUser', 'fileUploadService'],
   data () {
     return {
       filter: this.$route.query.sort,

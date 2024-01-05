@@ -61,7 +61,7 @@ public class NetworkController {
         }
     }
 
-    @PostMapping("/admin")
+    @PostMapping("/superuser")
     ResponseEntity<Object> createNetwork(@RequestBody Network network) {
         if (network.getTitle() == null || network.getTitle().isEmpty()) {
             return ResponseEntity.badRequest().body(Map.of("message", "Title is required"));
@@ -93,7 +93,7 @@ public class NetworkController {
         }
     }
 
-    @PutMapping("/admin/{id}")
+    @PutMapping("/superuser/{id}")
     public ResponseEntity<Object> updateNetwork(@RequestBody Network network, @PathVariable Long id) {
         try {
             if (!id.equals(network.getId())) {
@@ -117,7 +117,7 @@ public class NetworkController {
         }
     }
 
-    @DeleteMapping("/admin/{id}")
+    @DeleteMapping("/superuser/{id}")
     public ResponseEntity<Map<String, Serializable>> deleteNetwork(@PathVariable long id) {
         networkRepository.deleteById(id);
         return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "Network deleted successfully", "status", HttpStatus.OK));
