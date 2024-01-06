@@ -30,9 +30,18 @@
     </div>
     <div class="subscribeForm">
       <p class="white-text">Subscribe to our newsletter</p>
-      <form>
-        <input type="email" placeholder="Your email address"/>
-        <button type="submit" class="subscribeButton">Subscribe</button>
+      <form @submit.prevent="create">
+        <div class="flex-form">
+        <div class="form-flex">
+          <input type="email" placeholder="Your email address" v-model="newsletter.email" :class="{
+            'invalid-input': newsletter.email && (!isEmailValid || emailAlreadyExists),
+            'valid-input': newsletter.email && isEmailValid && !emailAlreadyExists
+          }" @input="validateEmail(newsletter.email)"/>
+          <button type="submit" class="subscribeButton" :disabled="!validateEmail">Subscribe</button>
+        </div>
+        <p class="errorMessage" v-if="!isEmailValid && newsletter.email">Invalid email</p>
+        <p class="errorMessage" v-if="emailAlreadyExists && newsletter.email">Email is already subscribed</p>
+        </div>
       </form>
     </div>
     <div class="bottomFooter">
@@ -44,8 +53,25 @@
 </template>
 
 <script>
+import news from '@/components/News.vue'
+
 export default {
   name: 'Footer.vue',
+  computed: {
+    news () {
+      return news
+    }
+  },
+  inject: ['newsletterService', 'newsletterServiceSuperuser'],
+  data () {
+    return {
+      newsletter: {
+        email: ''
+      },
+      isEmailValid: null,
+      emailAlreadyExists: null
+    }
+  },
   methods: {
     openEmail () {
       window.location.href = 'mailto:hello@happyhospitality.online'
@@ -61,6 +87,22 @@ export default {
     },
     goToInstagram () {
       window.open('http://instagram.com/', '_blank')
+    },
+    validateEmail (email) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+      this.isEmailValid = emailRegex.test(email)
+      return this.isEmailValid
+    },
+    async create () {
+      if (this.isEmailValid) {
+        try {
+          await this.newsletterService.asyncSave(this.newsletter)
+          this.$router.push({ name: 'welcome' })
+        } catch (e) {
+          console.error(e)
+          this.emailAlreadyExists = true
+        }
+      }
     }
   }
 }

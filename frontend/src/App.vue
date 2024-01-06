@@ -46,7 +46,9 @@ export default {
       researchServiceSuperUser: reactive(new CachedRESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/researches/superuser', Research.copyConstructor)),
       fileUploadService: new FileUploadAdapter(CONFIG.BACKEND_URL + '/image'),
       networkService: reactive(new CachedRESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/networks', Network.copyConstructor)),
-      networkServiceSuperUser: reactive(new CachedRESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/networks/superuser', Network.copyConstructor))
+      networkServiceSuperUser: reactive(new CachedRESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/networks/superuser', Network.copyConstructor)),
+      newsletterService: reactive(new CachedRESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/newsletters/authentication', Network.copyConstructor)),
+      newsletterServiceSuperuser: reactive(new CachedRESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/newsletters/superuser', Network.copyConstructor))
 
     }
   },

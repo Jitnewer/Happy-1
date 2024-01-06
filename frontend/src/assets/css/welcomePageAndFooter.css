@@ -133,6 +133,20 @@ span.carouselPagination.active {
     align-items: center;
     justify-content: center;
 }
+.form-flex {
+    display: flex;
+    width: 65%;
+}
+.flex-form {
+    width: 100%;
+}
+
+.flex-form .errorMessage {
+    font-size: 14px;
+    padding: 0;
+    margin-bottom: 0px;
+    margin-top: 7px;
+}
 
 .subscribeForm p {
     margin-bottom: 10px;
@@ -147,7 +161,15 @@ span.carouselPagination.active {
     padding: 8px;
     margin-right: 10px;
     width: 25%;
+    outline: none;
+    box-shadow: var(--shadow);
+    border: none
 }
+
+.subscribeForm input:focus-visible {
+    outline: none;
+}
+
 
 .subscribeButton {
     padding: 15px;
@@ -161,6 +183,7 @@ span.carouselPagination.active {
 
 .subscribeButton:hover {
     background-color: var(--main-color-hover);
+    box-shadow: var(--shadow);
 }
 
 .social-icons {
