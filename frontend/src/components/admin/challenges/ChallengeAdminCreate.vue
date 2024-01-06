@@ -157,11 +157,11 @@ export default {
       if (this.validateForm()) {
         this.challenge.dateTime = new Date(this.challenge.dateTime).toISOString()
         try {
-          const response = await this.challengeServiceAdmin.asyncSave(this.challenge)
+          const response = await this.challengeServiceSuperUser.asyncSave(this.challenge)
           const challenge = response.challenge
           const file = await this.fileUploadService.asyncUploadChallengePic(this.image, challenge.id)
           challenge.image = file.filePath
-          await this.challengeServiceAdmin.asyncSave(challenge)
+          await this.challengeServiceSuperUser.asyncSave(challenge)
           this.isSaved = true
           this.$router.push({ name: 'adminChallenges' })
         } catch (e) {

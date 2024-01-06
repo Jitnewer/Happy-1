@@ -90,7 +90,7 @@ export default {
     },
     async remove (research) {
       try {
-        await this.researchServiceAdmin.asyncDeleteById(research.id)
+        await this.researchServiceSuperUser.asyncDeleteById(research.id)
         await this.fileUploadService.asyncDeleteImage(research.image)
         await this.researchService.asyncFindAll()
       } catch (e) {

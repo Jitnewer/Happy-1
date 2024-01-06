@@ -154,11 +154,11 @@ export default {
             if (this.image !== null) {
               const file = await this.fileUploadService.asyncUploadChallengePic(this.image, this.copiedResearch.id)
               this.challenge.image = file.filePath
-              await this.researchServiceAdmin.asyncSave(this.copiedResearch)
+              await this.researchServiceSuperUser.asyncSave(this.copiedResearch)
               this.isSaved = true
             }
           } else {
-            await this.researchServiceAdmin.asyncSave(this.copiedResearch)
+            await this.researchServiceSuperUser.asyncSave(this.copiedResearch)
             this.isSaved = true
           }
           this.$router.push({ name: 'adminResearches' })

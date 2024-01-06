@@ -155,11 +155,11 @@ export default {
             if (this.image !== null) {
               const file = await this.fileUploadService.asyncUploadChallengePic(this.image, this.copiedChallenge.id)
               this.copiedChallenge.image = file.filePath
-              await this.challengeServiceAdmin.asyncSave(this.copiedChallenge)
+              await this.challengeServiceSuperUser.asyncSave(this.copiedChallenge)
               this.isSaved = true
             }
           } else {
-            await this.challengeServiceAdmin.asyncSave(this.copiedChallenge)
+            await this.challengeServiceSuperUser.asyncSave(this.copiedChallenge)
             this.isSaved = true
           }
           this.$router.push({ name: 'adminChallenges' })

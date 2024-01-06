@@ -90,7 +90,7 @@ export default {
     },
     async remove (challenge) {
       try {
-        await this.challengeServiceAdmin.asyncDeleteById(challenge.id)
+        await this.challengeServiceSuperUser.asyncDeleteById(challenge.id)
         await this.fileUploadService.asyncDeleteImage(challenge.image)
         await this.challengeService.asyncFindAll()
       } catch (e) {
