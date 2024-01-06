@@ -74,6 +74,20 @@ export class FileUploadAdapter {
     }
   }
 
+  async asyncUploadCarouselPic (file, carouselId) {
+    try {
+      const formdata = new FormData()
+      formdata.append('file', file)
+      formdata.append('carouselId', carouselId)
+
+      const response = await this.request(formdata, '/carouselPic')
+
+      return response.json()
+    } catch (error) {
+      console.error('Error uploading image: ', error)
+    }
+  }
+
   async asyncUploadChallengePic (file, challengeId) {
     try {
       const formdata = new FormData()

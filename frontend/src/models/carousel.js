@@ -1,13 +1,9 @@
 export class Carousel {
-  constructor (id, text, image, date) {
+  constructor (id, text, image, dateTime) {
     this.id = id
     this.text = text
     this.image = image
-    this.date = date
-  }
-
-  get date () {
-    return this.date
+    this.date = dateTime
   }
 
   static copyConstructor (carousel) {
@@ -17,7 +13,7 @@ export class Carousel {
       carousel.id,
       carousel.text,
       carousel.image,
-      carousel.text
+      carousel.dateTime
     )
   }
 }

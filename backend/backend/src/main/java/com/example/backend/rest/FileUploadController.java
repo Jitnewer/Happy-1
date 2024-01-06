@@ -109,6 +109,27 @@ public class FileUploadController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to upload the file");
         }
     }
+    @PostMapping("/carouselPic")
+    public ResponseEntity<Object> uploadCarouselPic (
+            @RequestPart("file") MultipartFile file,
+            @RequestPart("CarouselId") String carouselId
+    ) {
+        if (file.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Please select a file to upload");
+        }
+
+        try {
+            String customFileName = uploadFile(file, "carousel", carouselId, "/carouselPic");
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    Map.of(
+                            "message", "Challenge image uploaded successfully",
+                            "filePath", "assets/carouselPic/" + customFileName
+                    )
+            );
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to upload the file");
+        }
+    }
 
     @PostMapping("/networkPic")
     public ResponseEntity<Object> uploadNetworkPic (

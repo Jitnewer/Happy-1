@@ -1,126 +1,137 @@
 <template>
-  <div class="container-admin admin-event" v-if="!selectedCarousel">
+  <div class="container-admin">
     <div class="breadcrum-admin">
       <router-link :to="{ name: 'admin' }">Admin</router-link>
-      <p>></p>
-      <router-link :to="{ name: 'adminCarousel' }">Carousel</router-link>
+      <span>></span>
+      <router-link :to="{ name: 'adminCarousels' }">Carousel Slides</router-link>
     </div>
-    <div class="title">
-      <h1>Carousel</h1>
-    </div>
-    <div class="filters">
-      <input type="text" class="search-filter" id="nameFilter" placeholder="Search for carousels.." title="Type in a name"
-             v-model="filter.search">
-      <input class="date-filter" type="date" id="dateFilter" v-model="filter.date">
-      <button class="create-btn" @click="activateCreateCarousel">Create</button>
-    </div>
-    <div class="carousels">
-      <div class="carousel" v-for="carousel in filteredCarousel" :key="carousel.id">
-        <div class="carousel-left">
-          <img :src="require(`../../../assets/img/${carousel.image}`)" alt="Carousel Image">
-        </div>
-        <div class="carousel-right">
-          <div class="carousel-right-main">
-            <div class="carousel-right-left">
-              <h2>{{ carousel.text }}</h2>
+    <div class="challenges-admin">
+      <div class="title-button">
+        <h1>Carousel Slides</h1>
+        <button @click="create()">Create</button>
+      </div>
+      <table v-if="carousels">
+        <thead>
+        <tr>
+          <th>Id</th>
+          <th>Title</th>
+          <th class="datetime">DateTime</th>
+          <th class="image">Image</th>
+          <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr v-for="carousel in carousels" :key="carousel.id">
+          <td>{{ carousel.id }}</td>
+          <td>{{ carousel.text }}</td>
+          <td class="datetime">{{ formattedDateTime(carousel.dateTime) }}</td>
+          <td class="image"><img :src="carousel.image ? require(`../../../${carousel.image}`) : ''" alt="Carousel Image"></td>
+          <td>
+            <div class="table-buttons">
+              <button class="edit" @click="edit(carousel.id)">Edit</button>
+              <button class="delete" @click="remove(carousel)">Delete</button>
             </div>
-            <div class="carousel-right-right">
-              <p>{{ parseDate(carousel.date)  }}</p>
-              <p>{{ carousel.timeBegin.slice(0, 5) }} - {{ carousel.timeEnd.slice(0, 5) }}</p>
-            </div>
-          </div>
-          <div class="carousel-right-bottom">
-            <button @click="setSelectedCarousel(carousel.id)">Edit</button>
-          </div>
-        </div>
+          </td>
+        </tr>
+        </tbody>
+      </table>
       </div>
     </div>
-  </div>
 </template>
 
 <script>
-import { Carousel } from '@/models/carousel'
-
 export default {
-  name: 'AdminCarouselView',
-  inject: ['carouselService'],
+  name: 'CarouselAdmin.vue',
+  inject: ['carouselService', 'carouselServiceSuperUser', 'fileUploadService'],
   data () {
     return {
-      selectedCarousel: null,
-      create: false,
-      filter: {
-        search: '',
-        date: null
-      },
-      carousel: []
+      filter: this.$route.query.sort,
+      showFilter: false,
+      selectedCarousel: null
     }
   },
   methods: {
-    setSelectedCarousel (carousel) {
-      this.$router.push({ name: 'adminCarouselDetail', params: { id: carousel } })
+    create () {
+      this.$router.push({ name: 'adminCarouselCreate' })
     },
-    activateCreateCarousel () {
-      this.selectedCarousel = new Carousel()
-      this.selectedCarousel.id = 0
-      this.selectedCarousel.image = 'imagePlaceholder.jpg'
-      this.create = true
-      // this.$router.push(this.$route.matched[0].path + '/' + this.selectedEvent.id)
-      this.$router.push({ name: 'adminCarouselDetail', params: { id: this.selectedCarousel.id } })
+    paragraphs (carousel) {
+      this.showParagraphs = !this.showParagraphs
+      this.selectedCarousel = carousel
     },
-    parseDate (dateString) {
-      const dateObject = new Date(dateString)
-      const day = dateObject.getDate()
-      const month = dateObject.getMonth() + 1
-      const year = dateObject.getFullYear()
-
-      return `${day}-${month}-${year}`
-    }
-  },
-  computed: {
-    filteredCarousel () {
-      if (!this.filter.date && !this.filter.search) {
-        // If neither date nor search filter is set, return all events
-        return this.carousel
+    back () {
+      this.showParagraphs = false
+    },
+    async remove (carousel) {
+      try {
+        await this.carouselServiceSuperUser.asyncDeleteById(carousel.id)
+        await this.fileUploadService.asyncDeleteImage(carousel.image)
+        await this.carouselService.asyncFindAll()
+      } catch (e) {
+        console.error(e)
       }
+    },
+    async updateCarousel () {
+      try {
+        await this.carouselService.asyncFindAll()
+      } catch (e) {
+        console.error(e)
+      }
+    },
+    edit (id) {
+      this.$router.push({ name: 'adminCarouselEdit', params: { id: id } })
+    },
+    getFormattedDate (dateString) {
+      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }
+      return new Date(dateString).toLocaleDateString('nl-NL', options)
+    },
+    formattedDateTime (dateTime) {
+      const today = new Date()
+      const challengeDate = new Date(dateTime)
 
-      // Filter events based on date and/or search filter
-      return this.carousel.filter(event => {
-        // Check if the event date matches the date filter (if set)
-        const dateMatch = !this.filter.date || event.date === this.filter.date
+      const formattedTime = challengeDate.toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' })
 
-        // Check if the event name contains the search filter (if set)
-        const searchMatch = !this.filter.search || event.name.toLowerCase().includes(this.filter.search.toLowerCase())
-
-        // Return true if both date and search filters match, or if neither filter is set
-        return dateMatch && searchMatch
-      })
+      if (
+        challengeDate.getDate() === today.getDate() &&
+        challengeDate.getMonth() === today.getMonth() &&
+        challengeDate.getFullYear() === today.getFullYear()
+      ) {
+        // Vandaag, (tijd)
+        return `Vandaag, ${formattedTime}`
+      } else if (
+        challengeDate.getDate() === today.getDate() - 1 &&
+        challengeDate.getMonth() === today.getMonth() &&
+        challengeDate.getFullYear() === today.getFullYear()
+      ) {
+        // Gisteren, (tijd)
+        return `Gisteren, ${formattedTime}`
+      } else {
+        // Maandag, (tijd), Donderdag (tijd)
+        return `${this.getFormattedDate(dateTime)}, ${formattedTime}`
+      }
     }
   },
   async created () {
-    // if (localStorage.getItem('admin') === 'false') this.$router.push({ path: '/PageNotFound' })
-    this.carousel = await this.carouselService.asyncFindAll()
+    await this.updateCarousel()
   },
   watch: {
-    '$route' (to, from) {
-      console.log(to)
-      const carouselId = parseInt(to.params.id)
-      if (carouselId === 0) {
-        return
+    $route (to, from) {
+      if (to.fullPath !== from.fullPath) {
+        this.updateCarousel()
       }
-      if (carouselId) {
-        this.selectedCarousel = this.carousel.find(carousel => carousel.id === carouselId)
-      } else {
-        this.selectedCarousel = null
+    }
+  },
+  computed: {
+    carousels () {
+      return this.carouselService.entities
+    },
+    sortedParagraphs () {
+      if (this.selectedCarousel) {
+        // Sort paragraphs based on id
+        return this.selectedCarousel.paragraphs.slice().sort((a, b) => a.id - b.id)
       }
+      return []
     }
   }
 }
-</script>
 
-<style scoped>
-.container-admin {
-  margin-left: 1rem;
-  margin-top: 1rem;
-  width:100%
-}
-</style>
+</script>

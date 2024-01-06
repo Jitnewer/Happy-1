@@ -36,7 +36,8 @@ export default {
     this.theSessionSbService = shallowReactive(new SessionSbService(CONFIG.BACKEND_URL + '/authentication', CONFIG.JWT_STORAGE_ITEM))
     this.theFetchInterceptor = new FetchInterceptor(this.theSessionSbService, this.$router)
     return {
-      carouselService: new RESTAdaptorWithFetch(CONFIG.BACKEND_URL + 'authentication/carousels', Carousel.copyConstructor),
+      carouselService: reactive(new CachedRESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/authentication/carousels', Carousel.copyConstructor)),
+      carouselServiceSuperUser: reactive(new CachedRESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/carousels/superuser', Research.copyConstructor)),
       eventsService: reactive(new CachedRESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/events', Event.copyConstructor)),
       eventsServiceSuperUser: reactive(new CachedRESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/events/superuser', Event.copyConstructor)),
       usersService: reactive(new CachedRESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/users', User.copyConstructor)),

@@ -31,7 +31,6 @@ import ResearchAdminEdit from '@/components/admin/researches/ResearchAdminEdit.v
 import NetworksDetails from '@/components/networks/NetworkDetails.vue'
 import Networks from '@/components/networks/Networks.vue'
 
-
 const routes = [
   {
     path: '/',
@@ -108,8 +107,8 @@ const routes = [
     component: EventDetailsView
   },
   {
-    path: '/admin/carousel',
-    name: 'adminCarousel',
+    path: '/admin/carousels',
+    name: 'adminCarousels',
     component: AdminCarouselView
   },
   {

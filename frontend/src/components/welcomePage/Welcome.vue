@@ -15,16 +15,16 @@
     <div class="carouselHolder">
       <Carousel class="carousel" v-slot="{ currentSlide }" :slideCount="carouselSlides.length">
         <Slide v-for="(slide, index) in carouselSlides" :key="index" :slide-text="slide.text"
-               :is-current="index + 1 === currentSlide">
+               :is-current="index + 1">
           <div v-show="currentSlide === index + 1" class="slide">
             <div class="welcomeMsg">
-              <h2 class="blue-text"> {{ new Date(slide.date).toLocaleDateString('nl-NL') }} </h2>
+              <h2 class="blue-text"> {{ formattedDateTime(slide.dateTime) }} </h2>
               <h2 class="yellow-text"> {{ slide.text }}</h2>
               <button>
                 <span class="blue-text"> > Lees meer </span>
               </button>
             </div>
-            <img class="carouselImg" :src="require(`../../assets/img/${slide.image}`)" alt="Image">
+            <img class="carouselImg" :src="require(`../../${slide.image}`)" alt="Image">
           </div>
         </Slide>
       </Carousel>
@@ -180,29 +180,50 @@ import Slide from './Slide.vue'
 
 export default {
   name: 'Welcome.vue',
+  inject: ['carouselService'],
   components: { Carousel, Slide },
   data () {
     return {
-      carouselSlides: []
     }
   },
-  async created () {
-    try {
-      // Doe een fetch-verzoek naar jouw backend eindpunt om de carouselSlides op te halen
-      const response = await fetch('http://localhost:8085/authentication/carousels')
+  async mounted () {
+    await this.carouselService.asyncFindAll()
+    console.log('carouselSlides:', this.carouselSlides)
+  },
+  methods: {
+    getFormattedDate (dateString) {
+      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }
+      return new Date(dateString).toLocaleDateString('nl-NL', options)
+    },
+    formattedDateTime (dateTime) {
+      const today = new Date()
+      const challengeDate = new Date(dateTime)
 
-      // Controleer of het verzoek succesvol was (status 200 OK)
-      if (response.ok) {
-        // Zet de ontvangen gegevens om naar JSON
-        const data = await response.json()
+      const formattedTime = challengeDate.toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' })
 
-        // Wijs de ontvangen gegevens toe aan carouselSlides
-        this.carouselSlides = data
+      if (
+        challengeDate.getDate() === today.getDate() &&
+    challengeDate.getMonth() === today.getMonth() &&
+    challengeDate.getFullYear() === today.getFullYear()
+      ) {
+        // Vandaag, (tijd)
+        return `Vandaag, ${formattedTime}`
+      } else if (
+        challengeDate.getDate() === today.getDate() - 1 &&
+    challengeDate.getMonth() === today.getMonth() &&
+    challengeDate.getFullYear() === today.getFullYear()
+      ) {
+        // Gisteren, (tijd)
+        return `Gisteren, ${formattedTime}`
       } else {
-        console.error('Error fetching carousel slides:', response.statusText)
+        // Maandag, (tijd), Donderdag (tijd)
+        return `${this.getFormattedDate(dateTime)}, ${formattedTime}`
       }
-    } catch (error) {
-      console.error('Error fetching carousel slides:', error)
+    }
+  },
+  computed: {
+    carouselSlides () {
+      return this.carouselService.entities
     }
   }
 }

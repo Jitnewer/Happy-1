@@ -4,7 +4,7 @@
     <p>></p>
     <router-link :to="{ name: 'news', query: { sort: filter }  }">News</router-link>
     <p>></p>
-    <router-link :to="{ name: 'researches' , query: { sort: filter }   }">Research Articles</router-link>
+    <router-link :to="{ name: 'carousels' , query: { sort: filter }   }">Research Articles</router-link>
     <p>></p>
     <router-link :to="{ name: 'research', params: { id: research.id } , query: { sort: filter }  }">Research Article / {{ research.id }}</router-link>
   </div>
@@ -78,9 +78,9 @@ export default {
     },
     async back () {
       if (this.filter === null) {
-        this.$router.push({ name: 'researches' })
+        this.$router.push({ name: 'carousels' })
       } else {
-        this.$router.push({ name: 'researches', query: { sort: this.filter } })
+        this.$router.push({ name: 'carousels', query: { sort: this.filter } })
       }
     }
   },

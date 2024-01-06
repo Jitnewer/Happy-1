@@ -2,6 +2,8 @@ package com.example.backend.repositories.Carousel;
 
 import com.example.backend.models.Carousel;
 import com.example.backend.models.Event;
+import com.example.backend.models.Research;
+import com.example.backend.repositories.AbstractEntityRepositoryJpa;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
@@ -11,42 +13,37 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository
+@Repository("CAROUSEL.JPA")
 @Primary
-public class CarouselRepositoryJpa implements CarouselRepository {
+public class CarouselRepositoryJpa extends AbstractEntityRepositoryJpa<Carousel> {
 
-    @PersistenceContext
-    private EntityManager entityManager;
 
-    @Override
-    public List<Carousel> getCarousels() {
-        String jpql = "SELECT c FROM Carousel c";
-        TypedQuery<Carousel> query = entityManager.createQuery(jpql, Carousel.class);
-        return query.getResultList();
+    public CarouselRepositoryJpa() {
+        super(Carousel.class);
     }
 
     @Override
-    public Carousel getCarousel(long id) {return entityManager.find(Carousel.class, id);
+    public List<Carousel> findAll() {
+        return super.findAll();
     }
 
     @Override
-    @Transactional
-    public void addCarousel(Carousel carousel) {
-        entityManager.persist(carousel);
-
+    public List<Carousel> findByQuery(String jpqlName, Object... params) {
+        return super.findByQuery(jpqlName, params);
     }
 
     @Override
-    @Transactional
-    public void updateCarousel(Carousel carousel) {
-        entityManager.merge(carousel);
+    public Carousel findById(Long id) {
+        return super.findById(id);
     }
 
     @Override
-    @Transactional
-    public void deleteCarousel(long id) {
-        Carousel carousel = entityManager.find(Carousel.class, id);
-        if (carousel != null)
-            entityManager.remove(carousel);
+    public Carousel save(Carousel entity) {
+        return super.save(entity);
+    }
+
+    @Override
+    public boolean deleteById(Long id) {
+        return super.deleteById(id);
     }
 }
