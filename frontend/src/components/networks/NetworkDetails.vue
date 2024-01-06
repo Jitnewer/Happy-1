@@ -77,11 +77,11 @@ export default {
     <div class="challenge-main">
       <div class="challenge-title">
         <button @click="back">Back</button>
-        <h1>Challenge</h1>
+        <h1>Network Article</h1>
       </div>
       <div class="detail-challenge">
         <div>
-          <img :src="network.image ? require(`../../assets/img/${network.image}`) : ''" alt="Challenge Image">
+          <img :src="network.image ? require(`../../${network.image}`) : ''" alt="Challenge Image">
         </div>
         <div class="content">
           <div>

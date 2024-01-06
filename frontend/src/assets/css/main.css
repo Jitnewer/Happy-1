@@ -2071,6 +2071,10 @@ a.router-link-active:hover {
     background-color: white;
 }
 
+.network-filter {
+    left: 262px;
+}
+
 .research-filter {
     position: absolute;
     display: flex;
