@@ -33,7 +33,7 @@
       <span class="yellow-text">OUR</span> <span class="blue-text">PILLARS</span>
     </h1>
     <div class="pillarContainer">
-      <button>
+      <button @click="challenges">
         <div class="pillar" data-aos="fade-up">
           <div class="pillarText">
             <h1 class="welcomeH1">
@@ -49,7 +49,7 @@
           </div>
         </div>
       </button>
-      <button>
+      <button @click="network">
         <div class="pillar" data-aos="fade-up">
           <div class="pillarText">
             <h1 class="welcomeH1">
@@ -67,7 +67,7 @@
           </div>
         </div>
       </button>
-      <button>
+      <button @click="research">
         <div class="pillar" data-aos="fade-up">
           <div class="pillarText">
             <h1 class="welcomeH1">
@@ -208,6 +208,15 @@ export default {
     },
     waterNews () {
       this.$router.push({ name: 'news', query: { sort: 'WATER' } })
+    },
+    challenges () {
+      this.$router.push({ name: 'challenges' })
+    },
+    network () {
+      this.$router.push({ name: 'networks' })
+    },
+    research () {
+      this.$router.push({ name: 'researches' })
     }
   }
 }

@@ -7,7 +7,6 @@
 <script>
 import { Event } from '@/models/event.js'
 import CONFIG from '../app-config.js'
-import { RESTAdaptorWithFetch } from '@/services/RESTAdaptorWithFetch'
 import { User } from '@/models/user'
 import { SessionSbService } from '@/services/SessionSbService'
 import { UserEvent } from '@/models/UserEvent'
