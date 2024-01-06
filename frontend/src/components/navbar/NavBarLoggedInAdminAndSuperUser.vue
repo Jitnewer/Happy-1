@@ -36,8 +36,8 @@
     <transition name="dashboard-big">
       <div v-if="user" class="dashboard" v-show="showDashboard && !smallVersionDasboard">
         <div class="profile-dashboard" >
-          <img v-if="user.profilePic != null" :src='require(`../../${user.profilePic}`)' class="profile" width="45" height="45" alt="Event Image">
-          <canvas v-if="user.profilePic == null" ref="profileCanvas" class="profile" width="45" height="45"></canvas>
+          <img v-if="user.profilePic != null" :src='require(`../../${user.profilePic}`)' class="profile profile-db" width="45" height="45" alt="Event Image">
+          <canvas v-if="user.profilePic == null" ref="profileCanvas" class="profile profile-db" width="45" height="45"></canvas>
           <p id="profile-dashboard-name">{{ user.firstname }} {{ user.lastname }}</p>
           <p id="profile-dashboard-role">{{ user.userType }}</p>
         </div>
