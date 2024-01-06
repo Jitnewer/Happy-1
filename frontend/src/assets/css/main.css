@@ -180,6 +180,12 @@ a.router-link-active:hover {
     box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
 }
 
+.profile-admin {
+    border-radius: 50%;
+    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+    width: 50px !important;
+}
+
 #profile-name {
     margin: 0;
 }
@@ -489,6 +495,7 @@ a.router-link-active:hover {
     width: 100%;
     justify-content: space-between;
     padding: 0px 35px;
+    gap: 1rem;
 }
 
 

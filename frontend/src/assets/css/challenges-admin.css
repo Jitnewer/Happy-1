@@ -319,6 +319,9 @@
         box-sizing: border-box;
         margin-bottom: 5rem;
     }
+    .adminInfo {
+        display:none;
+    }
     .challenge-create {
         width: 45%;
     }
@@ -333,7 +336,9 @@
     .firstParagraph {
         display: none
     }
-
+    .adminImage {
+        display: none
+    }
     .dashboard {
         display: flex;
         flex-direction: column;
@@ -346,13 +351,19 @@
 }
 
 
-@media only screen and (max-width: 1080px) {
+@media only screen and (max-width: 1100px) {
     .challenges-admin {
         width: 98%;
         box-sizing: border-box;
         margin-bottom: 5rem;
     }
     .image {
+        display: none
+    }
+    .adminCity {
+        display: none
+    }
+    .adminSize {
         display: none
     }
     .dashboard {
@@ -366,7 +377,7 @@
     }
 }
 
-@media only screen and (max-width: 900px) {
+@media only screen and (max-width: 980px) {
     .challenges-admin {
         width: 97%;
         box-sizing: border-box;
@@ -375,11 +386,23 @@
     .datetime {
         display: none
     }
+    .adminTimeBegin, .adminTimeEnd {
+        display: none;
+    }
     .dashboard {
         display: flex;
         flex-direction: column;
         width: 29%;
         z-index: 99;
+    }
+    #hamburger-admin {
+        fill: var(--main-text-color);
+        width: 20px;
+        padding: 0px 13px;
+        box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+        border-radius: 10%;
+        transition: 0.5s;
+        cursor: pointer;
     }
     .challenge-create {
         width: 65%;
@@ -419,7 +442,9 @@
         width: 20%;
         z-index: 99;
     }
-
+    .adminName {
+        display:none
+    }
     .topFooterRight {
         width: 100%;
         text-align: left;

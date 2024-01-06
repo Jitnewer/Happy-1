@@ -1,0 +1,314 @@
+<template>
+  <div class="container-admin" v-if="copiedEvent">
+    <div class="breadcrum-admin">
+      <router-link :to="{ name: 'admin' }">Admin</router-link>
+      <span> > </span>
+      <router-link :to="{ name: 'adminEvents' }">Events</router-link>
+      <span>></span>
+      <router-link :to="{ name: 'adminEventEdit', query: { id: $route.params.id } }">Edit {{ copiedEvent.id }}</router-link>
+    </div>
+    <div class="challenge-create">
+      <div class="title-button-create">
+        <h1>Edit Event</h1>
+        <button @click="back()">Back</button>
+      </div>
+      <div>
+        <form @submit.prevent="edit" class="challenge-create-form" v-if="copiedEvent">
+          <div class="form-label">
+            <p>Name</p>
+            <input type="text" v-model="copiedEvent.name" :class="{'invalid-input': copiedEvent.name && !isNameValid,'valid-input': copiedEvent.name && isNameValid}" @input="validateName(copiedEvent.name)">
+            <p class="errorMessage" v-if="!isNameValid && event.name">Invalid name, no special symbols allowed</p>
+          </div>
+          <div class="form-label">
+            <p>City</p>
+            <input type="text" v-model="copiedEvent.city" :class="{'invalid-input': copiedEvent.city && !isCityValid,'valid-input': copiedEvent.city && isCityValid}" @input="validateCity(copiedEvent.city)">
+            <p class="errorMessage" v-if="!isCityValid && copiedEvent.city">Invalid city, no special symbols allowed</p>
+          </div>
+          <div class="form-label">
+            <p>Location</p>
+            <input type="text" v-model="copiedEvent.location" :class="{'invalid-input': copiedEvent.location && !isLocationValid,'valid-input': copiedEvent.location && isLocationValid}" @input="validateLocation(copiedEvent.location)">
+            <p class="errorMessage" v-if="!isLocationValid && copiedEvent.location">Invalid location, no special symbols allowed</p>
+          </div>
+          <div class="form-label">
+            <p>Price</p>
+            <input type="text" v-model="copiedEvent.price" :class="{'invalid-input': copiedEvent.price && !isPriceValid,'valid-input': copiedEvent.price && isPriceValid}" @input="validatePrice(copiedEvent.price)">
+            <p class="errorMessage" v-if="!isPriceValid && copiedEvent.price">Invalid price, no special symbols allowed</p>
+          </div>
+          <div class="form-label">
+            <p>Info</p>
+            <input type="text" v-model="copiedEvent.info" :class="{'invalid-input': copiedEvent.info && !isInfoValid,'valid-input': copiedEvent.info && isInfoValid}" @input="validateInfo(copiedEvent.info)">
+            <p class="errorMessage" v-if="!isInfoValid && copiedEvent.info">Invalid info, no special symbols allowed</p>
+          </div>
+          <div class="form-label">
+            <p>Date</p>
+            <input type="date" v-model="copiedEvent.date" :class="{'invalid-input': copiedEvent.date && !isDateValid,'valid-input': copiedEvent.date && isDateValid}" @input="validateDate(copiedEvent.date)">
+            <p class="errorMessage" v-if="!isDateValid && copiedEvent.date">Invalid date, needs te be at least 5 days ahead of today</p>
+          </div>
+          <div class="form-label">
+            <p>Time Begin</p>
+            <input type="time" v-model="copiedEvent.timeBegin" :class="{'invalid-input': copiedEvent.timeBegin && !isTimeBeginValid,'valid-input': copiedEvent.timeBegin && isTimeBeginValid}" @input="validateTimeBegin(copiedEvent.timeBegin)">
+            <p class="errorMessage" v-if="!isTimeBeginValid && copiedEvent.timeBegin">Invalid time begin, is not allowed to be empty or time end needs to be after time begin</p>
+          </div>
+          <div class="form-label">
+            <p>Time End</p>
+            <input type="time" v-model="copiedEvent.timeEnd" :class="{'invalid-input': copiedEvent.timeEnd && !isTimeEndValid,'valid-input': copiedEvent.timeEnd && isTimeEndValid}" @input="validateTimeEnd(copiedEvent.timeEnd)">
+            <p class="errorMessage" v-if="!isTimeEndValid && copiedEvent.timeEnd">Invalid time end, is not allowed to be empty or time end needs to be after time begin</p>
+          </div>
+          <div class="form-label">
+            <p>Size</p>
+            <input type="number" v-model="copiedEvent.size" :class="{'invalid-input': copiedEvent.size && !isSizeValid,'valid-input': copiedEvent.size && isSizeValid}" @input="validateSize(copiedEvent.size)">
+            <p class="errorMessage" v-if="!isSizeValid && copiedEvent.size">Invalid size, maximum is 500</p>
+          </div>
+          <div class="form-label">
+            <p>Image</p>
+            <input type="file"  @change="handleFileChange" :class="{'invalid-input': image && !isImageValid,'valid-input': image && isImageValid}" @input="validateImage(image)">
+            <p class="errorMessage" v-if="!isImageValid && image">{{ imageError }}</p>
+          </div>
+
+          <button type="submit" :disabled="!eventEdited && !validateForm()">Save</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'EventAdminEdit.vue',
+  inject: ['eventsService', 'eventsServiceSuperUser', 'fileUploadService'],
+  data () {
+    return {
+      filter: this.$route.query.sort,
+      showFilter: false,
+      copiedEvent: null,
+      image: null,
+      eventEdited: false,
+      isNameValid: null,
+      isCityValid: null,
+      isLocationValid: null,
+      isPriceValid: null,
+      isDateValid: null,
+      isTimeBeginValid: null,
+      isTimeEndValid: null,
+      isSizeValid: null,
+      isInfoValid: null,
+      isSaved: false,
+      imageError: null,
+      isImageValid: null
+    }
+  },
+  methods: {
+    validateName (name) {
+      const nameRegex = /^[a-zA-Z0-9\s\-!\\?.$€&,:'"ëéèêàáâûüúöóôçīńł]+$/u
+
+      this.isNameValid = nameRegex.test(name)
+      return this.isNameValid
+    },
+    validateCity (city) {
+      const cityRegex = /^[a-zA-Z0-9\s\-!\\?.$€&,:'"ëéèêàáâûüúöóôçīńł]+$/u
+
+      this.isCityValid = cityRegex.test(city)
+      return this.isCityValid
+    },
+    validateLocation (location) {
+      const locationRegex = /^[a-zA-Z0-9\s\-!\\?.$€&,:'"ëéèêàáâûüúöóôçīńł]+$/u
+
+      this.isLocationValid = locationRegex.test(location)
+      return this.isLocationValid
+    },
+    validatePrice (price) {
+      const priceRegex = /^[0-9]+([,.][0-9]{1,2})?$/
+
+      this.isPriceValid = priceRegex.test(price)
+      return this.isPriceValid
+    },
+    validateInfo (info) {
+      const infoRegex = /^[a-zA-Z0-9\s\-!\\?.$€&,:'"ëéèêàáâûüúöóôçīńł]+$/u
+
+      this.isInfoValid = infoRegex.test(info)
+      return this.isInfoValid
+    },
+    validateDate (date) {
+      const inputDate = new Date(date)
+      // Get the current date
+      const currentDate = new Date()
+
+      // Set the current date to 7 days in the future
+      currentDate.setDate(currentDate.getDate() + 4)
+
+      // Check if the input date is at least 7 days after the current date
+      this.isDateValid = inputDate >= currentDate
+
+      return this.isDateValid
+    },
+    validateTimeBegin (timeBegin) {
+      // Use regex to check if the time is not empty
+      const timeRegex = /^(?=.*[0-9])[\d:]*[APMapm]*$/
+      this.isTimeBeginValid = timeRegex.test(timeBegin)
+
+      return this.isTimeBeginValid
+    },
+    validateSize (size) {
+      const maxSize = 500
+      this.isSizeValid = /^\d+$/.test(size) && parseInt(size, 10) <= maxSize
+
+      return this.isSizeValid
+    },
+    validateTimeEnd (timeEnd) {
+      // Use regex to check if the time is not empty
+      const timeRegex = /^(?=.*[0-9])[\d:]*[APMapm]*$/
+      this.isTimeEndValid = timeRegex.test(timeEnd)
+
+      if (this.isTimeEndValid) {
+        // If the time is not empty, compare timeEnd with timeBegin
+        const timeBegin = new Date(`2000-01-01 ${this.event.timeBegin}`)
+        const endTime = new Date(`2000-01-01 ${timeEnd}`)
+
+        this.isTimeEndValid = endTime >= timeBegin
+      } else {
+        this.isTimeEndValid = false // Set to false if time is not valid
+      }
+
+      return this.isTimeEndValid
+    },
+    validateImage (file) {
+      if (file !== null) {
+        // Check if the file is an image
+        const isImage = /^image\//.test(file.type)
+        console.log(isImage)
+
+        // Check if the file size is within the allowed limit (in bytes)
+        const maxSize = 5 * 1024 * 1024 // 5MB
+        const isSizeValid = file.size <= maxSize
+
+        this.isImageValid = isImage && isSizeValid
+      }
+      return this.isImageValid
+    },
+    async edit () {
+      if (this.validateForm()) {
+        try {
+          if (this.image !== null) {
+            const file = await this.fileUploadService.asyncUploadEventPic(this.image, this.copiedEvent.id)
+            this.copiedEvent.image = file.filePath
+            await this.eventsServiceSuperUser.asyncSave(this.copiedEvent)
+            this.isSaved = true
+          } else {
+            await this.eventsServiceSuperUser.asyncSave(this.copiedEvent)
+            this.isSaved = true
+          }
+          this.$router.push({ name: 'adminEvents' })
+        } catch (e) {
+          console.error(e)
+        }
+      }
+    },
+    checkIEventEdited () {
+      if (this.event && this.copiedEvent) {
+        const isNameEdited = this.event.name !== this.copiedEvent.name
+        const isCityEdited = this.event.city !== this.copiedEvent.city
+        const isLocation = this.event.location !== this.copiedEvent.location
+        const isPriceEdited = this.event.price !== this.copiedEvent.price
+        const isInfoEdited = this.event.info !== this.copiedEvent.info
+        const isDateEdited = this.event.date !== this.copiedEvent.date
+        const isTimeBeginEdited = this.event.timeBegin !== this.copiedEvent.timeBegin
+        // eslint-disable-next-line dot-notation
+        const isTimeEndEdited = this.event['timeEnd'] !== this.copiedEvent['timeEnd']
+        const isSizeEdited = this.event.size !== this.copiedEvent.size
+        const isImageEdited = this.event.image !== this.copiedEvent.image
+
+        this.eventEdited =
+          isNameEdited ||
+          isCityEdited ||
+          isLocation ||
+          isPriceEdited ||
+          isInfoEdited ||
+          isDateEdited ||
+          isTimeBeginEdited ||
+          isTimeEndEdited ||
+          isSizeEdited ||
+          isImageEdited
+      }
+    },
+    back () {
+      this.$router.push({ name: 'adminChallenges' })
+    },
+    handleFileChange (event) {
+      const file = event.target.files[0]
+
+      if (file) {
+        // Validate the image file
+        this.isImageValid = this.validateImage(file)
+
+        if (this.isImageValid) {
+          // Update the challenge.image property when a valid file is selected
+          this.image = file
+        } else {
+          this.image = file
+          // Reset the input field and show an error message
+          event.target.value = null
+          this.imageError = 'Invalid image file. Please select a valid image (up to 5MB).'
+        }
+      }
+    },
+    async updateEvent () {
+      try {
+        await this.eventsService.asyncFindById(this.$route.params.id)
+        this.copiedEvent = JSON.parse(JSON.stringify(this.event))
+      } catch (e) {
+        console.error(e)
+      }
+    },
+    validateForm () {
+      const isNameValid = this.validateName(this.event.name)
+      const isCityValid = this.validateCity(this.event.city)
+      const isLocationValid = this.validateLocation(this.event.location)
+      const isPriceValid = this.validatePrice(this.event.price)
+      const isInfoValid = this.validateInfo(this.event.info)
+      const isDateValid = this.validateDate(this.event.date)
+      const isTimeBeginValid = this.validateTimeBegin(this.event.timeBegin)
+      const isTimeEndValid = this.validateTimeEnd(this.event.timeEnd)
+      const isSizeValid = this.validateSize(this.event.size)
+      const isImageValid = this.isImageValid
+
+      return isNameValid && isCityValid && isLocationValid && isPriceValid && isInfoValid && isDateValid && isTimeBeginValid && isTimeEndValid && isSizeValid && isImageValid
+    },
+    getFormattedDate (dateString) {
+      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }
+      return new Date(dateString).toLocaleDateString('nl-NL', options)
+    }
+  },
+  computed: {
+    event () {
+      return this.eventsService.entities
+    }
+  },
+  async created () {
+    await this.updateEvent()
+  },
+  watch: {
+    $route (to, from) {
+      if (to.fullPath !== from.fullPath) {
+        this.updateEvent()
+      }
+    },
+    copiedEvent: {
+      handler () {
+        this.checkIEventEdited()
+      },
+      deep: true
+    }
+  },
+  beforeRouteUpdate (to, from, next) {
+    if (!this.isSaved) {
+      this.conformationAlert(() => {
+        // Continue with the route update
+        next()
+      }, 'Are you sure you want to leave with unsaved changes?')
+    } else {
+      next()
+    }
+  }
+}
+
+</script>

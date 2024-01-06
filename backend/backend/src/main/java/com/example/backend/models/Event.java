@@ -20,7 +20,7 @@ public class Event implements Identifiable {
     @OneToMany(mappedBy = "event", orphanRemoval = true)
     @JsonIgnore
     private Set<UserEvent> userEvents = new HashSet<>();
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String image;
     @Column(nullable = false)
     private String name;

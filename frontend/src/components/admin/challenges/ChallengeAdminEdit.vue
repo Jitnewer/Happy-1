@@ -82,7 +82,6 @@ export default {
       filter: this.$route.query.sort,
       showFilter: false,
       showParagraphs: false,
-      selectedChallenge: null,
       image: null,
       paragraphsAmount: 0,
       copiedChallenge: null,

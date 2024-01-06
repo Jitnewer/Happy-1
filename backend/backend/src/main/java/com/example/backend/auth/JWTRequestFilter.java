@@ -51,7 +51,7 @@ public class JWTRequestFilter extends OncePerRequestFilter {
                 // Access control based on UserType
                 User.UserType userType = User.UserType.valueOf(jwToken.getRole());
                 if (!hasAccess(userType, servletPath)) {
-                    response.sendError(HttpServletResponse.SC_FORBIDDEN, "Access forbidden. Test");
+                    response.sendError(HttpServletResponse.SC_FORBIDDEN, "Access forbidden.");
                     return;
                 }
             } catch (RuntimeException e) {

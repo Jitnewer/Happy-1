@@ -171,7 +171,28 @@ public class UserEventController {
             return new ResponseEntity<>(events, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(Map.of(
-                    "message", "User not found",
+                    "message", "Event(s) not found",
+                    "status", HttpStatus.NOT_FOUND.value()), HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("/usersByEvent/{eventId}")
+    public ResponseEntity<?> getUsersByEvent(@PathVariable Long eventId) {
+        Event event = eventRepository.findById(eventId);
+
+
+        if (event != null) {
+            Set<User> users = new HashSet<>();
+
+            // Iterate through user's events and add them to the Set
+            for (UserEvent userEvent : event.getUserEvents()) {
+                users.add(userEvent.getUser());
+            }
+
+            return new ResponseEntity<>(users, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(Map.of(
+                    "message", "User(s) not found",
                     "status", HttpStatus.NOT_FOUND.value()), HttpStatus.NOT_FOUND);
         }
     }
