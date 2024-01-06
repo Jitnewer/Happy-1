@@ -30,6 +30,9 @@ import Networks from '@/components/networks/Networks.vue'
 import EventsAdmin from '@/components/admin/events/EventsAdmin.vue'
 import EventAdminCreate from '@/components/admin/events/EventAdminCreate.vue'
 import EventAdminEdit from '@/components/admin/events/EventAdminEdit.vue'
+import NetworksAdmin from '@/components/admin/networks/NetworksAdmin.vue'
+import NetworkAdminCreate from '@/components/admin/networks/NetworkAdminCreate.vue'
+import NetworkAdminEdit from '@/components/admin/networks/NetworkAdminEdit.vue'
 
 const routes = [
   {
@@ -140,6 +143,21 @@ const routes = [
     path: '/admin/researches/edit/:id',
     name: 'adminResearchEdit',
     component: ResearchAdminEdit
+  },
+  {
+    path: '/admin/networks',
+    name: 'adminNetworks',
+    component: NetworksAdmin
+  },
+  {
+    path: '/admin/networks/create',
+    name: 'adminNetworkCreate',
+    component: NetworkAdminCreate
+  },
+  {
+    path: '/admin/networks/edit/:id',
+    name: 'adminNetworkEdit',
+    component: NetworkAdminEdit
   },
   {
     path: '/admin/statistics',

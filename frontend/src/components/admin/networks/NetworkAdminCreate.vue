@@ -1,37 +1,37 @@
 <template>
-  <div class="container-admin" v-if="copiedChallenge">
+  <div class="container-admin">
     <div class="breadcrum-admin">
-      <router-link :to="{ name: 'welcome' }">Admin</router-link>
+      <router-link :to="{ name: 'admin' }">Admin</router-link>
       <span> > </span>
-      <router-link :to="{ name: 'adminChallenges' }">Challenge Articles</router-link>
+      <router-link :to="{ name: 'adminNetworks' }">Network Articles</router-link>
       <span>></span>
-      <router-link :to="{ name: 'adminChallengeEdit', query: { id: $route.params.id } }">Edit / {{ copiedChallenge.id}}</router-link>
+      <router-link :to="{ name: 'adminNetworkCreate' }">Create</router-link>
     </div>
     <div class="challenge-create">
       <div class="title-button-create">
-        <h1>Edit Challenge</h1>
+        <h1>Create Network</h1>
         <button @click="back()">Back</button>
       </div>
       <div>
-        <form @submit.prevent="edit" class="challenge-create-form" v-if="copiedChallenge">
+        <form @submit.prevent="create" class="challenge-create-form" v-if="network">
           <div class="form-label">
             <p>Title</p>
-            <input type="text" v-model="copiedChallenge.title" :class="{'invalid-input': copiedChallenge.title && !isTitleValid,'valid-input': copiedChallenge.title && isTitleValid}" @input="validateTitle(copiedChallenge.title)">
-            <p class="errorMessage" v-if="!isTitleValid && copiedChallenge.title">Invalid title, no special symbols allowed</p>
+            <input type="text" v-model="network.title" :class="{'invalid-input': network.title && !isTitleValid,'valid-input': network.title && isTitleValid}" @input="validateTitle(network.title)">
+            <p class="errorMessage" v-if="!isTitleValid && network.title">Invalid title, no special symbols allowed</p>
           </div>
           <div class="form-label">
             <p>First Paragraph</p>
-            <input type="text" v-model="copiedChallenge.firstParagraph" :class="{'invalid-input': copiedChallenge.firstParagraph && !isFirstParagraphValid,'valid-input': copiedChallenge.firstParagraph && isFirstParagraphValid}" @input="validateFirstParagraph(copiedChallenge.firstParagraph)">
-            <p class="errorMessage" v-if="!isFirstParagraphValid && copiedChallenge.firstParagraph">Invalid first paragraph, no special symbols allowed</p>
+            <input type="text" v-model="network.firstParagraph" :class="{'invalid-input': network.firstParagraph && !isFirstParagraphValid,'valid-input': network.firstParagraph && isFirstParagraphValid}" @input="validateFirstParagraph(network.firstParagraph)">
+            <p class="errorMessage" v-if="!isFirstParagraphValid && network.firstParagraph">Invalid first paragraph, no special symbols allowed</p>
           </div>
           <div class="form-label">
             <p>DateTime</p>
-            <input type="datetime-local" v-model="formattedDateTimeInput" :class="{'invalid-input': formattedDateTimeInput && !isDateTimeValid,'valid-input': formattedDateTimeInput && isDateTimeValid}" @input="validateDateTime(formattedDateTimeInput)">
-            <p class="errorMessage" v-if="!isDateTimeValid && formattedDateTimeInput">Invalid datetime, needs te be now or in the future</p>
+            <input type="datetime-local" v-model="network.dateTime" :class="{'invalid-input': network.dateTime && !isDateTimeValid,'valid-input': network.dateTime && isDateTimeValid}" @input="validateDateTime(network.dateTime)">
+            <p class="errorMessage" v-if="!isDateTimeValid && network.dateTime">Invalid datetime, needs te be now or in the future</p>
           </div>
           <div class="form-label">
             <p>Theme</p>
-            <select v-model="copiedChallenge.theme">
+            <select v-model="network.theme">
               <option value="FOOD_WASTE">FOOD_WASTE</option>
               <option value="DISTRIBUTION">DISTRIBUTION</option>
               <option value="ENERGY_TRANSITION">ENERGY_TRANSITION</option>
@@ -52,7 +52,7 @@
             <div @click="incrementParagraphs"><p>+</p></div>
           </div>
           <div class="paragraphs-inputs" v-if="paragraphsAmount !== 0">
-            <div class="paragraph" v-for="(paragraph, index) in copiedChallenge.paragraphs" :key="index">
+            <div class="paragraph" v-for="(paragraph, index) in network.paragraphs" :key="index">
               <p>Paragraph {{ index + 1 }}</p>
               <div class="form-label">
                 <p>Title</p>
@@ -75,16 +75,24 @@
 
 <script>
 export default {
-  name: 'ChallengeAdminEdit.vue',
-  inject: ['challengeService', 'challengeServiceSuperUser', 'fileUploadService'],
+  name: 'NetworkAdminCreate.vue',
+  inject: ['networkService', 'networkServiceSuperUser', 'fileUploadService'],
   data () {
     return {
       filter: this.$route.query.sort,
       showFilter: false,
       showParagraphs: false,
+      selectedNetwork: null,
+      network: {
+        title: '',
+        firstParagraph: '',
+        dateTime: '',
+        theme: '',
+        image: null,
+        paragraphs: []
+      },
       image: null,
       paragraphsAmount: 0,
-      copiedChallenge: null,
       challengeEdited: false,
       isTitleValid: null,
       isFirstParagraphValid: null,
@@ -145,59 +153,29 @@ export default {
       this.isParagraphContentValid[index] = paragraphContentRegex.test(paragraphContent)
       return this.isParagraphContentValid[index]
     },
-    async edit () {
-      // Create a deep comparison function
-      if (this.challengeEdited) {
-        this.copiedChallenge.dateTime = new Date(this.copiedChallenge.dateTime).toISOString()
+    async create () {
+      if (this.validateForm()) {
+        this.network.dateTime = new Date(this.network.dateTime).toISOString()
         try {
-          if (this.validateForm()) {
-            if (this.image !== null) {
-              const file = await this.fileUploadService.asyncUploadChallengePic(this.image, this.copiedChallenge.id)
-              this.copiedChallenge.image = file.filePath
-              await this.challengeServiceSuperUser.asyncSave(this.copiedChallenge)
-              this.isSaved = true
-            }
-          } else {
-            await this.challengeServiceSuperUser.asyncSave(this.copiedChallenge)
-            this.isSaved = true
-          }
-          this.$router.push({ name: 'adminChallenges' })
+          const response = await this.networkServiceSuperUser.asyncSave(this.network)
+          // eslint-disable-next-line dot-notation
+          const network = response['network']
+          const file = await this.fileUploadService.asyncUploadNetworkPic(this.image, network.id)
+          network.image = file.filePath
+          await this.networkServiceSuperUser.asyncSave(network)
+          this.isSaved = true
+          this.$router.push({ name: 'adminNetworks' })
         } catch (e) {
           console.error(e)
         }
       }
     },
-    back () {
-      this.$router.push({ name: 'adminChallenges' })
+    paragraphs (network) {
+      this.showParagraphs = !this.showParagraphs
+      this.selectedNetwork = network
     },
-    validateForm () {
-      // Validate title
-      const isTitleValid = this.validateTitle(this.copiedChallenge.title)
-
-      // Validate first paragraph
-      const isFirstParagraphValid = this.validateFirstParagraph(this.copiedChallenge.firstParagraph)
-
-      // Validate date and time
-      const isDateTimeValid = this.validateDateTime(this.formattedDateTimeInput)
-
-      const isImageValid = this.isImageValid
-
-      // Validate paragraphs
-      let areParagraphsValid = true
-      for (let i = 0; i < this.copiedChallenge.paragraphs.length; i++) {
-        const paragraph = this.copiedChallenge.paragraphs[i]
-        const isParagraphTitleValid = this.validateParagraphTitle(paragraph.title, i)
-        const isParagraphContentValid = this.validateParagraphContent(paragraph.content, i)
-
-        // If any paragraph is not valid, set areParagraphsValid to false
-        if (!isParagraphTitleValid || !isParagraphContentValid) {
-          areParagraphsValid = false
-          break
-        }
-      }
-
-      // Form is valid if all individual validations pass
-      return isTitleValid && isFirstParagraphValid && isDateTimeValid && isImageValid && areParagraphsValid
+    back () {
+      this.$router.push({ name: 'adminNetworks' })
     },
     formatDateTimeWithoutSeconds (dateTime) {
       const date = new Date(dateTime)
@@ -212,53 +190,14 @@ export default {
     incrementParagraphs () {
       // Increment the number of paragraphs
       this.paragraphsAmount++
-      this.copiedChallenge.paragraphs.push({ title: '', content: '' })
-      // Initialize validity flags for the new paragraph
-      this.isParagraphTitleValid.push(null)
-      this.isParagraphContentValid.push(null)
-    },
-    checkIfChallengeEdited () {
-      if (this.challenge && this.copiedChallenge) {
-        const isTitleEdited = this.challenge.title !== this.copiedChallenge.title
-        const isFirstParagraphEdited = this.challenge.firstParagraph !== this.copiedChallenge.firstParagraph
-        const isDateTimeEdited = this.challenge.dateTime !== this.copiedChallenge.dateTime
-        const isThemeEdited = this.challenge.theme !== this.copiedChallenge.theme
-        const isImageEdited = this.challenge.image !== this.copiedChallenge.image
-
-        let areParagraphsEdited = false
-
-        if (this.challenge.paragraphs.length !== this.copiedChallenge.paragraphs.length) {
-          areParagraphsEdited = true
-        } else {
-          for (let i = 0; i < this.challenge.paragraphs.length; i++) {
-            const paragraph = this.challenge.paragraphs[i]
-            const copiedParagraph = this.copiedChallenge.paragraphs[i]
-
-            if (paragraph.title !== copiedParagraph.title || paragraph.content !== copiedParagraph.content) {
-              areParagraphsEdited = true
-              break // Break out of the loop as soon as a difference is found
-            }
-          }
-        }
-
-        this.challengeEdited =
-          isTitleEdited ||
-          isFirstParagraphEdited ||
-          isDateTimeEdited ||
-          isThemeEdited ||
-          isImageEdited ||
-          areParagraphsEdited
-      }
+      this.network.paragraphs.push({ title: '', content: '' })
     },
     decrementParagraphs () {
       // Ensure the number of paragraphs doesn't go below 0
       if (this.paragraphsAmount > 0) {
         this.paragraphsAmount--
         // Remove the last paragraph when decrementing
-        this.copiedChallenge.paragraphs.pop()
-        // Remove validity flags for the removed paragraph
-        this.isParagraphTitleValid.pop()
-        this.isParagraphContentValid.pop()
+        this.network.paragraphs.pop()
       }
     },
     handleFileChange (event) {
@@ -269,7 +208,6 @@ export default {
         this.isImageValid = this.validateImage(file)
 
         if (this.isImageValid) {
-          this.networkEdited = true
           // Update the challenge.image property when a valid file is selected
           this.image = file
         } else {
@@ -280,23 +218,34 @@ export default {
         }
       }
     },
-    async updateChallenges () {
-      try {
-        await this.challengeService.asyncFindById(this.$route.params.id)
-        this.copiedChallenge = JSON.parse(JSON.stringify(this.challenge))
-        this.paragraphsAmount = this.challenge.paragraphs.length
-        // Initialize validity flags for each paragraph
-        this.isParagraphTitleValid = new Array(this.paragraphsAmount).fill(null)
-        this.isParagraphContentValid = new Array(this.paragraphsAmount).fill(null)
-      } catch (e) {
-        console.error(e)
+    validateForm () {
+      // Validate title
+      const isTitleValid = this.validateTitle(this.network.title)
+
+      // Validate first paragraph
+      const isFirstParagraphValid = this.validateFirstParagraph(this.network.firstParagraph)
+
+      // Validate date and time
+      const isDateTimeValid = this.validateDateTime(this.network.dateTime)
+
+      const isImageValid = this.isImageValid
+
+      // Validate paragraphs
+      let areParagraphsValid = true
+      for (let i = 0; i < this.network.paragraphs.length; i++) {
+        const paragraph = this.network.paragraphs[i]
+        const isParagraphTitleValid = this.validateParagraphTitle(paragraph.title, i)
+        const isParagraphContentValid = this.validateParagraphContent(paragraph.content, i)
+
+        // If any paragraph is not valid, set areParagraphsValid to false
+        if (!isParagraphTitleValid || !isParagraphContentValid) {
+          areParagraphsValid = false
+          break
+        }
       }
-    },
-    conformationAlert (callback, message) {
-      const result = confirm(message)
-      if (result === true) {
-        callback()
-      }
+
+      // Form is valid if all individual validations pass
+      return isTitleValid && isFirstParagraphValid && isDateTimeValid && isImageValid && areParagraphsValid
     },
     getFormattedDate (dateString) {
       const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }
@@ -305,6 +254,7 @@ export default {
     formattedDateTime (dateTime) {
       const today = new Date()
       const challengeDate = new Date(dateTime)
+
       const formattedTime = challengeDate.toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' })
 
       if (
@@ -327,53 +277,15 @@ export default {
       }
     }
   },
-  async created () {
-    await this.updateChallenges()
-    console.log(this.challenge)
-  },
-  watch: {
-    $route (to, from) {
-      if (to.fullPath !== from.fullPath) {
-        this.updateChallenges()
-      }
-    },
-    copiedChallenge: {
-      handler () {
-        this.checkIfChallengeEdited()
-      },
-      deep: true
-    }
-  },
   computed: {
-    challenge () {
-      return this.challengeService.entities
-    },
-    formattedDateTimeInput: {
-      get () {
-        // Format challenge.dateTime for datetime-local input
-        return this.formatDateTimeWithoutSeconds(this.copiedChallenge.dateTime)
-      },
-      set (value) {
-        // Parse the input value back to ISO format
-        this.copiedChallenge.dateTime = new Date(value).toISOString()
-      }
+    networks () {
+      return this.networkService.entities
     }
   },
   beforeRouteUpdate (to, from, next) {
-    if (this.challengeEdited && !this.isSaved) {
+    if (!this.isSaved) {
       this.conformationAlert(() => {
         // Continue with the route update
-        next()
-      }, 'Are you sure you want to leave with unsaved changes?')
-    } else {
-      next()
-    }
-  },
-
-  beforeRouteLeave (to, from, next) {
-    if (this.challengeEdited && !this.isSaved) {
-      this.conformationAlert(() => {
-        // Continue with leaving the route
         next()
       }, 'Are you sure you want to leave with unsaved changes?')
     } else {

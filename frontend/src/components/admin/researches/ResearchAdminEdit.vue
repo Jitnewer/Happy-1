@@ -268,6 +268,7 @@ export default {
         this.isImageValid = this.validateImage(file)
 
         if (this.isImageValid) {
+          this.networkEdited = true
           // Update the challenge.image property when a valid file is selected
           this.image = file
         } else {

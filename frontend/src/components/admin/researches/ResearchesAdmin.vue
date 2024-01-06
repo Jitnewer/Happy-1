@@ -28,7 +28,7 @@
           <td>{{ research.id }}</td>
           <td>{{ research.title }}</td>
           <td class="firstParagraph">{{ research.firstParagraph }}</td>
-          <td class="datetime">{{ formattedDateTime(research.dateTime) }}</td>
+          <td v-if="research.dateTime" class="datetime">{{ formattedDateTime(research.dateTime) }}</td>
           <td class="theme_small">{{ research.theme }}</td>
           <td class="image"><img :src="research.image ? require(`../../../${research.image}`) : ''" alt="Research Image"></td>
           <td><button class="relation" @click="paragraphs(research)">Check Paragraphs</button></td>

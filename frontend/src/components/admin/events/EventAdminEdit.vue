@@ -242,6 +242,7 @@ export default {
 
         if (this.isImageValid) {
           // Update the challenge.image property when a valid file is selected
+          this.eventEdited = true
           this.image = file
         } else {
           this.image = file
