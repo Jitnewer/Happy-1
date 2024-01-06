@@ -2,21 +2,21 @@
   <div class="breadcrum" v-if="research">
     <router-link :to="{ name: 'welcome' }">Home</router-link>
     <p>></p>
-    <a>News</a>
+    <router-link :to="{ name: 'news', query: { sort: filter }  }">News</router-link>
     <p>></p>
-    <router-link :to="{ name: 'researches' }">Researches</router-link>
+    <router-link :to="{ name: 'researches' , query: { sort: filter }   }">Research Articles</router-link>
     <p>></p>
-    <router-link :to="{ name: 'research', params: { id: research.id } }">Research / {{ research.id }}</router-link>
+    <router-link :to="{ name: 'research', params: { id: research.id } , query: { sort: filter }  }">Research Article / {{ research.id }}</router-link>
   </div>
   <div v-if="research" class="container">
     <div class="challenge-main">
       <div class="challenge-title">
         <button @click="back">Back</button>
-        <h1>Research</h1>
+        <h1>Research Article</h1>
       </div>
       <div class="detail-challenge">
         <div>
-          <img :src="require(`../../assets/img/${research.image}`)" alt="">
+          <img :src="require(`../../${research.image}`)" alt="">
         </div>
         <div class="content">
           <div>
@@ -42,7 +42,8 @@ export default {
   inject: ['researchService'],
   data () {
     return {
-      research: null
+      research: null,
+      filter: this.$route.query.sort
     }
   },
   methods: {
@@ -75,9 +76,12 @@ export default {
         return `${this.getFormattedDate(dateTime)}, ${formattedTime}`
       }
     },
-    back () {
-      this.$router.push({ name: 'researches' })
-      this.$emit('update-selected-reserach')
+    async back () {
+      if (this.filter === null) {
+        this.$router.push({ name: 'researches' })
+      } else {
+        this.$router.push({ name: 'researches', query: { sort: this.filter } })
+      }
     }
   },
   async created () {

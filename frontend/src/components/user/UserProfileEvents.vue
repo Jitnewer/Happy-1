@@ -59,7 +59,7 @@ export default {
               <h3>{{ event.location }}</h3>
             </div>
             <div class="event-right-right">
-              <p>{{ parseDate(event.date)  }}</p>
+              <p>{{ parseDate(event.date) }}</p>
               <p>{{ event.timeBegin.slice(0, 5) }} - {{ event.timeEnd.slice(0, 5) }}</p>
               <p> {{ formattedPrice(event) }}</p>
             </div>

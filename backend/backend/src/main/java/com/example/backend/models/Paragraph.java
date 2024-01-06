@@ -5,11 +5,11 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "paragraphs")
-public class Paragraph {
+public class Paragraph implements Identifiable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
 
     @Column(nullable = false)
     private String title;
@@ -27,6 +27,11 @@ public class Paragraph {
     @JsonBackReference(value = "research-paragraphs")
     private Research research;
 
+    @ManyToOne(cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "network_id")
+    @JsonBackReference(value = "network-paragraphs")
+    private Network network;
+
 
     // Constructors, getters, and setters
 
@@ -43,8 +48,14 @@ public class Paragraph {
     }
 
     // Getters and Setters
-    public Long getId() {
+    @Override
+    public long getId() {
         return id;
+    }
+
+    @Override
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getTitle() {
@@ -78,6 +89,14 @@ public class Paragraph {
 
     public void setResearch(Research research) {
         this.research = research;
+    }
+
+    public Network getNetwork() {
+        return network;
+    }
+
+    public void setNetwork(Network network) {
+        this.network = network;
     }
 
     @Override

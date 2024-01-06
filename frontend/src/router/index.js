@@ -5,8 +5,6 @@ import AdminStatistics from '@/components/admin/AdminStatistics.vue'
 import Events from '@/components/events/Events.vue'
 import EventsDetails from '@/components/events/EventsDetails.vue'
 import WelcomePage from '@/components/welcomePage/Welcome.vue'
-import SuperUserView from '@/components/admin/superUser/SuperUserView.vue'
-import SuperUserDetail from '@/components/admin/superUser/SuperUserDetail.vue'
 import AdminUsersView from '@/components/admin/userPage/AdminUsersView.vue'
 import AdminUsersDetail from '@/components/admin/userPage/AdminUsersDetail.vue'
 import Registration from '@/components/Registration.vue'
@@ -23,6 +21,16 @@ import Researches from '@/components/research/Researches.vue'
 import ResearchDetails from '@/components/research/ResearchDetails.vue'
 import welcomeAdmin from '@/components/admin/welcomeAdmin.vue'
 import AdminCarouselView from '@/components/admin/carouselPage/AdminCarouselView.vue'
+import News from '@/components/News.vue'
+import ChallengesAdmin from '@/components/admin/challenges/ChallengesAdmin.vue'
+import ChallengeAdminCreate from '@/components/admin/challenges/ChallengeAdminCreate.vue'
+import ChallengeAdminEdit from '@/components/admin/challenges/ChallengeAdminEdit.vue'
+import ResearchesAdmin from '@/components/admin/researches/ResearchesAdmin.vue'
+import ResearchAdminCreate from '@/components/admin/researches/ResearchAdminCreate.vue'
+import ResearchAdminEdit from '@/components/admin/researches/ResearchAdminEdit.vue'
+import NetworksDetails from '@/components/networks/NetworkDetails.vue'
+import Networks from '@/components/networks/Networks.vue'
+
 
 const routes = [
   {
@@ -50,19 +58,34 @@ const routes = [
     component: Challenges
   },
   {
+    path: '/news',
+    name: 'news',
+    component: News
+  },
+  {
     path: '/news/challenges/:id',
     name: 'challenge',
     component: ChallengeDetails
   },
   {
-    path: '/news/research',
+    path: '/news/researches',
     name: 'researches',
     component: Researches
   },
   {
-    path: '/news/research/:id',
+    path: '/news/researches/:id',
     name: 'research',
     component: ResearchDetails
+  },
+  {
+    path: '/news/networks',
+    name: 'networks',
+    component: Networks
+  },
+  {
+    path: '/news/networks/:id',
+    name: 'network',
+    component: NetworksDetails
   },
   {
     path: '/about',
@@ -80,14 +103,44 @@ const routes = [
     component: AdminEventView
   },
   {
+    path: '/admin/events/:id',
+    name: 'adminEventDetail',
+    component: EventDetailsView
+  },
+  {
     path: '/admin/carousel',
     name: 'adminCarousel',
     component: AdminCarouselView
   },
   {
-    path: '/admin/events/:id',
-    name: 'adminEventDetail',
-    component: EventDetailsView
+    path: '/admin/challenges',
+    name: 'adminChallenges',
+    component: ChallengesAdmin
+  },
+  {
+    path: '/admin/challenges/create',
+    name: 'adminChallengeCreate',
+    component: ChallengeAdminCreate
+  },
+  {
+    path: '/admin/challenges/edit/:id',
+    name: 'adminChallengeEdit',
+    component: ChallengeAdminEdit
+  },
+  {
+    path: '/admin/researches',
+    name: 'adminResearches',
+    component: ResearchesAdmin
+  },
+  {
+    path: '/admin/researches/create',
+    name: 'adminResearchCreate',
+    component: ResearchAdminCreate
+  },
+  {
+    path: '/admin/researches/edit/:id',
+    name: 'adminResearchEdit',
+    component: ResearchAdminEdit
   },
   {
     path: '/admin/statistics',
@@ -121,13 +174,6 @@ const routes = [
         name: 'userDetail',
         component: AdminUsersDetail
       }
-    ]
-  },
-  {
-    path: '/superuser/news',
-    component: SuperUserView,
-    children: [
-      { path: ':id', component: SuperUserDetail }
     ]
   },
   {

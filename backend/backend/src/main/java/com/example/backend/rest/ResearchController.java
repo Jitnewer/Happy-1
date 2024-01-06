@@ -1,8 +1,10 @@
 package com.example.backend.rest;
 
+import com.example.backend.exceptions.PreConditionFailedException;
 import com.example.backend.models.Challenge;
 import com.example.backend.models.Paragraph;
 import com.example.backend.models.Research;
+import com.example.backend.repositories.EntityRepository;
 import com.example.backend.repositories.paragraph.ParagraphRepository;
 import com.example.backend.repositories.research.ResearchRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,19 +24,19 @@ import java.util.Map;
 public class ResearchController {
 
     @Autowired
-    private ResearchRepository researchRepository;
+    private EntityRepository<Research> researchRepository;
     @Autowired
-    private ParagraphRepository paragraphRepository;
+    private EntityRepository<Paragraph> paragraphRepository;
 
     @GetMapping
     public List<Research> getAllResearches() {
-        return researchRepository.getResearches();
+        return researchRepository.findAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Object> getResearchById(@PathVariable Long id) {
+    public ResponseEntity<Object> getResearchById(@PathVariable long id) {
         try {
-            Research research = researchRepository.getResearch(id);
+            Research research = researchRepository.findById(id);
             if (research != null) {
                 return ResponseEntity.ok(research);
             } else {
@@ -47,7 +49,24 @@ public class ResearchController {
         }
     }
 
-    @PostMapping("/admin")
+    @GetMapping("/getByTheme/{theme}")
+    public ResponseEntity<Object> getResearchesByTheme(@PathVariable String theme) {
+        try {
+            Research.Theme themeEnum = Research.Theme.valueOf(theme.toUpperCase());
+
+            List<Research> researches = researchRepository.findMultipleByProperty("theme", themeEnum);
+            if (researches != null) {
+                return ResponseEntity.ok(researches);
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", "Researches not found with theme: " + theme));
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
+                    "message", "Error retrieving challenge",
+                    "error", e.getMessage()));
+        }
+    }
+    @PostMapping("/superuser")
     public ResponseEntity<Object> createResearch(@RequestBody Research research) {
         if (research.getTitle() == null || research.getTitle().isEmpty()) {
             return ResponseEntity.badRequest().body(Map.of("message", "Title is required"));
@@ -55,12 +74,13 @@ public class ResearchController {
 
         try {
             // Save the research entity first to generate a valid ID
-            researchRepository.addResearch(research);
+
+            researchRepository.save(research);
 
             // Set the research property in each paragraph and persist them
             for (Paragraph paragraph : research.getParagraphs()) {
                 paragraph.setResearch(research);
-                paragraphRepository.addParagraph(paragraph);
+                paragraphRepository.save(paragraph);
             }
 
             URI location = ServletUriComponentsBuilder
@@ -72,7 +92,8 @@ public class ResearchController {
             return ResponseEntity.created(location).body(Map.of(
                     "message", "Research added successfully",
                     "status", HttpStatus.CREATED.value(),
-                    "location", location.toString()));
+                    "location", location.toString(),
+                    "research", research));
         } catch (Exception e) {
             Map<String, Object> errorResponse = new HashMap<>();
             errorResponse.put("message", "Error adding the research");
@@ -81,10 +102,34 @@ public class ResearchController {
         }
     }
 
-    @DeleteMapping("/admin/{id}")
-    public ResponseEntity<Object> deleteResearch(@PathVariable Long id) {
-        researchRepository.deleteResearch(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    @PutMapping("/superuser/{id}")
+    public ResponseEntity<Object> updateResearch(@RequestBody Research research, @PathVariable Long id) {
+        try {
+            if (!id.equals(research.getId())) {
+                throw new PreConditionFailedException("Network ID in the path does not match the ID in the request body.");
+            }
+            researchRepository.save(research);
+
+            for (Paragraph paragraph : research.getParagraphs()) {
+                paragraph.setResearch(research);
+                paragraphRepository.save(paragraph);
+
+            }
+
+
+            return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "Research updated successfully", "research", research));
+        } catch (Exception e) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("message", "Error updating the research");
+            errorResponse.put("error", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+        }
+    }
+
+    @DeleteMapping("/superuser/{id}")
+    public ResponseEntity<Object> deleteResearch(@PathVariable long id) {
+        researchRepository.deleteById(id);
+        return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "Research deleted successfully", "status", HttpStatus.OK));
     }
 
 

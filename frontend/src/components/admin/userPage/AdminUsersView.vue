@@ -3,16 +3,16 @@ import { User } from '@/models/user'
 
 export default {
   name: 'AdminUsersView',
-  inject: ['usersServiceAdmin'],
+  inject: ['usersService', 'fileUploadService'],
   data () {
     return {
       filter: {
         search: null,
-        userType: null
+        userType: ''
       },
       selectedUser: null,
       create: false,
-      view: false,
+      edit: false,
       users: []
     }
   },
@@ -22,33 +22,38 @@ export default {
       this.selectedUser = new User(
         0,
         null,
-        'profilepic.png',
+        'assets/profilePic/profilepic.png',
         null,
         null,
         null,
         'N/A',
-        null,
-        null,
-        null,
+        0,
+        'Happy Hospitality',
+        'N/A',
         User.status.Active,
         User.userTypes.Admin,
+        'N/A',
         null,
-        null,
-        null
+        'Happy Hospitality'
       )
 
       this.$router.push({ name: 'userDetail', params: { id: this.selectedUser.id } })
     },
     async unblockUser (user) {
       if (confirm('Are you sure you want to unblock this user')) {
-        user.status = User.status.Unbanned
-        await this.usersServiceAdmin.asyncSave(user)
+        try {
+          await this.usersService.asyncSave(user)
+
+          user.status = User.status.Unbanned
+        } catch (e) {
+          console.log(e.message)
+        }
       }
     },
     async blockUser (user) {
       if (confirm('Are you sure you want to block this user?')) {
         user.status = User.status.Banned
-        await this.usersServiceAdmin.asyncSave(user)
+        await this.usersService.asyncSave(user)
       }
     },
     editUser (user) {
@@ -58,10 +63,8 @@ export default {
       this.create = false
       this.$router.push({ name: 'users' })
     },
-    async saveUser (user) {
+    saveUser (user) {
       try {
-        const savedUser = await this.usersServiceAdmin.asyncSave(user)
-        // console.log(savedUser)
         if (this.create === true) {
           this.users.push(user)
         } else {
@@ -81,7 +84,9 @@ export default {
     async deleteUser (user) {
       if (confirm('Are you sure you want to delete this user?')) {
         try {
-          await this.usersServiceAdmin.asyncDeleteById(user.id)
+          await this.usersService.asyncDeleteById(user.id)
+          await this.fileUploadService.asyncDeleteImage(user.profilePic)
+
           const indexToUpdate = this.users.findIndex(oldUser => oldUser.id === user.id)
 
           if (indexToUpdate >= 0) {
@@ -93,15 +98,21 @@ export default {
       }
     },
     viewUser (user) {
-      this.view = true
-      this.$router.push({ name: 'adminProfileView', params: { id: user.id } })
+      this.$router.push({ name: 'profileView', params: { id: user.id } })
     },
     isBanned (user) {
       return user && user.status === User.status.Banned
     },
-    back () {
-      this.view = false
-      this.$router.push({ name: 'users' })
+    selectUserByUrl (routeParam) {
+      if (!routeParam) return
+      if (routeParam === 0) this.createUser()
+      const user = this.users.find(user => user.id === routeParam)
+
+      if (user === undefined) {
+        this.$router.push({ path: '/PageNotFound' })
+      } else {
+        this.selectedUser = user
+      }
     }
   },
   computed: {
@@ -124,36 +135,24 @@ export default {
     }
   },
   async created () {
-    // if (localStorage.getItem('admin') === 'false') this.$router.push({ path: '/PageNotFound' })
-    this.users = await this.usersServiceAdmin.asyncFindAll()
+    this.users = await this.usersService.asyncFindAll()
+
+    this.selectUserByUrl(parseInt(this.$route.params.id))
+
     this.users = this.users.filter(user => {
       return user.id !== parseInt(localStorage.getItem('profileId'))
     })
   },
   watch: {
-    '$route' (to, from) {
-      console.log(to)
-      const userId = parseInt(to.params.id)
-      if (userId === 0) {
-        return
-      }
-      if (userId) {
-        this.selectedUser = this.users.find(user => user.id === userId)
-      } else {
-        this.selectedUser = null
-      }
+    '$route' (to) {
+      this.selectUserByUrl(parseInt(to.params.id))
     }
   }
 }
 </script>
 
 <template>
-  <div class="container-admin" v-if="!view">
-    <div class="breadcrum-admin breadcrum-admin-margin">
-      <router-link :to="{ name: 'admin' }">Admin</router-link>
-      <p>></p>
-      <router-link :to="{ name: 'users' }">Users</router-link>
-    </div>
+  <div class="container-admin admin-users">
     <div class="title">
       <h1>Users</h1>
     </div>
@@ -167,8 +166,7 @@ export default {
         <option value="PARTNER">Partner</option>
         <option value="SUPERUSER">Superuser</option>
       </select>
-      <button class="create-btn" @click="createUser">Create</button>
-      <button class="notification"><i class="fa-regular fa-bell"></i></button>
+      <button class="admin-create" @click="createUser">Create</button>
     </div>
     <div class="users-list">
       <table class="users-table">
@@ -192,28 +190,24 @@ export default {
           <td> {{ user.tag }}</td>
           <td> {{ user.status }}</td>
           <td class="buttons">
-            <button class="view-button" @click="viewUser(user)">View</button>
-            <button class="edit-button" @click="editUser(user)">Edit</button>
+            <button class="admin-view" @click="viewUser(user)">View</button>
+            <button class="admin-edit" @click="editUser(user)">Edit</button>
             <button v-if="!isBanned(user)" class="block-button" @click="blockUser(user)">Block</button>
             <button v-if="isBanned(user)" class="block-button" @click="unblockUser(user)">Unblock</button>
-            <button class="delete-button" @click="deleteUser(user)">Delete</button>
+            <button class="admin-delete" @click="deleteUser(user)">Delete</button>
           </td>
           </tr>
         </tbody>
       </table>
     </div>
   </div>
-  <router-view :selectedUser="selectedUser" @cancel-edit="cancelEdit" @save-edit="saveUser" :create="create" @back="back"/>
+  <router-view v-if="selectedUser" :selectedUser="selectedUser" @cancel-edit="cancelEdit" @save-edit="saveUser"
+               :create="create"/>
 </template>
 
 <style scoped>
 .container-admin {
   margin-top: 1rem;
   width:80%
-}
-
-h1, h2, h3, h4, h5, h6, p {
-  color: black;
-  margin: 0;
 }
 </style>

@@ -1,7 +1,4 @@
 <template>
-  <div class="breadcrum">
-    <router-link :to="{ name: 'welcome' }">Home</router-link>
-  </div>
   <div class="containerHomepage">
     <div>
       <h1 class="welcomeH1">

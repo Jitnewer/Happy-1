@@ -33,14 +33,19 @@
 
 <script>
 import { User } from '@/models/user'
+import { mapState } from 'vuex'
 
 export default {
   name: 'login.vue',
   inject: ['sessionSBService'],
+  computed: {
+    ...mapState(['loggedIn', 'loggedInAsAdmin'])
+  },
   data () {
     return {
       email: '',
-      password: ''
+      password: '',
+      signOut: this.$route.query.signOut
     }
   },
   methods: {
@@ -50,6 +55,7 @@ export default {
           mail: this.email,
           password: this.password
         })
+        console.log(user)
 
         if (user !== null) {
           const userType = user.body.userType
@@ -57,15 +63,27 @@ export default {
           if (userType === User.userTypes.Admin) {
             this.$store.commit('setLoggedInAsAdmin', true)
             this.$router.push({ path: '/admin' })
+            this.$forceUpdate()
+          } else if (userType === User.userTypes.SuperUser) {
+            this.$store.commit('setLoggedInAsSuperUser', true)
+            this.$router.push({ path: '/admin' })
+            this.$forceUpdate()
           } else {
             this.$store.commit('setLoggedIn', true)
 
             this.$router.push({ path: '/home' })
+            this.$forceUpdate()
           }
         }
       } catch (e) {
         console.error(e)
       }
+    }
+  },
+  created () {
+    if (this.signOut) {
+      this.$store.commit('setLoggedInAsAdmin', false)
+      this.$store.commit('setLoggedIn', false)
     }
   }
 }
@@ -77,7 +95,6 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 100vh;
 }
 
 .container-sign-up {
@@ -87,7 +104,6 @@ export default {
   text-align: center;
   padding: 50px 35px 10px 35px;
   box-shadow: 0px 3px 40px #000;
-  margin-top: 60px;
 }
 
 .header-sign-up {

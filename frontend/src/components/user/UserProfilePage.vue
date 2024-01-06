@@ -62,7 +62,7 @@ export default {
 </script>
 
 <template>
-  <div class="breadcrum" v-if="$route.fullPath === '/profile/info' && user" >
+  <div class="breadcrum" v-if="$route.fullPath === '/profile/info' && user">
     <router-link :to="{ name: 'welcome' }">Home</router-link>
     <p>></p>
     <a>News</a>
@@ -71,7 +71,7 @@ export default {
     <p>></p>
     <router-link :to="{ name: 'profilePageInfo', params: { id: user.id } }">Info</router-link>
   </div>
-  <div class="breadcrum" v-if="$route.fullPath === '/profile/events' && user" >
+  <div class="breadcrum" v-if="$route.fullPath === '/profile/events' && user">
     <router-link :to="{ name: 'welcome' }">Home</router-link>
     <p>></p>
     <a>News</a>
@@ -101,7 +101,7 @@ export default {
           <h1 v-if="!edit"> {{ user.firstname }} {{ user.lastname }}</h1>
         </div>
         <div v-if="!edit" class="buttons-view">
-          <router-link :to="{name: 'profilePageInfo'}"  class="info-view selected">Info</router-link>
+          <router-link :to="{name: 'profilePageInfo'}" class="info-view selected">Info</router-link>
           <router-link :to="{ name: 'profilePageEvents'}" class="events-view">Events</router-link>
         </div>
         <div class="info-right-bottom">

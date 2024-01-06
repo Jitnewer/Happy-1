@@ -2,47 +2,59 @@
 import { Event } from '@/models/event'
 export default {
   name: 'EventDetailsView',
-  inject: ['eventsServiceAdmin', 'eventsService'],
-  props: ['selectedEvent', 'create'],
-
+  inject: ['eventsServiceSuperUser', 'eventsService', 'fileUploadService'],
   data () {
     return {
-      created: this.create,
-      selectedCopy: null
+      create: false,
+      selectedCopy: null,
+      pictureUpload: null,
+      newEventPic: null,
+      event: null
     }
   },
   methods: {
+    back () {
+      this.$router.push({ name: 'adminEvents' })
+    },
     closeEventDetail () {
-      if (confirm('Are you sure you don\'t want to save changes?')) {
-        this.$router.push({ name: 'adminEvents' })
+      if (!Event.equals(this.event, this.selectedCopy)) {
+        if (confirm('Are you sure you want to discard your changes?')) {
+          this.back()
+        }
+      } else {
+        this.back()
       }
     },
     async saveEventDetail () {
-      if (this.validateFields()) {
-        if (confirm('Are you sure you want to save changes to event?')) {
-          try {
+      if (!Event.equals(this.event, this.selectedCopy) || this.newEventPic) {
+        if (this.validateFields) {
+          if (confirm('Do you want to save the changes to this event?')) {
+            if (this.pictureUpload) {
+              const profilePicPath = await this.fileUploadService.asyncUploadEventPic(this.pictureUpload, this.selectedCopy.id)
+              this.selectedCopy.image = profilePicPath.filePath
+            }
+
             await this.eventsServiceAdmin.asyncSave(this.selectedCopy)
-            this.$router.push({ name: 'adminEvents' })
-          } catch (e) {
-            console.error(e)
+            this.back()
           }
         }
       }
     },
     async deleteEventDetail () {
       if (confirm('Are you sure you want to delete this event?')) {
-        try {
-          await this.eventsServiceAdmin.asyncDeleteById(this.selectedCopy.id)
-          this.$router.push({ name: 'adminEvents' })
-        } catch (e) {
-          console.error(e)
-        }
+        await this.eventsServiceAdmin.asyncDeleteById(this.selectedCopy.id)
+        await this.fileUploadService.asyncDeleteImage(this.selectedCopy.image)
+
+        this.back()
       }
     },
     handleImageUpload (event) {
       const file = event.target.files[0]
-      this.selectedCopy.image = URL.createObjectURL(file)
-      console.log(this.selectedCopy.image)
+      this.newEventPic = URL.createObjectURL(file)
+      this.pictureUpload = file
+    },
+    activateInput () {
+      document.querySelector('#file').click()
     },
     clearInputs () {
       this.selectedCopy.name = null
@@ -54,8 +66,69 @@ export default {
       this.selectedCopy.price = null
       this.selectedCopy.info = null
     },
-    activateInput () {
-      document.querySelector('#file').click()
+    setUpErrorMessage (elementId, message) {
+      document.querySelector(elementId).setCustomValidity(message)
+      document.querySelector(elementId).reportValidity()
+    },
+    async loadEvent () {
+      const eventId = parseInt(this.$route.params.id)
+      if (eventId === 0) {
+        this.create = true
+        this.event = new Event()
+        this.event.id = 0
+        this.event.image = 'assets/eventPic/imagePlaceholder.jpg'
+        this.selectedCopy = Event.copyConstructor(this.event)
+        return
+      }
+
+      this.event = await this.eventsService.asyncFindById(eventId)
+
+      if (eventId <= 0 || this.event === null) {
+        this.$router.push({ path: '/EventNotFound' })
+      } else {
+        this.selectedCopy = { ...this.event }
+      }
+    }
+  },
+  async created () {
+    try {
+      await this.loadEvent()
+    } catch (e) {
+      console.error(e)
+    }
+  },
+  computed: {
+    validateFields () {
+      if (!this.eventNameIsValid) {
+        this.setUpErrorMessage('#edit-event-name', 'Name must be more than 3 characters')
+        return false
+      }
+      if (!this.eventDateIsValid) {
+        this.setUpErrorMessage('#edit-event-date', 'Event date must be further in the future')
+        return false
+      }
+      if (!this.eventBeginTimeIsValid) {
+        this.setUpErrorMessage('#edit-event-time-begin', 'This field is required')
+        return false
+      }
+      if (!this.eventEndTimeIsValid) {
+        this.setUpErrorMessage('#edit-event-time-end', 'This field is required')
+        return false
+      }
+      if (!this.eventLocationIsValid) {
+        this.setUpErrorMessage('#edit-event-location', 'Location must be more than 3 characters and can\'t contain numbers or symbols')
+        return false
+      }
+      if (!this.eventCityIsValid) {
+        this.setUpErrorMessage('#edit-event-city', 'City must be more than 3 characters and can\'t contain numbers or symbols')
+        return false
+      }
+      if (!this.eventPriceIsValid) {
+        this.setUpErrorMessage('#edit-event-price', 'Price must be 0 - 500')
+        return false
+      }
+
+      return true
     },
     eventNameIsValid () {
       const eventNameIsEmpty = !this.selectedCopy.name || this.selectedCopy.name.trim() === ''
@@ -83,88 +156,6 @@ export default {
       const eventPriceIsEmpty = !this.selectedCopy.price || this.selectedCopy.price === ''
       return !eventPriceIsEmpty && this.selectedCopy.price >= 0 && this.selectedCopy.price <= 500
     },
-    setUpErrorMessage (elementId, message) {
-      document.querySelector(elementId).setCustomValidity(message)
-      document.querySelector(elementId).reportValidity()
-    },
-    validateFields () {
-      if (!this.eventNameIsValid()) {
-        this.setUpErrorMessage('#edit-event-name', 'Name must be more than 3 characters')
-        return false
-      }
-      if (!this.eventDateIsValid()) {
-        this.setUpErrorMessage('#edit-event-date', 'Event date must be further in the future')
-        return false
-      }
-      if (!this.eventBeginTimeIsValid()) {
-        this.setUpErrorMessage('#edit-event-time-begin', 'This field is required')
-        return false
-      }
-      if (!this.eventEndTimeIsValid()) {
-        this.setUpErrorMessage('#edit-event-time-end', 'This field is required')
-        return false
-      }
-      if (!this.eventLocationIsValid()) {
-        this.setUpErrorMessage('#edit-event-location', 'Location must be more than 3 characters and can\'t contain numbers or symbols')
-        return false
-      }
-      if (!this.eventCityIsValid()) {
-        this.setUpErrorMessage('#edit-event-city', 'City must be more than 3 characters and can\'t contain numbers or symbols')
-        return false
-      }
-      if (!this.eventPriceIsValid()) {
-        this.setUpErrorMessage('#edit-event-price', 'Price must be 0 - 500')
-        return false
-      }
-
-      return true
-    },
-    async loadEvent () {
-      const eventId = this.$route.params.id
-      if (eventId) {
-        try {
-          this.event = await this.eventsService.asyncFindById(eventId)
-          this.selectedCopy = { ...this.event }
-          console.log(this.selectedCopy)
-        } catch (e) {
-          console.error(e)
-        }
-      }
-    }
-  },
-  watch: {
-    selectedEvent (newSelectedEvent) {
-      if (newSelectedEvent) {
-        this.selectedCopy = Event.copyConstructor(newSelectedEvent)
-      }
-    },
-    async '$route' (to, from) {
-      const eventId = to.params.id
-      // Check if the scooterId is present and different from the current scooter
-      if (eventId !== undefined) {
-        try {
-          this.event = await this.eventsService.asyncFindById(eventId)
-          this.selectedCopy = { ...this.event } // Create a copy of the scooter
-        } catch (e) {
-          console.error(e)
-        }
-      }
-
-      // Check if the scooterId is not present (deselected)
-      if (!eventId) {
-        this.event = null
-        this.selectedCopy = null
-      }
-    }
-  },
-  async created () {
-    try {
-      await this.loadEvent()
-    } catch (e) {
-      console.error(e)
-    }
-  },
-  computed: {
     formattedDate: {
       get () {
         if (this.selectedCopy.date) {
@@ -188,14 +179,7 @@ export default {
 </script>
 
 <template>
-  <div class="container" v-if="selectedCopy">
-    <div class="breadcrum-admin breadcrum-admin-margin">
-      <router-link :to="{ name: 'admin' }">Admin</router-link>
-      <p>></p>
-      <router-link :to="{ name: 'adminEvents' }">Events</router-link>
-      <p>></p>
-      <router-link :to="{ name: 'adminEventDetail', params: { id: selectedCopy.id } }">Event / {{ selectedCopy.id }}</router-link>
-    </div>
+  <div class="container admin-event-details" v-if="event">
     <div class="events-title">
       <button @click="closeEventDetail" class="back-button">Back</button>
       <h3>Event</h3>
@@ -203,7 +187,8 @@ export default {
     <form class="event-details">
       <div class="event-image-container">
         <input type="file" accept="image/jpeg, image/png, image/jpg" id="file" @change="handleImageUpload">
-        <img :src="require(`../../../assets/img/${selectedCopy.image}`)" alt="event image" class="event-image" @click="activateInput">
+        <img v-if="!newEventPic" :src="require(`../../../${selectedCopy.image}`)" alt="event image" class="event-image" @click="activateInput">
+        <img v-else :src="newEventPic" alt="event image" class="event-image" @click="activateInput">
       </div>
       <div class="info-inputs">
         <input type="text" placeholder="Event name" v-model="selectedCopy.name" id="edit-event-name">
@@ -219,36 +204,15 @@ export default {
       </div>
     </form>
     <div class="buttons-container">
-      <button @click="clearInputs">Clear</button>
-      <button @click="saveEventDetail">Save</button>
-      <button @click="deleteEventDetail" v-if="!created">Delete</button>
+      <button @click="clearInputs" class="admin-clear">Clear</button>
+      <button @click="saveEventDetail" class="admin-save">Save</button>
+      <button @click="deleteEventDetail" class="admin-delete" v-if="!create">Delete</button>
     </div>
   </div>
 </template>
 
 <style scoped>
-h1, h2, h3, h4 {
-  //color: #000000;
-}
-
 .events-title h3{
   margin: 0;
-}
-
-.container {
-  margin-top: 0;
-  margin-right: 0;
-  width: 100%;
-}
-
-button {
-  background: var(--main-color-hover);
-  color: var(--main-text-color);
-  border-style: none;
-  padding: 1rem 1.5rem;
-  font-size: 18px;
-  box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
-  cursor: pointer;
-  transition: 0.5s;
 }
 </style>
