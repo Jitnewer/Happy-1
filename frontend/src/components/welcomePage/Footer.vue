@@ -37,7 +37,7 @@
             'invalid-input': newsletter.email && (!isEmailValid || emailAlreadyExists),
             'valid-input': newsletter.email && isEmailValid && !emailAlreadyExists
           }" @input="validateEmail(newsletter.email)"/>
-          <button type="submit" class="subscribeButton" :disabled="!validateEmail">Subscribe</button>
+          <button type="submit" class="subscribeButton" :disabled="!validateEmail(newsletter.email) && emailAlreadyExists">Subscribe</button>
         </div>
         <p class="errorMessage" v-if="!isEmailValid && newsletter.email">Invalid email</p>
         <p class="errorMessage" v-if="emailAlreadyExists && newsletter.email">Email is already subscribed</p>
@@ -91,6 +91,11 @@ export default {
     validateEmail (email) {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
       this.isEmailValid = emailRegex.test(email)
+
+      if (email !== this.newsletter.emailAlreadyExists) {
+        this.emailAlreadyExists = null
+      }
+
       return this.isEmailValid
     },
     async create () {
@@ -101,6 +106,7 @@ export default {
         } catch (e) {
           console.error(e)
           this.emailAlreadyExists = true
+          this.newsletter.emailAlreadyExists = this.newsletter.email
         }
       }
     }

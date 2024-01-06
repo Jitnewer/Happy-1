@@ -33,6 +33,9 @@ import EventAdminEdit from '@/components/admin/events/EventAdminEdit.vue'
 import NetworksAdmin from '@/components/admin/networks/NetworksAdmin.vue'
 import NetworkAdminCreate from '@/components/admin/networks/NetworkAdminCreate.vue'
 import NetworkAdminEdit from '@/components/admin/networks/NetworkAdminEdit.vue'
+import NewsletterAdminCreate from '@/components/admin/newsletter/NewsletterAdminCreate.vue'
+import NewsletterAdminEdit from '@/components/admin/newsletter/NewsletterAdminEdit.vue'
+import NewslettersAdmin from '@/components/admin/newsletter/NewslettersAdmin.vue'
 
 const routes = [
   {
@@ -113,6 +116,21 @@ const routes = [
     path: '/admin/events/edit/:id',
     name: 'adminEventEdit',
     component: EventAdminEdit
+  },
+  {
+    path: '/admin/newsletters',
+    name: 'adminNewsletters',
+    component: NewslettersAdmin
+  },
+  {
+    path: '/admin/newsletters/create',
+    name: 'adminNewsletterCreate',
+    component: NewsletterAdminCreate
+  },
+  {
+    path: '/admin/newsletters/edit/:id',
+    name: 'adminNewsletterEdit',
+    component: NewsletterAdminEdit
   },
   {
     path: '/admin/challenges',

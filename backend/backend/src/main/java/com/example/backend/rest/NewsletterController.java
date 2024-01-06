@@ -24,12 +24,12 @@ public class NewsletterController {
     private EntityRepository<Newsletter> newsletterRepository;
 
 
-    @GetMapping
+    @GetMapping("/superuser")
     public List<Newsletter> getAllNewsletters() {
         return newsletterRepository.findAll();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/superuser/{id}")
     public ResponseEntity<Object> getNetworkById(@PathVariable long id) {
         try {
             Newsletter newsletter = newsletterRepository.findById(id);

@@ -20,6 +20,7 @@ import { FetchInterceptor } from '@/services/FetchInterceptor'
 import { CachedRESTAdaptorWithFetch } from '@/services/CachedRESTAdaptorWithFetch'
 import { Network } from '@/models/network.js'
 import { FileUploadAdapter } from '@/services/FileUploadAdapter'
+import { Newsletter } from '@/models/newsletter'
 
 export default {
   name: 'App',
@@ -47,8 +48,8 @@ export default {
       fileUploadService: new FileUploadAdapter(CONFIG.BACKEND_URL + '/image'),
       networkService: reactive(new CachedRESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/networks', Network.copyConstructor)),
       networkServiceSuperUser: reactive(new CachedRESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/networks/superuser', Network.copyConstructor)),
-      newsletterService: reactive(new CachedRESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/newsletters/authentication', Network.copyConstructor)),
-      newsletterServiceSuperuser: reactive(new CachedRESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/newsletters/superuser', Network.copyConstructor))
+      newsletterService: reactive(new CachedRESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/newsletters/authentication', Newsletter.copyConstructor)),
+      newsletterServiceSuperuser: reactive(new CachedRESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/newsletters/superuser', Newsletter.copyConstructor))
 
     }
   },

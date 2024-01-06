@@ -458,6 +458,7 @@ a.router-link-active:hover {
     justify-content: flex-start;
     fill: var(--main-text-color);
     gap: 1rem;
+    align-items: center;
 }
 
 .dashboard-links-small a {
