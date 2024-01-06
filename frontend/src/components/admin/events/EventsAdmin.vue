@@ -41,7 +41,7 @@
           <td class="adminTimeEnd" v-if="event.timeEnd">{{ event.timeEnd.slice(0, 5) }}</td>
           <td class="adminSize">{{ event.size }}</td>
           <td class="adminImage"><img :src="event.image ? require(`../../../${event.image}`) : ''" alt="Event Image"></td>
-          <td><button @click="selecteUsers(event)">Check Users</button></td>
+          <td><button class="relation" @click="selecteUsers(event)">Check Users</button></td>
           <td>
             <div class="table-buttons">
               <button class="edit" @click="edit(event.id)">Edit</button>
