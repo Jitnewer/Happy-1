@@ -55,12 +55,17 @@ export default {
           mail: this.email,
           password: this.password
         })
+        console.log(user)
 
         if (user !== null) {
           const userType = user.body.userType
 
           if (userType === User.userTypes.Admin) {
             this.$store.commit('setLoggedInAsAdmin', true)
+            this.$router.push({ path: '/admin' })
+            this.$forceUpdate()
+          } else if (userType === User.userTypes.SuperUser) {
+            this.$store.commit('setLoggedInAsSuperUser', true)
             this.$router.push({ path: '/admin' })
             this.$forceUpdate()
           } else {
@@ -109,16 +114,6 @@ export default {
 
 .container-sign-up .form-sign-up-1 {
   width: 100%;
-  overflow: hidden;
-}
-
-.form-sign-up-1 form {
-  display: flex;
-  width: 400%;
-}
-
-.form-sign-up-1 form .sign-up-page {
-  width: 25%;
 }
 
 .title-sign-up-form {
@@ -142,12 +137,16 @@ export default {
 }
 
 .sign-up-input {
-  height: 100%;
+  outline: none;
   width: 100%;
-  border: 1px solid lightgrey;
-  border-radius: 5px;
-  font-size: 18px;
-  padding-left: 15px;
+  padding: 0.5rem;
+  font-size: 12px;
+  box-shadow: var(--shadow);
+  border: none;
+}
+
+.sign-up-input:focus-visible {
+  outline: none;
 }
 
 .field-btn button {
@@ -157,7 +156,6 @@ export default {
   margin-top: -20px;
   border: none;
   background: #0992A4;
-  border-radius: 5px;
   color: #fff;
   font-size: 18px;
   font-weight: 500;
@@ -165,6 +163,8 @@ export default {
   text-transform: uppercase;
   cursor: pointer;
   transition: 0.3s ease;
+  box-shadow: var(--shadow);
+
 }
 
 .field-btn button:hover {

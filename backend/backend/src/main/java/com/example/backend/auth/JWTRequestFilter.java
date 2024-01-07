@@ -71,7 +71,7 @@ public class JWTRequestFilter extends OncePerRequestFilter {
                     true;
             case SUPERUSER ->
                 // Superuser can access paths with superuser and authentication
-                    servletPath.contains("superuser") && !servletPath.contains("admin");
+                    !servletPath.contains("admin");
             case PARTNER, ENTREPRENEUR ->
                 // Partners and Entrepreneurs can access paths for normal users and authentication
                     !servletPath.contains("admin") && !servletPath.contains("superuser");

@@ -28,7 +28,7 @@
           <td>{{ research.id }}</td>
           <td>{{ research.title }}</td>
           <td class="firstParagraph">{{ research.firstParagraph }}</td>
-          <td class="datetime">{{ formattedDateTime(research.dateTime) }}</td>
+          <td v-if="research.dateTime" class="datetime">{{ formattedDateTime(research.dateTime) }}</td>
           <td class="theme_small">{{ research.theme }}</td>
           <td class="image"><img :src="research.image ? require(`../../../${research.image}`) : ''" alt="Research Image"></td>
           <td><button class="relation" @click="paragraphs(research)">Check Paragraphs</button></td>
@@ -68,7 +68,7 @@
 <script>
 export default {
   name: 'ResearchesAdmin.vue',
-  inject: ['researchService', 'researchServiceAdmin', 'fileUploadService'],
+  inject: ['researchService', 'researchServiceSuperUser', 'fileUploadService'],
   data () {
     return {
       filter: this.$route.query.sort,
@@ -90,7 +90,7 @@ export default {
     },
     async remove (research) {
       try {
-        await this.researchServiceAdmin.asyncDeleteById(research.id)
+        await this.researchServiceSuperUser.asyncDeleteById(research.id)
         await this.fileUploadService.asyncDeleteImage(research.image)
         await this.researchService.asyncFindAll()
       } catch (e) {

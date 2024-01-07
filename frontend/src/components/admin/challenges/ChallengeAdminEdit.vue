@@ -76,13 +76,12 @@
 <script>
 export default {
   name: 'ChallengeAdminEdit.vue',
-  inject: ['challengeService', 'challengeServiceAdmin', 'fileUploadService'],
+  inject: ['challengeService', 'challengeServiceSuperUser', 'fileUploadService'],
   data () {
     return {
       filter: this.$route.query.sort,
       showFilter: false,
       showParagraphs: false,
-      selectedChallenge: null,
       image: null,
       paragraphsAmount: 0,
       copiedChallenge: null,
@@ -155,11 +154,11 @@ export default {
             if (this.image !== null) {
               const file = await this.fileUploadService.asyncUploadChallengePic(this.image, this.copiedChallenge.id)
               this.copiedChallenge.image = file.filePath
-              await this.challengeServiceAdmin.asyncSave(this.copiedChallenge)
+              await this.challengeServiceSuperUser.asyncSave(this.copiedChallenge)
               this.isSaved = true
             }
           } else {
-            await this.challengeServiceAdmin.asyncSave(this.copiedChallenge)
+            await this.challengeServiceSuperUser.asyncSave(this.copiedChallenge)
             this.isSaved = true
           }
           this.$router.push({ name: 'adminChallenges' })
@@ -270,6 +269,7 @@ export default {
         this.isImageValid = this.validateImage(file)
 
         if (this.isImageValid) {
+          this.networkEdited = true
           // Update the challenge.image property when a valid file is selected
           this.image = file
         } else {

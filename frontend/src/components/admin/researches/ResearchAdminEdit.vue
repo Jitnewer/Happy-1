@@ -76,7 +76,7 @@
 <script>
 export default {
   name: 'ResearchAdminEdit.vue',
-  inject: ['researchService', 'researchServiceAdmin', 'fileUploadService'],
+  inject: ['researchService', 'researchServiceSuperUser', 'fileUploadService'],
   data () {
     return {
       filter: this.$route.query.sort,
@@ -154,11 +154,11 @@ export default {
             if (this.image !== null) {
               const file = await this.fileUploadService.asyncUploadChallengePic(this.image, this.copiedResearch.id)
               this.challenge.image = file.filePath
-              await this.researchServiceAdmin.asyncSave(this.copiedResearch)
+              await this.researchServiceSuperUser.asyncSave(this.copiedResearch)
               this.isSaved = true
             }
           } else {
-            await this.researchServiceAdmin.asyncSave(this.copiedResearch)
+            await this.researchServiceSuperUser.asyncSave(this.copiedResearch)
             this.isSaved = true
           }
           this.$router.push({ name: 'adminResearches' })
@@ -268,6 +268,7 @@ export default {
         this.isImageValid = this.validateImage(file)
 
         if (this.isImageValid) {
+          this.networkEdited = true
           // Update the challenge.image property when a valid file is selected
           this.image = file
         } else {

@@ -66,7 +66,7 @@ public class ResearchController {
                     "error", e.getMessage()));
         }
     }
-    @PostMapping("/admin")
+    @PostMapping("/superuser")
     public ResponseEntity<Object> createResearch(@RequestBody Research research) {
         if (research.getTitle() == null || research.getTitle().isEmpty()) {
             return ResponseEntity.badRequest().body(Map.of("message", "Title is required"));
@@ -75,7 +75,6 @@ public class ResearchController {
         try {
             // Save the research entity first to generate a valid ID
 
-            System.out.println(research.getTheme());
             researchRepository.save(research);
 
             // Set the research property in each paragraph and persist them
@@ -103,11 +102,11 @@ public class ResearchController {
         }
     }
 
-    @PutMapping("/admin/{id}")
+    @PutMapping("/superuser/{id}")
     public ResponseEntity<Object> updateResearch(@RequestBody Research research, @PathVariable Long id) {
         try {
             if (!id.equals(research.getId())) {
-                throw new PreConditionFailedException("Event ID in the path does not match the ID in the request body.");
+                throw new PreConditionFailedException("Network ID in the path does not match the ID in the request body.");
             }
             researchRepository.save(research);
 
@@ -127,7 +126,7 @@ public class ResearchController {
         }
     }
 
-    @DeleteMapping("/admin/{id}")
+    @DeleteMapping("/superuser/{id}")
     public ResponseEntity<Object> deleteResearch(@PathVariable long id) {
         researchRepository.deleteById(id);
         return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "Research deleted successfully", "status", HttpStatus.OK));

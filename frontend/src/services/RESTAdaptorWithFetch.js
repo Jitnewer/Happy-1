@@ -108,7 +108,6 @@ export class RESTAdaptorWithFetch {
 
   async asyncSave (object) {
     let response
-    console.log(object)
     try {
       if (object.id === 0) {
         response = await this.fetchJson(this.resourceUrl, {
@@ -119,7 +118,6 @@ export class RESTAdaptorWithFetch {
           }
         })
       } else {
-        console.log('test')
         response = await this.fetchJson(`${this.resourceUrl}/${object.id}`, {
           method: 'PUT',
           body: JSON.stringify(object),

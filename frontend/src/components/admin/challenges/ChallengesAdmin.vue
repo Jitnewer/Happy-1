@@ -28,7 +28,7 @@
           <td>{{ challenge.id }}</td>
           <td>{{ challenge.title }}</td>
           <td class="firstParagraph">{{ challenge.firstParagraph }}</td>
-          <td class="datetime">{{ formattedDateTime(challenge.dateTime) }}</td>
+          <td  v-if="challenge.dateTime" class="datetime">{{ formattedDateTime(challenge.dateTime) }}</td>
           <td class="theme_small">{{ challenge.theme }}</td>
           <td class="image"><img :src="challenge.image ? require(`../../../${challenge.image}`) : ''" alt="Challenge Image"></td>
           <td><button class="relation" @click="paragraphs(challenge)">Check Paragraphs</button></td>
@@ -68,7 +68,7 @@
 <script>
 export default {
   name: 'ChallengesAdmin.vue',
-  inject: ['challengeService', 'challengeServiceAdmin', 'fileUploadService'],
+  inject: ['challengeService', 'challengeServiceSuperUser', 'fileUploadService'],
   data () {
     return {
       filter: this.$route.query.sort,
@@ -90,7 +90,7 @@ export default {
     },
     async remove (challenge) {
       try {
-        await this.challengeServiceAdmin.asyncDeleteById(challenge.id)
+        await this.challengeServiceSuperUser.asyncDeleteById(challenge.id)
         await this.fileUploadService.asyncDeleteImage(challenge.image)
         await this.challengeService.asyncFindAll()
       } catch (e) {
