@@ -3,14 +3,14 @@
     <div class="breadcrum-admin">
       <router-link :to="{ name: 'admin' }">Admin</router-link>
       <span>></span>
-      <router-link :to="{ name: 'adminChallenges' }">Challenge Articles</router-link>
+      <router-link :to="{ name: 'adminNetworks' }">Network Articles</router-link>
     </div>
     <div class="challenges-admin">
       <div class="title-button">
-        <h1>Challenge Articles</h1>
+        <h1>Network Articles</h1>
         <button @click="create()">Create</button>
       </div>
-      <table v-if="challenges">
+      <table v-if="networks">
         <thead>
         <tr>
           <th>Id</th>
@@ -24,18 +24,18 @@
         </tr>
         </thead>
         <tbody>
-        <tr v-for="challenge in challenges" :key="challenge.id">
-          <td>{{ challenge.id }}</td>
-          <td>{{ challenge.title }}</td>
-          <td class="firstParagraph">{{ challenge.firstParagraph }}</td>
-          <td  v-if="challenge.dateTime" class="datetime">{{ formattedDateTime(challenge.dateTime) }}</td>
-          <td class="theme_small">{{ challenge.theme }}</td>
-          <td class="image"><img :src="challenge.image ? require(`../../../${challenge.image}`) : ''" alt="Challenge Image"></td>
-          <td><button class="relation" @click="paragraphs(challenge)">Check Paragraphs</button></td>
+        <tr v-for="network in networks" :key="network.id">
+          <td>{{ network.id }}</td>
+          <td>{{ network.title }}</td>
+          <td class="firstParagraph">{{ network.firstParagraph }}</td>
+          <td v-if="network.dateTime" class="datetime">{{ formattedDateTime(network.dateTime) }}</td>
+          <td class="theme_small">{{ network.theme }}</td>
+          <td class="image"><img :src="network.image ? require(`../../../${network.image}`) : ''" alt="Network Image"></td>
+          <td><button class="relation" @click="paragraphs(network)">Check Paragraphs</button></td>
           <td>
             <div class="table-buttons">
-              <button class="edit" @click="edit(challenge.id)">Edit</button>
-              <button class="delete" @click="remove(challenge)">Delete</button>
+              <button class="edit" @click="edit(network.id)">Edit</button>
+              <button class="delete" @click="remove(network)">Delete</button>
             </div>
           </td>
         </tr>
@@ -67,45 +67,45 @@
 
 <script>
 export default {
-  name: 'ChallengesAdmin.vue',
-  inject: ['challengeService', 'challengeServiceSuperUser', 'fileUploadService'],
+  name: 'NetworksAdmin.vue',
+  inject: ['networkService', 'networkServiceSuperUser', 'fileUploadService'],
   data () {
     return {
       filter: this.$route.query.sort,
       showFilter: false,
       showParagraphs: false,
-      selectedChallenge: null
+      selectedNetwork: null
     }
   },
   methods: {
     create () {
-      this.$router.push({ name: 'adminChallengeCreate' })
+      this.$router.push({ name: 'adminNetworkCreate' })
     },
-    paragraphs (challenge) {
+    paragraphs (network) {
       this.showParagraphs = !this.showParagraphs
-      this.selectedChallenge = challenge
+      this.selectedNetwork = network
     },
     back () {
       this.showParagraphs = false
     },
-    async remove (challenge) {
+    async remove (network) {
       try {
-        await this.challengeServiceSuperUser.asyncDeleteById(challenge.id)
-        await this.fileUploadService.asyncDeleteImage(challenge.image)
-        await this.challengeService.asyncFindAll()
+        await this.networkServiceSuperUser.asyncDeleteById(network.id)
+        await this.fileUploadService.asyncDeleteImage(network.image)
+        await this.networkService.asyncFindAll()
       } catch (e) {
         console.error(e)
       }
     },
-    async updateChallenges () {
+    async updateNetworks () {
       try {
-        await this.challengeService.asyncFindAll()
+        await this.networkService.asyncFindAll()
       } catch (e) {
         console.error(e)
       }
     },
     edit (id) {
-      this.$router.push({ name: 'adminChallengeEdit', params: { id: id } })
+      this.$router.push({ name: 'adminNetworkEdit', params: { id: id } })
     },
     getFormattedDate (dateString) {
       const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }
@@ -138,24 +138,23 @@ export default {
     }
   },
   async created () {
-    await this.updateChallenges()
-    console.log(this.challenges)
+    await this.updateNetworks()
   },
   watch: {
     $route (to, from) {
       if (to.fullPath !== from.fullPath) {
-        this.updateChallenges()
+        this.updateNetworks()
       }
     }
   },
   computed: {
-    challenges () {
-      return this.challengeService.entities
+    networks () {
+      return this.networkService.entities
     },
     sortedParagraphs () {
-      if (this.selectedChallenge) {
+      if (this.selectedNetwork) {
         // Sort paragraphs based on id
-        return this.selectedChallenge.paragraphs.slice().sort((a, b) => a.id - b.id)
+        return this.selectedNetwork.paragraphs.slice().sort((a, b) => a.id - b.id)
       }
       return []
     }

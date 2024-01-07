@@ -67,7 +67,8 @@ public class EventController {
             return ResponseEntity.created(location).body(Map.of(
                     "message", "Event added successfully",
                     "status", HttpStatus.CREATED.value(),
-                    "location", location.toString()));
+                    "location", location.toString(),
+                    "event", event));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
                     "message", "Error adding the event",
@@ -85,7 +86,7 @@ public class EventController {
             }
 
             eventRepository.save(event);
-            return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "Event updated successfully"));
+            return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "Event updated successfully", "event", event));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
                     "message", "Error updating the event",

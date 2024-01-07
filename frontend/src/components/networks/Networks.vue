@@ -2,16 +2,16 @@
   <div class="breadcrum">
     <router-link :to="{ name: 'welcome' }">Home</router-link>
     <p>></p>
-    <a>News</a>
+    <router-link :to="{ name: 'news', query: { sort: filter} }">News</router-link>
     <p>></p>
-    <router-link :to="{ name: 'networks' }">Networks</router-link>
+    <router-link :to="{ name: 'networks', query: { sort: filter} }">Network Articles</router-link>
   </div>
   <div class="container">
     <div class="title-filter">
-      <h1 id="challenges-title">Networks</h1>
+      <h1 id="challenges-title">Network Articles</h1>
       <button class="filter-button" @click="toggleFilter">Filter</button>
       <transition name="filter">
-        <div v-if="showFilter" class="challenge-filter">
+        <div v-if="showFilter" class="network-filter challenge-filter">
           <div class="filter-up">
             <div class="filter-child">
               <p>Food Waste</p>
@@ -46,7 +46,7 @@
     <div class="challenges">
       <div class="challenge" v-for="network in sortedNetworks" :key="network.id" @click="selectNetwork(network)">
         <div class="challenge-left">
-          <img :src="network.image ? require(`../../assets/img/${network.image}`) : ''" alt="Challenge Image">
+          <img :src="network.image ? require(`../../${network.image}`) : ''" alt="Challenge Image">
         </div>
         <div class="challenge-right">
           <p class="challenge-time">{{ formattedDateTime(network.dateTime) }}</p>
@@ -92,7 +92,7 @@ export default {
         if (this.filter == null) {
           await this.networkService.asyncFindAll()
         } else {
-          this.$router.push({ name: 'challenges', query: { sort: this.filter } })
+          this.$router.push({ name: 'networks', query: { sort: this.filter } })
           await this.networkService.asyncFindByProperty(this.filter, 'getByTheme')
         }
       } catch (e) {

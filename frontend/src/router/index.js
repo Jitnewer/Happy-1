@@ -1,6 +1,4 @@
 import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router'
-import AdminEventView from '@/components/admin/eventPage/AdminEventView.vue'
-import EventDetailsView from '@/components/admin/eventPage/EventDetailsView.vue'
 import AdminStatistics from '@/components/admin/AdminStatistics.vue'
 import Events from '@/components/events/Events.vue'
 import EventsDetails from '@/components/events/EventsDetails.vue'
@@ -30,6 +28,15 @@ import ResearchAdminCreate from '@/components/admin/researches/ResearchAdminCrea
 import ResearchAdminEdit from '@/components/admin/researches/ResearchAdminEdit.vue'
 import NetworksDetails from '@/components/networks/NetworkDetails.vue'
 import Networks from '@/components/networks/Networks.vue'
+import EventsAdmin from '@/components/admin/events/EventsAdmin.vue'
+import EventAdminCreate from '@/components/admin/events/EventAdminCreate.vue'
+import EventAdminEdit from '@/components/admin/events/EventAdminEdit.vue'
+import NetworksAdmin from '@/components/admin/networks/NetworksAdmin.vue'
+import NetworkAdminCreate from '@/components/admin/networks/NetworkAdminCreate.vue'
+import NetworkAdminEdit from '@/components/admin/networks/NetworkAdminEdit.vue'
+import NewsletterAdminCreate from '@/components/admin/newsletter/NewsletterAdminCreate.vue'
+import NewsletterAdminEdit from '@/components/admin/newsletter/NewsletterAdminEdit.vue'
+import NewslettersAdmin from '@/components/admin/newsletter/NewslettersAdmin.vue'
 
 const routes = [
   {
@@ -99,12 +106,32 @@ const routes = [
   {
     path: '/admin/events',
     name: 'adminEvents',
-    component: AdminEventView
+    component: EventsAdmin
   },
   {
-    path: '/admin/events/:id',
-    name: 'adminEventDetail',
-    component: EventDetailsView
+    path: '/admin/events/create',
+    name: 'adminEventCreate',
+    component: EventAdminCreate
+  },
+  {
+    path: '/admin/events/edit/:id',
+    name: 'adminEventEdit',
+    component: EventAdminEdit
+  },
+  {
+    path: '/admin/newsletters',
+    name: 'adminNewsletters',
+    component: NewslettersAdmin
+  },
+  {
+    path: '/admin/newsletters/create',
+    name: 'adminNewsletterCreate',
+    component: NewsletterAdminCreate
+  },
+  {
+    path: '/admin/newsletters/edit/:id',
+    name: 'adminNewsletterEdit',
+    component: NewsletterAdminEdit
   },
   {
     path: '/admin/carousels',
@@ -140,6 +167,21 @@ const routes = [
     path: '/admin/researches/edit/:id',
     name: 'adminResearchEdit',
     component: ResearchAdminEdit
+  },
+  {
+    path: '/admin/networks',
+    name: 'adminNetworks',
+    component: NetworksAdmin
+  },
+  {
+    path: '/admin/networks/create',
+    name: 'adminNetworkCreate',
+    component: NetworkAdminCreate
+  },
+  {
+    path: '/admin/networks/edit/:id',
+    name: 'adminNetworkEdit',
+    component: NetworkAdminEdit
   },
   {
     path: '/admin/statistics',

@@ -180,6 +180,12 @@ a.router-link-active:hover {
     box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
 }
 
+.profile-admin {
+    border-radius: 50%;
+    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+    width: 50px !important;
+}
+
 #profile-name {
     margin: 0;
 }
@@ -452,6 +458,7 @@ a.router-link-active:hover {
     justify-content: flex-start;
     fill: var(--main-text-color);
     gap: 1rem;
+    align-items: center;
 }
 
 .dashboard-links-small a {
@@ -489,6 +496,7 @@ a.router-link-active:hover {
     width: 100%;
     justify-content: space-between;
     padding: 0px 35px;
+    gap: 1rem;
 }
 
 
@@ -507,7 +515,7 @@ a.router-link-active:hover {
     .profile-dashboard {
         background-color: var(--main-color-admin)
     }
-    .profile-dashboard canvas, .profile-dashboard p {
+    .profile-dashboard canvas, .profile-dashboard p, .profile-db {
         visibility: hidden;
     }
     .dashboard-links a {
@@ -522,7 +530,7 @@ a.router-link-active:hover {
     .profile-dashboard {
         background-color: var(--main-color-admin)
     }
-    .profile-dashboard canvas, .profile-dashboard p {
+    .profile-dashboard canvas, .profile-dashboard p, .profile-db {
         visibility: hidden;
     }
     .dashboard-links a {
@@ -2062,6 +2070,10 @@ a.router-link-active:hover {
     left: 298px;
     gap: 2rem;
     background-color: white;
+}
+
+.network-filter {
+    left: 262px;
 }
 
 .research-filter {
