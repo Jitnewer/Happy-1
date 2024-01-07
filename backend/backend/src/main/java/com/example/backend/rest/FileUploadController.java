@@ -112,7 +112,7 @@ public class FileUploadController {
     @PostMapping("/carouselPic")
     public ResponseEntity<Object> uploadCarouselPic (
             @RequestPart("file") MultipartFile file,
-            @RequestPart("CarouselId") String carouselId
+            @RequestPart("carouselId") String carouselId
     ) {
         if (file.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Please select a file to upload");
@@ -122,7 +122,7 @@ public class FileUploadController {
             String customFileName = uploadFile(file, "carousel", carouselId, "/carouselPic");
             return ResponseEntity.status(HttpStatus.OK).body(
                     Map.of(
-                            "message", "Challenge image uploaded successfully",
+                            "message", "carousel image uploaded successfully",
                             "filePath", "assets/carouselPic/" + customFileName
                     )
             );

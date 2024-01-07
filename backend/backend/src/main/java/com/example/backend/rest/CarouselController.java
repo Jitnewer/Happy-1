@@ -70,6 +70,20 @@ public class CarouselController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
     }
+    @PutMapping("/superuser/{id}")
+    public ResponseEntity<Object> updateCarousel(@RequestBody Carousel carousel, @PathVariable Long id) {
+        try {
+            if (!id.equals(carousel.getId())) {
+                throw new PreConditionFailedException("Event ID in the path does not match the ID in the request body.");
+            }
+            carouselRepository.save(carousel);
+            return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "Event updated successfully", "carousel", carousel));
+            }catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
+                    "message", "Error updating the carousel",
+                    "error", e.getMessage()));
+    }
+    }
     @DeleteMapping("/superuser/{id}")
     public ResponseEntity<Object> deleteCarousel(@PathVariable long id) {
         try {

@@ -47,9 +47,7 @@ public class Carousel implements Identifiable {
     }
 
     @Override
-    public void setId(long id) {
-
-    }
+    public void setId(long id) { this.id = id;}
 
     public String getTitle() {
         return title;
@@ -75,7 +73,16 @@ public class Carousel implements Identifiable {
         this.dateTime = dateTime;
     }
 
-
-
-
+    @Override
+    public String toString() {
+        return "Carousel{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", dateTime=" + dateTime +
+                ", image='" + image +
+                '}';
+    }
 }
+
+
+

@@ -79,9 +79,6 @@ export class FileUploadAdapter {
       const formdata = new FormData()
       formdata.append('file', file)
       formdata.append('carouselId', carouselId)
-      console.log('ik ben carouselId in fileupload ' + carouselId)
-      console.log(formdata)
-      console.log(this.request(formdata, '/carouselPic'))
       const response = await this.request(formdata, '/carouselPic')
       return response.json()
     } catch (error) {
