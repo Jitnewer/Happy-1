@@ -219,14 +219,7 @@ export default {
         // Maandag, (tijd), Donderdag (tijd)
         return `${this.getFormattedDate(dateTime)}, ${formattedTime}`
       }
-    }
-  },
-  computed: {
-    carouselSlides () {
-      return this.carouselService.entities
-    }
-  },
-  methods: {
+    },
     foodWasteNews () {
       this.$router.push({ name: 'news', query: { sort: 'FOOD_WASTE' } })
     },
@@ -253,6 +246,11 @@ export default {
     },
     research () {
       this.$router.push({ name: 'researches' })
+    }
+  },
+  computed: {
+    carouselSlides () {
+      return this.carouselService.entities
     }
   }
 }
