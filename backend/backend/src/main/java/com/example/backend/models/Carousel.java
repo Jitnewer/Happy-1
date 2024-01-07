@@ -19,18 +19,18 @@ public class Carousel implements Identifiable {
     private long id;
 
     @Column(nullable = false)
-    private String text;
-    @Column(nullable = false)
+    private String title;
+    @Column(nullable = true)
     private String image;
     @Temporal(TemporalType.TIMESTAMP)
     @Column (nullable = false)
     private LocalDateTime dateTime;
 
 
-  public Carousel (String text) {
-      this.text = text;
+  public Carousel (String title) {
+      this.title = title;
       this.dateTime = LocalDateTime.now();
-      this.image = "image.png";
+      this.image = "img.png";
 
 
   }
@@ -39,7 +39,7 @@ public class Carousel implements Identifiable {
 
   public Carousel() {
         this.dateTime = LocalDateTime.now();;
-        this.image = "image.png";
+        this.image = "assets/carouselPic/imagePlaceholder.jpg";
   }
 
     public long getId() {
@@ -51,8 +51,8 @@ public class Carousel implements Identifiable {
 
     }
 
-    public String getText() {
-        return text;
+    public String getTitle() {
+        return title;
     }
 
     public String getImage() {
@@ -60,7 +60,7 @@ public class Carousel implements Identifiable {
     }
 
     public void setText(String text) {
-        this.text = text;
+        this.title = text;
     }
 
     public void setImage(String image) {
@@ -78,13 +78,4 @@ public class Carousel implements Identifiable {
 
 
 
-    @Override
-    public String toString() {
-        return "Carousel{" +
-                "id=" + id +
-                ", text='" + text + '\'' +
-                ", dateTime=" + dateTime +
-                ", image='" + image + '\'' +
-                '}';
-  }
 }

@@ -158,8 +158,14 @@ export default {
         this.challenge.dateTime = new Date(this.challenge.dateTime).toISOString()
         try {
           const response = await this.challengeServiceSuperUser.asyncSave(this.challenge)
+          console.log('eerste response' + response)
           const challenge = response.challenge
+          console.log(challenge)
+          console.log('image voor fileupload' + this.image)
+          console.log('carousel id voor fileupload' + challenge.id)
           const file = await this.fileUploadService.asyncUploadChallengePic(this.image, challenge.id)
+          console.log(file)
+          console.log(this.image)
           challenge.image = file.filePath
           await this.challengeServiceSuperUser.asyncSave(challenge)
           this.isSaved = true

@@ -14,12 +14,12 @@
     </div>
     <div class="carouselHolder">
       <Carousel class="carousel" v-slot="{ currentSlide }" :slideCount="carouselSlides.length">
-        <Slide v-for="(slide, index) in carouselSlides" :key="index" :slide-text="slide.text"
+        <Slide v-for="(slide, index) in carouselSlides" :key="index" :slide-title="slide.title"
                :is-current="index + 1">
           <div v-show="currentSlide === index + 1" class="slide">
             <div class="welcomeMsg">
               <h2 class="blue-text"> {{ formattedDateTime(slide.dateTime) }} </h2>
-              <h2 class="yellow-text"> {{ slide.text }}</h2>
+              <h2 class="yellow-text"> {{ slide.title }}</h2>
               <button>
                 <span class="blue-text"> > Lees meer </span>
               </button>

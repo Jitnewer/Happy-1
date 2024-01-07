@@ -23,7 +23,7 @@
         <tbody>
         <tr v-for="carousel in carousels" :key="carousel.id">
           <td>{{ carousel.id }}</td>
-          <td>{{ carousel.text }}</td>
+          <td>{{ carousel.title}}</td>
           <td class="datetime">{{ formattedDateTime(carousel.dateTime) }}</td>
           <td class="image"><img :src="carousel.image ? require(`../../../${carousel.image}`) : ''" alt="Carousel Image"></td>
           <td>
@@ -63,9 +63,13 @@ export default {
     },
     async remove (carousel) {
       try {
+        console.log('Removing carousel with id:', carousel.id)
         await this.carouselServiceSuperUser.asyncDeleteById(carousel.id)
+        console.log('Carousel removed successfully.')
         await this.fileUploadService.asyncDeleteImage(carousel.image)
+        console.log('Image deleted successfully.')
         await this.carouselService.asyncFindAll()
+        console.log('Updated carousel list.')
       } catch (e) {
         console.error(e)
       }

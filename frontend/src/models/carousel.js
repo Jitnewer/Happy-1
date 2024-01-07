@@ -1,7 +1,7 @@
 export class Carousel {
-  constructor (id, text, image, dateTime) {
+  constructor (id, title, image, dateTime) {
     this.id = id
-    this.text = text
+    this.title = title
     this.image = image
     this.date = dateTime
   }
@@ -11,7 +11,7 @@ export class Carousel {
 
     return new Carousel(
       carousel.id,
-      carousel.text,
+      carousel.title,
       carousel.image,
       carousel.dateTime
     )

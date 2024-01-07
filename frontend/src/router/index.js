@@ -37,6 +37,8 @@ import NetworkAdminEdit from '@/components/admin/networks/NetworkAdminEdit.vue'
 import NewsletterAdminCreate from '@/components/admin/newsletter/NewsletterAdminCreate.vue'
 import NewsletterAdminEdit from '@/components/admin/newsletter/NewsletterAdminEdit.vue'
 import NewslettersAdmin from '@/components/admin/newsletter/NewslettersAdmin.vue'
+import AdminCarouselCreate from '@/components/admin/carouselPage/AdminCarouselCreate.vue'
+import AdminCarouselEdit from '@/components/admin/carouselPage/AdminCarouselEdit.vue'
 
 const routes = [
   {
@@ -137,6 +139,16 @@ const routes = [
     path: '/admin/carousels',
     name: 'adminCarousels',
     component: AdminCarouselView
+  },
+  {
+    path: '/admin/carousels/create',
+    name: 'adminCarouselCreate',
+    component: AdminCarouselCreate
+  },
+  {
+    path: '/admin/carousels/edit/:id',
+    name: 'adminCarouselEdit',
+    component: AdminCarouselEdit
   },
   {
     path: '/admin/challenges',

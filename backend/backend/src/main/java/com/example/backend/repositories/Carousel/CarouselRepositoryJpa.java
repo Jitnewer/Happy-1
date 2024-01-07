@@ -46,4 +46,9 @@ public class CarouselRepositoryJpa extends AbstractEntityRepositoryJpa<Carousel>
     public boolean deleteById(Long id) {
         return super.deleteById(id);
     }
+
+    @Override
+    public boolean entityWithEntityExist(String propertyName, Object value) {
+        return super.entityWithEntityExist(propertyName, value);
+    }
 }

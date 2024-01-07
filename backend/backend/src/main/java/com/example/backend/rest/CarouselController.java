@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/authentication/carousels")
+@RequestMapping("/carousels")
 public class CarouselController {
 
     @Autowired
@@ -46,7 +46,43 @@ public class CarouselController {
                     "error", e.getMessage()));
         }
     }
+    @PostMapping("/superuser")
+    public ResponseEntity<Object> createCarousel(@RequestBody Carousel carousel) {
+        try {
+            carouselRepository.save(carousel);
+
+
+            URI location = ServletUriComponentsBuilder
+                    .fromCurrentRequest()
+                    .path("/{id}")
+                    .buildAndExpand(carousel.getId())
+                    .toUri();
+
+            return ResponseEntity.created(location).body(Map.of(
+                    "message", "carousel added successfully",
+                    "status", HttpStatus.CREATED.value(),
+                    "location", location.toString(),
+                    "carousel", carousel));
+        } catch (Exception e) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("message", "Error adding the carousel");
+            errorResponse.put("error", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+        }
     }
+    @DeleteMapping("/superuser/{id}")
+    public ResponseEntity<Object> deleteCarousel(@PathVariable long id) {
+        try {
+            carouselRepository.deleteById(id);
+            return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "Carousel with id " + id + " deleted successfully"));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
+                    "message", "Error deleting the event",
+                    "error", e.getMessage()));
+        }
+    }
+
+}
 
 
 
