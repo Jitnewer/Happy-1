@@ -4,7 +4,7 @@
     <p>></p>
     <router-link :to="{ name: 'news', query: { sort: filter} }">News</router-link>
     <p>></p>
-    <router-link :to="{ name: 'carousels', query: { sort: filter} }">Research Articles</router-link>
+    <router-link :to="{ name: 'researches', query: { sort: filter} }">Research Articles</router-link>
   </div>
   <div class="container">
     <div class="title-filter">
@@ -87,11 +87,11 @@ export default {
       if (this.filter === filterValue) {
         // If the same filter is clicked again, deselect it
         this.filter = null
-        this.$router.push({ name: 'carousels' })
+        this.$router.push({ name: 'researches' })
       } else {
         // Otherwise, set the selected filter
         this.filter = filterValue
-        this.$router.push({ name: 'carousels', query: { sort: this.filter } })
+        this.$router.push({ name: 'researches', query: { sort: this.filter } })
       }
     },
     getFormattedDate (dateString) {

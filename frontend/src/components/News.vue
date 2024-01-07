@@ -41,9 +41,9 @@ export default {
     },
     research () {
       if (this.filter == null) {
-        this.$router.push({ name: 'carousels' })
+        this.$router.push({ name: 'researches' })
       } else {
-        this.$router.push({ name: 'carousels', query: { sort: this.filter } })
+        this.$router.push({ name: 'researches', query: { sort: this.filter } })
       }
     },
     network () {
