@@ -10,7 +10,7 @@
     <div class="challenge-create">
       <div class="title-button-create">
         <h1>Create Network</h1>
-        <button @click="back()">Back</button>
+        <button @click="back()" class="back-button">Back</button>
       </div>
       <div>
         <form @submit.prevent="create" class="challenge-create-form" v-if="network">
@@ -88,7 +88,7 @@ export default {
         firstParagraph: '',
         dateTime: '',
         theme: '',
-        image: null,
+        image: 'assets/NetworkPic/imagePlaceholder.jpg',
         paragraphs: []
       },
       image: null,
@@ -159,7 +159,7 @@ export default {
         try {
           const response = await this.networkServiceSuperUser.asyncSave(this.network)
           // eslint-disable-next-line dot-notation
-          const network = response['network']
+          const network = response
           const file = await this.fileUploadService.asyncUploadNetworkPic(this.image, network.id)
           network.image = file.filePath
           await this.networkServiceSuperUser.asyncSave(network)

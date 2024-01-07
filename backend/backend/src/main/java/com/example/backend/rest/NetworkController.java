@@ -84,7 +84,7 @@ public class NetworkController {
                     "message", "Challenge added successfully",
                     "status", HttpStatus.CREATED.value(),
                     "location", location.toString(),
-                    "network", network));
+                    "entity", network));
         } catch (Exception e) {
             Map<String, Object> errorResponse = new HashMap<>();
             errorResponse.put("message", "Error adding the network");

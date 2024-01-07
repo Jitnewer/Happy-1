@@ -8,6 +8,7 @@ import java.util.Objects;
 import java.util.Random;
 import java.util.Set;
 
+@NamedQuery(name = "find_User_By_Id", query = "SELECT U from User U WHERE U.mail = ?1")
 @Entity
 @Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames = "mail")})
 public class User implements Identifiable{

@@ -88,7 +88,7 @@ export default {
         firstParagraph: '',
         dateTime: '',
         theme: '',
-        image: null,
+        image: 'assets/ResearchPic/imagePlaceholder.jpg',
         paragraphs: []
       },
       image: null,
@@ -160,7 +160,7 @@ export default {
           const response = await this.researchServiceSuperUser.asyncSave(this.research)
           console.log(response)
 
-          const research = response.research
+          const research = response
           const file = await this.fileUploadService.asyncUploadResearchPic(this.image, research.id)
           research.image = file.filePath
           await this.researchServiceSuperUser.asyncSave(research)

@@ -38,6 +38,16 @@ export class RESTAdaptorWithFetch {
     }
   }
 
+  async asyncFindByMail (mail) {
+    try {
+      const data = await this.fetchJson(`${this.resourceUrl}/mail/${mail}`)
+
+      return data
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
   async asyncFindAll () {
     try {
       const data = await this.fetchJson(this.resourceUrl, {
@@ -109,7 +119,7 @@ export class RESTAdaptorWithFetch {
   async asyncSave (object) {
     let response
     try {
-      if (object.id === 0) {
+      if (object.id === 0 || !object.id) {
         response = await this.fetchJson(this.resourceUrl, {
           method: 'POST',
           body: JSON.stringify(object),
@@ -126,7 +136,6 @@ export class RESTAdaptorWithFetch {
           }
         })
       }
-      console.log(response)
 
       return this.copyConstructor(response.entity)
     } catch (error) {

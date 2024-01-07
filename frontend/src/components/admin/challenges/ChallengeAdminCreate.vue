@@ -88,7 +88,7 @@ export default {
         firstParagraph: '',
         dateTime: '',
         theme: '',
-        image: null,
+        image: 'assets/ChallengePic/imagePlaceholder.jpg',
         paragraphs: []
       },
       image: null,
@@ -158,7 +158,7 @@ export default {
         this.challenge.dateTime = new Date(this.challenge.dateTime).toISOString()
         try {
           const response = await this.challengeServiceSuperUser.asyncSave(this.challenge)
-          const challenge = response.challenge
+          const challenge = response
           const file = await this.fileUploadService.asyncUploadChallengePic(this.image, challenge.id)
           challenge.image = file.filePath
           await this.challengeServiceSuperUser.asyncSave(challenge)

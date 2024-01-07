@@ -84,9 +84,9 @@ export default {
       if (confirm('Are you sure you want to delete this user?')) {
         try {
           await this.usersServiceAdmin.asyncDeleteById(user.id)
-          // if (user.profilePic !== 'assets/profilePic/profilepic.png') {
-          //   await this.fileUploadService.asyncDeleteImage(user.profilePic)
-          // }
+          if (user.profilePic !== 'assets/profilePic/profilepic.png') {
+            await this.fileUploadService.asyncDeleteImage(user.profilePic)
+          }
           const indexToUpdate = this.users.findIndex(oldUser => oldUser.id === user.id)
 
           if (indexToUpdate >= 0) {

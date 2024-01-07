@@ -56,7 +56,7 @@ public class EventController {
     @PostMapping("/superuser")
     public ResponseEntity<Object> addEvent(@RequestBody Event event) {
         try {
-            eventRepository.save(event);
+            Event savedEvent = eventRepository.save(event);
 
             URI location = ServletUriComponentsBuilder
                     .fromCurrentRequest()
@@ -68,7 +68,7 @@ public class EventController {
                     "message", "Event added successfully",
                     "status", HttpStatus.CREATED.value(),
                     "location", location.toString(),
-                    "event", event));
+                    "entity", savedEvent));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
                     "message", "Error adding the event",

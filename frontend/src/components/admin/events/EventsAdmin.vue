@@ -8,7 +8,7 @@
     <div class="challenges-admin">
       <div class="title-button">
         <h1>Events</h1>
-        <button @click="create()">Create</button>
+        <button @click="create()" class="admin-create">Create</button>
       </div>
       <table v-if="events">
         <thead>

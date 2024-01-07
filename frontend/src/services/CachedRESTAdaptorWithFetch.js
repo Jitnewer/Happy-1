@@ -59,6 +59,14 @@ export class CachedRESTAdaptorWithFetch extends RESTAdaptorWithFetch {
     }
   }
 
+  async asyncFindByMail (mail) {
+    try {
+      return await super.asyncFindByMail(mail)
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
   async asyncAddEntityToEntity (id1, id2, url) {
     try {
       const response = await super.asyncAddEntityToEntity(id1, id2, url)

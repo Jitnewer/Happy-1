@@ -60,7 +60,7 @@ export default {
     }
   },
   async created () {
-    this.user = await this.usersService.asyncFindById(parseInt(localStorage.getItem('profileId')))
+    this.user = await this.usersService.asyncFindByMail(JSON.parse(localStorage.getItem('userDetails')).mail)
     this.$router.push({ name: 'profilePageInfo' })
     this.copyUser = User.copyConstructor(this.user)
   }

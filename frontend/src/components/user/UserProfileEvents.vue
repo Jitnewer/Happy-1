@@ -141,4 +141,7 @@ export default {
 </template>
 
 <style scoped>
+h1 {
+  color: black;
+}
 </style>

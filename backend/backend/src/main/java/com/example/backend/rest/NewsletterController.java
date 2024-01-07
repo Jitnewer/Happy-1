@@ -66,7 +66,7 @@ public class NewsletterController {
                     "message", "Newsletter added successfully",
                     "status", HttpStatus.CREATED.value(),
                     "location", location.toString(),
-                    "newsletter", newsletter));
+                    "entity", newsletter));
         } catch (Exception e) {
             Map<String, Object> errorResponse = new HashMap<>();
             errorResponse.put("message", "Error adding the newsletter");

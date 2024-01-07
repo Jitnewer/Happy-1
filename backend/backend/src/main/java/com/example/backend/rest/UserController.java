@@ -36,7 +36,15 @@ public class UserController {
         }
     }
 
-
+    @GetMapping("/mail/{mail}")
+    public ResponseEntity<Object> getUserByMail(@PathVariable String mail) {
+        try {
+            List<User> users = userRepository.findByQuery("find_User_By_Id", mail);
+            return ResponseEntity.ok(users.get(0));
+        } catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("message", "Error getting user by Mail", "error", e.getMessage()));
+        }
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<Object> getUser(@PathVariable long id) {
@@ -58,7 +66,7 @@ public class UserController {
                 return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("message", "User with mail:" + user.getMail() + " is already in use"));
             }
 
-            User addedUser = userRepository.save(user);
+            User savedUser = userRepository.save(user);
 
             URI location = ServletUriComponentsBuilder
                     .fromCurrentRequest()
@@ -70,7 +78,7 @@ public class UserController {
                     "message", "User added successfully",
                     "status", HttpStatus.CREATED.value(),
                     "location", location.toString(),
-                    "entity", addedUser));
+                    "entity", savedUser));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("message", "Error adding user", "error", e.getMessage()));
         }
@@ -81,18 +89,14 @@ public class UserController {
        return this.updateUser(user, id);
     }
 
-
     @PutMapping("/{id}")
     public ResponseEntity<Object> updateUser(@RequestBody User user, @PathVariable Long id) {
         try {
             if (userRepository.findById(id) == null) {
                 return ResponseEntity.notFound().build();
             }
-            User updatedUser = userRepository.save(user);
-            return ResponseEntity.status(HttpStatus.OK).body(Map.of(
-                    "message", "User updated successfully",
-                    "entity", updatedUser
-                    ));
+            userRepository.save(user);
+            return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "User updated successfully"));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("message", "Error updating user", "error", e.getMessage()));
         }
