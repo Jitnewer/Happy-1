@@ -128,7 +128,7 @@ export default {
         if (this.filter == null) {
           await this.researchService.asyncFindAll()
         } else {
-          this.$router.push({ name: 'carousels', query: { sort: this.filter } })
+          this.$router.push({ name: 'researches', query: { sort: this.filter } })
           await this.researchService.asyncFindByProperty(this.filter, 'getByTheme')
         }
       } catch (e) {

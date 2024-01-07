@@ -83,8 +83,6 @@ export class FileUploadAdapter {
       console.log(formdata)
       console.log(this.request(formdata, '/carouselPic'))
       const response = await this.request(formdata, '/carouselPic')
-      console.log()
-      console.log(response.json())
       return response.json()
     } catch (error) {
       console.error('Error uploading image: ', error)
@@ -98,7 +96,6 @@ export class FileUploadAdapter {
       formdata.append('challengeId', challengeId)
 
       const response = await this.request(formdata, '/challengePic')
-      console.log(response.json())
       return response.json()
     } catch (error) {
       console.error('Error uploading image: ', error)
