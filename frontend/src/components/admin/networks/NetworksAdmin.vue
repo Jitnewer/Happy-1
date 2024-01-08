@@ -30,7 +30,7 @@
           <td class="firstParagraph">{{ network.firstParagraph }}</td>
           <td v-if="network.dateTime" class="datetime">{{ formattedDateTime(network.dateTime) }}</td>
           <td class="theme_small">{{ network.theme }}</td>
-          <td class="image"><img :src="network.image ? require(`../../../${network.image}`) : ''" alt="Network Image"></td>
+          <td class="image"><img :src="network.image ? `https://ik.imagekit.io/happy1hva${network.image}` : ''" alt="Network Image"></td>
           <td><button class="relation" @click="paragraphs(network)">Check Paragraphs</button></td>
           <td>
             <div class="table-buttons">

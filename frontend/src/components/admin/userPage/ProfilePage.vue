@@ -86,7 +86,7 @@ export default {
     </div>
     <div class="profile-info">
       <div class="info-left">
-        <img class="profile-pic" :src="require(`../../../${user.profilePic}`)">
+        <img class="profile-pic" :src="`https://ik.imagekit.io/happy1hva${user.profilePic}`">
         <div class="profile-edit-buttons">
           <button class="back-button" @click="previousPage">Back</button>
         </div>

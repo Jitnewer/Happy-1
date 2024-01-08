@@ -57,6 +57,7 @@ export default {
         })
         if (user !== null) {
           const userType = user.body.userType
+          window.localStorage.setItem('profileId', user.body.id)
 
           if (userType === User.userTypes.Admin) {
             this.$store.commit('setLoggedInAsAdmin', true)

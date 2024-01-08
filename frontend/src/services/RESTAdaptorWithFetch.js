@@ -53,6 +53,7 @@ export class RESTAdaptorWithFetch {
 
   async asyncFindAll () {
     try {
+      console.log(this.resourceUrl)
       const data = await this.fetchJson(this.resourceUrl, {
       })
       return data?.map(d => this.copyConstructor(d))
