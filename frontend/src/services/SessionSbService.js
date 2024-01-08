@@ -13,31 +13,31 @@ export class SessionSbService {
   async fetchJson (url, options = null) {
     try {
       const response = await fetch(url, options)
-      const authorization = response.headers.get('Authorization') // Access the headers
 
       if (response.ok) {
-        const body = await response.json()
-        return { authorization, body }
+        return await response.json()
       } else {
         const responseBody = !response.bodyUsed ? await response.text() : ''
 
-        console.log(response)
-
-        if (response.status === 401) {
-          throw new CustomError('Unauthorized: Please log in', response.status, responseBody)
-        } else if (response.status === 403) {
-          throw new CustomError('Forbidden: You don\'t have permission to access this resource', response.status, responseBody)
-        } else {
-          throw new CustomError('Error with response', response.status, responseBody)
-        }
+        console.error(responseBody)
       }
     } catch (error) {
-      if (error.status === 401) {
-        throw new CustomError('Unauthorized: Please log in', error.status, error.message)
-      } else if (error.status === 403) {
-        throw new CustomError('Forbidden: You don\'t have permission to access this resource', error.status, error)
+      const errorString = error.toString()
+      const innerJsonStartIndex = errorString.indexOf('{"')
+      const innerJsonEndIndex = errorString.lastIndexOf('"}}') + 2
+      const innerJsonSubstring = errorString.substring(innerJsonStartIndex, innerJsonEndIndex)
+      const decodedInnerJson = decodeURIComponent(innerJsonSubstring)
+
+      const correctedInnerJsonString = decodedInnerJson.replace('{"message":"{', '{"message":{').replace('}"}', '}}')
+
+      const errorObject = JSON.parse(correctedInnerJsonString + '}')
+      const e = errorObject.params.message
+      if (e.status === 401) {
+        throw new CustomError('Unauthorized: Please log in', e.status, e.message)
+      } else if (e.status === 403) {
+        throw new CustomError('Forbidden: You don\'t have permission to access this resource', e.status, e.message)
       } else {
-        throw new CustomError('Error fetching data', error.status || 500, error.message)
+        throw new CustomError('Error fetching data', e.status || 500, e.message)
       }
     }
   }
