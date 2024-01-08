@@ -18,6 +18,7 @@ import ChallengeDetails from '@/components/challenges/ChallengeDetails.vue'
 import Researches from '@/components/research/Researches.vue'
 import ResearchDetails from '@/components/research/ResearchDetails.vue'
 import welcomeAdmin from '@/components/admin/welcomeAdmin.vue'
+import AdminCarouselView from '@/components/admin/carousels/AdminCarouselView.vue'
 import News from '@/components/News.vue'
 import ChallengesAdmin from '@/components/admin/challenges/ChallengesAdmin.vue'
 import ChallengeAdminCreate from '@/components/admin/challenges/ChallengeAdminCreate.vue'
@@ -36,6 +37,8 @@ import NetworkAdminEdit from '@/components/admin/networks/NetworkAdminEdit.vue'
 import SubscribersAdmin from '@/components/admin/subscriber/SubscribersAdmin.vue'
 import SubscriberAdminCreate from '@/components/admin/subscriber/SubscriberAdminCreate.vue'
 import SubscriberAdminEdit from '@/components/admin/subscriber/SubscriberAdminEdit.vue'
+import AdminCarouselCreate from '@/components/admin/carousels/AdminCarouselCreate.vue'
+import AdminCarouselEdit from '@/components/admin/carousels/AdminCarouselEdit.vue'
 
 const routes = [
   {
@@ -131,6 +134,21 @@ const routes = [
     path: '/admin/subscribers/edit/:id',
     name: 'adminSubscriberEdit',
     component: SubscriberAdminEdit
+  },
+  {
+    path: '/admin/carousels',
+    name: 'adminCarousels',
+    component: AdminCarouselView
+  },
+  {
+    path: '/admin/carousels/create',
+    name: 'adminCarouselCreate',
+    component: AdminCarouselCreate
+  },
+  {
+    path: '/admin/carousels/edit/:id',
+    name: 'adminCarouselEdit',
+    component: AdminCarouselEdit
   },
   {
     path: '/admin/challenges',

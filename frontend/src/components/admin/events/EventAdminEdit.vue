@@ -5,7 +5,7 @@
       <span> > </span>
       <router-link :to="{ name: 'adminEvents' }">Events</router-link>
       <span>></span>
-      <router-link :to="{ name: 'adminEventEdit', query: { id: $route.params.id } }">Edit {{ copiedEvent.id }}</router-link>
+      <router-link :to="{ name: 'adminEventEdit', query: { id: $route.params.id } }">Edit / {{ copiedEvent.id }}</router-link>
     </div>
     <div class="challenge-create">
       <div class="title-button-create">
@@ -41,8 +41,8 @@
           </div>
           <div class="form-label">
             <p>Date</p>
-            <input type="date" v-model="copiedEvent.date" :class="{'invalid-input': copiedEvent.date && !isDateValid,'valid-input': copiedEvent.date && isDateValid}" @input="validateDate(copiedEvent.date)">
-            <p class="errorMessage" v-if="!isDateValid && copiedEvent.date">Invalid date, needs te be at least 5 days ahead of today</p>
+            <input type="datetime-local" v-model="formattedDateTimeInput" :class="{'invalid-input': formattedDateTimeInput && !isDateValid,'valid-input': formattedDateTimeInput && isDateValid}" @input="validateDate(formattedDateTimeInput)">
+            <p class="errorMessage" v-if="!isDateValid && formattedDateTimeInput">Invalid date, needs te be at least 5 days ahead of today</p>
           </div>
           <div class="form-label">
             <p>Time Begin</p>
@@ -73,6 +73,7 @@
 </template>
 
 <script>
+
 import CustomError from '@/CustomError'
 
 export default {
@@ -309,14 +310,30 @@ export default {
 
       return isNameValid && isCityValid && isLocationValid && isPriceValid && isInfoValid && isDateValid && isTimeBeginValid && isTimeEndValid && isSizeValid && isImageValid
     },
-    getFormattedDate (dateString) {
-      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }
-      return new Date(dateString).toLocaleDateString('nl-NL', options)
+    formatDateTimeWithoutSeconds (dateTime) {
+      const date = new Date(dateTime)
+      const year = date.getFullYear()
+      const month = `0${date.getMonth() + 1}`.slice(-2)
+      const day = `0${date.getDate()}`.slice(-2)
+      const hours = `0${date.getHours()}`.slice(-2)
+      const minutes = `0${date.getMinutes()}`.slice(-2)
+
+      return `${year}-${month}-${day}T${hours}:${minutes}`
     }
   },
   computed: {
     event () {
       return this.eventsService.entities
+    },
+    formattedDateTimeInput: {
+      get () {
+      // Format challenge.dateTime for datetime-local input
+        return this.formatDateTimeWithoutSeconds(this.copiedEvent.dateTime)
+      },
+      set (value) {
+      // Parse the input value back to ISO format
+        this.copiedEvent.dateTime = new Date(value).toISOString()
+      }
     }
   },
   async created () {

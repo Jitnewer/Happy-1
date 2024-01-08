@@ -13,18 +13,18 @@
       </p>
     </div>
     <div class="carouselHolder">
-      <Carousel class="carousel" v-slot="{ currentSlide }">
-        <Slide v-for="(slide, index) in carouselSlides" :key="index" :slide-text="slide.text"
-               :is-current="index + 1 === currentSlide">
+      <Carousel class="carousel" v-slot="{ currentSlide }" :slideCount="carouselSlides.length">
+        <Slide v-for="(slide, index) in carouselSlides" :key="index" :slide-title="slide.title"
+               :is-current="index + 1">
           <div v-show="currentSlide === index + 1" class="slide">
             <div class="welcomeMsg">
-              <h2 class="blue-text"> {{ slide.date }} </h2>
-              <h1 class="yellow-text"> {{ slide.title }}</h1>
+              <h2 class="blue-text"> {{ parseDate(slide.date) }} </h2>
+              <h2 class="yellow-text"> {{ slide.title }}</h2>
               <button>
                 <span class="blue-text"> > Lees meer </span>
               </button>
             </div>
-            <img class="carouselImg" :src="require(`@/assets/img/carousel/${slide.image}.jpg`)" alt="">
+            <img class="carouselImg" :src="require(`../../${slide.image}`)" alt="Image">
           </div>
         </Slide>
       </Carousel>
@@ -33,13 +33,13 @@
       <span class="yellow-text">OUR</span> <span class="blue-text">PILLARS</span>
     </h1>
     <div class="pillarContainer">
-      <button @click="challenges">
+      <button class="pillarButton" @click="challenges">
         <div class="pillar" data-aos="fade-up">
           <div class="pillarText">
             <h1 class="welcomeH1">
               <span class="blue-text">Challenges</span>
             </h1>
-            <h3>
+            <h3 class="h3Theme">
               Explore sustainability challenges in the hospitality industry with our initiative.
             </h3>
             <h3><span class="blue-text"> > Read more</span></h3>
@@ -49,7 +49,7 @@
           </div>
         </div>
       </button>
-      <button @click="network">
+      <button class="pillarButton" @click="network">
         <div class="pillar" data-aos="fade-up">
           <div class="pillarText">
             <h1 class="welcomeH1">
@@ -67,13 +67,13 @@
           </div>
         </div>
       </button>
-      <button @click="research">
+      <button class="pillarButton" @click="research">
         <div class="pillar" data-aos="fade-up">
           <div class="pillarText">
             <h1 class="welcomeH1">
               <span class="blue-text">Research</span>
             </h1>
-            <h3>
+            <h3 class="h3Theme">
               Explore the challenges and advancements in sustainable research practices within the hospitality
               sector.
 
@@ -181,18 +181,15 @@ import { mapState } from 'vuex'
 
 export default {
   name: 'Welcome.vue',
+  inject: ['carouselService'],
   components: { Carousel, Slide },
-  computed: {
-    ...mapState(['loggedIn', 'loggedInAsAdmin', 'loggedInAsSuperUser'])
-  },
   data () {
     return {
-      carouselSlides: [
-        { image: 'bg-1', date: '15 December 2023', title: 'Embracing energy transition within hospitality' },
-        { image: 'bg-2', date: '27 December 2023', title: 'Protein within hospitality' },
-        { image: 'bg-3', date: '15 November 2023', title: 'Water embracing tactics' }
-      ]
     }
+  },
+  async mounted () {
+    await this.carouselService.asyncFindAll()
+    console.log('carouselSlides:', this.carouselSlides)
   },
   created () {
     if (this.loggedInAsAdmin || this.loggedInAsSuperUser) {
@@ -200,6 +197,31 @@ export default {
     }
   },
   methods: {
+    formattedDateTime (dateTime) {
+      const today = new Date()
+      const challengeDate = new Date(dateTime)
+
+      const formattedTime = challengeDate.toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' })
+
+      if (
+        challengeDate.getDate() === today.getDate() &&
+    challengeDate.getMonth() === today.getMonth() &&
+    challengeDate.getFullYear() === today.getFullYear()
+      ) {
+        // Vandaag, (tijd)
+        return `Vandaag, ${formattedTime}`
+      } else if (
+        challengeDate.getDate() === today.getDate() - 1 &&
+    challengeDate.getMonth() === today.getMonth() &&
+    challengeDate.getFullYear() === today.getFullYear()
+      ) {
+        // Gisteren, (tijd)
+        return `Gisteren, ${formattedTime}`
+      } else {
+        // Maandag, (tijd), Donderdag (tijd)
+        return `${this.getFormattedDate(dateTime)}, ${formattedTime}`
+      }
+    },
     foodWasteNews () {
       this.$router.push({ name: 'news', query: { sort: 'FOOD_WASTE' } })
     },
@@ -226,7 +248,21 @@ export default {
     },
     research () {
       this.$router.push({ name: 'researches' })
+    },
+    parseDate (dateString) {
+      const dateObject = new Date(dateString)
+      const day = dateObject.getDate()
+      const month = dateObject.getMonth() + 1
+      const year = dateObject.getFullYear()
+
+      return `${day}-${month}-${year}`
     }
+  },
+  computed: {
+    carouselSlides () {
+      return this.carouselService.entities
+    },
+    ...mapState(['loggedIn', 'loggedInAsAdmin', 'loggedInAsSuperUser'])
   }
 }
 </script>
