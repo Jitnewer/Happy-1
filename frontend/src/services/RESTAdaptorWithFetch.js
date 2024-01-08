@@ -18,23 +18,36 @@ export class RESTAdaptorWithFetch {
       } else {
         const responseBody = !response.bodyUsed ? await response.text() : ''
 
-        if (response.status === 401) {
-          throw new CustomError('Unauthorized: Please log in', response.status, responseBody)
-        } else if (response.status === 403) {
-          throw new CustomError('Forbidden: You don\'t have permission to access this resource', response.status, responseBody)
-        } else {
-          throw new CustomError('Error with response', response.status, responseBody)
-        }
+        console.error(responseBody)
       }
     } catch (error) {
-      if (error.status === 401) {
-        throw new CustomError('Unauthorized: Please log in', error.status, error.message)
-      } else if (error.status === 403) {
-        throw new CustomError('Forbidden: You don\'t have permission to access this resource', error.status, error.message)
+      const errorString = error.toString()
+      const innerJsonStartIndex = errorString.indexOf('{"')
+      const innerJsonEndIndex = errorString.lastIndexOf('"}}') + 2
+      const innerJsonSubstring = errorString.substring(innerJsonStartIndex, innerJsonEndIndex)
+      const decodedInnerJson = decodeURIComponent(innerJsonSubstring)
+
+      const correctedInnerJsonString = decodedInnerJson.replace('{"message":"{', '{"message":{').replace('}"}', '}}')
+
+      const errorObject = JSON.parse(correctedInnerJsonString + '}')
+      const e = errorObject.params.message
+      if (e.status === 401) {
+        throw new CustomError('Unauthorized: Please log in', e.status, e.message)
+      } else if (e.status === 403) {
+        throw new CustomError('Forbidden: You don\'t have permission to access this resource', e.status, e.message)
       } else {
-        console.log(error)
-        throw new CustomError('Error fetching data', error.status || 500, error.message)
+        throw new CustomError('Error fetching data', e.status || 500, e.message)
       }
+    }
+  }
+
+  async asyncFindByMail (mail) {
+    try {
+      const data = await this.fetchJson(`${this.resourceUrl}/mail/${mail}`)
+
+      return data
+    } catch (e) {
+      throw new CustomError('Error in asyncFindByMail', e.toJSON().status || 500, e.toJSON().error)
     }
   }
 
@@ -45,7 +58,7 @@ export class RESTAdaptorWithFetch {
       })
       return data?.map(d => this.copyConstructor(d))
     } catch (error) {
-      throw new CustomError('Error in asyncFindAll', error.status || 500, error.message)
+      throw new CustomError('Error in asyncFindAll', error.toJSON().status || 500, error.toJSON().error)
     }
   }
 
@@ -54,7 +67,7 @@ export class RESTAdaptorWithFetch {
       const response = await this.fetchJson(`${this.resourceUrl}/${id}`)
       return this.copyConstructor(response)
     } catch (error) {
-      throw new CustomError('Error in asyncFindById', error.status || 500, error.message)
+      throw new CustomError('Error in asyncFindById', error.toJSON().status || 500, error.toJSON().error)
     }
   }
 
@@ -65,7 +78,7 @@ export class RESTAdaptorWithFetch {
       })
       return this.copyConstructor(response)
     } catch (error) {
-      throw new CustomError('Error in asyncAddEntityToEntity', error.status || 500, error.message)
+      throw new CustomError('Error in asyncAddEntityToEntity', error.toJSON().status || 500, error.toJSON().error)
     }
   }
 
@@ -76,7 +89,7 @@ export class RESTAdaptorWithFetch {
       })
       return true
     } catch (error) {
-      throw new CustomError('Error in asyncRemoveEntityFromEntity', error.status || 500, error.message)
+      throw new CustomError('Error in asyncRemoveEntityFromEntity', error.toJSON().status || 500, error.toJSON().error)
     }
   }
 
@@ -85,7 +98,7 @@ export class RESTAdaptorWithFetch {
       const response = await this.fetchJson(`${this.resourceUrl}/${url}/${column}`)
       return this.copyConstructor(response)
     } catch (error) {
-      throw new CustomError('Error in asyncFindByColumn', error.status || 500, error.message)
+      throw new CustomError('Error in asyncFindByColumn', error.toJSON().status || 500, error.toJSON().error)
     }
   }
 
@@ -93,24 +106,22 @@ export class RESTAdaptorWithFetch {
     try {
       return await this.fetchJson(`${this.resourceUrl}/${url}/${id1}`)
     } catch (error) {
-      console.error('Error in asyncAddEntityToEntity:', error.message)
-      return null
+      throw new CustomError('Error in asyncAddEntityToEntity', error.toJSON().status || 500, error.toJSON().error)
     }
   }
 
   async asyncHasEntityEntity (id1, id2, url) {
     try {
-      console.log(`${this.resourceUrl}/${url}/${id1}/${id2}`)
       return await this.fetchJson(`${this.resourceUrl}/${url}/${id1}/${id2}`)
     } catch (error) {
-      console.error('Error in asyncAddEntityToEntity:', error)
+      throw new CustomError('Error in asyncAddEntityToEntity', error.toJSON().status || 500, error.toJSON().error)
     }
   }
 
   async asyncSave (object) {
     let response
     try {
-      if (object.id == null) {
+      if (object.id === 0 || !object.id) {
         response = await this.fetchJson(this.resourceUrl, {
           method: 'POST',
           body: JSON.stringify(object),
@@ -127,22 +138,33 @@ export class RESTAdaptorWithFetch {
           }
         })
       }
-      console.log(response)
-
-      return this.copyConstructor(response.entity)
+      return response
     } catch (error) {
-      console.log(error)
-      throw new CustomError('Error in asyncSave', error.status || 500, error.message)
+      throw new CustomError('Error in asyncSave', error.toJSON().status || 500, error.toJSON().error)
+    }
+  }
+
+  async asyncSendNewsletter (object) {
+    try {
+      return await this.fetchJson(`${this.resourceUrl}/newsletter`, {
+        method: 'POST',
+        body: JSON.stringify(object),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+    } catch (error) {
+      throw new CustomError('Error in asyncSendNewsletter', error.toJSON().status || 500, error.toJSON().error)
     }
   }
 
   async asyncDeleteById (id) {
     try {
-      const response = await this.fetchJson(`${this.resourceUrl}/${id}`, {
+      return await this.fetchJson(`${this.resourceUrl}/${id}`, {
         method: 'DELETE'
       })
     } catch (error) {
-      throw new CustomError('Error in asyncDeleteById', error.status || 500, error.message)
+      throw new CustomError('Error in asyncDeleteById', error.toJSON().status || 500, error.toJSON().error)
     }
   }
 
@@ -150,7 +172,7 @@ export class RESTAdaptorWithFetch {
     try {
       return await this.fetchJson(`${this.resourceUrl}/${url}/${propertyId}`)
     } catch (error) {
-      throw new CustomError('Error in asyncFindByProperty', error.status || 500, error.message)
+      throw new CustomError('Error in asyncFindByProperty', error.toJSON().status || 500, error.toJSON().error)
     }
   }
 }

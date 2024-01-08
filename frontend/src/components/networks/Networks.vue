@@ -59,6 +59,8 @@
 </template>
 
 <script>
+import ErrorPopUp from '@/components/errorPopUp.vue'
+
 export default {
   name: 'Networks.vue',
   inject: ['networkService'],
@@ -70,8 +72,13 @@ export default {
   },
   methods: {
     async selectNetwork (network) {
-      this.$router.push({ name: 'network', params: { id: network.id }, query: { sort: this.filter } })
-      await this.networkService.asyncFindById(network.id)
+      this.$router.push({ name: 'network', params: { id: network.id } })
+      try {
+        await this.networkService.asyncFindById(network.id)
+      } catch (e) {
+        console.error(e.toJSON())
+        await this.networkService.asyncFindById(network.id)
+      }
     },
     toggleFilter () {
       this.showFilter = !this.showFilter
@@ -96,7 +103,7 @@ export default {
           this.$router.push({ name: 'networks', query: { sort: this.filter } })
         }
       } catch (e) {
-        console.error(e)
+        console.error(e.toJSON())
       }
     },
     shortenParagraph (paragraph) {

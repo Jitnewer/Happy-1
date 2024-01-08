@@ -59,6 +59,8 @@
 </template>
 
 <script>
+import ErrorPopUp from '@/components/errorPopUp.vue'
+
 export default {
   name: 'Challenges.vue',
   inject: ['challengeService'],
@@ -96,7 +98,13 @@ export default {
           this.$router.push({ name: 'challenges', query: { sort: this.filter } })
         }
       } catch (e) {
-        console.error(e)
+        console.error(e.toJSON())
+        this.$store.commit('setError', true)
+        this.$store.commit('setErrorMessage', e.toJSON().error)
+        setTimeout(() => {
+          this.$store.commit('setError', false)
+          this.$store.commit('setErrorMessage', null)
+        }, 8000)
       }
     },
     shortenParagraph (paragraph) {

@@ -44,7 +44,7 @@
               <p> {{ formattedPrice(event) }}</p>
             </div>
           </div>
-          <div class="event-right-bottom">
+          <div class="event-right-bottom2">
             <button @click="selectEventMoreInfo(event)" >More Info</button>
             <button v-if="!isEventSignedIn(event)" @click="toggleSignIn(event)">Sign In</button>
             <button :disabled="disableSignOut(event)" v-if="isEventSignedIn(event)" @click="toggleSignOut(event)">Sign Out</button>
@@ -97,6 +97,7 @@
 import { Event } from '@/models/event'
 import { mapGetters } from 'vuex'
 import { reactive } from 'vue'
+import ErrorPopUp from '@/components/errorPopUp.vue'
 
 export default {
   name: 'Events.vue',
@@ -126,15 +127,14 @@ export default {
       if (this.filter == null) {
         this.filter = 'asc'
       }
-      console.log(this.events)
       this.$router.push({ name: 'events', query: { sort: this.filter } })
       await this.eventsService.asyncFindAll()
       const userAndToken = await this.sessionSBService.asyncFindByEmail(JSON.parse(localStorage.getItem('userDetails')).mail)
       this.user = userAndToken.body
-
+      await this.userEventsService.asyncFindByProperty(this.user.id, 'eventsByUser')
       this.signedInEvents = this.associatedEvents.map((event) => event.id)
     } catch (e) {
-      console.error(e)
+      console.error(e.toJSON())
     }
   },
   methods: {
@@ -176,7 +176,13 @@ export default {
         }
         return false
       } catch (e) {
-        console.log(e)
+        console.log(e.toJSON())
+        this.$store.commit('setError', true)
+        this.$store.commit('setErrorMessage', e.toJSON().error)
+        setTimeout(() => {
+          this.$store.commit('setError', false)
+          this.$store.commit('setErrorMessage', null)
+        }, 8000)
       }
     },
     updateFilter (filterValue) {
@@ -194,7 +200,6 @@ export default {
     async signIn () {
       this.showSignIn = false
       this.signInIn = true
-
       // First timeout: Add participant after 10 seconds
       setTimeout(() => {
         this.userEventsService.asyncAddEntityToEntity(this.user.id, this.selectedEventsSignIn.id, 'addUserToEvent')
@@ -203,12 +208,17 @@ export default {
       setTimeout(() => {
         this.signInIn = false
         this.signInComplete = true
-
         // Third timeout: Reset selectedEventsSignIn after 5 seconds
         setTimeout(() => {
           this.signInComplete = false
           this.signedInEvents.push(this.selectedEventsSignIn.id)
           this.selectedEventsSignIn = null
+          this.$store.commit('setSuccess', true)
+          this.$store.commit('setSuccessMessage', 'Signed in for an event!')
+          setTimeout(() => {
+            this.$store.commit('setSuccess', false)
+            this.$store.commit('setSuccessMessage', null)
+          }, 8000)
         }, 3000)
       }, 7000)
     },
@@ -235,6 +245,12 @@ export default {
           }
           this.selectedEventsSignOut = null
           this.$forceUpdate()
+          this.$store.commit('setSuccess', true)
+          this.$store.commit('setSuccessMessage', 'Signed out for an event!')
+          setTimeout(() => {
+            this.$store.commit('setSuccess', false)
+            this.$store.commit('setSuccessMessage', null)
+          }, 8000)
         }, 3000)
       }, 7000)
     },
@@ -287,7 +303,6 @@ export default {
       return this.userEventsService.entities
     },
     filteredEventsOnDate  () {
-      console.log(this.event)
       if (Array.isArray(this.events)) {
         if (this.events.length > 1) {
           const sortedEvents = this.events.slice().sort((a, b) => {

@@ -35,7 +35,6 @@ export default {
         this.$router.push({ path: '/PageNotFound' })
         return
       }
-
       this.infoView()
     },
     setSelected (newSelectedElementClass, oldSelectedElementClass) {

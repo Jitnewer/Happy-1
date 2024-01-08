@@ -1,0 +1,468 @@
+.image-card-regform img{
+    width: 90px;
+    height: 90px;
+    position: absolute;
+    right: 10px;
+
+}
+
+.sign-up-input.invalid-input {
+    border: 1px solid red;
+    box-shadow: var(--shadow), 0 0 0 2px red;
+}
+
+.sign-up-input {
+    outline: none;
+}
+.sign-up-input.invalid-input:focus-visible {
+    outline: none
+}
+
+.errorMessageRegistrationForm{
+    color: red;
+    display: flex;
+    font-size: smaller;
+}
+.sign-up-input.valid-input {
+    border: 1px solid limegreen;
+    box-shadow: var(--shadow), 0 0 0 2px limegreen;
+}
+
+.sign-up-input.valid-input:focus-visible {
+    outline: none
+}
+
+/* The switch - the box around the slider */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+/* The slider */
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: #0992A4;
+}
+
+input:focus + .slider {
+    box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+/*Sign up form */
+.sign-up-body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 60vh;}
+
+.container-sign-up {
+    width: 400px;
+    background: #fff;
+    border-radius: 5px;
+    text-align: center;
+    padding: 50px 35px 10px 35px;
+    box-shadow: 0px 3px 40px #000;
+}
+
+.header-sign-up {
+    font-size: 35px;
+    font-weight: 600;
+    margin: 0 0 30px 0;
+}
+
+.container-sign-up .form-sign-up-1 {
+    width: 100%;
+}
+
+
+.form-sign-up-1 form .sign-up-page {
+    width: 100%;
+}
+
+.title-sign-up-form {
+    text-align: left;
+    font-size: 25px;
+    font-weight: 500;
+}
+
+.field-sign-up {
+    height: 45px;
+    width: 100%;
+    margin: 45px 0;
+    margin-bottom: 10px;
+    display: flex;
+    position: relative;
+}
+
+.label-sign-up {
+    position: absolute;
+    top: -30px;
+    font-weight: 500;
+}
+
+.sign-up-input {
+    outline: none;
+    width: 100%;
+    padding: 0.5rem;
+    font-size: 12px;
+    box-shadow: var(--shadow);
+    border: none;
+}
+
+.sign-up-input:focus-visible {
+    outline: none;
+}
+
+.select-gender-sign-up {
+    outline: none;
+    width: 100%;
+    padding: 0.5rem;
+    font-size: 12px;
+    box-shadow: var(--shadow);
+    border: none;
+
+}
+
+.select-gender-sign-up:focus-visible {
+    outline: none;
+}
+
+.field-btn {
+    display: flex;
+}
+
+.field-btn button {
+    width: 100%;
+    height: 60px;
+    margin-left: 5px;
+    margin-bottom: 10px;
+    margin-top: 30px;
+    border: none;
+    background: #0992A4;
+    color: #fff;
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: 0.3s ease;
+    box-shadow: var(--shadow);
+
+}
+
+.field-btn button:hover {
+    background:#FECC32;
+}
+
+.prev-1 {
+    margin-right: 3px;
+    font-size: 17px;
+}
+
+.next-1 {
+    margin-right: 3px;
+    font-size: 17px;
+}
+
+.progress-bar-sign-up {
+    display: flex;
+    margin: 40px 0;
+}
+
+.step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+}
+
+.p-sign-up-form {
+    font-size: 18px;
+    font-weight: 500;
+    color: #000;
+    margin-bottom: 8px;
+}
+
+.bullet-sign-up-form {
+    height: 30px;
+    width: 30px;
+    border: 2px solid #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    font-weight: 500;
+    font-size: 17px;
+    line-height: 25px;
+    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+}
+.span-sign-up-form-check{
+    color:whitesmoke;
+}
+.span-sign-up-form-check span {
+    font-weight: 500;
+    font-size: 17px;
+    line-height: 25px;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%);
+}
+
+.bullet-sign-up-form:before,
+.bullet-sign-up-form:after {
+    display: none;
+}
+
+.step:last-child .bullet-sign-up-form:before,
+.step:last-child.bullet-sign-up-form:after {
+    position: absolute;
+    content: '';
+    bottom: 11px;
+    right: -51px;
+    height: 3px;
+    width: 44px;
+    background: #262626;
+}
+
+.step .bullet-sign-up-form:after {
+    background: #0992A4;
+    transform: scaleX(0);
+    transform-origin: left;
+    animation: animate 0.3s linear forwards;
+}
+
+@keyframes animate {
+    100% {
+        transform: scaleX(1);
+    }
+}
+
+.check-sign-up {
+    position: absolute;
+    left: 50%;
+    top: 70%;
+    font-size: 15px;
+    transform: translate(-50%, -50%);
+    display: none;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+/*Sign up AS form -  */
+.form-sign-up-as-1 form .sign-up-page {
+}
+
+/*Sign up AS button -  */
+.field-btn-sign-up-as button {
+    width: 100%;
+    height: 60px;
+    margin-top: 50px;
+    margin-bottom: 10px;
+    border: none;
+    background: #0992A4;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.field-btn-sign-up-as button:hover {
+    background: #FECC32;
+}
+
+.container-reg .title {
+    font-size: 25px;
+    font-weight: 500;
+    position: relative;
+}
+
+.container-reg .title::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 3px;
+    width: 30px;
+    background: #0992a4;
+    justify-content: center;
+    align-items: center;
+}
+
+.container-reg form .user-details {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin: 20px 0 12px 0;
+}
+
+form .user-details .input-box {
+    margin-bottom: 15px;
+    width: calc(100% / 2 - 20px);
+}
+
+.user-details .input-box .details {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 5px;
+}
+
+.user-details .input-box input {
+    height: 45px;
+    width: 100%;
+    outline: none;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    padding-left: 15px;
+    font-size: 16px;
+    border-bottom-width: 2px;
+    transition: a11 0.3s ease;
+}
+
+.user-details .input-box input:focus,
+.user-details .input-box input:valid {
+    border-color: #0992A4;
+}
+
+form .gender-details .gender-title {
+    font-size: 20px;
+    font-weight: 500;
+}
+
+form .gender-details .gender-category {
+    display: flex;
+    width: 80%;
+    margin: 14px 0;
+    justify-content: space-between;
+}
+
+.gender-details .gender-category label {
+    display: flex;
+    align-items: center;
+}
+
+.gender-details .gender-category .dot {
+    height: 18px;
+    width: 18px;
+    background: #d9d9d9;
+    border-radius: 50%;
+    margin-right: 10px;
+    border: 5px solid transparent;
+    transition: all 0.3s ease;
+}
+
+#dot-1:checked ~ .gender-category label .one,
+#dot-2:checked ~ .gender-category label .two {
+    border-color: #d9d9d9;
+    background: black;
+}
+
+form input[type="radio"] {
+    display: none;
+}
+
+form .button {
+    height: 45px;
+    margin: 45px 0;
+}
+
+.button input {
+    height: 100%;
+    width: 100%;
+    outline: none;
+    color: #fff;
+    border: none;
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    border-radius: 5px;
+    background: #0992A4;
+}
+
+form .button input:hover {
+    background: black;
+}
+
+.check-green {
+    background-color: #0991a3;
+}
+
+.check-yellow {
+    background-color: #FECC32;
+}
+
+.check-red {
+    background-color: #ed3f3f;
+}
+
+@media only screen and (max-width: 1280px) {
+    .header-sign-up {
+        font-size: 25px;
+        font-weight: 600;
+        margin: 0 0 30px 0;
+    }
+    .container-sign-up {
+        width: 325px;
+        background: #fff;
+        border-radius: 5px;
+        text-align: center;
+        padding: 40px 15px 10px 15px;
+        box-shadow: 0px 3px 40px #000;
+    }
+}

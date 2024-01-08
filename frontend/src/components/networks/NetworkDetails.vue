@@ -35,7 +35,17 @@ export default {
       }
     },
     async back () {
-      await this.networkService.asyncFindAll()
+      try {
+        await this.networkService.asyncFindAll()
+      } catch (e) {
+        console.error(e.toJSON())
+        this.$store.commit('setError', true)
+        this.$store.commit('setErrorMessage', e.toJSON().error)
+        setTimeout(() => {
+          this.$store.commit('setError', false)
+          this.$store.commit('setErrorMessage', null)
+        }, 8000)
+      }
 
       this.$router.push({ name: 'networks' })
       this.$emit('update-selected-network')
@@ -45,7 +55,7 @@ export default {
     try {
       await this.networkService.asyncFindById(this.$route.params.id)
     } catch (e) {
-      console.error(e)
+      console.error(e.toJSON())
     }
   },
   computed: {

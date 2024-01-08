@@ -10,7 +10,7 @@
     <div class="challenge-create">
       <div class="title-button-create">
         <h1>Create Research</h1>
-        <button @click="back()">Back</button>
+        <button @click="back()" class="back-button">Back</button>
       </div>
       <div>
         <form @submit.prevent="create" class="challenge-create-form" v-if="research">
@@ -66,7 +66,7 @@
               </div>
             </div>
           </div>
-          <button type="submit" :disabled="!researchEdited && !validateForm()">Save</button>
+          <button type="submit" :disabled="!researchEdited && !validateForm()" class="admin-create">Save</button>
         </form>
       </div>
     </div>
@@ -74,6 +74,8 @@
 </template>
 
 <script>
+
+import CustomError from '@/CustomError'
 export default {
   name: 'ResearchAdminCreate.vue',
   inject: ['researchService', 'researchServiceSuperUser', 'fileUploadService'],
@@ -88,7 +90,7 @@ export default {
         firstParagraph: '',
         dateTime: '',
         theme: '',
-        image: null,
+        image: 'assets/ResearchPic/imagePlaceholder.jpg',
         paragraphs: []
       },
       image: null,
@@ -158,16 +160,35 @@ export default {
         this.research.dateTime = new Date(this.research.dateTime).toISOString()
         try {
           const response = await this.researchServiceSuperUser.asyncSave(this.research)
-          console.log(response)
-
-          const research = response.research
+          const research = response.entity
           const file = await this.fileUploadService.asyncUploadResearchPic(this.image, research.id)
           research.image = file.filePath
-          await this.researchServiceSuperUser.asyncSave(research)
+          const response2 = await this.researchServiceSuperUser.asyncSave(research)
           this.isSaved = true
+          this.$store.commit('setSuccess', true)
+          this.$store.commit('setSuccessMessage', response2.message)
+          setTimeout(() => {
+            this.$store.commit('setSuccess', false)
+            this.$store.commit('setSuccessMessage', null)
+          }, 8000)
           this.$router.push({ name: 'adminResearches' })
         } catch (e) {
-          console.error(e)
+          if (e instanceof CustomError) {
+            console.error(e.toJSON())
+            this.$store.commit('setError', true)
+            this.$store.commit('setErrorMessage', e.toJSON().error)
+            setTimeout(() => {
+              this.$store.commit('setError', false)
+              this.$store.commit('setErrorMessage', null)
+            }, 8000)
+          } else {
+            this.$store.commit('setError', true)
+            this.$store.commit('setErrorMessage', 'Error adding the network')
+            setTimeout(() => {
+              this.$store.commit('setError', false)
+              this.$store.commit('setErrorMessage', null)
+            }, 8000)
+          }
         }
       }
     },

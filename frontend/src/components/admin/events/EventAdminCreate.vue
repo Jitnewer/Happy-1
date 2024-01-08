@@ -10,7 +10,7 @@
     <div class="challenge-create">
       <div class="title-button-create">
         <h1>Create Event</h1>
-        <button @click="back()">Back</button>
+        <button @click="back()" class="back-button">Back</button>
       </div>
       <div>
         <form @submit.prevent="create" class="challenge-create-form" v-if="event">
@@ -65,7 +65,7 @@
             <p class="errorMessage" v-if="!isImageValid && image">{{ imageError }}</p>
           </div>
 
-          <button type="submit" :disabled="!eventEdited && !validateForm()">Save</button>
+          <button type="submit" :disabled="!eventEdited && !validateForm()" class="admin-create">Save</button>
         </form>
       </div>
     </div>
@@ -73,6 +73,8 @@
 </template>
 
 <script>
+import CustomError from '@/CustomError'
+
 export default {
   name: 'EventAdminCreate.vue',
   inject: ['eventsService', 'eventsServiceSuperUser', 'fileUploadService'],
@@ -90,7 +92,7 @@ export default {
         timeBegin: '',
         timeEnd: '',
         size: '',
-        image: null
+        image: 'assets/eventPic/imagePlaceholder.jpg'
       },
       image: null,
       eventEdited: false,
@@ -200,14 +202,35 @@ export default {
       if (this.validateForm()) {
         try {
           const response = await this.eventsServiceSuperUser.asyncSave(this.event)
-          const event = response.event
+          const event = response.entity
           const file = await this.fileUploadService.asyncUploadEventPic(this.image, event.id)
           event.image = file.filePath
-          await this.eventsServiceSuperUser.asyncSave(event)
+          const response2 = await this.eventsServiceSuperUser.asyncSave(event)
           this.isSaved = true
+          this.$store.commit('setSuccess', true)
+          this.$store.commit('setSuccessMessage', response2.message)
+          setTimeout(() => {
+            this.$store.commit('setSuccess', false)
+            this.$store.commit('setSuccessMessage', null)
+          }, 8000)
           this.$router.push({ name: 'adminEvents' })
         } catch (e) {
-          console.error(e)
+          if (e instanceof CustomError) {
+            console.error(e.toJSON())
+            this.$store.commit('setError', true)
+            this.$store.commit('setErrorMessage', e.toJSON().error)
+            setTimeout(() => {
+              this.$store.commit('setError', false)
+              this.$store.commit('setErrorMessage', null)
+            }, 8000)
+          } else {
+            this.$store.commit('setError', true)
+            this.$store.commit('setErrorMessage', 'Error adding the network')
+            setTimeout(() => {
+              this.$store.commit('setError', false)
+              this.$store.commit('setErrorMessage', null)
+            }, 8000)
+          }
         }
       }
     },

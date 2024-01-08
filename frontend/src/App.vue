@@ -1,5 +1,7 @@
 <template>
   <NavBar></NavBar>
+  <error-pop-up v-if="loggedIn || (!loggedIn && !loggedInAsAdmin && !loggedInAsSuperUser)"></error-pop-up>
+  <success-pop-up v-if="loggedIn || (!loggedIn && !loggedInAsAdmin && !loggedInAsSuperUser)">></success-pop-up>
   <router-view v-if="!loggedInAsAdmin && !loggedInAsSuperUser"></router-view>
   <Footer v-if="!loggedInAsAdmin && !loggedInAsSuperUser"></Footer>
 </template>
@@ -20,7 +22,9 @@ import { FetchInterceptor } from '@/services/FetchInterceptor'
 import { CachedRESTAdaptorWithFetch } from '@/services/CachedRESTAdaptorWithFetch'
 import { Network } from '@/models/network.js'
 import { FileUploadAdapter } from '@/services/FileUploadAdapter'
-import { Newsletter } from '@/models/newsletter'
+import { Subscriber } from '@/models/subscriber'
+import ErrorPopUp from '@/components/errorPopUp.vue'
+import SuccessPopUp from '@/components/successPopUp.vue'
 
 export default {
   name: 'App',
@@ -28,6 +32,8 @@ export default {
     ...mapState(['loggedIn', 'loggedInAsAdmin', 'loggedInAsSuperUser'])
   },
   components: {
+    SuccessPopUp,
+    ErrorPopUp,
     NavBar,
     Footer
   },
@@ -48,8 +54,8 @@ export default {
       fileUploadService: new FileUploadAdapter(CONFIG.BACKEND_URL + '/image'),
       networkService: reactive(new CachedRESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/networks', Network.copyConstructor)),
       networkServiceSuperUser: reactive(new CachedRESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/networks/superuser', Network.copyConstructor)),
-      newsletterService: reactive(new CachedRESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/newsletters/authentication', Newsletter.copyConstructor)),
-      newsletterServiceSuperuser: reactive(new CachedRESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/newsletters/superuser', Newsletter.copyConstructor))
+      subscriberService: reactive(new CachedRESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/subscribers/authentication', Subscriber.copyConstructor)),
+      subscriberServiceSuperuser: reactive(new CachedRESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/subscribers/superuser', Subscriber.copyConstructor))
 
     }
   },

@@ -10,7 +10,7 @@
     <div class="challenge-create">
       <div class="title-button-create">
         <h1>Create Challenge</h1>
-        <button @click="back()">Back</button>
+        <button @click="back()" class="back-button">Back</button>
       </div>
       <div>
         <form @submit.prevent="create" class="challenge-create-form" v-if="challenge">
@@ -66,7 +66,7 @@
               </div>
             </div>
           </div>
-          <button type="submit" :disabled="!challengeEdited && !validateForm()">Save</button>
+          <button type="submit" :disabled="!challengeEdited && !validateForm()" class="admin-create">Save</button>
         </form>
       </div>
     </div>
@@ -74,6 +74,9 @@
 </template>
 
 <script>
+
+import CustomError from '@/CustomError'
+
 export default {
   name: 'ChallengeAdminCreate.vue',
   inject: ['challengeService', 'challengeServiceSuperUser', 'fileUploadService'],
@@ -88,7 +91,7 @@ export default {
         firstParagraph: '',
         dateTime: '',
         theme: '',
-        image: null,
+        image: 'assets/ChallengePic/imagePlaceholder.jpg',
         paragraphs: []
       },
       image: null,
@@ -155,17 +158,38 @@ export default {
     },
     async create () {
       if (this.validateForm()) {
-        this.challenge.dateTime = new Date(this.challenge.dateTime).toISOString()
         try {
+          this.challenge.dateTime = new Date(this.challenge.dateTime).toISOString()
           const response = await this.challengeServiceSuperUser.asyncSave(this.challenge)
-          const challenge = response.challenge
+          const challenge = response.entity
           const file = await this.fileUploadService.asyncUploadChallengePic(this.image, challenge.id)
           challenge.image = file.filePath
-          await this.challengeServiceSuperUser.asyncSave(challenge)
+          const response2 = await this.challengeServiceSuperUser.asyncSave(challenge)
           this.isSaved = true
+          this.$store.commit('setSuccess', true)
+          this.$store.commit('setSuccessMessage', response2.message)
+          setTimeout(() => {
+            this.$store.commit('setSuccess', false)
+            this.$store.commit('setSuccessMessage', null)
+          }, 8000)
           this.$router.push({ name: 'adminChallenges' })
         } catch (e) {
-          console.error(e)
+          if (e instanceof CustomError) {
+            console.error(e.toJSON())
+            this.$store.commit('setError', true)
+            this.$store.commit('setErrorMessage', e.toJSON().error)
+            setTimeout(() => {
+              this.$store.commit('setError', false)
+              this.$store.commit('setErrorMessage', null)
+            }, 8000)
+          } else {
+            this.$store.commit('setError', true)
+            this.$store.commit('setErrorMessage', 'Error adding the network')
+            setTimeout(() => {
+              this.$store.commit('setError', false)
+              this.$store.commit('setErrorMessage', null)
+            }, 8000)
+          }
         }
       }
     },

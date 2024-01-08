@@ -10,7 +10,7 @@
     <div class="challenge-create">
       <div class="title-button-create">
         <h1>Edit Research</h1>
-        <button @click="back()">Back</button>
+        <button @click="back()" class="back-button">Back</button>
       </div>
       <div>
         <form @submit.prevent="edit" class="challenge-create-form" v-if="copiedResearch">
@@ -66,7 +66,7 @@
               </div>
             </div>
           </div>
-          <button type="submit" :disabled="!researchEdited && !validateForm()">Save</button>
+          <button type="submit" :disabled="!researchEdited && !validateForm()" class="admin-create">Save</button>
         </form>
       </div>
     </div>
@@ -74,6 +74,9 @@
 </template>
 
 <script>
+
+import CustomError from '@/CustomError'
+
 export default {
   name: 'ResearchAdminEdit.vue',
   inject: ['researchService', 'researchServiceSuperUser', 'fileUploadService'],
@@ -154,16 +157,43 @@ export default {
             if (this.image !== null) {
               const file = await this.fileUploadService.asyncUploadChallengePic(this.image, this.copiedResearch.id)
               this.challenge.image = file.filePath
-              await this.researchServiceSuperUser.asyncSave(this.copiedResearch)
+              const response = await this.researchServiceSuperUser.asyncSave(this.copiedResearch)
               this.isSaved = true
+              this.$store.commit('setSuccess', true)
+              this.$store.commit('setSuccessMessage', response.message)
+              setTimeout(() => {
+                this.$store.commit('setSuccess', false)
+                this.$store.commit('setSuccessMessage', null)
+              }, 8000)
             }
           } else {
-            await this.researchServiceSuperUser.asyncSave(this.copiedResearch)
+            const response = await this.researchServiceSuperUser.asyncSave(this.copiedResearch)
             this.isSaved = true
+            this.$store.commit('setSuccess', true)
+            this.$store.commit('setSuccessMessage', response.message)
+            setTimeout(() => {
+              this.$store.commit('setSuccess', false)
+              this.$store.commit('setSuccessMessage', null)
+            }, 8000)
           }
           this.$router.push({ name: 'adminResearches' })
         } catch (e) {
-          console.error(e)
+          if (e instanceof CustomError) {
+            console.error(e.toJSON())
+            this.$store.commit('setError', true)
+            this.$store.commit('setErrorMessage', e.toJSON().error)
+            setTimeout(() => {
+              this.$store.commit('setError', false)
+              this.$store.commit('setErrorMessage', null)
+            }, 8000)
+          } else {
+            this.$store.commit('setError', true)
+            this.$store.commit('setErrorMessage', 'Error adding the network')
+            setTimeout(() => {
+              this.$store.commit('setError', false)
+              this.$store.commit('setErrorMessage', null)
+            }, 8000)
+          }
         }
       }
     },
@@ -288,7 +318,13 @@ export default {
         this.isParagraphTitleValid = new Array(this.paragraphsAmount).fill(null)
         this.isParagraphContentValid = new Array(this.paragraphsAmount).fill(null)
       } catch (e) {
-        console.error(e)
+        console.error(e.toJSON())
+        this.$store.commit('setError', true)
+        this.$store.commit('setErrorMessage', e.toJSON().error)
+        setTimeout(() => {
+          this.$store.commit('setError', false)
+          this.$store.commit('setErrorMessage', null)
+        }, 8000)
       }
     },
     conformationAlert (callback, message) {

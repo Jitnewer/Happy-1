@@ -41,10 +41,10 @@ export default {
     async save () {
       if (confirm('Are you sure you wan\'t to save changes?')) {
         try {
-          // if (this.pictureUpload) {
-          //   const profilePicPath = await this.fileUploadService.asyncUploadProfilePic(this.pictureUpload, this.user)
-          //   this.copyUser.profilePic = profilePicPath.filePath
-          // }
+          if (this.pictureUpload) {
+            const profilePicPath = await this.fileUploadService.asyncUploadProfilePic(this.pictureUpload, this.user)
+            this.copyUser.profilePic = profilePicPath.filePath
+          }
           this.newProfilePic = null
 
           console.log(this.copyUser)
@@ -54,14 +54,19 @@ export default {
           this.user = this.copyUser
           this.edit = false
         } catch (e) {
-          console.log(e)
+          console.log(e.toJSON())
+          this.$store.commit('setError', true)
+          this.$store.commit('setErrorMessage', e.toJSON().error)
+          setTimeout(() => {
+            this.$store.commit('setError', false)
+            this.$store.commit('setErrorMessage', null)
+          }, 8000)
         }
       }
     }
   },
   async created () {
-    console.log(localStorage)
-    this.user = await this.usersService.asyncFindById(parseInt(localStorage.getItem('profileId')))
+    this.user = await this.usersService.asyncFindByMail(JSON.parse(localStorage.getItem('userDetails')).mail)
     this.$router.push({ name: 'profilePageInfo' })
     this.copyUser = User.copyConstructor(this.user)
   }

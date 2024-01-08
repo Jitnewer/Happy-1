@@ -34,6 +34,7 @@ export default {
         null,
         'Happy Hospitality'
       )
+      document.body.style.overflow = 'hidden'
 
       this.$router.push({ name: 'userDetail', params: { id: this.selectedUser.id } })
     },
@@ -43,7 +44,13 @@ export default {
           user.status = User.status.Unbanned
           await this.usersServiceAdmin.asyncSave(user)
         } catch (e) {
-          console.log(e.message)
+          console.log(e.toJSON())
+          this.$store.commit('setError', true)
+          this.$store.commit('setErrorMessage', e.toJSON().error)
+          setTimeout(() => {
+            this.$store.commit('setError', false)
+            this.$store.commit('setErrorMessage', null)
+          }, 8000)
         }
       }
     },
@@ -58,14 +65,15 @@ export default {
     },
     cancelEdit () {
       this.create = false
+      document.body.style.overflow = 'auto'
       this.$router.push({ name: 'users' })
     },
     async saveUser (user) {
       try {
-        const savedUser = await this.usersServiceAdmin.asyncSave(user)
+        // const savedUser = await this.usersServiceAdmin.asyncSave(user)
 
         if (this.create) {
-          this.users.push(savedUser)
+          this.users.push(user)
         } else {
           const indexToUpdate = this.users.findIndex(oldUser => oldUser.id === user.id)
 
@@ -74,6 +82,7 @@ export default {
           }
         }
 
+        document.body.style.overflow = 'auto'
         this.create = false
         this.$router.push({ name: 'users' })
       } catch (e) {
@@ -84,7 +93,7 @@ export default {
       if (confirm('Are you sure you want to delete this user?')) {
         try {
           await this.usersServiceAdmin.asyncDeleteById(user.id)
-          if (user.profilePic !== 'assets/profilPic/profilepic.png') {
+          if (user.profilePic !== 'assets/profilePic/profilepic.png') {
             await this.fileUploadService.asyncDeleteImage(user.profilePic)
           }
           const indexToUpdate = this.users.findIndex(oldUser => oldUser.id === user.id)
@@ -212,6 +221,5 @@ export default {
 <style scoped>
 .container-admin {
   margin-top: 1rem;
-  width:80%
 }
 </style>

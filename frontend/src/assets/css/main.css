@@ -7,6 +7,7 @@
 @import "challenge.css";
 @import "welcomePageAndFooter.css";
 @import "challenges-admin.css";
+@import "registration-form.css";
 :root {
     --main-color: #0991a3;
     --main-color-admin: #0a454d;
@@ -53,7 +54,7 @@ nav {
     display: flex;
     align-items: center;
     position: sticky;
-    z-index: 1000;
+    z-index: 99;
     top: 0;
 }
 
@@ -173,6 +174,7 @@ a.router-link-active:hover {
     align-items: center;
     gap: 0.5rem;
     cursor: pointer;
+    flex-direction: column;
 }
 
 .profile {
@@ -262,7 +264,7 @@ a.router-link-active:hover {
         visibility: visible;
         display: block;
         fill: var(--main-text-color);
-        width: 30px;
+        width: 80px;
         padding: 8px 24px;
         box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
         border-radius: 10%;
@@ -345,7 +347,10 @@ a.router-link-active:hover {
 
 @media only screen and (max-width: 520px) {
     #hamburger {
-        width: 20px;
+        width: 65px;
+    }
+    #hamburger-admin {
+        width: 65px
     }
     #logo {
         width: 280px
@@ -379,7 +384,7 @@ a.router-link-active:hover {
 }
 #hamburger-admin {
     fill: var(--main-text-color);
-    width: 30px;
+    width: 80px;
     padding: 8px 24px;
     box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
     border-radius: 10%;
@@ -395,7 +400,7 @@ a.router-link-active:hover {
     display: flex;
     flex-direction: column;
     width: 20%;
-    z-index: 99;
+    z-index: 98;
 }
 
 .small {
@@ -751,7 +756,7 @@ a.router-link-active:hover {
 }
 
 
-.event-right-bottom {
+.event-right-bottom2 {
     display: flex;
     justify-content: space-between;
 }
@@ -2130,4 +2135,60 @@ a.router-link-active:hover {
 
 .filter-down {
 
+}
+
+.error-pop-up {
+    background-color: rgba(255, 0, 0, 0.5);
+    padding-inline: 4rem;
+    padding-block: 1rem;
+    display: flex;
+    justify-content: center;
+    width: fit-content;
+    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+
+}
+
+.success-pop-up {
+    background-color: rgba(22, 129, 14, 0.5);
+    padding-inline: 4rem;
+    padding-block: 1rem;
+    display: flex;
+    justify-content: center;
+    width: fit-content;
+    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+
+}
+
+.error-pop-up p {
+    color: white
+}
+
+
+.errorLoggedInAsAdminOrSuperUser {
+    /*margin-left: 1rem;*/
+    /*margin-top: 1rem;*/
+}
+
+.errorLoggedIn {
+    width: 80%;
+    margin: 1rem auto 1rem auto;
+    display: flex;
+    gap: 0.5rem;
+
+}
+
+.successLoggedInAsAdminOrSuperUser {
+    margin-left: 1rem;
+    margin-top: 1rem;
+}
+
+.successLoggedIn {
+    width: 80%;
+    margin: 1rem auto 1rem auto;
+    display: flex;
+    gap: 0.5rem
+}
+
+.views {
+    width: 100%;
 }

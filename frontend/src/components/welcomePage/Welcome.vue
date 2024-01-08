@@ -177,10 +177,14 @@
 <script>
 import Carousel from './Carousel.vue'
 import Slide from './Slide.vue'
+import { mapState } from 'vuex'
 
 export default {
   name: 'Welcome.vue',
   components: { Carousel, Slide },
+  computed: {
+    ...mapState(['loggedIn', 'loggedInAsAdmin', 'loggedInAsSuperUser'])
+  },
   data () {
     return {
       carouselSlides: [
@@ -188,6 +192,11 @@ export default {
         { image: 'bg-2', date: '27 December 2023', title: 'Protein within hospitality' },
         { image: 'bg-3', date: '15 November 2023', title: 'Water embracing tactics' }
       ]
+    }
+  },
+  created () {
+    if (this.loggedInAsAdmin || this.loggedInAsSuperUser) {
+      this.$router.push({ path: '/admin' })
     }
   },
   methods: {

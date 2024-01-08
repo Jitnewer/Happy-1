@@ -77,7 +77,7 @@ export default {
           }
         }
       } catch (e) {
-        console.error(e)
+        console.error(e.toJSON())
       }
     }
   },
@@ -91,93 +91,4 @@ export default {
 </script>
 
 <style scoped>
-/*Sign up form */
-.sign-up-body {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.container-sign-up {
-  width: 330px;
-  background: #fff;
-  border-radius: 5px;
-  text-align: center;
-  padding: 50px 35px 10px 35px;
-  box-shadow: 0px 3px 40px #000;
-}
-
-.header-sign-up {
-  font-size: 35px;
-  font-weight: 600;
-  margin: 0 0 30px 0;
-}
-
-.container-sign-up .form-sign-up-1 {
-  width: 100%;
-}
-
-.title-sign-up-form {
-  text-align: left;
-  font-size: 25px;
-  font-weight: 500;
-}
-
-.field-sign-up {
-  height: 45px;
-  width: 330px;
-  margin: 45px 0;
-  display: flex;
-  position: relative;
-}
-
-.label-sign-up {
-  position: absolute;
-  top: -30px;
-  font-weight: 500;
-}
-
-.sign-up-input {
-  outline: none;
-  width: 100%;
-  padding: 0.5rem;
-  font-size: 12px;
-  box-shadow: var(--shadow);
-  border: none;
-}
-
-.sign-up-input:focus-visible {
-  outline: none;
-}
-
-.field-btn button {
-  width: 100%;
-  height: 50px;
-  margin-bottom: 10px;
-  margin-top: -20px;
-  border: none;
-  background: #0992A4;
-  color: #fff;
-  font-size: 18px;
-  font-weight: 500;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: 0.3s ease;
-  box-shadow: var(--shadow);
-
-}
-
-.field-btn button:hover {
-  background: #000;
-}
-
-.span-sign-up-form-check span{
-  font-weight: 500;
-  font-size: 17px;
-  line-height: 25px;
-  position: absolute;
-  left: 50%;
-  transform: translate(-50%);
-}
 </style>

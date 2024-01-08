@@ -22,7 +22,8 @@
 
 <script>
 import Chart from 'chart.js/auto'
-import { User } from '@/models/user' // Import Chart.js
+import { User } from '@/models/user'
+import ErrorPopUp from '@/components/errorPopUp.vue' // Import Chart.js
 
 export default {
   name: 'AdminStatistics',
@@ -82,7 +83,11 @@ export default {
     }
   },
   async created () {
-    this.users = await this.usersServiceAdmin.asyncFindAll()
+    try {
+      this.users = await this.usersServiceAdmin.asyncFindAll()
+    } catch (e) {
+      console.error(e.toJSON())
+    }
   }
 }
 </script>
