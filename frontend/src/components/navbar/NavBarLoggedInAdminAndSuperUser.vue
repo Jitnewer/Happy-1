@@ -91,8 +91,8 @@
         </div>
       </div>
     </transition>
-    <div>
-    <div class="error-admin" :class="{'errorLoggedInAsAdminOrSuperUser': loggedInAsAdmin || loggedInAsSuperUser }">
+    <div class="views">
+    <div class="error-admin" :class="{'errorLoggedInAsAdminOrSuperUser': loggedInAsAdmin || loggedInAsSuperUser}">
       <error-pop-up></error-pop-up>
     </div>
       <div class="success-admin" :class="{'successLoggedInAsAdminOrSuperUser': loggedInAsAdmin || loggedInAsSuperUser }">

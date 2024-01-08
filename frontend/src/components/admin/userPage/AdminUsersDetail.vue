@@ -5,7 +5,7 @@ export default {
   name: 'AdminUserDetail',
   props: ['selectedUser', 'create'],
   emits: ['cancel-edit', 'save-edit'],
-  inject: ['usersService'],
+  inject: ['usersServiceAdmin'],
   data () {
     return {
       selectedCopy: null,
@@ -25,10 +25,10 @@ export default {
       if (this.validateFields) {
         if (confirm('Are you sure you want to change the access of this user?')) {
           try {
-            const response = await this.usersService.asyncSave(this.selectedCopy)
+            const response = await this.usersServiceAdmin.asyncSave(this.selectedCopy)
 
             if (response) {
-              this.$emit('save-edit', response)
+              this.$emit('save-edit', response.entity)
             } else {
               this.$emit('save-edit', this.selectedCopy)
             }
@@ -131,5 +131,11 @@ h1, h2, h3, h4, h5, h6, p {
   padding: 0.2rem 1rem;
   box-shadow: rgba(0, 0, 0, 0.19) 0 10px 20px, rgba(0, 0, 0, 0.23) 0 6px 6px;
   border: none;
+}
+
+.detail-container {
+  z-index: 99;
+  left: 0;
+  position: absolute;
 }
 </style>
