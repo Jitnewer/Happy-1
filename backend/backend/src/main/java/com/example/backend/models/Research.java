@@ -34,14 +34,26 @@ public class Research implements Identifiable {
     @JsonManagedReference(value = "research-paragraphs")
     private Set<Paragraph> paragraphs = new HashSet<>();
 
+    public enum Theme {
+        FOOD_WASTE,
+        DISTRIBUTION,
+        ENERGY_TRANSITION,
+        SINGLE_USED_PLASTIC,
+        PROTEIN_TRANSITION,
+        WATER
+    }
+
+    @Column(nullable = false)
+    private Theme theme;
+
     // Constructors
-    public Research(String title, String firstParagraph, Set<Paragraph> paragraphs) {
+    public Research(String title, String firstParagraph, Set<Paragraph> paragraphs, Theme theme) {
         this.title = title;
         this.dateTime = LocalDateTime.now();
         this.image = "img.png";
         this.firstParagraph = firstParagraph;
         this.paragraphs = paragraphs;
-
+        this.theme = theme;
     }
 
     public Research() {
@@ -63,6 +75,14 @@ public class Research implements Identifiable {
 
     public String getTitle() {
         return title;
+    }
+
+    public Theme getTheme() {
+        return theme;
+    }
+
+    public void setTheme(Theme theme) {
+        this.theme = theme;
     }
 
     public void setTitle(String title) {

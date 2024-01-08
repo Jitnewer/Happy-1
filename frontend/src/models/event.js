@@ -1,8 +1,7 @@
 
 export class Event {
-  constructor (id, userEvents, image, name, city, date, timeBegin, timeEnd, price, location, info, size, participants) {
+  constructor (id, userEvents, image, name, city, date, timeBegin, timeEnd, price, location, info, size) {
     this.id = id
-    this.userEvents = userEvents
     this.image = image
     this.name = name
     this.city = city
@@ -50,8 +49,8 @@ export class Event {
     return new Event(
       id,
       imageIndex === 0
-        ? require('../assets/img/arnhem-event.jpg')
-        : require('../assets/img/rotterdam-event.webp'),
+        ? require('../assets/eventPic/arnhem-event.jpg')
+        : require('../assets/eventPic/rotterdam-event.webp'),
       `Kroegpraat @ ${nameSuffix}`,
       nameSuffix,
       date,
@@ -65,7 +64,7 @@ export class Event {
   }
 
   static createSampleEvents2 (pId = 0) {
-    const images = [require('../assets/img/arnhem-event.jpg'), require('../assets/img/rotterdam-event.webp'), require('../assets/img/restaurant-nederland.png'), require('../assets/img/cafe-nederland.png')]
+    const images = [require('../assets/eventPic/arnhem-event.jpg'), require('../assets/eventPic/rotterdam-event.webp'), require('../assets/eventPic/restaurant-nederland.png'), require('../assets/eventPic/cafe-nederland.png')]
     const names = ['Kroegpraat', 'Cafépraat', 'Lounge Borrel']
     const cities = ['Amsterdam', 'Rotterdam', 'Arnhem', 'Zaandam', 'Utrecht', 'Edam', 'Purmerend', 'Brabant', 'Assen', 'Den Haag', 'Haarlem', 'Hilversum']
     const locations = ['Amsterdam Dam Restaurant', 'Rotterdam Ahoy Lounge', 'Villa Sansbeek Bistro', 'Zaandam Delightful Diner', 'Utrecht Culinary Corner', 'Edam Cheese Haven', 'Purmerend Oasis Bar', 'Brabant Gastropub', 'Assen Retreat Cafe', 'Den Haag Coastal Eatery', 'Haarlem Vineyard Lounge', 'Hilversum Skyline Bistro']

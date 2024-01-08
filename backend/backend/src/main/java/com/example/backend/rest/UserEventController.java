@@ -7,6 +7,9 @@ import com.example.backend.repositories.EntityRepository;
 import com.example.backend.repositories.UserEvent.UserEventRepository;
 import com.example.backend.repositories.event.EventRepository;
 import com.example.backend.repositories.user.UserRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.TypedQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +19,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.swing.text.html.parser.Entity;
 import java.net.URI;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -24,6 +28,8 @@ import java.util.Set;
 public class UserEventController {
 
 
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Autowired
     private EntityRepository<User> userRepository;
@@ -72,28 +78,36 @@ public class UserEventController {
         Event event = eventRepository.findById(eventId);
 
         if (user != null && event != null) {
+            TypedQuery<UserEvent> query = entityManager.createNamedQuery("UserEvent.findByUserAndEvent", UserEvent.class);
+            query.setParameter("user", user);
+            query.setParameter("event", event);
 
+            UserEvent userEvent = query.getSingleResult();
 
-            UserEvent userEvent = (UserEvent) userEventRepository.findByQuery("SELECT ue FROM UserEvent ue WHERE ue.user = :user AND ue.event = :event", user, event);
             if (userEvent != null) {
                 userEventRepository.deleteById(userEvent.getId());
+
+                URI location = ServletUriComponentsBuilder
+                        .fromCurrentRequest()
+                        .build()
+                        .toUri();
+
+                return ResponseEntity.created(location).body(Map.of(
+                        "message", "User removed from event successfully",
+                        "status", HttpStatus.OK.value(),
+                        "location", location.toString()));
+            } else {
+                return new ResponseEntity<>(Map.of(
+                        "message", "User is not part of the event",
+                        "status", HttpStatus.NOT_FOUND.value()), HttpStatus.NOT_FOUND);
             }
-
-            URI location = ServletUriComponentsBuilder
-                    .fromCurrentRequest()
-                    .build()
-                    .toUri();
-
-            return ResponseEntity.created(location).body(Map.of(
-                    "message", "User removed from event successfully",
-                    "status", HttpStatus.OK.value(),
-                    "location", location.toString()));
         } else {
             return new ResponseEntity<>(Map.of(
                     "message", "User or event not found",
                     "status", HttpStatus.NOT_FOUND.value()), HttpStatus.NOT_FOUND);
         }
     }
+
 
 //    @GetMapping("/userCountForEvent/{eventId}")
 //    public ResponseEntity<?> getUserCountForEvent(@PathVariable Long eventId) {
@@ -157,7 +171,28 @@ public class UserEventController {
             return new ResponseEntity<>(events, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(Map.of(
-                    "message", "User not found",
+                    "message", "Event(s) not found",
+                    "status", HttpStatus.NOT_FOUND.value()), HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("/usersByEvent/{eventId}")
+    public ResponseEntity<?> getUsersByEvent(@PathVariable Long eventId) {
+        Event event = eventRepository.findById(eventId);
+
+
+        if (event != null) {
+            Set<User> users = new HashSet<>();
+
+            // Iterate through user's events and add them to the Set
+            for (UserEvent userEvent : event.getUserEvents()) {
+                users.add(userEvent.getUser());
+            }
+
+            return new ResponseEntity<>(users, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(Map.of(
+                    "message", "User(s) not found",
                     "status", HttpStatus.NOT_FOUND.value()), HttpStatus.NOT_FOUND);
         }
     }

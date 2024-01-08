@@ -1,7 +1,4 @@
 <template>
-  <div class="breadcrum">
-    <router-link :to="{ name: 'welcome' }">Home</router-link>
-  </div>
   <div class="containerHomepage">
     <div>
       <h1 class="welcomeH1">
@@ -36,7 +33,7 @@
       <span class="yellow-text">OUR</span> <span class="blue-text">PILLARS</span>
     </h1>
     <div class="pillarContainer">
-      <button>
+      <button @click="challenges">
         <div class="pillar" data-aos="fade-up">
           <div class="pillarText">
             <h1 class="welcomeH1">
@@ -52,7 +49,7 @@
           </div>
         </div>
       </button>
-      <button>
+      <button @click="network">
         <div class="pillar" data-aos="fade-up">
           <div class="pillarText">
             <h1 class="welcomeH1">
@@ -70,7 +67,7 @@
           </div>
         </div>
       </button>
-      <button>
+      <button @click="research">
         <div class="pillar" data-aos="fade-up">
           <div class="pillarText">
             <h1 class="welcomeH1">
@@ -101,7 +98,7 @@
       </p>
       <div class="themeContainer">
         <div class="theme" data-aos="fade-up">
-          <button class="themeButton">
+          <button class="themeButton" @click="foodWasteNews">
             <h2>
               <span class="yellow-text">Food</span> <span class="blue-text">Waste</span>
             </h2>
@@ -111,7 +108,7 @@
           </button>
         </div>
         <div class="theme" data-aos="fade-up">
-          <button class="themeButton">
+          <button class="themeButton" @click="distributionNews">
             <h2>
               <span class="yellow-text">Distrib</span><span class="blue-text">ution</span></h2>
             <h4 class="themeH4">Enhance hospitality sustainability with optimized supply chains, reduced carbon footprints,
@@ -120,7 +117,7 @@
           </button>
         </div>
         <div class="theme" data-aos="fade-up">
-          <button class="themeButton">
+          <button class="themeButton" @click="energyTransitionNews">
             <h2><span class="yellow-text">Energy</span> <span class="blue-text">Transition</span></h2>
             <h4 class="themeH4">Embrace energy transition in hospitality through renewables, energy-efficient tech, and
               sustainable practices for a greener future.</h4>
@@ -128,7 +125,7 @@
           </button>
         </div>
         <div class="theme" data-aos="fade-up">
-          <button class="themeButton">
+          <button class="themeButton" @click="singleUsedPlasticNews">
             <h2><span class="yellow-text">Single Us</span><span class="blue-text">ed Plastic</span></h2>
             <h4 class="themeH4">Combatting hospitality's single-use plastic issue involves reducing reliance, adopting eco-friendly
               alternatives, and minimizing plastic pollution commitment.</h4>
@@ -136,7 +133,7 @@
           </button>
         </div>
         <div class="theme" data-aos="fade-up">
-          <button class="themeButton">
+          <button class="themeButton" @click="proteinTransitionNews">
             <h2><span class="yellow-text">Protein</span> <span class="blue-text">Transition</span></h2>
             <h4 class="themeH4">Hospitality's protein transition emphasizes sustainable, plant-based options, reducing reliance on
               traditional meat, and promoting eco-friendly alternatives.</h4>
@@ -144,7 +141,7 @@
           </button>
         </div>
         <div class="theme" data-aos="fade-up">
-          <button class="themeButton">
+          <button class="themeButton" @click="waterNews">
             <h2>
               <span class="yellow-text">Wat</span><span class="blue-text">er</span>
             </h2>
@@ -191,6 +188,35 @@ export default {
         { image: 'bg-2', date: '27 December 2023', title: 'Protein within hospitality' },
         { image: 'bg-3', date: '15 November 2023', title: 'Water embracing tactics' }
       ]
+    }
+  },
+  methods: {
+    foodWasteNews () {
+      this.$router.push({ name: 'news', query: { sort: 'FOOD_WASTE' } })
+    },
+    distributionNews () {
+      this.$router.push({ name: 'news', query: { sort: 'DISTRIBUTION' } })
+    },
+    energyTransitionNews () {
+      this.$router.push({ name: 'news', query: { sort: 'ENERGY_TRANSITION' } })
+    },
+    singleUsedPlasticNews () {
+      this.$router.push({ name: 'news', query: { sort: 'SINGLE_USED_PLASTIC' } })
+    },
+    proteinTransitionNews () {
+      this.$router.push({ name: 'news', query: { sort: 'PROTEIN_TRANSITION' } })
+    },
+    waterNews () {
+      this.$router.push({ name: 'news', query: { sort: 'WATER' } })
+    },
+    challenges () {
+      this.$router.push({ name: 'challenges' })
+    },
+    network () {
+      this.$router.push({ name: 'networks' })
+    },
+    research () {
+      this.$router.push({ name: 'researches' })
     }
   }
 }

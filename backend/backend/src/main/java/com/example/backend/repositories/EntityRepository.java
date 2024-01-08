@@ -21,5 +21,7 @@ public interface EntityRepository<E extends Identifiable> {
     boolean entityWithEntityExist(String propertyName, Object value);
 
     E findByProperty(String propertyName, Object value);
+
+    List<E> findMultipleByProperty(String propertyName, Object value);
 }
 

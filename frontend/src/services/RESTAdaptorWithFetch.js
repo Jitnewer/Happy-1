@@ -32,6 +32,7 @@ export class RESTAdaptorWithFetch {
       } else if (error.status === 403) {
         throw new CustomError('Forbidden: You don\'t have permission to access this resource', error.status, error.message)
       } else {
+        console.log(error)
         throw new CustomError('Error fetching data', error.status || 500, error.message)
       }
     }
@@ -49,11 +50,7 @@ export class RESTAdaptorWithFetch {
 
   async asyncFindById (id) {
     try {
-      const response = await this.fetchJson(`${this.resourceUrl}/${id}`, {
-        headers: {
-          Authorization: window.sessionStorage.getItem('token')
-        }
-      })
+      const response = await this.fetchJson(`${this.resourceUrl}/${id}`)
       return this.copyConstructor(response)
     } catch (error) {
       throw new CustomError('Error in asyncFindById', error.status || 500, error.message)
@@ -74,10 +71,7 @@ export class RESTAdaptorWithFetch {
   async asyncRemoveEntityFromEntity (id1, id2, url) {
     try {
       const response = await this.fetchJson(`${this.resourceUrl}/${url}/${id1}/${id2}`, {
-        method: 'DELETE',
-        headers: {
-          Authorization: window.sessionStorage.getItem('token')
-        }
+        method: 'DELETE'
       })
       return true
     } catch (error) {
@@ -115,20 +109,28 @@ export class RESTAdaptorWithFetch {
   async asyncSave (object) {
     let response
     try {
-      if (object.id === 0) {
+      if (object.id == null) {
         response = await this.fetchJson(this.resourceUrl, {
           method: 'POST',
-          body: JSON.stringify(object)
+          body: JSON.stringify(object),
+          headers: {
+            'Content-Type': 'application/json'
+          }
         })
       } else {
         response = await this.fetchJson(`${this.resourceUrl}/${object.id}`, {
           method: 'PUT',
-          body: JSON.stringify(object)
+          body: JSON.stringify(object),
+          headers: {
+            'Content-Type': 'application/json'
+          }
         })
       }
+      console.log(response)
 
-      return this.copyConstructor(response)
+      return response
     } catch (error) {
+      console.log(error)
       throw new CustomError('Error in asyncSave', error.status || 500, error.message)
     }
   }
@@ -138,7 +140,6 @@ export class RESTAdaptorWithFetch {
       const response = await this.fetchJson(`${this.resourceUrl}/${id}`, {
         method: 'DELETE'
       })
-      return true
     } catch (error) {
       throw new CustomError('Error in asyncDeleteById', error.status || 500, error.message)
     }

@@ -11,15 +11,16 @@ import java.util.*;
 
 @Entity
 @Table(name = "events")
+@NamedQuery(name = "UserEvent.findByUserAndEvent", query = "SELECT ue FROM UserEvent ue WHERE ue.user = :user AND ue.event = :event")
 public class Event implements Identifiable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "event", orphanRemoval = true)
     @JsonIgnore
     private Set<UserEvent> userEvents = new HashSet<>();
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String image;
     @Column(nullable = false)
     private String name;
@@ -231,7 +232,7 @@ public class Event implements Identifiable {
     }
 
     private static String[] getNames() {
-       return new String[] {
+        return new String[] {
                 "Kroegpraat",
                 "Cafépraat",
                 "Lounge Borrel"
@@ -298,4 +299,4 @@ public class Event implements Identifiable {
                 event.size
         );
     }
- }
+}

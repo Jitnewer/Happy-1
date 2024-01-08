@@ -1,6 +1,7 @@
 import 'whatwg-fetch'
 import fetchIntercept from 'fetch-intercept'
 import CustomError from '@/CustomError'
+
 export class FetchInterceptor {
   static theInstance;
   session;
@@ -22,7 +23,9 @@ export class FetchInterceptor {
       async response (response) {
         if (response.status === 401) {
           // Redirect to '/sign-out' in case of a 401 Unauthorized error
-          FetchInterceptor.theInstance.router.push({ name: 'login' })
+          FetchInterceptor.theInstance.session.saveTokenIntoBrowserStorage(null, null)
+          console.log('Token is outdated maybe')
+          FetchInterceptor.theInstance.router.push({ name: 'login', query: { signOut: true } })
         } else if (!response.ok) {
           // Handle other error responses
           const errorMessage = await response.text() // You may need to adjust this based on your API response format

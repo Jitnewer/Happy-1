@@ -1,12 +1,8 @@
 import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router'
-import AdminEventView from '@/components/admin/eventPage/AdminEventView.vue'
-import EventDetailsView from '@/components/admin/eventPage/EventDetailsView.vue'
 import AdminStatistics from '@/components/admin/AdminStatistics.vue'
 import Events from '@/components/events/Events.vue'
 import EventsDetails from '@/components/events/EventsDetails.vue'
 import WelcomePage from '@/components/welcomePage/Welcome.vue'
-import SuperUserView from '@/components/admin/superUser/SuperUserView.vue'
-import SuperUserDetail from '@/components/admin/superUser/SuperUserDetail.vue'
 import AdminUsersView from '@/components/admin/userPage/AdminUsersView.vue'
 import AdminUsersDetail from '@/components/admin/userPage/AdminUsersDetail.vue'
 import Registration from '@/components/Registration.vue'
@@ -22,6 +18,24 @@ import ChallengeDetails from '@/components/challenges/ChallengeDetails.vue'
 import Researches from '@/components/research/Researches.vue'
 import ResearchDetails from '@/components/research/ResearchDetails.vue'
 import welcomeAdmin from '@/components/admin/welcomeAdmin.vue'
+import News from '@/components/News.vue'
+import ChallengesAdmin from '@/components/admin/challenges/ChallengesAdmin.vue'
+import ChallengeAdminCreate from '@/components/admin/challenges/ChallengeAdminCreate.vue'
+import ChallengeAdminEdit from '@/components/admin/challenges/ChallengeAdminEdit.vue'
+import ResearchesAdmin from '@/components/admin/researches/ResearchesAdmin.vue'
+import ResearchAdminCreate from '@/components/admin/researches/ResearchAdminCreate.vue'
+import ResearchAdminEdit from '@/components/admin/researches/ResearchAdminEdit.vue'
+import NetworksDetails from '@/components/networks/NetworkDetails.vue'
+import Networks from '@/components/networks/Networks.vue'
+import EventsAdmin from '@/components/admin/events/EventsAdmin.vue'
+import EventAdminCreate from '@/components/admin/events/EventAdminCreate.vue'
+import EventAdminEdit from '@/components/admin/events/EventAdminEdit.vue'
+import NetworksAdmin from '@/components/admin/networks/NetworksAdmin.vue'
+import NetworkAdminCreate from '@/components/admin/networks/NetworkAdminCreate.vue'
+import NetworkAdminEdit from '@/components/admin/networks/NetworkAdminEdit.vue'
+import NewsletterAdminCreate from '@/components/admin/newsletter/NewsletterAdminCreate.vue'
+import NewsletterAdminEdit from '@/components/admin/newsletter/NewsletterAdminEdit.vue'
+import NewslettersAdmin from '@/components/admin/newsletter/NewslettersAdmin.vue'
 
 const routes = [
   {
@@ -49,19 +63,34 @@ const routes = [
     component: Challenges
   },
   {
+    path: '/news',
+    name: 'news',
+    component: News
+  },
+  {
     path: '/news/challenges/:id',
     name: 'challenge',
     component: ChallengeDetails
   },
   {
-    path: '/news/research',
+    path: '/news/researches',
     name: 'researches',
     component: Researches
   },
   {
-    path: '/news/research/:id',
+    path: '/news/researches/:id',
     name: 'research',
     component: ResearchDetails
+  },
+  {
+    path: '/news/networks',
+    name: 'networks',
+    component: Networks
+  },
+  {
+    path: '/news/networks/:id',
+    name: 'network',
+    component: NetworksDetails
   },
   {
     path: '/about',
@@ -76,12 +105,77 @@ const routes = [
   {
     path: '/admin/events',
     name: 'adminEvents',
-    component: AdminEventView
+    component: EventsAdmin
   },
   {
-    path: '/admin/events/:id',
-    name: 'adminEventDetail',
-    component: EventDetailsView
+    path: '/admin/events/create',
+    name: 'adminEventCreate',
+    component: EventAdminCreate
+  },
+  {
+    path: '/admin/events/edit/:id',
+    name: 'adminEventEdit',
+    component: EventAdminEdit
+  },
+  {
+    path: '/admin/newsletters',
+    name: 'adminNewsletters',
+    component: NewslettersAdmin
+  },
+  {
+    path: '/admin/newsletters/create',
+    name: 'adminNewsletterCreate',
+    component: NewsletterAdminCreate
+  },
+  {
+    path: '/admin/newsletters/edit/:id',
+    name: 'adminNewsletterEdit',
+    component: NewsletterAdminEdit
+  },
+  {
+    path: '/admin/challenges',
+    name: 'adminChallenges',
+    component: ChallengesAdmin
+  },
+  {
+    path: '/admin/challenges/create',
+    name: 'adminChallengeCreate',
+    component: ChallengeAdminCreate
+  },
+  {
+    path: '/admin/challenges/edit/:id',
+    name: 'adminChallengeEdit',
+    component: ChallengeAdminEdit
+  },
+  {
+    path: '/admin/researches',
+    name: 'adminResearches',
+    component: ResearchesAdmin
+  },
+  {
+    path: '/admin/researches/create',
+    name: 'adminResearchCreate',
+    component: ResearchAdminCreate
+  },
+  {
+    path: '/admin/researches/edit/:id',
+    name: 'adminResearchEdit',
+    component: ResearchAdminEdit
+  },
+  {
+    path: '/admin/networks',
+    name: 'adminNetworks',
+    component: NetworksAdmin
+  },
+  {
+    path: '/admin/networks/create',
+    name: 'adminNetworkCreate',
+    component: NetworkAdminCreate
+  },
+  {
+    path: '/admin/networks/edit/:id',
+    name: 'adminNetworkEdit',
+    component: NetworkAdminEdit
   },
   {
     path: '/admin/statistics',
@@ -115,13 +209,6 @@ const routes = [
         name: 'userDetail',
         component: AdminUsersDetail
       }
-    ]
-  },
-  {
-    path: '/superuser/news',
-    component: SuperUserView,
-    children: [
-      { path: ':id', component: SuperUserDetail }
     ]
   },
   {

@@ -13,10 +13,10 @@
                 <router-link class="dropdown-content-link" to="/news/challenges">
                   Challenges
                 </router-link>
-                <router-link class="dropdown-content-link" to="/news/research">
+                <router-link class="dropdown-content-link" to="/news/researches">
                   Research
                 </router-link>
-                <router-link class="dropdown-content-link" to="/news/network">
+                <router-link class="dropdown-content-link" to="/news/networks">
                   Network
                 </router-link>
               </div>
@@ -32,9 +32,9 @@
         <div class="nav-links-right">
           <div class="dropdown-profile" @click="toggleProfile">
             <div class="profile-d">
-              <img v-if="user.profilePic != null" :src='require(`../../assets/img/${user.profilePic}`)' class="profile" width="45" height="45" alt="Event Image">
+              <img v-if="user.profilePic != null" :src='require(`../../${user.profilePic}`)' class="profile" width="45" height="45" alt="Event Image">
               <canvas v-if="user.profilePic == null" ref="profileCanvas" class="profile" width="45" height="45"></canvas>
-                <p id="profile-name">{{ user.firstname }} {{ user.lastname }}</p>
+              <p id="profile-name">{{ user.firstname }} {{ user.lastname }}</p>
               <div class="caret">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Pro 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M182.6 137.4c-12.5-12.5-32.8-12.5-45.3 0l-128 128c-9.2 9.2-11.9 22.9-6.9 34.9s16.6 19.8 29.6 19.8H288c12.9 0 24.6-7.8 29.6-19.8s2.2-25.7-6.9-34.9l-128-128z"/></svg>
               </div>
@@ -52,8 +52,8 @@
                 </a>
               </div>
             </transition>
+          </div>
         </div>
-      </div>
       </div>
     </transition>
   </nav>

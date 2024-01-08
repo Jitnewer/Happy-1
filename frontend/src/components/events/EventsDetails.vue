@@ -4,7 +4,7 @@
     <p>></p>
     <router-link :to="{ name: 'events' }">Events</router-link>
     <p>></p>
-    <router-link :to="{ name: 'event', params: { id: event.id } }">Event / {{ event.id }}</router-link>
+    <router-link :to="{ name: 'event', params: { id: this.event.id } }">Event / {{ event.id }}</router-link>
   </div>
   <div v-if="event" class="container">
     <div class="event-main">
@@ -14,7 +14,7 @@
       </div>
       <div class="detail-event">
         <div class="detail-event-left">
-          <img :src="require(`../../assets/img/${event.image}`)" alt="Image">
+          <img :src="event.image ? require(`../../${event.image}`) : ''" alt="Image">
         </div>
         <div class="detail-event-right-main">
           <div class="detail-event-right">
@@ -22,7 +22,7 @@
               <h1>{{ event.name}}</h1>
               <h3>{{ event.location}}</h3>
             </div>
-            <div class="detail-event-right-right">
+            <div class="detail-event-right-right" v-if="event.timeBegin && event.timeEnd">
               <p>{{ parseDate(event.date)  }}</p>
               <p>{{ event.timeBegin.slice(0, 5) }} - {{ event.timeEnd.slice(0, 5) }}</p>
               <p> {{ formattedPrice(event) }}</p>
@@ -42,14 +42,13 @@
 export default {
   name: 'EventsDetails.vue',
   inject: ['eventsService'],
-  props: ['filter'],
   data () {
     return {
-      event: null
+      filter: this.$route.query.sort
     }
   },
   async created () {
-    this.event = await this.eventsService.asyncFindById(this.$route.params.id)
+    await this.eventsService.asyncFindById(this.$route.params.id)
   },
   methods: {
     formattedPrice (event) {
@@ -67,9 +66,13 @@ export default {
 
       return `${day}-${month}-${year}`
     },
-    back () {
+    async back () {
       this.$router.push({ name: 'events', query: { sort: this.filter } })
-      this.$emit('update-selected-event')
+    }
+  },
+  computed: {
+    event () {
+      return this.eventsService.entities
     }
   }
 }

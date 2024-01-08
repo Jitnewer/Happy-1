@@ -633,12 +633,16 @@ input:checked + .slider:before {
 }
 
 .sign-up-input {
-  height: 100%;
+  outline: none;
   width: 100%;
-  border: 1px solid lightgrey;
-  border-radius: 5px;
-  font-size: 18px;
-  padding-left: 15px;
+  padding: 0.5rem;
+  font-size: 12px;
+  box-shadow: var(--shadow);
+  border: none;
+}
+
+.sign-up-input:focus-visible {
+  outline: none;
 }
 
 .select-gender-sign-up {
@@ -666,7 +670,6 @@ input:checked + .slider:before {
   margin-top: 30px;
   border: none;
   background: #0992A4;
-  border-radius: 5px;
   color: #fff;
   font-size: 18px;
   font-weight: 500;
@@ -674,6 +677,8 @@ input:checked + .slider:before {
   text-transform: uppercase;
   cursor: pointer;
   transition: 0.3s ease;
+  box-shadow: var(--shadow);
+
 }
 
 .field-btn button:hover {

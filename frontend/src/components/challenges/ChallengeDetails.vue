@@ -2,21 +2,21 @@
   <div class="breadcrum" v-if="challenge">
     <router-link :to="{ name: 'welcome' }">Home</router-link>
     <p>></p>
-    <a>News</a>
+    <router-link :to="{ name: 'news' , query: { sort: filter }   }">News</router-link>
     <p>></p>
-    <router-link :to="{ name: 'challenges' }">Challenges</router-link>
+    <router-link :to="{ name: 'challenges' , query: { sort: filter }  }">Challenges</router-link>
     <p>></p>
-    <router-link :to="{ name: 'challenge', params: { id: challenge.id } }">Challenge / {{ challenge.id }}</router-link>
+    <router-link :to="{ name: 'challenge', params: { id: this.challenge.id }, query: { sort: filter }   }">Challenge Article / {{ challenge.id }}</router-link>
   </div>
   <div v-if="challenge" class="container">
     <div class="challenge-main">
       <div class="challenge-title">
         <button @click="back">Back</button>
-        <h1>Challenge</h1>
+        <h1>Challenge Article</h1>
       </div>
       <div class="detail-challenge">
         <div>
-          <img :src="require(`../../assets/img/${challenge.image}`)" alt="">
+          <img :src="challenge.image ? require(`../../${challenge.image}`) : ''" alt="Challenge Image">
         </div>
         <div class="content">
           <div>
@@ -42,7 +42,7 @@ export default {
   inject: ['challengeService'],
   data () {
     return {
-      challenge: null
+      filter: this.$route.query.sort
     }
   },
   methods: {
@@ -75,21 +75,26 @@ export default {
         return `${this.getFormattedDate(dateTime)}, ${formattedTime}`
       }
     },
-    back () {
-      this.$router.push({ name: 'challenges' })
+    async back () {
+      if (this.filter === null) {
+        this.$router.push({ name: 'challenges' })
+      } else {
+        this.$router.push({ name: 'challenges', query: { sort: this.filter } })
+      }
+
       this.$emit('update-selected-challenge')
     }
   },
   async created () {
     try {
-      this.challenge = await this.challengeService.asyncFindById(this.$route.params.id)
+      await this.challengeService.asyncFindById(this.$route.params.id)
     } catch (e) {
       console.error(e)
     }
   },
   computed: {
-    challenges () {
-      return challenges
+    challenge () {
+      return this.challengeService.entities
     },
     sortedChallenges () {
       return this.challenges.slice().sort((a, b) => {

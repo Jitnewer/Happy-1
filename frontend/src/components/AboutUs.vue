@@ -13,7 +13,7 @@
         <span class="yellow-text"> US </span>
       </h1>
       <div class="aboutBanner">
-       <img src="../assets/img/forestscreen.jpg" width="6000" height="1701" alt="About Us Banner">
+        <img src="../assets/img/forestscreen.jpg" width="6000" height="1701" alt="About Us Banner">
       </div>
 
       <div class="aboutArticle" data-aos="fade-up" data-aos-once="false">
