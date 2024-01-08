@@ -189,6 +189,7 @@ export default {
       return this.isImageValid
     },
     async edit () {
+      console.log(this.validateForm())
       if (this.validateForm()) {
         try {
           if (this.image !== null) {
@@ -203,7 +204,9 @@ export default {
               this.$store.commit('setSuccessMessage', null)
             }, 8000)
           } else {
+            console.log('test')
             const response = await this.eventsServiceSuperUser.asyncSave(this.copiedEvent)
+            console.log(response)
             this.isSaved = true
             this.$store.commit('setSuccess', true)
             this.$store.commit('setSuccessMessage', response.message)
@@ -286,6 +289,7 @@ export default {
       try {
         await this.eventsService.asyncFindById(this.$route.params.id)
         this.copiedEvent = JSON.parse(JSON.stringify(this.event))
+        console.log(this.copiedEvent.date)
       } catch (e) {
         console.error(e)
         this.$store.commit('setError', true)
@@ -304,10 +308,17 @@ export default {
       const isInfoValid = this.validateInfo(this.copiedEvent.info)
       const isDateValid = this.validateDate(this.copiedEvent.date)
       const isTimeBeginValid = this.validateTimeBegin(this.copiedEvent.timeBegin)
-      const isTimeEndValid = this.validateTimeEnd(this.copiedEvent.timeEnd)
+      // eslint-disable-next-line dot-notation
+      const isTimeEndValid = this.validateTimeEnd(this.copiedEvent['timeEnd'])
       const isSizeValid = this.validateSize(this.copiedEvent.size)
-      const isImageValid = this.isImageValid
+      let isImageValid
+      if (this.isImageValid === null) {
+        isImageValid = true
+      } else {
+        isImageValid = this.isImageValid
+      }
 
+      console.log(isNameValid, isCityValid, isLocationValid, isPriceValid, isInfoValid, isDateValid, isTimeBeginValid, isTimeEndValid, isSizeValid, isImageValid)
       return isNameValid && isCityValid && isLocationValid && isPriceValid && isInfoValid && isDateValid && isTimeBeginValid && isTimeEndValid && isSizeValid && isImageValid
     },
     formatDateTimeWithoutSeconds (dateTime) {
@@ -327,12 +338,19 @@ export default {
     },
     formattedDateTimeInput: {
       get () {
-      // Format challenge.dateTime for datetime-local input
-        return this.formatDateTimeWithoutSeconds(this.copiedEvent.dateTime)
+        // Format copiedEvent.date for datetime-local input
+        const date = new Date(this.copiedEvent.date)
+        const year = date.getFullYear()
+        const month = `0${date.getMonth() + 1}`.slice(-2)
+        const day = `0${date.getDate()}`.slice(-2)
+        const hours = `0${date.getHours()}`.slice(-2)
+        const minutes = `0${date.getMinutes()}`.slice(-2)
+
+        return `${year}-${month}-${day}T${hours}:${minutes}`
       },
       set (value) {
-      // Parse the input value back to ISO format
-        this.copiedEvent.dateTime = new Date(value).toISOString()
+        // Parse the input value back to ISO format
+        this.copiedEvent.date = new Date(value).toISOString()
       }
     }
   },

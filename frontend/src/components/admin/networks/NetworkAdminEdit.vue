@@ -209,7 +209,12 @@ export default {
       // Validate date and time
       const isDateTimeValid = this.validateDateTime(this.formattedDateTimeInput)
 
-      const isImageValid = this.isImageValid
+      let isImageValid
+      if (this.isImageValid === null) {
+        isImageValid = true
+      } else {
+        isImageValid = this.isImageValid
+      }
 
       // Validate paragraphs
       let areParagraphsValid = true
@@ -224,7 +229,6 @@ export default {
           break
         }
       }
-
       // Form is valid if all individual validations pass
       return isTitleValid && isFirstParagraphValid && isDateTimeValid && isImageValid && areParagraphsValid
     },

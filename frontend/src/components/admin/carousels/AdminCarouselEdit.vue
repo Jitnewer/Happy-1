@@ -153,7 +153,12 @@ export default {
     validateForm () {
       const isTitleValid = this.validateTitle(this.carousel.name)
       const isDateValid = this.validateDate(this.copiedCarousel.date)
-      const isImageValid = this.isImageValid
+      let isImageValid
+      if (this.isImageValid === null) {
+        isImageValid = true
+      } else {
+        isImageValid = this.isImageValid
+      }
 
       return isTitleValid && isDateValid && isImageValid
     },
