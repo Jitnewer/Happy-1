@@ -9,7 +9,7 @@
       <div class="title-button">
         <h1>Subscribers</h1>
         <button @click="create()" class="admin-create">Create</button>
-        <button @click="sendNewsletter()" class="admin-create">Send Newsletter</button>
+        <button @click="sendNewsletter()" class="admin-create">Send Newsletters</button>
       </div>
       <table v-if="subscribers">
         <thead>

@@ -2173,8 +2173,8 @@ a.router-link-active:hover {
 }
 
 .successLoggedInAsAdminOrSuperUser {
-    /*margin-left: 1rem;*/
-    /*margin-top: 1rem;*/
+    margin-left: 1rem;
+    margin-top: 1rem;
 }
 
 .successLoggedIn {
