@@ -3,11 +3,18 @@ package com.example.backend.rest;
 import com.example.backend.exceptions.PreConditionFailedException;
 import com.example.backend.models.Subscriber;
 import com.example.backend.repositories.EntityRepository;
+
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.thymeleaf.spring6.SpringTemplateEngine;
+import org.thymeleaf.context.Context;
 
 import java.net.URI;
 import java.util.HashMap;
@@ -20,6 +27,11 @@ public class SubscriberController {
 
     @Autowired
     private EntityRepository<Subscriber> subscriberRepository;
+
+    @Autowired
+    private JavaMailSender javaMailSender;
+    @Autowired
+    private SpringTemplateEngine templateEngine;
 
 
     @GetMapping("/superuser")
@@ -64,7 +76,7 @@ public class SubscriberController {
                     "message", "Subscriber added successfully",
                     "status", HttpStatus.CREATED.value(),
                     "location", location.toString(),
-                    "subscriber", subscriber));
+                    "entity", subscriber));
         } catch (Exception e) {
             Map<String, Object> errorResponse = new HashMap<>();
             errorResponse.put("message", "Error adding the subscriber");
@@ -83,17 +95,21 @@ public class SubscriberController {
         try {
             subscriberRepository.save(subscriber);
 
+            sendNewsletterEmail(subscriber.getEmail());
+
+
             URI location = ServletUriComponentsBuilder
                     .fromCurrentRequest()
                     .path("/{id}")
                     .buildAndExpand(subscriber.getId())
                     .toUri();
 
+
             return ResponseEntity.created(location).body(Map.of(
                     "message", "You have subscribed for the newsletter!",
                     "status", HttpStatus.CREATED.value(),
                     "location", location.toString(),
-                    "subscriber", subscriber));
+                    "entity", subscriber));
         } catch (Exception e) {
             Map<String, Object> errorResponse = new HashMap<>();
             errorResponse.put("message", "Error adding the subscriber");
@@ -116,6 +132,7 @@ public class SubscriberController {
             Map<String, Object> errorResponse = new HashMap<>();
             errorResponse.put("message", "Error updating the subscriber");
             errorResponse.put("error", e.getMessage());
+            System.out.println(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
     }
@@ -128,5 +145,28 @@ public class SubscriberController {
         subscriberRepository.deleteById(id);
         return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "Subscriber deleted successfully", "status", HttpStatus.OK));
     }
+    private void sendNewsletterEmail(String toEmail) {
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage);
 
+        try {
+            String htmlContent = buildHtmlContent();
+            helper.setFrom("rickveerman4@gmail.com");
+            helper.setTo(toEmail);
+            helper.setSubject("Newsletter Subscription");
+            helper.setText(htmlContent, true);
+
+            javaMailSender.send(mimeMessage);
+        } catch (MessagingException e) {
+            // Handle exception (log or rethrow)
+            e.printStackTrace();
+        }
+    }
+    private String buildHtmlContent() {
+        Context context = new Context();
+        // You can add variables to the context if you want dynamic content in your email
+
+        // Process Thymeleaf template to HTML
+        return templateEngine.process("newsletter-template.html", context);
+    }
 }

@@ -66,7 +66,7 @@
               </div>
             </div>
           </div>
-          <button type="submit" :disabled="!researchEdited && !validateForm()">Save</button>
+          <button type="submit" :disabled="!researchEdited && !validateForm()" class="admin-create">Save</button>
         </form>
       </div>
     </div>
@@ -160,9 +160,7 @@ export default {
         this.research.dateTime = new Date(this.research.dateTime).toISOString()
         try {
           const response = await this.researchServiceSuperUser.asyncSave(this.research)
-          console.log(response)
-
-          const research = response
+          const research = response.entity
           const file = await this.fileUploadService.asyncUploadResearchPic(this.image, research.id)
           research.image = file.filePath
           const response2 = await this.researchServiceSuperUser.asyncSave(research)

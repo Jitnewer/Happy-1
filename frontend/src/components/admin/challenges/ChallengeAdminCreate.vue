@@ -66,7 +66,7 @@
               </div>
             </div>
           </div>
-          <button type="submit" :disabled="!challengeEdited && !validateForm()">Save</button>
+          <button type="submit" :disabled="!challengeEdited && !validateForm()" class="admin-create">Save</button>
         </form>
       </div>
     </div>
@@ -161,7 +161,7 @@ export default {
         try {
           this.challenge.dateTime = new Date(this.challenge.dateTime).toISOString()
           const response = await this.challengeServiceSuperUser.asyncSave(this.challenge)
-          const challenge = response
+          const challenge = response.entity
           const file = await this.fileUploadService.asyncUploadChallengePic(this.image, challenge.id)
           challenge.image = file.filePath
           const response2 = await this.challengeServiceSuperUser.asyncSave(challenge)

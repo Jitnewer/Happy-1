@@ -1,7 +1,7 @@
 <template>
   <NavBar></NavBar>
-  <error-pop-up v-if="!loggedInAsAdmin && !loggedInAsSuperUser"></error-pop-up>
-  <success-pop-up>v-if="!loggedInAsAdmin && !loggedInAsSuperUser"></success-pop-up>
+  <error-pop-up v-if="loggedIn || (!loggedIn && !loggedInAsAdmin && !loggedInAsSuperUser)"></error-pop-up>
+  <success-pop-up v-if="loggedIn || (!loggedIn && !loggedInAsAdmin && !loggedInAsSuperUser)">></success-pop-up>
   <router-view v-if="!loggedInAsAdmin && !loggedInAsSuperUser"></router-view>
   <Footer v-if="!loggedInAsAdmin && !loggedInAsSuperUser"></Footer>
 </template>

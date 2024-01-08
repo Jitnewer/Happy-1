@@ -66,7 +66,7 @@
               </div>
             </div>
           </div>
-          <button type="submit" :disabled="!challengeEdited && !validateForm()">Save</button>
+          <button type="submit" :disabled="!challengeEdited && !validateForm()" class="admin-create">Save</button>
         </form>
       </div>
     </div>
@@ -161,7 +161,7 @@ export default {
           this.network.dateTime = new Date(this.network.dateTime).toISOString()
           const response = await this.networkServiceSuperUser.asyncSave(this.network)
           // eslint-disable-next-line dot-notation
-          const network = response['network']
+          const network = response.entity
           const file = await this.fileUploadService.asyncUploadNetworkPic(this.image, network.id)
           network.image = file.filePath
           const response2 = await this.networkServiceSuperUser.asyncSave(network)

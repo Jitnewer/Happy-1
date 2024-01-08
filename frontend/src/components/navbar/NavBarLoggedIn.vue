@@ -82,6 +82,8 @@ export default {
     handleLogout () {
       this.sessionSBService.signOut()
       this.$store.commit('setLoggedIn', false)
+      this.$store.commit('setLoggedInAsSuperUser', false)
+      this.$store.commit('setLoggedInAsAdmin', false)
       this.$router.push({ path: '/home' })
     },
     toggleNav () {

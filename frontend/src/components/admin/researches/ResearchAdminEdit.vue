@@ -66,7 +66,7 @@
               </div>
             </div>
           </div>
-          <button type="submit" :disabled="!researchEdited && !validateForm()">Save</button>
+          <button type="submit" :disabled="!researchEdited && !validateForm()" class="admin-create">Save</button>
         </form>
       </div>
     </div>

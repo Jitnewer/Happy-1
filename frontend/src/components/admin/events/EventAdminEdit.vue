@@ -65,7 +65,7 @@
             <p class="errorMessage" v-if="!isImageValid && image">{{ imageError }}</p>
           </div>
 
-          <button type="submit" :disabled="!eventEdited && !validateForm()">Save</button>
+          <button type="submit" :disabled="!eventEdited && !validateForm()" class="admin-create">Save</button>
         </form>
       </div>
     </div>

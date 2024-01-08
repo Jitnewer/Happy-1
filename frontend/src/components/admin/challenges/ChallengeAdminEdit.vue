@@ -66,7 +66,7 @@
               </div>
             </div>
           </div>
-          <button type="submit" :disabled="!challengeEdited && !validateForm()">Save</button>
+          <button type="submit" :disabled="!challengeEdited && !validateForm()" class="admin-create">Save</button>
         </form>
       </div>
     </div>

@@ -66,7 +66,7 @@
               </div>
             </div>
           </div>
-          <button type="submit" :disabled="!networkEdited && !validateForm()">Save</button>
+          <button type="submit" :disabled="!networkEdited && !validateForm()" class="admin-create">Save</button>
         </form>
       </div>
     </div>

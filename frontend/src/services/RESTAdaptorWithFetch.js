@@ -137,7 +137,7 @@ export class RESTAdaptorWithFetch {
           }
         })
       }
-      return this.copyConstructor(response.entity)
+      return response
     } catch (error) {
       throw new CustomError('Error in asyncSave', error.toJSON().status || 500, error.toJSON().error)
     }

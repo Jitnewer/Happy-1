@@ -55,6 +55,7 @@
 <script>
 import news from '@/components/News.vue'
 import ErrorPopUp from '@/components/errorPopUp.vue'
+import CustomError from '@/CustomError'
 
 export default {
   name: 'Footer.vue',
@@ -105,21 +106,26 @@ export default {
           const response = await this.subscriberService.asyncSave(this.subscriber)
           this.$store.commit('setSuccess', true)
           this.$store.commit('setSuccessMessage', response.message)
+          this.subscriber.email = ''
           setTimeout(() => {
             this.$store.commit('setSuccess', false)
             this.$store.commit('setSuccessMessage', null)
           }, 8000)
+
           window.scrollTo({ top: 0, behavior: 'smooth' })
         } catch (e) {
-          console.error(e.toJSON())
-          this.emailAlreadyExists = true
-          this.subscriber.emailAlreadyExists = this.subscriber.email
-          this.$store.commit('setError', true)
-          this.$store.commit('setErrorMessage', e.toJSON().error)
-          setTimeout(() => {
-            this.$store.commit('setError', false)
-            this.$store.commit('setErrorMessage', null)
-          }, 8000)
+          if (e instanceof CustomError) {
+            console.error(e.toJSON())
+            this.emailAlreadyExists = true
+            this.subscriber.emailAlreadyExists = this.subscriber.email
+            this.$store.commit('setError', true)
+            this.$store.commit('setErrorMessage', e.toJSON().error)
+            setTimeout(() => {
+              this.$store.commit('setError', false)
+              this.$store.commit('setErrorMessage', null)
+            }, 8000)
+          }
+          console.error(e)
         }
       }
     }

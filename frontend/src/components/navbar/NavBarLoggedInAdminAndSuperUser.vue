@@ -92,10 +92,10 @@
       </div>
     </transition>
     <div>
-    <div class="error-admin" :class="{'errorLoggedInAsAdminOrSuperUser': loggedInAsAdmin || loggedInAsSuperUser}">
+    <div class="error-admin" :class="{'errorLoggedInAsAdminOrSuperUser': loggedInAsAdmin || loggedInAsSuperUser }">
       <error-pop-up></error-pop-up>
     </div>
-      <div class="success-admin" :class="{'successLoggedInAsAdminOrSuperUser': loggedInAsAdmin || loggedInAsSuperUser}">
+      <div class="success-admin" :class="{'successLoggedInAsAdminOrSuperUser': loggedInAsAdmin || loggedInAsSuperUser }">
         <success-pop-up></success-pop-up>
       </div>
     <router-view></router-view>
@@ -114,7 +114,7 @@ export default {
   emits: ['logout'],
   inject: ['sessionSBService'],
   computed: {
-    ...mapState(['loggedInAsAdmin', 'loggedInAsSuperUser'])
+    ...mapState(['loggedInAsAdmin', 'loggedInAsSuperUser', 'loggedIn'])
   },
   data () {
     return {
@@ -127,6 +127,8 @@ export default {
     }
   },
   async created () {
+    this.$store.commit('setLoggedIn', false)
+
     try {
       if (window.innerWidth <= 860) {
         this.showDashboard = false
@@ -164,6 +166,7 @@ export default {
       this.sessionSBService.signOut()
       this.$store.commit('setLoggedInAsAdmin', false)
       this.$store.commit('setLoggedInAsSuperUser', false)
+      this.$store.commit('setLoggedIn', false)
 
       this.$router.push({ path: '/home' })
     },

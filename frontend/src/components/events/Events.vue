@@ -44,7 +44,7 @@
               <p> {{ formattedPrice(event) }}</p>
             </div>
           </div>
-          <div class="event-right-bottom">
+          <div class="event-right-bottom2">
             <button @click="selectEventMoreInfo(event)" >More Info</button>
             <button v-if="!isEventSignedIn(event)" @click="toggleSignIn(event)">Sign In</button>
             <button :disabled="disableSignOut(event)" v-if="isEventSignedIn(event)" @click="toggleSignOut(event)">Sign Out</button>
@@ -214,7 +214,7 @@ export default {
           this.signedInEvents.push(this.selectedEventsSignIn.id)
           this.selectedEventsSignIn = null
           this.$store.commit('setSuccess', true)
-          this.$store.commit('setSuccessMessage', 'Signed in for event!')
+          this.$store.commit('setSuccessMessage', 'Signed in for an event!')
           setTimeout(() => {
             this.$store.commit('setSuccess', false)
             this.$store.commit('setSuccessMessage', null)
@@ -246,7 +246,7 @@ export default {
           this.selectedEventsSignOut = null
           this.$forceUpdate()
           this.$store.commit('setSuccess', true)
-          this.$store.commit('setSuccessMessage', 'Signed out for event!')
+          this.$store.commit('setSuccessMessage', 'Signed out for an event!')
           setTimeout(() => {
             this.$store.commit('setSuccess', false)
             this.$store.commit('setSuccessMessage', null)

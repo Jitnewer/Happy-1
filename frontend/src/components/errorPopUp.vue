@@ -1,5 +1,5 @@
 <template>
-  <div v-if="error" class="errorDiv" :class="{'errorLoggedIn': loggedIn}">
+  <div v-if="error" class="errorDiv" :class="{'errorLoggedIn': loggedIn || (!loggedIn && !loggedInAsAdmin && !loggedInAsSuperUser)}">
     <div class="error-pop-up">
       <p>{{ errorMessage }}</p>
     </div>

@@ -23,7 +23,7 @@
             <p class="errorMessage" v-if="!isEmailValid && subscriber.email">Invalid email</p>
             <p class="errorMessage" v-if="emailAlreadyExists && subscriber.email">Email is already subscribed</p>
           </div>
-          <button type="submit" :disabled="!validateEmail(subscriber.email)">Save</button>
+          <button type="submit" :disabled="!validateEmail(subscriber.email)" class="admin-create">Save</button>
         </form>
       </div>
     </div>
