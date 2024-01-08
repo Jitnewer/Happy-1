@@ -30,7 +30,7 @@
             <p class="errorMessage" v-if="!isImageValid && image">{{ imageError }}</p>
           </div>
 
-          <button type="submit" :disabled="!carouselEdited && !validateForm()">Save</button>
+          <button type="submit" :disabled="!carouselEdited && !validateForm()" class="admin-create">Save</button>
         </form>
       </div>
     </div>
@@ -179,12 +179,19 @@ export default {
     },
     formattedDateTimeInput: {
       get () {
-        // Format challenge.dateTime for datetime-local input
-        return this.formatDateTimeWithoutSeconds(this.copiedCarousel.dateTime)
+        // Format copiedEvent.date for datetime-local input
+        const date = new Date(this.copiedCarousel.date)
+        const year = date.getFullYear()
+        const month = `0${date.getMonth() + 1}`.slice(-2)
+        const day = `0${date.getDate()}`.slice(-2)
+        const hours = `0${date.getHours()}`.slice(-2)
+        const minutes = `0${date.getMinutes()}`.slice(-2)
+
+        return `${year}-${month}-${day}T${hours}:${minutes}`
       },
       set (value) {
         // Parse the input value back to ISO format
-        this.copiedCarousel.dateTime = new Date(value).toISOString()
+        this.copiedCarousel.date = new Date(value).toISOString()
       }
     }
   },
