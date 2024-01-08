@@ -360,11 +360,22 @@ export default {
           this.user.userType = 'ENTREPRENEUR'
           this.user.tag = 'N/A'
         }
-        console.log(this.user)
-        await this.sessionSBService.asyncRegister(this.user)
-        this.$router.push({ path: '/login' })
+        const response = await this.sessionSBService.asyncRegister(this.user)
+        this.$store.commit('setSuccess', true)
+        this.$store.commit('setSuccessMessage', response.message)
+        setTimeout(() => {
+          this.$store.commit('setSuccess', false)
+          this.$store.commit('setSuccessMessage', null)
+        }, 8000)
+        this.$router.push({ name: 'login' })
       } catch (e) {
-        console.log(e)
+        console.log(e.toJSON())
+        this.$store.commit('setError', true)
+        this.$store.commit('setErrorMessage', e.toJSON().error)
+        setTimeout(() => {
+          this.$store.commit('setError', false)
+          this.$store.commit('setErrorMessage', null)
+        }, 8000)
       }
     },
     validateCompanyName (companyName) {

@@ -63,21 +63,44 @@ export default {
 
           if (userType === User.userTypes.Admin) {
             this.$store.commit('setLoggedInAsAdmin', true)
+            this.$store.commit('setSuccess', true)
+            this.$store.commit('setSuccessMessage', 'Logged in!')
+            setTimeout(() => {
+              this.$store.commit('setSuccess', false)
+              this.$store.commit('setSuccessMessage', null)
+            }, 8000)
             this.$router.push({ path: '/admin' })
             this.$forceUpdate()
           } else if (userType === User.userTypes.SuperUser) {
             this.$store.commit('setLoggedInAsSuperUser', true)
+            this.$store.commit('setSuccess', true)
+            this.$store.commit('setSuccessMessage', 'Logged in!')
+            setTimeout(() => {
+              this.$store.commit('setSuccess', false)
+              this.$store.commit('setSuccessMessage', null)
+            }, 8000)
             this.$router.push({ path: '/admin' })
             this.$forceUpdate()
           } else {
             this.$store.commit('setLoggedIn', true)
-
+            this.$store.commit('setSuccess', true)
+            this.$store.commit('setSuccessMessage', 'Logged in!')
+            setTimeout(() => {
+              this.$store.commit('setSuccess', false)
+              this.$store.commit('setSuccessMessage', null)
+            }, 8000)
             this.$router.push({ path: '/home' })
             this.$forceUpdate()
           }
         }
       } catch (e) {
         console.error(e.toJSON())
+        this.$store.commit('setError', true)
+        this.$store.commit('setErrorMessage', 'Login failed with email : ' + this.email)
+        setTimeout(() => {
+          this.$store.commit('setError', false)
+          this.$store.commit('setErrorMessage', null)
+        }, 8000)
       }
     }
   },
