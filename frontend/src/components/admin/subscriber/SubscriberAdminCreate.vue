@@ -10,10 +10,10 @@
     <div class="challenge-create">
       <div class="title-button-create">
         <h1>Create Subscriber</h1>
-        <button @click="back()">Back</button>
+        <button @click="back()"  class="back-button">Back</button>
       </div>
       <div>
-        <form @submit.prevent="create" class="challenge-create-form" v-if="subscriber">
+        <form @submit.prevent="create" class="challenge-create-form"  v-if="subscriber">
           <div class="form-label">
             <p>Email</p>
             <input type="email" v-model="subscriber.email" :class="{

@@ -74,6 +74,8 @@
 </template>
 
 <script>
+import CustomError from '@/CustomError'
+
 export default {
   name: 'NetworkAdminCreate.vue',
   inject: ['networkService', 'networkServiceSuperUser', 'fileUploadService'],
@@ -155,41 +157,40 @@ export default {
     },
     async create () {
       if (this.validateForm()) {
-      try {
-        this.network.dateTime = new Date(this.network.dateTime).toISOString()
-        const response = await this.networkServiceSuperUser.asyncSave(this.network)
-        // eslint-disable-next-line dot-notation
-        const network = response['network']
-        const file = await this.fileUploadService.asyncUploadNetworkPic(this.image, network.id)
-        network.image = file.filePath
-        const response2 = await this.networkServiceSuperUser.asyncSave(network)
-        this.isSaved = true
-        this.$store.commit('setSuccess', true)
-        this.$store.commit('setSuccessMessage', response2.message)
-        setTimeout(() => {
-          this.$store.commit('setSuccess', false)
-          this.$store.commit('setSuccessMessage', null)
-        }, 8000)
-        this.$router.push({ name: 'adminNetworks' })
-      } catch (e) {
-        if (e instanceof CustomError) {
-          console.error(e.toJSON())
-          this.$store.commit('setError', true)
-          this.$store.commit('setErrorMessage', e.toJSON().error)
+        try {
+          this.network.dateTime = new Date(this.network.dateTime).toISOString()
+          const response = await this.networkServiceSuperUser.asyncSave(this.network)
+          // eslint-disable-next-line dot-notation
+          const network = response['network']
+          const file = await this.fileUploadService.asyncUploadNetworkPic(this.image, network.id)
+          network.image = file.filePath
+          const response2 = await this.networkServiceSuperUser.asyncSave(network)
+          this.isSaved = true
+          this.$store.commit('setSuccess', true)
+          this.$store.commit('setSuccessMessage', response2.message)
           setTimeout(() => {
-            this.$store.commit('setError', false)
-            this.$store.commit('setErrorMessage', null)
+            this.$store.commit('setSuccess', false)
+            this.$store.commit('setSuccessMessage', null)
           }, 8000)
-        } else {
-          this.$store.commit('setError', true)
-          this.$store.commit('setErrorMessage', 'Error adding the network')
-          setTimeout(() => {
-            this.$store.commit('setError', false)
-            this.$store.commit('setErrorMessage', null)
-          }, 8000)
-
+          this.$router.push({ name: 'adminNetworks' })
+        } catch (e) {
+          if (e instanceof CustomError) {
+            console.error(e.toJSON())
+            this.$store.commit('setError', true)
+            this.$store.commit('setErrorMessage', e.toJSON().error)
+            setTimeout(() => {
+              this.$store.commit('setError', false)
+              this.$store.commit('setErrorMessage', null)
+            }, 8000)
+          } else {
+            this.$store.commit('setError', true)
+            this.$store.commit('setErrorMessage', 'Error adding the network')
+            setTimeout(() => {
+              this.$store.commit('setError', false)
+              this.$store.commit('setErrorMessage', null)
+            }, 8000)
+          }
         }
-      }
       }
     },
     paragraphs (network) {

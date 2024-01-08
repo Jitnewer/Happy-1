@@ -63,7 +63,7 @@ export class CachedRESTAdaptorWithFetch extends RESTAdaptorWithFetch {
     try {
       return await super.asyncFindByMail(mail)
     } catch (e) {
-      throw new CustomError('Error in asyncFindByMail', error.status, error.error)
+      throw new CustomError('Error in asyncFindByMail', e.status, e.error)
     }
   }
 

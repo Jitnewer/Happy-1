@@ -42,8 +42,7 @@ export default {
             }, 8000)
           }
         }
-          this.$emit('save-edit', this.selectedCopy)
-        }
+      }
     },
     setUpErrorMessage (elementId, message) {
       document.querySelector(elementId).setCustomValidity(message)
@@ -87,33 +86,6 @@ export default {
       const emailFieldIsEmpty = !this.selectedCopy.mail || this.selectedCopy.mail.trim() === ''
       return !emailFieldIsEmpty && /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(this.selectedCopy.mail)
     },
-    setUpErrorMessage (elementId, message) {
-      document.querySelector(elementId).setCustomValidity(message)
-      document.querySelector(elementId).reportValidity()
-    },
-    validateFields () {
-      if (this.edit) {
-        if (!this.validateFirstName()) {
-          this.setUpErrorMessage('#firstname', 'Firstname must be at least 3 characters')
-          return false
-        }
-        if (!this.validateLastName()) {
-          this.setUpErrorMessage('#lastname', 'Lastname must be at least 3 characters')
-          return false
-        }
-        if (!this.validateMail()) {
-          this.setUpErrorMessage('#email', 'Email must contain @')
-          return false
-        }
-        if (!this.validatePassWord()) {
-          this.setUpErrorMessage('#password', 'Password must be at least 6 characters')
-          return false
-        }
-      }
-      return true
-    }
-  },
-  computed: {
     isAdminOrSuperUser () {
       if (this.selectedUser.userType === User.userTypes.Admin) return true
       if (this.selectedUser.userType === User.userTypes.SuperUser) return true

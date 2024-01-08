@@ -47,7 +47,7 @@ export class RESTAdaptorWithFetch {
 
       return data
     } catch (e) {
-      throw new CustomError('Error in asyncFindByMail', error.toJSON().status || 500, error.toJSON().error)
+      throw new CustomError('Error in asyncFindByMail', e.toJSON().status || 500, e.toJSON().error)
     }
   }
 
