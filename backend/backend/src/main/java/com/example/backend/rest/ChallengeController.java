@@ -97,7 +97,7 @@ public class ChallengeController {
                     "message", "Challenge added successfully",
                     "status", HttpStatus.CREATED.value(),
                     "location", location.toString(),
-                    "challenge", challenge));
+                    "entity", challenge));
         } catch (Exception e) {
             Map<String, Object> errorResponse = new HashMap<>();
             errorResponse.put("message", "Error adding the challenge");

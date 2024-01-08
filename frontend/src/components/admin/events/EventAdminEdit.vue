@@ -10,7 +10,7 @@
     <div class="challenge-create">
       <div class="title-button-create">
         <h1>Edit Event</h1>
-        <button @click="back()">Back</button>
+        <button @click="back()" class="back-button">Back</button>
       </div>
       <div>
         <form @submit.prevent="edit" class="challenge-create-form" v-if="copiedEvent">
@@ -73,6 +73,8 @@
 </template>
 
 <script>
+import CustomError from '@/CustomError'
+
 export default {
   name: 'EventAdminEdit.vue',
   inject: ['eventsService', 'eventsServiceSuperUser', 'fileUploadService'],
@@ -191,15 +193,42 @@ export default {
           if (this.image !== null) {
             const file = await this.fileUploadService.asyncUploadEventPic(this.image, this.copiedEvent.id)
             this.copiedEvent.image = file.filePath
-            await this.eventsServiceSuperUser.asyncSave(this.copiedEvent)
+            const response = await this.eventsServiceSuperUser.asyncSave(this.copiedEvent)
             this.isSaved = true
+            this.$store.commit('setSuccess', true)
+            this.$store.commit('setSuccessMessage', response.message)
+            setTimeout(() => {
+              this.$store.commit('setSuccess', false)
+              this.$store.commit('setSuccessMessage', null)
+            }, 8000)
           } else {
-            await this.eventsServiceSuperUser.asyncSave(this.copiedEvent)
+            const response = await this.eventsServiceSuperUser.asyncSave(this.copiedEvent)
             this.isSaved = true
+            this.$store.commit('setSuccess', true)
+            this.$store.commit('setSuccessMessage', response.message)
+            setTimeout(() => {
+              this.$store.commit('setSuccess', false)
+              this.$store.commit('setSuccessMessage', null)
+            }, 8000)
           }
           this.$router.push({ name: 'adminEvents' })
         } catch (e) {
-          console.error(e)
+          if (e instanceof CustomError) {
+            console.error(e.toJSON())
+            this.$store.commit('setError', true)
+            this.$store.commit('setErrorMessage', e.toJSON().error)
+            setTimeout(() => {
+              this.$store.commit('setError', false)
+              this.$store.commit('setErrorMessage', null)
+            }, 8000)
+          } else {
+            this.$store.commit('setError', true)
+            this.$store.commit('setErrorMessage', 'Error adding the network')
+            setTimeout(() => {
+              this.$store.commit('setError', false)
+              this.$store.commit('setErrorMessage', null)
+            }, 8000)
+          }
         }
       }
     },
@@ -258,6 +287,12 @@ export default {
         this.copiedEvent = JSON.parse(JSON.stringify(this.event))
       } catch (e) {
         console.error(e)
+        this.$store.commit('setError', true)
+        this.$store.commit('setErrorMessage', e.toJSON().error)
+        setTimeout(() => {
+          this.$store.commit('setError', false)
+          this.$store.commit('setErrorMessage', null)
+        }, 8000)
       }
     },
     validateForm () {

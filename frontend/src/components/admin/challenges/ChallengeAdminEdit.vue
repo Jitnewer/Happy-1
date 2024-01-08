@@ -10,7 +10,7 @@
     <div class="challenge-create">
       <div class="title-button-create">
         <h1>Edit Challenge</h1>
-        <button @click="back()">Back</button>
+        <button @click="back()" class="back-button">Back</button>
       </div>
       <div>
         <form @submit.prevent="edit" class="challenge-create-form" v-if="copiedChallenge">
@@ -74,6 +74,9 @@
 </template>
 
 <script>
+
+import CustomError from '@/CustomError'
+
 export default {
   name: 'ChallengeAdminEdit.vue',
   inject: ['challengeService', 'challengeServiceSuperUser', 'fileUploadService'],
@@ -148,22 +151,49 @@ export default {
     async edit () {
       // Create a deep comparison function
       if (this.challengeEdited) {
-        this.copiedChallenge.dateTime = new Date(this.copiedChallenge.dateTime).toISOString()
         try {
+          this.copiedChallenge.dateTime = new Date(this.copiedChallenge.dateTime).toISOString()
           if (this.validateForm()) {
             if (this.image !== null) {
               const file = await this.fileUploadService.asyncUploadChallengePic(this.image, this.copiedChallenge.id)
               this.copiedChallenge.image = file.filePath
-              await this.challengeServiceSuperUser.asyncSave(this.copiedChallenge)
+              const response = await this.challengeServiceSuperUser.asyncSave(this.copiedChallenge)
               this.isSaved = true
+              this.$store.commit('setSuccess', true)
+              this.$store.commit('setSuccessMessage', response.message)
+              setTimeout(() => {
+                this.$store.commit('setSuccess', false)
+                this.$store.commit('setSuccessMessage', null)
+              }, 8000)
             }
           } else {
-            await this.challengeServiceSuperUser.asyncSave(this.copiedChallenge)
+            const response = await this.challengeServiceSuperUser.asyncSave(this.copiedChallenge)
             this.isSaved = true
+            this.$store.commit('setSuccess', true)
+            this.$store.commit('setSuccessMessage', response.message)
+            setTimeout(() => {
+              this.$store.commit('setSuccess', false)
+              this.$store.commit('setSuccessMessage', null)
+            }, 8000)
           }
           this.$router.push({ name: 'adminChallenges' })
         } catch (e) {
-          console.error(e)
+          if (e instanceof CustomError) {
+            console.error(e.toJSON())
+            this.$store.commit('setError', true)
+            this.$store.commit('setErrorMessage', e.toJSON().error)
+            setTimeout(() => {
+              this.$store.commit('setError', false)
+              this.$store.commit('setErrorMessage', null)
+            }, 8000)
+          } else {
+            this.$store.commit('setError', true)
+            this.$store.commit('setErrorMessage', 'Error adding the network')
+            setTimeout(() => {
+              this.$store.commit('setError', false)
+              this.$store.commit('setErrorMessage', null)
+            }, 8000)
+          }
         }
       }
     },
@@ -289,7 +319,22 @@ export default {
         this.isParagraphTitleValid = new Array(this.paragraphsAmount).fill(null)
         this.isParagraphContentValid = new Array(this.paragraphsAmount).fill(null)
       } catch (e) {
-        console.error(e)
+        if (e instanceof CustomError) {
+          console.error(e.toJSON())
+          this.$store.commit('setError', true)
+          this.$store.commit('setErrorMessage', e.toJSON().error)
+          setTimeout(() => {
+            this.$store.commit('setError', false)
+            this.$store.commit('setErrorMessage', null)
+          }, 8000)
+        } else {
+          this.$store.commit('setError', true)
+          this.$store.commit('setErrorMessage', 'Error adding the network')
+          setTimeout(() => {
+            this.$store.commit('setError', false)
+            this.$store.commit('setErrorMessage', null)
+          }, 8000)
+        }
       }
     },
     conformationAlert (callback, message) {

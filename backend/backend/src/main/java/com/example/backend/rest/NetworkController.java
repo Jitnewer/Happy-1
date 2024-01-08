@@ -81,10 +81,10 @@ public class NetworkController {
                     .toUri();
 
             return ResponseEntity.created(location).body(Map.of(
-                    "message", "Challenge added successfully",
+                    "message", "Network added successfully",
                     "status", HttpStatus.CREATED.value(),
                     "location", location.toString(),
-                    "network", network));
+                    "entity", network));
         } catch (Exception e) {
             Map<String, Object> errorResponse = new HashMap<>();
             errorResponse.put("message", "Error adding the network");

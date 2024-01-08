@@ -14,10 +14,9 @@ export class CachedRESTAdaptorWithFetch extends RESTAdaptorWithFetch {
   async asyncFindAll () {
     try {
       this.entities = await super.asyncFindAll()
-      console.log(this.entities)
       return this.entities
     } catch (error) {
-      throw new CustomError('Error in asyncFindAll', error.status || 500, error.message)
+      throw new CustomError('Error in asyncFindAll', error.status || 500, error.error)
     }
   }
 
@@ -31,7 +30,7 @@ export class CachedRESTAdaptorWithFetch extends RESTAdaptorWithFetch {
 
       return entity
     } catch (error) {
-      throw new CustomError('Error in asyncFindById', error.status || 500, error.message)
+      throw new CustomError('Error in asyncFindById', error.status, error.error)
     }
   }
 
@@ -46,17 +45,25 @@ export class CachedRESTAdaptorWithFetch extends RESTAdaptorWithFetch {
 
       return newEntity
     } catch (error) {
-      console.log(error)
-      throw new CustomError('Error in asyncSave', error.status || 500, error.message)
+      throw new CustomError('Error in asyncSave', error.status, error.error)
     }
   }
 
   async asyncDeleteById (id) {
+    // eslint-disable-next-line no-useless-catch
     try {
       // Delete the entity from the server
-      await super.asyncDeleteById(id)
+      return await super.asyncDeleteById(id)
     } catch (error) {
-      throw new CustomError('Error in asyncDeleteById', error.status || 500, error.message)
+      throw error
+    }
+  }
+
+  async asyncFindByMail (mail) {
+    try {
+      return await super.asyncFindByMail(mail)
+    } catch (e) {
+      throw new CustomError('Error in asyncFindByMail', e.status, e.error)
     }
   }
 
@@ -69,7 +76,7 @@ export class CachedRESTAdaptorWithFetch extends RESTAdaptorWithFetch {
 
       return response
     } catch (error) {
-      throw new CustomError('Error in asyncAddEntityToEntity', error.status || 500, error.message)
+      throw new CustomError('Error in asyncAddEntityToEntity', error.status, error.error)
     }
   }
 
@@ -84,7 +91,7 @@ export class CachedRESTAdaptorWithFetch extends RESTAdaptorWithFetch {
 
       return isRemoved
     } catch (error) {
-      throw new CustomError('Error in asyncRemoveEntityFromEntity', error.status || 500, error.message)
+      throw new CustomError('Error in asyncRemoveEntityFromEntity', error.status, error.error)
     }
   }
 
@@ -110,7 +117,7 @@ export class CachedRESTAdaptorWithFetch extends RESTAdaptorWithFetch {
 
       return response
     } catch (error) {
-      throw new CustomError('Error in asyncFindByColumn', error.status || 500, error.message)
+      throw new CustomError('Error in asyncFindByColumn', error.status, error.error)
     }
   }
 
@@ -136,8 +143,7 @@ export class CachedRESTAdaptorWithFetch extends RESTAdaptorWithFetch {
 
       return response.length
     } catch (error) {
-      console.error('Error in asyncGetCount:', error.message)
-      return null
+      throw new CustomError('Error in asyncGetCount', error.status, error.error)
     }
   }
 
@@ -145,13 +151,12 @@ export class CachedRESTAdaptorWithFetch extends RESTAdaptorWithFetch {
     try {
       // Fetch data from the server if not in the cache
       const response = await super.asyncFindByProperty(propertyId, url)
-
       // Update the cache
       this.entities = response
 
       return response
     } catch (error) {
-      throw new CustomError('Error in asyncFindByProperty', error.status || 500, error.message)
+      throw new CustomError('Error in asyncFindByProperty', error.status, error.error)
     }
   }
 }

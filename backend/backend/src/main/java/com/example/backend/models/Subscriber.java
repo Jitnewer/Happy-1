@@ -1,15 +1,10 @@
 package com.example.backend.models;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
-import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
-
 @Entity
-@Table(name = "newsletter")
-public class Newsletter implements Identifiable{
+@Table(name = "subscribers")
+public class Subscriber implements Identifiable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,22 +13,12 @@ public class Newsletter implements Identifiable{
     @Column(nullable = false, unique = true)
     private String email;
 
-
-    // Constructors
-
-
-
-    // Constructor with parameters
-    public Newsletter(String email) {
+    public Subscriber(String email) {
         this.email = email;
+    }
+    public Subscriber() {
 
     }
-
-
-    public Newsletter() {
-
-    }
-
 
     public String getEmail() {
         return email;
@@ -53,10 +38,5 @@ public class Newsletter implements Identifiable{
     public void setId(long id) {
         this.id = id;
     }
-
-
-
-
-    // Other methods
 
 }

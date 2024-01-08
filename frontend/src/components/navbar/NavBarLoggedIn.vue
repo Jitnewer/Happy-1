@@ -41,7 +41,7 @@
             </div>
             <transition name="dropdownProfile">
               <div class="dropdown-profile-content" v-show="showProfile">
-                <router-link class="dropdown-profile-content-link"  to="/profile">
+                <router-link class="dropdown-profile-content-link"  to="/myProfile">
                   Profile
                 </router-link>
                 <router-link class="dropdown-profile-content-link" to="/profile/settings">
@@ -149,7 +149,7 @@ export default {
         this.user.profilePic = null
       }
     } catch (e) {
-      console.error(e)
+      console.error(e.toJSON())
     }
 
     const fullname = `${this.user.firstname} ${this.user.lastname}`

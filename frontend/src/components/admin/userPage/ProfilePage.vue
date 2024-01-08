@@ -6,20 +6,18 @@ export default {
   data () {
     return {
       user: null,
-      previousRoute: null
+      previousRoute: null,
+      viewRoute: 'info'
     }
   },
   methods: {
     infoView () {
-      this.test--
       this.$router.push({ name: 'profileInfoView' })
     },
     adminEventsView () {
-      this.test--
       this.$router.push({ name: 'profileEventsView' })
     },
     previousPage () {
-      console.log(this.previousRoute)
       if (this.previousRoute.path === '/') {
         this.$router.push({ name: 'users' })
       } else {
@@ -27,7 +25,7 @@ export default {
       }
     },
     async findUserByUrl (urlParam) {
-      if (urlParam < 0) {
+      if (urlParam <= 0) {
         this.$router.push({ path: '/PageNotFound' })
         return
       }
@@ -37,7 +35,6 @@ export default {
         this.$router.push({ path: '/PageNotFound' })
         return
       }
-
       this.infoView()
     },
     setSelected (newSelectedElementClass, oldSelectedElementClass) {
@@ -53,10 +50,18 @@ export default {
       if (!to) return
       if (to.path.includes('events')) {
         this.setSelected('.events-view', '.info-view')
+        this.viewRoute = 'event'
       }
       if (to.path.includes('info')) {
         this.setSelected('.info-view', '.events-view')
+        this.viewRoute = 'info'
       }
+    }
+  },
+  computed: {
+    isInfoView () {
+      if (this.viewRoute === 'info') return true
+      return false
     }
   },
   beforeRouteEnter (to, from, next) {
@@ -69,6 +74,14 @@ export default {
 
 <template>
   <div class="user-profile-container" v-if="user">
+    <div class="breadcrum-admin breadcrum-admin-margin">
+      <router-link :to="{ name: 'users' }">User</router-link>
+      <p>></p>
+      <p> {{ user.id }}</p>
+      <p>></p>
+      <router-link v-if="isInfoView" class="infoViewRoute selectedRoute" :to="{ name: 'profileInfoView'}">info</router-link>
+      <router-link v-if="!isInfoView" class="eventViewRoute" :to="{ name: 'profileEventsView'}">event</router-link>
+    </div>
     <div class="profile-banner">
     </div>
     <div class="profile-info">
@@ -83,8 +96,8 @@ export default {
           <h1> {{ user.firstname }} {{ user.lastname }}</h1>
         </div>
         <div class="buttons-view">
-          <a class="router-link-active router-link-exact-active info-view selected" @click="infoView">Info</a>
-          <a class="events-view" @click="adminEventsView">Events</a>
+          <router-link class="info-view selected" @click="infoView" to="profileInfoView">Info</router-link>
+          <router-link class="events-view" @click="adminEventsView" to="profileEventsView">Events</router-link>
         </div>
         <div class="info-right-bottom">
           <router-view :user="user"></router-view>
@@ -95,4 +108,12 @@ export default {
 </template>
 
 <style scoped>
+.breadcrum-admin {
+  position: absolute;
+  color: white;
+}
+
+.breadcrum-admin a, .breadcrum-admin p {
+  color: white;
+}
 </style>

@@ -8,7 +8,7 @@
     <div class="challenges-admin">
       <div class="title-button">
         <h1>Challenge Articles</h1>
-        <button @click="create()">Create</button>
+        <button @click="create()" class="admin-create">Create</button>
       </div>
       <table v-if="challenges">
         <thead>
@@ -66,6 +66,7 @@
 </template>
 
 <script>
+
 export default {
   name: 'ChallengesAdmin.vue',
   inject: ['challengeService', 'challengeServiceSuperUser', 'fileUploadService'],
@@ -91,17 +92,36 @@ export default {
     async remove (challenge) {
       try {
         await this.challengeServiceSuperUser.asyncDeleteById(challenge.id)
-        await this.fileUploadService.asyncDeleteImage(challenge.image)
+        const response = await this.fileUploadService.asyncDeleteImage(challenge.image)
         await this.challengeService.asyncFindAll()
+        this.$store.commit('setSuccess', true)
+        this.$store.commit('setSuccessMessage', response.message)
+        setTimeout(() => {
+          this.$store.commit('setSuccess', false)
+          this.$store.commit('setSuccessMessage', null)
+        }, 8000)
       } catch (e) {
-        console.error(e)
+        console.error(e.toJSON())
+        this.$store.commit('setError', true)
+        this.$store.commit('setErrorMessage', e.toJSON().error)
+        setTimeout(() => {
+          this.$store.commit('setError', false)
+          this.$store.commit('setErrorMessage', null)
+        }, 8000)
       }
     },
     async updateChallenges () {
       try {
         await this.challengeService.asyncFindAll()
       } catch (e) {
-        console.error(e)
+        console.error(e.toJSON())
+        this.error = true
+        this.$store.commit('setError', true)
+        this.$store.commit('setErrorMessage', e.toJSON().error)
+        setTimeout(() => {
+          this.$store.commit('setError', false)
+          this.$store.commit('setErrorMessage', null)
+        }, 8000)
       }
     },
     edit (id) {
@@ -139,7 +159,6 @@ export default {
   },
   async created () {
     await this.updateChallenges()
-    console.log(this.challenges)
   },
   watch: {
     $route (to, from) {

@@ -1,39 +1,38 @@
-package com.example.backend.repositories.newsletter;
+package com.example.backend.repositories.subscriber;
 
-import com.example.backend.models.Challenge;
-import com.example.backend.models.Newsletter;
+import com.example.backend.models.Subscriber;
 import com.example.backend.repositories.AbstractEntityRepositoryJpa;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository("NEWSLETTER.JPA")
+@Repository("SUBSCRIBER.JPA")
 @Primary
-public class NetworkRepositoryJpa extends AbstractEntityRepositoryJpa<Newsletter> {
+public class SubscriberRepositoryJpa extends AbstractEntityRepositoryJpa<Subscriber> {
 
 
-    public NetworkRepositoryJpa() {
-        super(Newsletter.class);
+    public SubscriberRepositoryJpa() {
+        super(Subscriber.class);
     }
 
     @Override
-    public List<Newsletter> findAll() {
+    public List<Subscriber> findAll() {
         return super.findAll();
     }
 
     @Override
-    public List<Newsletter> findByQuery(String jpqlName, Object... params) {
+    public List<Subscriber> findByQuery(String jpqlName, Object... params) {
         return super.findByQuery(jpqlName, params);
     }
 
     @Override
-    public Newsletter findById(Long id) {
+    public Subscriber findById(Long id) {
         return super.findById(id);
     }
 
     @Override
-    public Newsletter save(Newsletter entity) {
+    public Subscriber save(Subscriber entity) {
         return super.save(entity);
     }
 

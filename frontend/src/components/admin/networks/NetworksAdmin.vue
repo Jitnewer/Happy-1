@@ -8,7 +8,7 @@
     <div class="challenges-admin">
       <div class="title-button">
         <h1>Network Articles</h1>
-        <button @click="create()">Create</button>
+        <button @click="create()" class="admin-create">Create</button>
       </div>
       <table v-if="networks">
         <thead>
@@ -94,14 +94,27 @@ export default {
         await this.fileUploadService.asyncDeleteImage(network.image)
         await this.networkService.asyncFindAll()
       } catch (e) {
-        console.error(e)
+        console.error(e.toJSON())
+        this.$store.commit('setError', true)
+        this.$store.commit('setErrorMessage', e.toJSON().error)
+        setTimeout(() => {
+          this.$store.commit('setError', false)
+          this.$store.commit('setErrorMessage', null)
+        }, 8000)
       }
     },
     async updateNetworks () {
       try {
         await this.networkService.asyncFindAll()
       } catch (e) {
-        console.error(e)
+        console.error(e.toJSON())
+        this.error = true
+        this.$store.commit('setError', true)
+        this.$store.commit('setErrorMessage', e.toJSON().error)
+        setTimeout(() => {
+          this.$store.commit('setError', false)
+          this.$store.commit('setErrorMessage', null)
+        }, 8000)
       }
     },
     edit (id) {

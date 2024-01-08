@@ -12,11 +12,6 @@ import java.util.List;
 @Repository("USER.JPA")
 @Primary
 public class UserRepositoryJpa extends AbstractEntityRepositoryJpa<User> {
-
-    private static final int WORKLOAD = 12;
-    @PersistenceContext
-    private EntityManager entityManager;
-
     public UserRepositoryJpa() {
         super(User.class);
     }

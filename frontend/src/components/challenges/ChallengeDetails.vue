@@ -36,6 +36,7 @@
 
 <script>
 import challenges from './Challenges.vue'
+import ErrorPopUp from '@/components/errorPopUp.vue'
 
 export default {
   name: 'ChallengeDetails.vue',
@@ -89,7 +90,13 @@ export default {
     try {
       await this.challengeService.asyncFindById(this.$route.params.id)
     } catch (e) {
-      console.error(e)
+      console.error(e.toJSON())
+      this.$store.commit('setError', true)
+      this.$store.commit('setErrorMessage', e.toJSON().error)
+      setTimeout(() => {
+        this.$store.commit('setError', false)
+        this.$store.commit('setErrorMessage', null)
+      }, 8000)
     }
   },
   computed: {

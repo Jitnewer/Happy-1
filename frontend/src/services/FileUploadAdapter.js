@@ -1,9 +1,10 @@
+
 export class FileUploadAdapter {
   resourceUrl;
   copyConstructor;
   constructor (resourceUrl) {
     this.resourceUrl = resourceUrl
-    console.log('Created UserEventAdapter for ' + resourceUrl)
+    console.log('Created FileUploadAdaptor for ' + resourceUrl)
   }
 
   async request (formData, map) {
@@ -25,6 +26,7 @@ export class FileUploadAdapter {
 
       const response = await fetch(url, options)
 
+      console.log('test:  ' + response)
       return response
     } catch (error) {
       console.error('Error uploading file: ' + error)

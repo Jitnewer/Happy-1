@@ -8,7 +8,7 @@
     <div class="challenges-admin">
       <div class="title-button">
         <h1>Events</h1>
-        <button @click="create()">Create</button>
+        <button @click="create()" class="admin-create">Create</button>
       </div>
       <table v-if="events">
         <thead>
@@ -114,8 +114,6 @@ export default {
       this.showUsers = !this.showUsers
       this.selectedEvent = event
       this.users = await this.userEventsService.asyncFindByProperty(this.selectedEvent.id, 'usersByEvent')
-      console.log(this.users)
-      console.log(this.sortedUsers)
     },
     back () {
       this.showUsers = false
@@ -123,18 +121,36 @@ export default {
     },
     async remove (event) {
       try {
-        await this.eventsServiceSuperUser.asyncDeleteById(event.id)
+        const response = await this.eventsServiceSuperUser.asyncDeleteById(event.id)
         await this.fileUploadService.asyncDeleteImage(event.image)
         await this.eventsService.asyncFindAll()
+        this.$store.commit('setSuccess', true)
+        this.$store.commit('setSuccessMessage', response.message)
+        setTimeout(() => {
+          this.$store.commit('setSuccess', false)
+          this.$store.commit('setSuccessMessage', null)
+        }, 8000)
       } catch (e) {
-        console.error(e)
+        console.error(e.toJSON())
+        this.$store.commit('setError', true)
+        this.$store.commit('setErrorMessage', e.toJSON().error)
+        setTimeout(() => {
+          this.$store.commit('setError', false)
+          this.$store.commit('setErrorMessage', null)
+        }, 8000)
       }
     },
     async updateChallenges () {
       try {
         await this.eventsService.asyncFindAll()
       } catch (e) {
-        console.error(e)
+        console.error(e.toJSON())
+        this.$store.commit('setError', true)
+        this.$store.commit('setErrorMessage', e.toJSON().error)
+        setTimeout(() => {
+          this.$store.commit('setError', false)
+          this.$store.commit('setErrorMessage', null)
+        }, 8000)
       }
     },
     edit (id) {

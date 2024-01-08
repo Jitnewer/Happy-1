@@ -2,9 +2,13 @@
     max-width: 1280px;
 }
 
+.error-admin {
+
+}
+
 .breadcrum-admin {
     margin-bottom: 20px;
-    background-color: white;
+    /*background-color: white;*/
 }
 
 .container-admin button {
@@ -125,7 +129,7 @@
 }
 
 .challenge-create {
-    width: 30%;
+    width: fit-content;
 }
 
 .challenge-create-form {
@@ -147,7 +151,7 @@
     display: flex;
     gap: 1rem;
     justify-content: space-between;
-
+    width: max-content;
 }
 
 .challenge-create-form button {
@@ -323,7 +327,7 @@
         margin-bottom: 5rem;
     }
     .challenge-create {
-        width: 30%;
+        /*width: 30%;*/
     }
 }
 
@@ -337,7 +341,7 @@
         display:none;
     }
     .challenge-create {
-        width: 45%;
+        /*width: 45%;*/
     }
 }
 
@@ -360,7 +364,7 @@
         z-index: 99;
     }
     .challenge-create {
-        width: 50%;
+        /*width: 50%;*/
     }
 }
 
@@ -387,7 +391,7 @@
         z-index: 99;
     }
     .challenge-create {
-        width: 50%;
+        /*width: 50%;*/
     }
 }
 
@@ -419,7 +423,7 @@
         cursor: pointer;
     }
     .challenge-create {
-        width: 65%;
+        /*width: 65%;*/
     }
 
 }
@@ -437,7 +441,7 @@
         z-index: 99;
     }
     .challenge-create {
-        width: 65%;
+        /*width: 65%;*/
     }
 }
 
@@ -466,7 +470,7 @@
         flex-direction: column;
     }
     .challenge-create {
-        width: 90%;
+        /*width: 90%;*/
     }
 }
 
@@ -496,7 +500,7 @@
         z-index: 99;
     }
     .challenge-create {
-        width: 100%;
+        /*width: 100%;*/
     }
 
 }
