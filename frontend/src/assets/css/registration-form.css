@@ -100,8 +100,7 @@ input:checked + .slider:before {
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 100vh;
-}
+    min-height: 60vh;}
 
 .container-sign-up {
     width: 400px;
