@@ -170,8 +170,13 @@ export default {
       this.$store.commit('setLoggedInAsAdmin', false)
       this.$store.commit('setLoggedInAsSuperUser', false)
       this.$store.commit('setLoggedIn', false)
-
-      this.$router.push({ path: '/home' })
+      this.$store.commit('setSuccess', true)
+      this.$store.commit('setSuccessMessage', 'Logged out!')
+      setTimeout(() => {
+        this.$store.commit('setSuccess', false)
+        this.$store.commit('setSuccessMessage', null)
+      }, 8000)
+      this.$router.push({ path: '/login' })
     },
     toggleDropdown (event) {
       event.stopPropagation()
