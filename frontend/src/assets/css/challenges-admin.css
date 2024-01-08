@@ -361,7 +361,7 @@
         display: flex;
         flex-direction: column;
         width: 26%;
-        z-index: 99;
+        z-index: 97;
     }
     .challenge-create {
         /*width: 50%;*/
@@ -388,7 +388,7 @@
         display: flex;
         flex-direction: column;
         width: 28%;
-        z-index: 99;
+        z-index: 98;
     }
     .challenge-create {
         /*width: 50%;*/
@@ -411,7 +411,7 @@
         display: flex;
         flex-direction: column;
         width: 29%;
-        z-index: 99;
+        z-index: 97;
     }
     #hamburger-admin {
         fill: var(--main-text-color);
@@ -438,7 +438,7 @@
         display: flex;
         flex-direction: column;
         width: 20%;
-        z-index: 99;
+        z-index: 97;
     }
     .challenge-create {
         /*width: 65%;*/
@@ -458,7 +458,7 @@
         display: flex;
         flex-direction: column;
         width: 20%;
-        z-index: 99;
+        z-index: 97;
     }
     .adminName {
         display:none
@@ -497,7 +497,7 @@
         display: flex;
         flex-direction: column;
         width: 20%;
-        z-index: 99;
+        z-index: 97;
     }
     .challenge-create {
         /*width: 100%;*/

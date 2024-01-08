@@ -34,6 +34,7 @@ export default {
         null,
         'Happy Hospitality'
       )
+      document.body.style.overflow = 'hidden'
 
       this.$router.push({ name: 'userDetail', params: { id: this.selectedUser.id } })
     },
@@ -64,14 +65,15 @@ export default {
     },
     cancelEdit () {
       this.create = false
+      document.body.style.overflow = 'auto'
       this.$router.push({ name: 'users' })
     },
     async saveUser (user) {
       try {
-        const savedUser = await this.usersServiceAdmin.asyncSave(user)
+        // const savedUser = await this.usersServiceAdmin.asyncSave(user)
 
         if (this.create) {
-          this.users.push(savedUser)
+          this.users.push(user)
         } else {
           const indexToUpdate = this.users.findIndex(oldUser => oldUser.id === user.id)
 
@@ -80,6 +82,7 @@ export default {
           }
         }
 
+        document.body.style.overflow = 'auto'
         this.create = false
         this.$router.push({ name: 'users' })
       } catch (e) {
@@ -218,6 +221,5 @@ export default {
 <style scoped>
 .container-admin {
   margin-top: 1rem;
-  width:80%
 }
 </style>
