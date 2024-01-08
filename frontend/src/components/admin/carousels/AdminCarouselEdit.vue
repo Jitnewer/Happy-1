@@ -21,8 +21,8 @@
           </div>
           <div class="form-label">
             <p>Date</p>
-            <input type="date" v-model="copiedCarousel.dateTime" :class="{'invalid-input': copiedCarousel.dateTime && !isDateValid,'valid-input': copiedCarousel.dateTime && isDateValid}" @input="validateDate(copiedCarousel.dateTime)">
-            <p class="errorMessage" v-if="!isDateValid && copiedCarousel.dateTime">Invalid date, needs te be at least 5 days ahead of today</p>
+            <input type="datetime-local" v-model="formattedDateTimeInput" :class="{'invalid-input': formattedDateTimeInput && !isDateValid,'valid-input': formattedDateTimeInput && isDateValid}" @input="validateDate(formattedDateTimeInput)">
+            <p class="errorMessage" v-if="!isDateValid && formattedDateTimeInput">Invalid date, needs to be in the future</p>
           </div>
           <div class="form-label">
             <p>Image</p>
@@ -64,7 +64,15 @@ export default {
     },
     validateDate (date) {
       const inputDate = new Date(date)
-      this.isDateValid = true
+
+      // Format the input date to "yyyy-MM-dd"
+      const formattedDate = inputDate.toISOString().split('T')[0]
+
+      // Get the current date
+      const currentDate = new Date()
+
+      // Check if the formatted date is today or in the future
+      this.isDateValid = formattedDate >= currentDate.toISOString().split('T')[0]
 
       return this.isDateValid
     },
@@ -136,7 +144,7 @@ export default {
     },
     async updateCarousel () {
       try {
-        await this.carouselService.asyncFindById(this.$route.params.id)
+        await this.carouselServiceSuperUser.asyncFindById(this.$route.params.id)
         this.copiedCarousel = JSON.parse(JSON.stringify(this.carousel))
       } catch (e) {
         console.error(e)
@@ -144,24 +152,41 @@ export default {
     },
     validateForm () {
       const isTitleValid = this.validateTitle(this.carousel.name)
-      const isDateValid = this.validateDate(this.carousel.date)
+      const isDateValid = this.validateDate(this.copiedCarousel.date)
       const isImageValid = this.isImageValid
 
       return isTitleValid && isDateValid && isImageValid
     },
-    getFormattedDate (dateString) {
-      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }
-      return new Date(dateString).toLocaleDateString('nl-NL', options)
+    formatDateTimeWithoutSeconds (dateTime) {
+      const date = new Date(dateTime)
+      const year = date.getFullYear()
+      const month = `0${date.getMonth() + 1}`.slice(-2)
+      const day = `0${date.getDate()}`.slice(-2)
+      const hours = `0${date.getHours()}`.slice(-2)
+      const minutes = `0${date.getMinutes()}`.slice(-2)
+
+      return `${year}-${month}-${day}T${hours}:${minutes}`
     }
   },
   computed: {
     carousel () {
-      return this.carouselService.entities
+      return this.carouselServiceSuperUser.entities
+    },
+    formattedDateTimeInput: {
+      get () {
+        // Format challenge.dateTime for datetime-local input
+        return this.formatDateTimeWithoutSeconds(this.copiedCarousel.dateTime)
+      },
+      set (value) {
+        // Parse the input value back to ISO format
+        this.copiedCarousel.dateTime = new Date(value).toISOString()
+      }
     }
   },
   async created () {
     await this.updateCarousel()
   },
+
   watch: {
     $route (to, from) {
       if (to.fullPath !== from.fullPath) {

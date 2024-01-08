@@ -41,8 +41,8 @@
           </div>
           <div class="form-label">
             <p>Date</p>
-            <input type="date" v-model="copiedEvent.date" :class="{'invalid-input': copiedEvent.date && !isDateValid,'valid-input': copiedEvent.date && isDateValid}" @input="validateDate(copiedEvent.date)">
-            <p class="errorMessage" v-if="!isDateValid && copiedEvent.date">Invalid date, needs te be at least 5 days ahead of today</p>
+            <input type="datetime-local" v-model="formattedDateTimeInput" :class="{'invalid-input': formattedDateTimeInput && !isDateValid,'valid-input': formattedDateTimeInput && isDateValid}" @input="validateDate(formattedDateTimeInput)">
+            <p class="errorMessage" v-if="!isDateValid && formattedDateTimeInput">Invalid date, needs te be at least 5 days ahead of today</p>
           </div>
           <div class="form-label">
             <p>Time Begin</p>
@@ -266,7 +266,7 @@ export default {
       const isLocationValid = this.validateLocation(this.event.location)
       const isPriceValid = this.validatePrice(this.event.price)
       const isInfoValid = this.validateInfo(this.event.info)
-      const isDateValid = this.validateDate(this.event.date)
+      const isDateValid = this.validateDate(this.copiedEvent.date)
       const isTimeBeginValid = this.validateTimeBegin(this.event.timeBegin)
       const isTimeEndValid = this.validateTimeEnd(this.event.timeEnd)
       const isSizeValid = this.validateSize(this.event.size)
@@ -274,14 +274,30 @@ export default {
 
       return isNameValid && isCityValid && isLocationValid && isPriceValid && isInfoValid && isDateValid && isTimeBeginValid && isTimeEndValid && isSizeValid && isImageValid
     },
-    getFormattedDate (dateString) {
-      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }
-      return new Date(dateString).toLocaleDateString('nl-NL', options)
+    formatDateTimeWithoutSeconds (dateTime) {
+      const date = new Date(dateTime)
+      const year = date.getFullYear()
+      const month = `0${date.getMonth() + 1}`.slice(-2)
+      const day = `0${date.getDate()}`.slice(-2)
+      const hours = `0${date.getHours()}`.slice(-2)
+      const minutes = `0${date.getMinutes()}`.slice(-2)
+
+      return `${year}-${month}-${day}T${hours}:${minutes}`
     }
   },
   computed: {
     event () {
       return this.eventsService.entities
+    },
+    formattedDateTimeInput: {
+      get () {
+      // Format challenge.dateTime for datetime-local input
+        return this.formatDateTimeWithoutSeconds(this.copiedEvent.dateTime)
+      },
+      set (value) {
+      // Parse the input value back to ISO format
+        this.copiedEvent.dateTime = new Date(value).toISOString()
+      }
     }
   },
   async created () {

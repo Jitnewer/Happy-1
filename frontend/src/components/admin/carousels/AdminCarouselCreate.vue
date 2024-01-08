@@ -18,6 +18,7 @@
             <p>Title</p>
             <input type="text" v-model="carousel.title" :class="{'invalid-input': carousel.title && !isTitleValid,'valid-input': carousel.title && isTitleValid}" @input="validateTitle(carousel.title)">
             <p class="errorMessage" v-if="!isTitleValid && carousel.title">Invalid title, no special symbols allowed</p>
+            <p class="charCounter">{{ charCount }} / 82 characters</p>
           </div>
           <div class="form-label">
             <p>DateTime</p>
@@ -63,7 +64,9 @@ export default {
       const titleRegex = /^[a-zA-Z0-9\s\-!\\?.$€&,:'"ëéèêàáâûüúöóôçīńł]+$/u
 
       this.isTitleValid = titleRegex.test(title)
-      return this.isTitleValid
+      this.charCount = title.length
+
+      return this.isTitleValid && this.charCount <= 82
     },
     validateDateTime (dateTime) {
       const inputDate = new Date(dateTime)

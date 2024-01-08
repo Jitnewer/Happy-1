@@ -438,4 +438,87 @@ span.carouselPagination.active {
 .yellow-text, .blue-text {
     display: inline;
 }
+@media only screen and (max-width: 1100px) {
+    .pagination {
+        top: calc(50% + 135px);
+    }
+}
+@media only screen and (max-width: 980px) {
+
+    .themeButton{
+        padding: 1px;
+    }
+    .pagination {
+        top: calc(50% + 120px);
+    }
+    .welcomeMsg {
+        font-size: 12px;
+    }
+    .theme .themeImg {
+         width: 50%;
+         height: 30%;
+    }
+}
+@media only screen and (max-width: 768px) {
+
+    .themeButton{
+        padding: 1px;
+    }
+    .pagination {
+        top: calc(50% + 90px);
+    }
+    .pillarButton {
+        padding: 1px;
+    }
+    .themeH4{
+        font-size: 14px;
+    }.theme button {
+    height: 500px;
+         }
+     .h3Theme {
+         font-size: 14px;
+     }
+    .theme .themeImg {
+        width: 80%;
+        height: 30%;
+    }.welcomeMsg {
+         font-size: 10px;
+     }.navigate i {
+    display: none;
+               }
+    .carouselPagination.active {
+        width: 12px;
+        height: 12px;
+      }
+    .welcomeMsg button {
+        font-size: 12px;
+    }
+
+}@media only screen and (max-width: 520px) {
+    .themeButton{
+    }
+    .pagination {
+        top: calc(50% + 60px);
+    }
+    .pillarButton {
+        padding: 1px;
+    }
+    .themeH4{
+        font-size: 7px;;
+    }.theme button {
+         height: 300px;
+     }
+    .h3Theme {
+        font-size: 10px;
+
+    }
+    .theme .themeImg {
+        width: 60%;
+        height: 30%;
+    }.welcomeMsg {
+         font-size: 6px;
+     } .welcomeMsg button {
+        font-size: 10px;
+                }
+}
 

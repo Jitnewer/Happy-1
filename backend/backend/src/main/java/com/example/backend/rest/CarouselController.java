@@ -26,12 +26,12 @@ public class CarouselController {
     @Autowired
     private EntityRepository<Carousel> carouselRepository;
 
-    @GetMapping
+    @GetMapping("authentication")
     public List<Carousel> getAllCarousels() {
         return carouselRepository.findAll();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/superuser/{id}")
     public ResponseEntity<Object> getCarouselById(@PathVariable long id) {
         try {
             Carousel carousel = carouselRepository.findById(id);

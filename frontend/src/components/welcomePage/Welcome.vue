@@ -18,7 +18,7 @@
                :is-current="index + 1">
           <div v-show="currentSlide === index + 1" class="slide">
             <div class="welcomeMsg">
-              <h2 class="blue-text"> {{ formattedDateTime(slide.dateTime) }} </h2>
+              <h2 class="blue-text"> {{ parseDate(slide.date) }} </h2>
               <h2 class="yellow-text"> {{ slide.title }}</h2>
               <button>
                 <span class="blue-text"> > Lees meer </span>
@@ -33,13 +33,13 @@
       <span class="yellow-text">OUR</span> <span class="blue-text">PILLARS</span>
     </h1>
     <div class="pillarContainer">
-      <button @click="challenges">
+      <button class="pillarButton" @click="challenges">
         <div class="pillar" data-aos="fade-up">
           <div class="pillarText">
             <h1 class="welcomeH1">
               <span class="blue-text">Challenges</span>
             </h1>
-            <h3>
+            <h3 class="h3Theme">
               Explore sustainability challenges in the hospitality industry with our initiative.
             </h3>
             <h3><span class="blue-text"> > Read more</span></h3>
@@ -49,13 +49,13 @@
           </div>
         </div>
       </button>
-      <button @click="network">
+      <button class="pillarButton" @click="network">
         <div class="pillar" data-aos="fade-up">
           <div class="pillarText">
             <h1 class="welcomeH1">
               <span class="blue-text">Network</span>
             </h1>
-            <h3>
+            <h3 class="h3Theme">
               Discover the challenges and innovations shaping eco-friendly networking practices within the
               hospitality
               industry.
@@ -67,13 +67,13 @@
           </div>
         </div>
       </button>
-      <button @click="research">
+      <button class="pillarButton" @click="research">
         <div class="pillar" data-aos="fade-up">
           <div class="pillarText">
             <h1 class="welcomeH1">
               <span class="blue-text">Research</span>
             </h1>
-            <h3>
+            <h3 class="h3Theme">
               Explore the challenges and advancements in sustainable research practices within the hospitality
               sector.
 
@@ -191,10 +191,6 @@ export default {
     console.log('carouselSlides:', this.carouselSlides)
   },
   methods: {
-    getFormattedDate (dateString) {
-      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }
-      return new Date(dateString).toLocaleDateString('nl-NL', options)
-    },
     formattedDateTime (dateTime) {
       const today = new Date()
       const challengeDate = new Date(dateTime)
@@ -246,6 +242,14 @@ export default {
     },
     research () {
       this.$router.push({ name: 'researches' })
+    },
+    parseDate (dateString) {
+      const dateObject = new Date(dateString)
+      const day = dateObject.getDate()
+      const month = dateObject.getMonth() + 1
+      const year = dateObject.getFullYear()
+
+      return `${day}-${month}-${year}`
     }
   },
   computed: {

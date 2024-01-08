@@ -24,7 +24,7 @@
         <tr v-for="carousel in carousels" :key="carousel.id">
           <td>{{ carousel.id }}</td>
           <td>{{ carousel.title}}</td>
-          <td class="datetime">{{ formattedDateTime(carousel.dateTime) }}</td>
+          <td class="datetime">{{ parseDate(carousel.date) }}</td>
           <td class="image"><img :src="carousel.image ? require(`../../../${carousel.image}`) : ''" alt="Carousel Image"></td>
           <td>
             <div class="table-buttons">
@@ -84,34 +84,13 @@ export default {
     edit (id) {
       this.$router.push({ name: 'adminCarouselEdit', params: { id: id } })
     },
-    getFormattedDate (dateString) {
-      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }
-      return new Date(dateString).toLocaleDateString('nl-NL', options)
-    },
-    formattedDateTime (dateTime) {
-      const today = new Date()
-      const challengeDate = new Date(dateTime)
+    parseDate (dateString) {
+      const dateObject = new Date(dateString)
+      const day = dateObject.getDate()
+      const month = dateObject.getMonth() + 1
+      const year = dateObject.getFullYear()
 
-      const formattedTime = challengeDate.toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' })
-
-      if (
-        challengeDate.getDate() === today.getDate() &&
-        challengeDate.getMonth() === today.getMonth() &&
-        challengeDate.getFullYear() === today.getFullYear()
-      ) {
-        // Vandaag, (tijd)
-        return `Vandaag, ${formattedTime}`
-      } else if (
-        challengeDate.getDate() === today.getDate() - 1 &&
-        challengeDate.getMonth() === today.getMonth() &&
-        challengeDate.getFullYear() === today.getFullYear()
-      ) {
-        // Gisteren, (tijd)
-        return `Gisteren, ${formattedTime}`
-      } else {
-        // Maandag, (tijd), Donderdag (tijd)
-        return `${this.getFormattedDate(dateTime)}, ${formattedTime}`
-      }
+      return `${day}-${month}-${year}`
     }
   },
   async created () {
