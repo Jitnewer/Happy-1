@@ -296,15 +296,15 @@ export default {
       }
     },
     validateForm () {
-      const isNameValid = this.validateName(this.event.name)
-      const isCityValid = this.validateCity(this.event.city)
-      const isLocationValid = this.validateLocation(this.event.location)
-      const isPriceValid = this.validatePrice(this.event.price)
-      const isInfoValid = this.validateInfo(this.event.info)
-      const isDateValid = this.validateDate(this.event.date)
-      const isTimeBeginValid = this.validateTimeBegin(this.event.timeBegin)
-      const isTimeEndValid = this.validateTimeEnd(this.event.timeEnd)
-      const isSizeValid = this.validateSize(this.event.size)
+      const isNameValid = this.validateName(this.copiedEvent.name)
+      const isCityValid = this.validateCity(this.copiedEvent.city)
+      const isLocationValid = this.validateLocation(this.copiedEvent.location)
+      const isPriceValid = this.validatePrice(this.copiedEvent.price)
+      const isInfoValid = this.validateInfo(this.copiedEvent.info)
+      const isDateValid = this.validateDate(this.copiedEvent.date)
+      const isTimeBeginValid = this.validateTimeBegin(this.copiedEvent.timeBegin)
+      const isTimeEndValid = this.validateTimeEnd(this.copiedEvent.timeEnd)
+      const isSizeValid = this.validateSize(this.copiedEvent.size)
       const isImageValid = this.isImageValid
 
       return isNameValid && isCityValid && isLocationValid && isPriceValid && isInfoValid && isDateValid && isTimeBeginValid && isTimeEndValid && isSizeValid && isImageValid
