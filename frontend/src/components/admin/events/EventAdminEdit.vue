@@ -73,6 +73,9 @@
 </template>
 
 <script>
+
+import CustomError from '@/CustomError'
+
 export default {
   name: 'EventAdminEdit.vue',
   inject: ['eventsService', 'eventsServiceSuperUser', 'fileUploadService'],
