@@ -210,7 +210,12 @@ export default {
       // Validate date and time
       const isDateTimeValid = this.validateDateTime(this.formattedDateTimeInput)
 
-      const isImageValid = this.isImageValid
+      let isImageValid
+      if (this.isImageValid === null) {
+        isImageValid = true
+      } else {
+        isImageValid = this.isImageValid
+      }
 
       // Validate paragraphs
       let areParagraphsValid = true
