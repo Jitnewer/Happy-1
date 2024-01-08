@@ -97,7 +97,6 @@ public class UserController {
             }
             userRepository.save(user);
             return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "User updated successfully"));
-            return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "Network updated successfully", "user", user));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("message", "Error updating user", "error", e.getMessage()));
         }
