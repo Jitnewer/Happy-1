@@ -5,7 +5,7 @@
       <span> > </span>
       <router-link :to="{ name: 'adminEvents' }">Events</router-link>
       <span>></span>
-      <router-link :to="{ name: 'adminEventEdit', query: { id: $route.params.id } }">Edit {{ copiedEvent.id }}</router-link>
+      <router-link :to="{ name: 'adminEventEdit', query: { id: $route.params.id } }">Edit / {{ copiedEvent.id }}</router-link>
     </div>
     <div class="challenge-create">
       <div class="title-button-create">
