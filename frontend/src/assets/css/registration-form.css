@@ -110,7 +110,6 @@ input:checked + .slider:before {
     text-align: center;
     padding: 50px 35px 10px 35px;
     box-shadow: 0px 3px 40px #000;
-    margin-top: 60px;
 }
 
 .header-sign-up {
@@ -123,13 +122,9 @@ input:checked + .slider:before {
     width: 100%;
 }
 
-.form-sign-up-1 form {
-    display: flex;
-    width: 400%;
-}
 
 .form-sign-up-1 form .sign-up-page {
-    width: 25%;
+    width: 100%;
 }
 
 .title-sign-up-form {
@@ -470,6 +465,5 @@ form .button input:hover {
         text-align: center;
         padding: 40px 15px 10px 15px;
         box-shadow: 0px 3px 40px #000;
-        margin-top: 60px;
     }
 }
