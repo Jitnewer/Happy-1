@@ -17,7 +17,7 @@
           </div>
           <transition name="dropdownProfile">
             <div class="dropdown-profile-content" v-show="showProfile">
-              <router-link  to="/profile">
+              <router-link  to="/myProfile">
                 Profile
               </router-link>
               <router-link to="/profile/settings">

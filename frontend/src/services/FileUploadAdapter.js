@@ -1,3 +1,4 @@
+
 export class FileUploadAdapter {
   resourceUrl;
   copyConstructor;
@@ -25,6 +26,7 @@ export class FileUploadAdapter {
 
       const response = await fetch(url, options)
 
+      console.log('test:  ' + response)
       return response
     } catch (error) {
       console.error('Error uploading file: ' + error)

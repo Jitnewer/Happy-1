@@ -59,6 +59,14 @@ export class CachedRESTAdaptorWithFetch extends RESTAdaptorWithFetch {
     }
   }
 
+  async asyncFindByMail (mail) {
+    try {
+      return await super.asyncFindByMail(mail)
+    } catch (e) {
+      throw new CustomError('Error in asyncFindByMail', error.status, error.error)
+    }
+  }
+
   async asyncAddEntityToEntity (id1, id2, url) {
     try {
       const response = await super.asyncAddEntityToEntity(id1, id2, url)
@@ -143,7 +151,6 @@ export class CachedRESTAdaptorWithFetch extends RESTAdaptorWithFetch {
     try {
       // Fetch data from the server if not in the cache
       const response = await super.asyncFindByProperty(propertyId, url)
-
       // Update the cache
       this.entities = response
 

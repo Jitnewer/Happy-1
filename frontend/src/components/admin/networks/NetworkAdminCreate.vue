@@ -10,7 +10,7 @@
     <div class="challenge-create">
       <div class="title-button-create">
         <h1>Create Network</h1>
-        <button @click="back()">Back</button>
+        <button @click="back()" class="back-button">Back</button>
       </div>
       <div>
         <form @submit.prevent="create" class="challenge-create-form" v-if="network">
@@ -74,7 +74,6 @@
 </template>
 
 <script>
-import CustomError from '@/CustomError'
 export default {
   name: 'NetworkAdminCreate.vue',
   inject: ['networkService', 'networkServiceSuperUser', 'fileUploadService'],
@@ -89,7 +88,7 @@ export default {
         firstParagraph: '',
         dateTime: '',
         theme: '',
-        image: null,
+        image: 'assets/NetworkPic/imagePlaceholder.jpg',
         paragraphs: []
       },
       image: null,
@@ -155,6 +154,7 @@ export default {
       return this.isParagraphContentValid[index]
     },
     async create () {
+      if (this.validateForm()) {
       try {
         this.network.dateTime = new Date(this.network.dateTime).toISOString()
         const response = await this.networkServiceSuperUser.asyncSave(this.network)
@@ -187,7 +187,9 @@ export default {
             this.$store.commit('setError', false)
             this.$store.commit('setErrorMessage', null)
           }, 8000)
+
         }
+      }
       }
     },
     paragraphs (network) {

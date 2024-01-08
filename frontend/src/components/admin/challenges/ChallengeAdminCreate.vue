@@ -10,7 +10,7 @@
     <div class="challenge-create">
       <div class="title-button-create">
         <h1>Create Challenge</h1>
-        <button @click="back()">Back</button>
+        <button @click="back()" class="back-button">Back</button>
       </div>
       <div>
         <form @submit.prevent="create" class="challenge-create-form" v-if="challenge">
@@ -91,7 +91,7 @@ export default {
         firstParagraph: '',
         dateTime: '',
         theme: '',
-        image: null,
+        image: 'assets/ChallengePic/imagePlaceholder.jpg',
         paragraphs: []
       },
       image: null,
@@ -161,7 +161,7 @@ export default {
         try {
           this.challenge.dateTime = new Date(this.challenge.dateTime).toISOString()
           const response = await this.challengeServiceSuperUser.asyncSave(this.challenge)
-          const challenge = response.challenge
+          const challenge = response
           const file = await this.fileUploadService.asyncUploadChallengePic(this.image, challenge.id)
           challenge.image = file.filePath
           const response2 = await this.challengeServiceSuperUser.asyncSave(challenge)

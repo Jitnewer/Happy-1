@@ -93,7 +93,7 @@ public class ResearchController {
                     "message", "Research added successfully",
                     "status", HttpStatus.CREATED.value(),
                     "location", location.toString(),
-                    "research", research));
+                    "entity", research));
         } catch (Exception e) {
             Map<String, Object> errorResponse = new HashMap<>();
             errorResponse.put("message", "Error adding the research");

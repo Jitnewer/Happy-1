@@ -1,5 +1,10 @@
 <template>
   <div class="container-admin">
+     <div class="breadcrum-admin breadcrum-admin-margin">
+      <router-link :to="{ name: 'admin' }">Admin</router-link>
+      <p>></p>
+      <router-link :to="{ name: 'statistics' }">Statistics</router-link>
+    </div>
     <div class="users-amount-container">
       <div class="legend">
         <p class="total">Total Users: {{ totalUsers }}</p>
@@ -22,7 +27,7 @@ import ErrorPopUp from '@/components/errorPopUp.vue' // Import Chart.js
 
 export default {
   name: 'AdminStatistics',
-  inject: ['usersService'],
+  inject: ['usersServiceAdmin'],
   data () {
     return {
       users: [],
@@ -79,7 +84,7 @@ export default {
   },
   async created () {
     try {
-      this.users = await this.usersService.asyncFindAll()
+      this.users = await this.usersServiceAdmin.asyncFindAll()
     } catch (e) {
       console.error(e.toJSON())
     }

@@ -41,6 +41,16 @@ export class RESTAdaptorWithFetch {
     }
   }
 
+  async asyncFindByMail (mail) {
+    try {
+      const data = await this.fetchJson(`${this.resourceUrl}/mail/${mail}`)
+
+      return data
+    } catch (e) {
+      throw new CustomError('Error in asyncFindByMail', error.toJSON().status || 500, error.toJSON().error)
+    }
+  }
+
   async asyncFindAll () {
     try {
       const data = await this.fetchJson(this.resourceUrl, {
@@ -110,7 +120,7 @@ export class RESTAdaptorWithFetch {
   async asyncSave (object) {
     let response
     try {
-      if (object.id == null) {
+      if (object.id === 0 || !object.id) {
         response = await this.fetchJson(this.resourceUrl, {
           method: 'POST',
           body: JSON.stringify(object),
@@ -127,14 +137,13 @@ export class RESTAdaptorWithFetch {
           }
         })
       }
-      return response
+      return this.copyConstructor(response.entity)
     } catch (error) {
       throw new CustomError('Error in asyncSave', error.toJSON().status || 500, error.toJSON().error)
     }
   }
 
   async asyncDeleteById (id) {
-    // eslint-disable-next-line no-useless-catch
     try {
       return await this.fetchJson(`${this.resourceUrl}/${id}`, {
         method: 'DELETE'

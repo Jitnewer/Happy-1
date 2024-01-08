@@ -10,7 +10,7 @@
     <div class="challenge-create">
       <div class="title-button-create">
         <h1>Create Research</h1>
-        <button @click="back()">Back</button>
+        <button @click="back()" class="back-button">Back</button>
       </div>
       <div>
         <form @submit.prevent="create" class="challenge-create-form" v-if="research">
@@ -90,7 +90,7 @@ export default {
         firstParagraph: '',
         dateTime: '',
         theme: '',
-        image: null,
+        image: 'assets/ResearchPic/imagePlaceholder.jpg',
         paragraphs: []
       },
       image: null,
@@ -162,7 +162,7 @@ export default {
           const response = await this.researchServiceSuperUser.asyncSave(this.research)
           console.log(response)
 
-          const research = response.research
+          const research = response
           const file = await this.fileUploadService.asyncUploadResearchPic(this.image, research.id)
           research.image = file.filePath
           const response2 = await this.researchServiceSuperUser.asyncSave(research)

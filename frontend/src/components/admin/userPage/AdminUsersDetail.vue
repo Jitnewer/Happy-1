@@ -22,7 +22,7 @@ export default {
       }
     },
     async save () {
-      if (this.validateFields()) {
+      if (this.validateFields) {
         if (confirm('Are you sure you want to change the access of this user?')) {
           try {
             const response = await this.usersService.asyncSave(this.selectedCopy)
@@ -42,7 +42,34 @@ export default {
             }, 8000)
           }
         }
+          this.$emit('save-edit', this.selectedCopy)
+        }
+    },
+    setUpErrorMessage (elementId, message) {
+      document.querySelector(elementId).setCustomValidity(message)
+      document.querySelector(elementId).reportValidity()
+    }
+  },
+  computed: {
+    validateFields () {
+      if (!this.validateFirstName) {
+        this.setUpErrorMessage('#firstname', 'Firstname must be at least 3 characters and can\'t contain any numbers and symbols')
+        return false
       }
+      if (!this.validateLastName) {
+        this.setUpErrorMessage('#lastname', 'Lastname must be at least 3 characters and can\'t contain any numbers and symbols')
+        return false
+      }
+      if (!this.validateMail) {
+        this.setUpErrorMessage('#email', 'Email must contain @ and end with .com/.nl etc.')
+        return false
+      }
+      if (!this.validatePassWord) {
+        this.setUpErrorMessage('#password', 'Password must be at least 6 characters')
+        return false
+      }
+
+      return true
     },
     validateFirstName () {
       const firstNameFieldIsEmpty = !this.selectedCopy.firstname || this.selectedCopy.firstname.trim() === ''

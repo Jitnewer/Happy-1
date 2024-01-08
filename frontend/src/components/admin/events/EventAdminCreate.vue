@@ -10,7 +10,7 @@
     <div class="challenge-create">
       <div class="title-button-create">
         <h1>Create Event</h1>
-        <button @click="back()">Back</button>
+        <button @click="back()" class="back-button">Back</button>
       </div>
       <div>
         <form @submit.prevent="create" class="challenge-create-form" v-if="event">
@@ -92,7 +92,7 @@ export default {
         timeBegin: '',
         timeEnd: '',
         size: '',
-        image: null
+        image: 'assets/eventPic/imagePlaceholder.jpg'
       },
       image: null,
       eventEdited: false,
@@ -202,7 +202,8 @@ export default {
       if (this.validateForm()) {
         try {
           const response = await this.eventsServiceSuperUser.asyncSave(this.event)
-          const event = response.event
+          console.log(response)
+          const event = response
           const file = await this.fileUploadService.asyncUploadEventPic(this.image, event.id)
           event.image = file.filePath
           const response2 = await this.eventsServiceSuperUser.asyncSave(event)
