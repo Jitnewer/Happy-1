@@ -82,7 +82,8 @@ export class FileUploadAdapter {
 
       const response = await this.request(formdata, '/challengePic')
 
-      return response.json()
+      var responseJson = await response.json()
+      return responseJson
     } catch (error) {
       console.error('Error uploading image: ', error)
     }

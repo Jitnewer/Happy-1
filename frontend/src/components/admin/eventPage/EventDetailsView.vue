@@ -201,7 +201,7 @@ export default {
     <form class="event-details">
       <div class="event-image-container">
         <input type="file" accept="image/jpeg, image/png, image/jpg" id="file" @change="handleImageUpload">
-        <img v-if="!newEventPic" :src="require(`../../../${selectedCopy.image}`)" alt="event image" class="event-image" @click="activateInput">
+        <img v-if="!newEventPic" :src="`https://ik.imagekit.io/happy1hva${selectedCopy.image}`" alt="event image" class="event-image" @click="activateInput">
         <img v-else :src="newEventPic" alt="event image" class="event-image" @click="activateInput">
       </div>
       <div class="info-inputs">

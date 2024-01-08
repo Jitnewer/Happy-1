@@ -156,7 +156,8 @@ const routes = [
         component: UserProfileEvents
       }
     ]
-  }
+  },
+  {
     path: '/register',
     name: 'register',
     component: Registration

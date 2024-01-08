@@ -60,6 +60,7 @@ export default {
     }
   },
   async created () {
+    console.log(localStorage)
     this.user = await this.usersService.asyncFindById(parseInt(localStorage.getItem('profileId')))
     this.$router.push({ name: 'profilePageInfo' })
     this.copyUser = User.copyConstructor(this.user)
@@ -91,7 +92,7 @@ export default {
     </div>
     <div class="profile-info">
       <div class="info-left">
-        <img v-if="!newProfilePic" class="profile-pic" :src="require(`../../../src/${copyUser.profilePic}`)" @click="activateInput">
+        <img v-if="!newProfilePic" class="profile-pic" :src="`https://ik.imagekit.io/happy1hva${copyUser.profilePic}`" @click="activateInput">
         <img v-else class="profile-pic" :src="newProfilePic" @click="activateInput">
         <input type="file" accept="image/jpeg, image/png, image/jpg" id="file" @change="handleImageUpload">
         <div v-if="!edit" class="profile-edit-buttons">

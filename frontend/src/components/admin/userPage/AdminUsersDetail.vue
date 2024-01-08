@@ -5,7 +5,7 @@ export default {
   name: 'AdminUserDetail',
   props: ['selectedUser', 'create'],
   emits: ['cancel-edit', 'save-edit'],
-  inject: ['usersServiceAdmin', 'usersService'],
+  inject: ['usersServiceAdmin'],
   data () {
     return {
       selectedCopy: null,
@@ -25,7 +25,7 @@ export default {
       if (this.validateFields) {
         if (confirm('Are you sure you want to change the access of this user?')) {
           try {
-            const response = await this.usersService.asyncSave(this.selectedCopy)
+            const response = await this.usersServiceAdmin.asyncSave(this.selectedCopy)
 
             if (response) {
               this.$emit('save-edit', response)
@@ -85,13 +85,6 @@ export default {
       if (this.selectedUser.userType === User.userTypes.SuperUser) return true
       return false
     }
-  },
-  computed: {
-    isAdminOrSuperUser () {
-      if (this.selectedUser.userType === User.userTypes.Admin) return true
-      if (this.selectedUser.userType === User.userTypes.SuperUser) return true
-      return false
-    }
   }
 }
 </script>
@@ -101,7 +94,7 @@ export default {
     <div class="black"></div>
     <div class="user">
       <div class="user-info">
-        <img id="profile-image" :src="require(`../../../${selectedCopy.profilePic}`)" alt="user image"/>
+        <img id="profile-image" :src="`https://ik.imagekit.io/happy1hva${selectedCopy.profilePic}`" alt="user image"/>
         <form class="inputInfo">
           <h2 v-if="!create"> {{ selectedCopy.firstname }} {{ selectedCopy.lastname }} </h2>
           <h3 v-if="!create"> {{ selectedCopy.mail }} </h3>

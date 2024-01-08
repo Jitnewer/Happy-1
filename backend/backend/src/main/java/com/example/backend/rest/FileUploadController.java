@@ -1,5 +1,7 @@
 package com.example.backend.rest;
 
+import io.imagekit.sdk.exceptions.*;
+import io.imagekit.sdk.models.FileCreateRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -13,13 +15,14 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Map;
+import io.imagekit.sdk.ImageKit;
+import io.imagekit.sdk.config.Configuration;
+import io.imagekit.sdk.utils.Utils;
 
 
-@Controller
+@RestController
 @RequestMapping("image")
 public class FileUploadController {
-    private final String ASSETS_FOLDER = "frontend/src/";
-
 
     @PostMapping("/profilePic")
     public ResponseEntity<Object> uploadProfilePic(
@@ -36,7 +39,7 @@ public class FileUploadController {
             return ResponseEntity.status(HttpStatus.OK).body(
                     Map.of(
                             "message", "Image uploaded successfully",
-                            "filePath", "assets/profilePic/" + customFileName
+                            "filePath", customFileName
                     )
             );
         } catch (Exception e) {
@@ -58,7 +61,7 @@ public class FileUploadController {
             return ResponseEntity.status(HttpStatus.OK).body(
                     Map.of(
                             "message", "Event image uploaded successfully",
-                            "filePath", "assets/eventPic/" + customFileName
+                            "filePath", customFileName
                     )
             );
         } catch (Exception e) {
@@ -80,7 +83,7 @@ public class FileUploadController {
             return ResponseEntity.status(HttpStatus.OK).body(
                     Map.of(
                             "message", "Research image uploaded successfully",
-                            "filePath", "assets/researchPic/" + customFileName
+                            "filePath", customFileName
                     )
             );
         } catch (Exception e) {
@@ -102,7 +105,7 @@ public class FileUploadController {
             return ResponseEntity.status(HttpStatus.OK).body(
                     Map.of(
                             "message", "Challenge image uploaded successfully",
-                            "filePath", "assets/challengePic/" + customFileName
+                            "filePath", customFileName
                     )
             );
         } catch (Exception e) {
@@ -124,7 +127,7 @@ public class FileUploadController {
             return ResponseEntity.status(HttpStatus.OK).body(
                     Map.of(
                             "message", "Challenge image uploaded successfully",
-                            "filePath", "assets/networkPic/" + customFileName
+                            "filePath", customFileName
                     )
             );
         } catch (Exception e) {
@@ -140,11 +143,7 @@ public class FileUploadController {
         }
 
         try {
-            String path = ASSETS_FOLDER + imagePath;
-            File imageFile = new File(path);
-
-            boolean test = imageFile.delete();
-
+//            ImageKit.getInstance().deleteFile(imagePath); // Will have to figure out how to delete from ImageKit without knowing the ID of the file
             return ResponseEntity.status(HttpStatus.OK).body(
                     Map.of(
                             "message", "Image deleted successfully"
@@ -157,12 +156,12 @@ public class FileUploadController {
 
     private String uploadFile(MultipartFile file, String name, String id, String folder) {
         try {
-            String uploadFolderPath = ASSETS_FOLDER + "assets/" + folder;
+            String uploadFolderPath = "assets/" + folder;
 
-            File uploadFolder = new File(uploadFolderPath);
-            if (!uploadFolder.exists()) {
-                uploadFolder.mkdirs();
-            }
+//            File uploadFolder = new File(uploadFolderPath);
+//            if (!uploadFolder.exists()) {
+//                uploadFolder.mkdirs();
+//            }
 
             String fileExtension = getFileExtension(file.getOriginalFilename());
 
@@ -170,11 +169,18 @@ public class FileUploadController {
             String customFileName = name + "_" + id + fileExtension;
 
             // Save the file to the upload folder
-            Path filePath = Paths.get(uploadFolderPath, customFileName);
-            Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+//            Path filePath = Paths.get(uploadFolderPath, customFileName);
+//            Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
 
-            return customFileName;
-        } catch (IOException e) {
+            FileCreateRequest fileCreateRequest = new FileCreateRequest(
+                    file.getBytes(),
+                    customFileName
+            );
+            fileCreateRequest.setFolder(uploadFolderPath);
+            String result = ImageKit.getInstance().upload(fileCreateRequest).getFilePath();
+
+            return result;
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
