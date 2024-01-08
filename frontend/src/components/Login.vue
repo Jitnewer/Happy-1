@@ -55,8 +55,6 @@ export default {
           mail: this.email,
           password: this.password
         })
-        console.log(user)
-
         if (user !== null) {
           const userType = user.body.userType
 
@@ -93,7 +91,7 @@ export default {
           }
         }
       } catch (e) {
-        console.error(e.toJSON())
+        console.error(e)
         this.$store.commit('setError', true)
         this.$store.commit('setErrorMessage', 'Login failed with email : ' + this.email)
         setTimeout(() => {

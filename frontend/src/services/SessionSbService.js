@@ -13,9 +13,11 @@ export class SessionSbService {
   async fetchJson (url, options = null) {
     try {
       const response = await fetch(url, options)
+      const authorization = response.headers.get('Authorization') // Access the headers
 
       if (response.ok) {
-        return await response.json()
+        const body = await response.json()
+        return { authorization, body }
       } else {
         const responseBody = !response.bodyUsed ? await response.text() : ''
 
@@ -55,7 +57,7 @@ export class SessionSbService {
       this.saveTokenIntoBrowserStorage(response.authorization, user)
       return response
     } catch (error) {
-      throw new CustomError('Error in asyncSignIn', error.status || 500, error.message)
+      throw new CustomError('Error in asyncSignIn', error.toJSON().status || 500, error.toJSON().error)
     }
   }
 
@@ -70,7 +72,7 @@ export class SessionSbService {
         body: JSON.stringify(user)
       })
     } catch (error) {
-      throw new CustomError('Error in asyncRegister', error.status || 500, error.message)
+      throw new CustomError('Error in asyncRegister', error.toJSON().status || 500, error.toJSON().error)
     }
   }
 
