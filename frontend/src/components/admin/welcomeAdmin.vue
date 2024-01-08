@@ -5,7 +5,9 @@
     </div>
     <div class="welcome-admin">
       <h1>Hello {{ this.user.firstname }} {{ this.user.lastname }}. Welcome to the admin page!</h1>
-      <h2>More coming soon!.....</h2>
+      <div class="admin-homepage">
+        <img src="../../assets/img/dutch_restaurant_pic.png" alt="Dutch Restaurant Pic"/>
+      </div>
     </div>
   </div>
 </template>
@@ -27,7 +29,8 @@ export default {
   },
   async created () {
     try {
-      this.user = await this.sessionSBService.asyncFindByEmail(JSON.parse(localStorage.getItem('userDetails')).mail)
+      const response = await this.sessionSBService.asyncFindByEmail(JSON.parse(localStorage.getItem('userDetails')).mail)
+      this.user = response.body
     } catch (e) {
       console.log(e.toJSON())
       this.$store.commit('setError', true)
