@@ -77,22 +77,13 @@ public class UserController {
     }
 
     @PutMapping("/admin/{id}")
-    public ResponseEntity<Object> adminUpdateUser(@RequestBody User user, @PathVariable Long id) {
-       return this.updateUser(user, id);
-    }
-
-
-    @PutMapping("/{id}")
     public ResponseEntity<Object> updateUser(@RequestBody User user, @PathVariable Long id) {
         try {
             if (userRepository.findById(id) == null) {
                 return ResponseEntity.notFound().build();
             }
-            User updatedUser = userRepository.save(user);
-            return ResponseEntity.status(HttpStatus.OK).body(Map.of(
-                    "message", "User updated successfully",
-                    "entity", updatedUser
-                    ));
+            userRepository.save(user);
+            return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "Network updated successfully", "user", user));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("message", "Error updating user", "error", e.getMessage()));
         }

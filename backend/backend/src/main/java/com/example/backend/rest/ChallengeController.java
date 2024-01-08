@@ -34,11 +34,6 @@ public class ChallengeController {
         return challengeRepository.findAll();
     }
 
-    @GetMapping("/admin")
-    public List<Challenge> getAllChallengesAdmin() {
-        return challengeRepository.findAll();
-    }
-
     @GetMapping("/{id}")
     public ResponseEntity<Object> getChallengeById(@PathVariable long id) {
         try {
@@ -54,6 +49,7 @@ public class ChallengeController {
                     "error", e.getMessage()));
         }
     }
+
 
 
 
@@ -75,7 +71,7 @@ public class ChallengeController {
         }
     }
 
-    @PostMapping("/admin")
+    @PostMapping("/superuser")
     public ResponseEntity<Object> createChallenge(@RequestBody Challenge challenge) {
 
         if (challenge.getTitle() == null || challenge.getTitle().isEmpty()) {
@@ -110,7 +106,7 @@ public class ChallengeController {
         }
     }
 
-    @PutMapping("/admin/{id}")
+    @PutMapping("/superuser/{id}")
     public ResponseEntity<Object> updateChallenge(@RequestBody Challenge challenge, @PathVariable Long id) {
         try {
             if (!id.equals(challenge.getId())) {
@@ -137,7 +133,7 @@ public class ChallengeController {
 
 
 
-    @DeleteMapping("/admin/{id}")
+    @DeleteMapping("/superuser/{id}")
     public ResponseEntity<Object> deleteChallenge(@PathVariable long id) {
         challengeRepository.deleteById(id);
         return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "Challenge deleted successfully", "status", HttpStatus.OK));

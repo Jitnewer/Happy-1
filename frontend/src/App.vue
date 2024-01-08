@@ -1,13 +1,12 @@
 <template>
   <NavBar></NavBar>
-  <router-view v-if="!loggedInAsAdmin"></router-view>
-  <Footer v-if="!loggedInAsAdmin"></Footer>
+  <router-view v-if="!loggedInAsAdmin && !loggedInAsSuperUser"></router-view>
+  <Footer v-if="!loggedInAsAdmin && !loggedInAsSuperUser"></Footer>
 </template>
 
 <script>
 import { Event } from '@/models/event.js'
 import CONFIG from '../app-config.js'
-import { RESTAdaptorWithFetch } from '@/services/RESTAdaptorWithFetch'
 import { User } from '@/models/user'
 import { SessionSbService } from '@/services/SessionSbService'
 import { UserEvent } from '@/models/UserEvent'
@@ -19,12 +18,14 @@ import Footer from '@/components/welcomePage/Footer.vue'
 import { mapState } from 'vuex'
 import { FetchInterceptor } from '@/services/FetchInterceptor'
 import { CachedRESTAdaptorWithFetch } from '@/services/CachedRESTAdaptorWithFetch'
+import { Network } from '@/models/network.js'
 import { FileUploadAdapter } from '@/services/FileUploadAdapter'
+import { Newsletter } from '@/models/newsletter'
 
 export default {
   name: 'App',
   computed: {
-    ...mapState(['loggedIn', 'loggedInAsAdmin'])
+    ...mapState(['loggedIn', 'loggedInAsAdmin', 'loggedInAsSuperUser'])
   },
   components: {
     NavBar,
@@ -35,16 +36,21 @@ export default {
     this.theFetchInterceptor = new FetchInterceptor(this.theSessionSbService, this.$router)
     return {
       eventsService: reactive(new CachedRESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/events', Event.copyConstructor)),
-      eventsServiceAdmin: reactive(new CachedRESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/events/admin', Event.copyConstructor)),
+      eventsServiceSuperUser: reactive(new CachedRESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/events/superuser', Event.copyConstructor)),
       usersService: reactive(new CachedRESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/users', User.copyConstructor)),
       challengeService: reactive(new CachedRESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/challenges', Challenge.copyConstructor)),
-      challengeServiceAdmin: reactive(new CachedRESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/challenges/admin', Challenge.copyConstructor)),
+      challengeServiceSuperUser: reactive(new CachedRESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/challenges/superuser', Challenge.copyConstructor)),
       userEventsService: reactive(new CachedRESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/userevents', UserEvent.copyConstructor)),
       usersServiceAdmin: reactive(new CachedRESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/users/admin', User.copyConstructor)),
       sessionSBService: shallowReactive(new SessionSbService(CONFIG.BACKEND_URL + '/authentication', CONFIG.JWT_STORAGE_ITEM)),
       researchService: reactive(new CachedRESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/researches', Research.copyConstructor)),
-      researchServiceAdmin: reactive(new CachedRESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/researches/admin', Research.copyConstructor)),
-      fileUploadService: reactive(new FileUploadAdapter(CONFIG.BACKEND_URL + '/upload'))
+      researchServiceSuperUser: reactive(new CachedRESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/researches/superuser', Research.copyConstructor)),
+      fileUploadService: new FileUploadAdapter(CONFIG.BACKEND_URL + '/image'),
+      networkService: reactive(new CachedRESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/networks', Network.copyConstructor)),
+      networkServiceSuperUser: reactive(new CachedRESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/networks/superuser', Network.copyConstructor)),
+      newsletterService: reactive(new CachedRESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/newsletters/authentication', Newsletter.copyConstructor)),
+      newsletterServiceSuperuser: reactive(new CachedRESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/newsletters/superuser', Newsletter.copyConstructor))
+
     }
   },
   unmounted () {

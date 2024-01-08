@@ -4,7 +4,8 @@ import { createStore } from 'vuex'
 export default createStore({
   state: {
     loggedIn: false,
-    loggedInAsAdmin: false
+    loggedInAsAdmin: false,
+    loggedInAsSuperUser: false
   },
   mutations: {
     setLoggedIn (state, value) {
@@ -12,6 +13,9 @@ export default createStore({
     },
     setLoggedInAsAdmin (state, value) {
       state.loggedInAsAdmin = value
+    },
+    setLoggedInAsSuperUser (state, value) {
+      state.loggedInAsSuperUser = value
     }
   }
 })

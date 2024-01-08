@@ -42,11 +42,11 @@ export class CachedRESTAdaptorWithFetch extends RESTAdaptorWithFetch {
       // Add the new entity to the cache
       if (Array.isArray(this.entities)) {
         this.entities.push(newEntity)
-      } else {
-        this.entities = newEntity
       }
+
       return newEntity
     } catch (error) {
+      console.log(error)
       throw new CustomError('Error in asyncSave', error.status || 500, error.message)
     }
   }

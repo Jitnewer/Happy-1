@@ -53,7 +53,7 @@ public class EventController {
         }
     }
 
-    @PostMapping("/admin")
+    @PostMapping("/superuser")
     public ResponseEntity<Object> addEvent(@RequestBody Event event) {
         try {
             eventRepository.save(event);
@@ -67,7 +67,8 @@ public class EventController {
             return ResponseEntity.created(location).body(Map.of(
                     "message", "Event added successfully",
                     "status", HttpStatus.CREATED.value(),
-                    "location", location.toString()));
+                    "location", location.toString(),
+                    "event", event));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
                     "message", "Error adding the event",
@@ -76,7 +77,7 @@ public class EventController {
     }
 
 
-    @PutMapping("/admin/{id}")
+    @PutMapping("/superuser/{id}")
     public ResponseEntity<Object> updateEvent(@RequestBody Event event, @PathVariable Long id) {
         try {
             // Ensure the ID in the path matches the ID in the request body
@@ -85,7 +86,7 @@ public class EventController {
             }
 
             eventRepository.save(event);
-            return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "Event updated successfully"));
+            return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "Event updated successfully", "event", event));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
                     "message", "Error updating the event",
@@ -93,7 +94,7 @@ public class EventController {
         }
     }
 
-    @DeleteMapping("/admin/{id}")
+    @DeleteMapping("/superuser/{id}")
     public ResponseEntity<Object> deleteEvent(@PathVariable long id) {
         try {
             eventRepository.deleteById(id);

@@ -76,7 +76,7 @@
 <script>
 export default {
   name: 'ResearchAdminCreate.vue',
-  inject: ['researchService', 'researchServiceAdmin', 'fileUploadService'],
+  inject: ['researchService', 'researchServiceSuperUser', 'fileUploadService'],
   data () {
     return {
       filter: this.$route.query.sort,
@@ -157,13 +157,13 @@ export default {
       if (this.validateForm()) {
         this.research.dateTime = new Date(this.research.dateTime).toISOString()
         try {
-          const response = await this.researchServiceAdmin.asyncSave(this.research)
+          const response = await this.researchServiceSuperUser.asyncSave(this.research)
           console.log(response)
 
           const research = response.research
           const file = await this.fileUploadService.asyncUploadResearchPic(this.image, research.id)
           research.image = file.filePath
-          await this.researchServiceAdmin.asyncSave(research)
+          await this.researchServiceSuperUser.asyncSave(research)
           this.isSaved = true
           this.$router.push({ name: 'adminResearches' })
         } catch (e) {
