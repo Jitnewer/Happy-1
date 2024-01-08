@@ -14,6 +14,7 @@ import { SessionSbService } from '@/services/SessionSbService'
 import { UserEvent } from '@/models/UserEvent'
 import { Challenge } from '@/models/challenge'
 import { Research } from '@/models/research'
+import { Carousel } from '@/models/carousel'
 import { reactive, shallowReactive } from 'vue'
 import NavBar from '@/components/navbar/NavBar.vue'
 import Footer from '@/components/welcomePage/Footer.vue'
@@ -41,6 +42,8 @@ export default {
     this.theSessionSbService = shallowReactive(new SessionSbService(CONFIG.BACKEND_URL + '/authentication', CONFIG.JWT_STORAGE_ITEM))
     this.theFetchInterceptor = new FetchInterceptor(this.theSessionSbService, this.$router)
     return {
+      carouselService: reactive(new CachedRESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/carousels/authentication', Carousel.copyConstructor)),
+      carouselServiceSuperUser: reactive(new CachedRESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/carousels/superuser', Carousel.copyConstructor)),
       eventsService: reactive(new CachedRESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/events', Event.copyConstructor)),
       eventsServiceSuperUser: reactive(new CachedRESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/events/superuser', Event.copyConstructor)),
       usersService: reactive(new CachedRESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/users', User.copyConstructor)),
