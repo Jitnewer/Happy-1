@@ -10,7 +10,7 @@
     <div class="challenge-create">
       <div class="title-button-create">
         <h1>Edit Carousel</h1>
-        <button @click="back()">Back</button>
+        <button @click="back()" class="back-button">Back</button>
       </div>
       <div>
         <form @submit.prevent="edit" class="challenge-create-form" v-if="copiedCarousel">
