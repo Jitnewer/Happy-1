@@ -46,7 +46,7 @@
     <div class="challenges">
       <div class="challenge" v-for="network in sortedNetworks" :key="network.id" @click="selectNetwork(network)">
         <div class="challenge-left">
-          <img :src="network.image ? require(`../../${network.image}`) : ''" alt="Challenge Image">
+          <img :src="network.image ? `https://ik.imagekit.io/happy1hva${network.image}` : ''" alt="Challenge Image">
         </div>
         <div class="challenge-right">
           <p class="challenge-time">{{ formattedDateTime(network.dateTime) }}</p>
@@ -64,13 +64,13 @@ export default {
   inject: ['networkService'],
   data () {
     return {
-      filter: null,
+      filter: this.$route.query.sort,
       showFilter: false
     }
   },
   methods: {
     async selectNetwork (network) {
-      this.$router.push({ name: 'network', params: { id: network.id } })
+      this.$router.push({ name: 'network', params: { id: network.id }, query: { sort: this.filter } })
       await this.networkService.asyncFindById(network.id)
     },
     toggleFilter () {
@@ -92,8 +92,8 @@ export default {
         if (this.filter == null) {
           await this.networkService.asyncFindAll()
         } else {
-          this.$router.push({ name: 'networks', query: { sort: this.filter } })
           await this.networkService.asyncFindByProperty(this.filter, 'getByTheme')
+          this.$router.push({ name: 'networks', query: { sort: this.filter } })
         }
       } catch (e) {
         console.error(e)
@@ -151,11 +151,14 @@ export default {
       return this.networkService.entities
     },
     sortedNetworks () {
-      return this.networks.slice().sort((a, b) => {
-        const dateA = new Date(a.dateTime)
-        const dateB = new Date(b.dateTime)
-        return dateA - dateB
-      })
+      if (Array.isArray(this.networks)) {
+        return this.networks.slice().sort((a, b) => {
+          const dateA = new Date(a.dateTime)
+          const dateB = new Date(b.dateTime)
+          return dateA - dateB
+        })
+      }
+      return null
     }
   }
 }

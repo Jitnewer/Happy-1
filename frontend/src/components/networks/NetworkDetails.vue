@@ -81,7 +81,7 @@ export default {
       </div>
       <div class="detail-challenge">
         <div>
-          <img :src="network.image ? require(`../../${network.image}`) : ''" alt="Challenge Image">
+          <img :src="network.image ? `https://ik.imagekit.io/happy1hva${network.image}` : ''" alt="Challenge Image">
         </div>
         <div class="content">
           <div>
