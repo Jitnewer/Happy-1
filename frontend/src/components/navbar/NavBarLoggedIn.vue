@@ -149,7 +149,7 @@ export default {
         this.user.profilePic = null
       }
     } catch (e) {
-      console.error(e)
+      console.error(e.toJSON())
     }
 
     const fullname = `${this.user.firstname} ${this.user.lastname}`

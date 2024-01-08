@@ -74,6 +74,8 @@
 </template>
 
 <script>
+
+import CustomError from '@/CustomError'
 export default {
   name: 'ResearchAdminCreate.vue',
   inject: ['researchService', 'researchServiceSuperUser', 'fileUploadService'],
@@ -163,11 +165,32 @@ export default {
           const research = response.research
           const file = await this.fileUploadService.asyncUploadResearchPic(this.image, research.id)
           research.image = file.filePath
-          await this.researchServiceSuperUser.asyncSave(research)
+          const response2 = await this.researchServiceSuperUser.asyncSave(research)
           this.isSaved = true
+          this.$store.commit('setSuccess', true)
+          this.$store.commit('setSuccessMessage', response2.message)
+          setTimeout(() => {
+            this.$store.commit('setSuccess', false)
+            this.$store.commit('setSuccessMessage', null)
+          }, 8000)
           this.$router.push({ name: 'adminResearches' })
         } catch (e) {
-          console.error(e)
+          if (e instanceof CustomError) {
+            console.error(e.toJSON())
+            this.$store.commit('setError', true)
+            this.$store.commit('setErrorMessage', e.toJSON().error)
+            setTimeout(() => {
+              this.$store.commit('setError', false)
+              this.$store.commit('setErrorMessage', null)
+            }, 8000)
+          } else {
+            this.$store.commit('setError', true)
+            this.$store.commit('setErrorMessage', 'Error adding the network')
+            setTimeout(() => {
+              this.$store.commit('setError', false)
+              this.$store.commit('setErrorMessage', null)
+            }, 8000)
+          }
         }
       }
     },

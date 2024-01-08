@@ -74,6 +74,8 @@
 </template>
 
 <script>
+import CustomError from '@/CustomError'
+
 export default {
   name: 'NetworkAdminEdit.vue',
   inject: ['networkService', 'networkServiceSuperUser', 'fileUploadService'],
@@ -154,16 +156,43 @@ export default {
             if (this.image !== null) {
               const file = await this.fileUploadService.asyncUploadNetworkPic(this.image, this.copiedNetwork.id)
               this.copiedNetwork.image = file.filePath
-              await this.networkServiceSuperUser.asyncSave(this.copiedNetwork)
+              const response = await this.networkServiceSuperUser.asyncSave(this.copiedNetwork)
               this.isSaved = true
+              this.$store.commit('setSuccess', true)
+              this.$store.commit('setSuccessMessage', response.message)
+              setTimeout(() => {
+                this.$store.commit('setSuccess', false)
+                this.$store.commit('setSuccessMessage', null)
+              }, 8000)
             }
           } else {
-            await this.networkServiceSuperUser.asyncSave(this.copiedNetwork)
+            const response = await this.networkServiceSuperUser.asyncSave(this.copiedNetwork)
             this.isSaved = true
+            this.$store.commit('setSuccess', true)
+            this.$store.commit('setSuccessMessage', response.message)
+            setTimeout(() => {
+              this.$store.commit('setSuccess', false)
+              this.$store.commit('setSuccessMessage', null)
+            }, 8000)
           }
           this.$router.push({ name: 'adminNetworks' })
         } catch (e) {
-          console.error(e)
+          if (e instanceof CustomError) {
+            console.error(e.toJSON())
+            this.$store.commit('setError', true)
+            this.$store.commit('setErrorMessage', e.toJSON().error)
+            setTimeout(() => {
+              this.$store.commit('setError', false)
+              this.$store.commit('setErrorMessage', null)
+            }, 8000)
+          } else {
+            this.$store.commit('setError', true)
+            this.$store.commit('setErrorMessage', 'Error adding the network')
+            setTimeout(() => {
+              this.$store.commit('setError', false)
+              this.$store.commit('setErrorMessage', null)
+            }, 8000)
+          }
         }
       }
     },
@@ -289,7 +318,22 @@ export default {
         this.isParagraphTitleValid = new Array(this.paragraphsAmount).fill(null)
         this.isParagraphContentValid = new Array(this.paragraphsAmount).fill(null)
       } catch (e) {
-        console.error(e)
+        if (e instanceof CustomError) {
+          console.error(e.toJSON())
+          this.$store.commit('setError', true)
+          this.$store.commit('setErrorMessage', e.toJSON().error)
+          setTimeout(() => {
+            this.$store.commit('setError', false)
+            this.$store.commit('setErrorMessage', null)
+          }, 8000)
+        } else {
+          this.$store.commit('setError', true)
+          this.$store.commit('setErrorMessage', 'Error adding the network')
+          setTimeout(() => {
+            this.$store.commit('setError', false)
+            this.$store.commit('setErrorMessage', null)
+          }, 8000)
+        }
       }
     },
     conformationAlert (callback, message) {

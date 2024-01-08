@@ -66,6 +66,7 @@
 </template>
 
 <script>
+
 export default {
   name: 'ResearchesAdmin.vue',
   inject: ['researchService', 'researchServiceSuperUser', 'fileUploadService'],
@@ -90,18 +91,36 @@ export default {
     },
     async remove (research) {
       try {
-        await this.researchServiceSuperUser.asyncDeleteById(research.id)
+        const response = await this.researchServiceSuperUser.asyncDeleteById(research.id)
         await this.fileUploadService.asyncDeleteImage(research.image)
         await this.researchService.asyncFindAll()
+        this.$store.commit('setSuccess', true)
+        this.$store.commit('setSuccessMessage', response.message)
+        setTimeout(() => {
+          this.$store.commit('setSuccess', false)
+          this.$store.commit('setSuccessMessage', null)
+        }, 8000)
       } catch (e) {
-        console.error(e)
+        console.error(e.toJSON())
+        this.$store.commit('setError', true)
+        this.$store.commit('setErrorMessage', e.toJSON().error)
+        setTimeout(() => {
+          this.$store.commit('setError', false)
+          this.$store.commit('setErrorMessage', null)
+        }, 8000)
       }
     },
     async updateResearches () {
       try {
         await this.researchService.asyncFindAll()
       } catch (e) {
-        console.error(e)
+        console.error(e.toJSON())
+        this.$store.commit('setError', true)
+        this.$store.commit('setErrorMessage', e.toJSON().error)
+        setTimeout(() => {
+          this.$store.commit('setError', false)
+          this.$store.commit('setErrorMessage', null)
+        }, 8000)
       }
     },
     edit (id) {

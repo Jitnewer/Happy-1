@@ -4,5 +4,14 @@ class CustomError extends Error {
     this.status = status
     this.error = error
   }
+
+  toJSON () {
+    return {
+      message: this.message,
+      status: this.status,
+      error: this.error
+    }
+  }
 }
+
 export default CustomError

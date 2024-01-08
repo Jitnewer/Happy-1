@@ -51,7 +51,13 @@ export default {
             this.$store.commit('setLoggedInAsSuperUser', false)
           }
         } catch (e) {
-          console.error(e)
+          console.error(e.toJSON())
+          this.$store.commit('setError', true)
+          this.$store.commit('setErrorMessage', e.toJSON().error)
+          setTimeout(() => {
+            this.$store.commit('setError', false)
+            this.$store.commit('setErrorMessage', null)
+          }, 8000)
         }
       }
     }

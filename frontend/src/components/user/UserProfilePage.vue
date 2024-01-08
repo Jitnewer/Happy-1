@@ -45,7 +45,13 @@ export default {
           this.edit = false
           this.copyUser = null
         } catch (e) {
-          console.log(e)
+          console.log(e.toJSON())
+          this.$store.commit('setError', true)
+          this.$store.commit('setErrorMessage', e.toJSON().error)
+          setTimeout(() => {
+            this.$store.commit('setError', false)
+            this.$store.commit('setErrorMessage', null)
+          }, 8000)
         }
       }
     }

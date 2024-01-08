@@ -46,7 +46,13 @@ export default {
 
           user.status = User.status.Unbanned
         } catch (e) {
-          console.log(e.message)
+          console.log(e.toJSON())
+          this.$store.commit('setError', true)
+          this.$store.commit('setErrorMessage', e.toJSON().error)
+          setTimeout(() => {
+            this.$store.commit('setError', false)
+            this.$store.commit('setErrorMessage', null)
+          }, 8000)
         }
       }
     },

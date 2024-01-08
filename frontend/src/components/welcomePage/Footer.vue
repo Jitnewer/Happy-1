@@ -29,18 +29,18 @@
       </div>
     </div>
     <div class="subscribeForm">
-      <p class="white-text">Subscribe to our newsletter</p>
+      <p class="white-text">Subscribe to our subscriber</p>
       <form @submit.prevent="create">
         <div class="flex-form">
         <div class="form-flex">
-          <input type="email" placeholder="Your email address" v-model="newsletter.email" :class="{
-            'invalid-input': newsletter.email && (!isEmailValid || emailAlreadyExists),
-            'valid-input': newsletter.email && isEmailValid && !emailAlreadyExists
-          }" @input="validateEmail(newsletter.email)"/>
-          <button type="submit" class="subscribeButton" :disabled="!validateEmail(newsletter.email) && emailAlreadyExists">Subscribe</button>
+          <input type="email" placeholder="Your email address" v-model="subscriber.email" :class="{
+            'invalid-input': subscriber.email && (!isEmailValid || emailAlreadyExists),
+            'valid-input': subscriber.email && isEmailValid && !emailAlreadyExists
+          }" @input="validateEmail(subscriber.email)"/>
+          <button type="submit" class="subscribeButton" :disabled="!validateEmail(subscriber.email) && emailAlreadyExists">Subscribe</button>
         </div>
-        <p class="errorMessage" v-if="!isEmailValid && newsletter.email">Invalid email</p>
-        <p class="errorMessage" v-if="emailAlreadyExists && newsletter.email">Email is already subscribed</p>
+        <p class="errorMessage" v-if="!isEmailValid && subscriber.email">Invalid email</p>
+        <p class="errorMessage" v-if="emailAlreadyExists && subscriber.email">Email is already subscribed</p>
         </div>
       </form>
     </div>
@@ -54,6 +54,7 @@
 
 <script>
 import news from '@/components/News.vue'
+import ErrorPopUp from '@/components/errorPopUp.vue'
 
 export default {
   name: 'Footer.vue',
@@ -62,10 +63,10 @@ export default {
       return news
     }
   },
-  inject: ['newsletterService', 'newsletterServiceSuperuser'],
+  inject: ['subscriberService', 'subscriberServiceSuperuser'],
   data () {
     return {
-      newsletter: {
+      subscriber: {
         email: ''
       },
       isEmailValid: null,
@@ -92,7 +93,7 @@ export default {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
       this.isEmailValid = emailRegex.test(email)
 
-      if (email !== this.newsletter.emailAlreadyExists) {
+      if (email !== this.subscriber.emailAlreadyExists) {
         this.emailAlreadyExists = null
       }
 
@@ -101,12 +102,24 @@ export default {
     async create () {
       if (this.isEmailValid) {
         try {
-          await this.newsletterService.asyncSave(this.newsletter)
-          this.$router.push({ name: 'welcome' })
+          const response = await this.subscriberService.asyncSave(this.subscriber)
+          this.$store.commit('setSuccess', true)
+          this.$store.commit('setSuccessMessage', response.message)
+          setTimeout(() => {
+            this.$store.commit('setSuccess', false)
+            this.$store.commit('setSuccessMessage', null)
+          }, 8000)
+          window.scrollTo({ top: 0, behavior: 'smooth' })
         } catch (e) {
-          console.error(e)
+          console.error(e.toJSON())
           this.emailAlreadyExists = true
-          this.newsletter.emailAlreadyExists = this.newsletter.email
+          this.subscriber.emailAlreadyExists = this.subscriber.email
+          this.$store.commit('setError', true)
+          this.$store.commit('setErrorMessage', e.toJSON().error)
+          setTimeout(() => {
+            this.$store.commit('setError', false)
+            this.$store.commit('setErrorMessage', null)
+          }, 8000)
         }
       }
     }

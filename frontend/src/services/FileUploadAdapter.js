@@ -3,7 +3,7 @@ export class FileUploadAdapter {
   copyConstructor;
   constructor (resourceUrl) {
     this.resourceUrl = resourceUrl
-    console.log('Created UserEventAdapter for ' + resourceUrl)
+    console.log('Created FileUploadAdaptor for ' + resourceUrl)
   }
 
   async request (formData, map) {

@@ -73,6 +73,8 @@
 </template>
 
 <script>
+import CustomError from '@/CustomError'
+
 export default {
   name: 'EventAdminCreate.vue',
   inject: ['eventsService', 'eventsServiceSuperUser', 'fileUploadService'],
@@ -203,11 +205,32 @@ export default {
           const event = response.event
           const file = await this.fileUploadService.asyncUploadEventPic(this.image, event.id)
           event.image = file.filePath
-          await this.eventsServiceSuperUser.asyncSave(event)
+          const response2 = await this.eventsServiceSuperUser.asyncSave(event)
           this.isSaved = true
+          this.$store.commit('setSuccess', true)
+          this.$store.commit('setSuccessMessage', response2.message)
+          setTimeout(() => {
+            this.$store.commit('setSuccess', false)
+            this.$store.commit('setSuccessMessage', null)
+          }, 8000)
           this.$router.push({ name: 'adminEvents' })
         } catch (e) {
-          console.error(e)
+          if (e instanceof CustomError) {
+            console.error(e.toJSON())
+            this.$store.commit('setError', true)
+            this.$store.commit('setErrorMessage', e.toJSON().error)
+            setTimeout(() => {
+              this.$store.commit('setError', false)
+              this.$store.commit('setErrorMessage', null)
+            }, 8000)
+          } else {
+            this.$store.commit('setError', true)
+            this.$store.commit('setErrorMessage', 'Error adding the network')
+            setTimeout(() => {
+              this.$store.commit('setError', false)
+              this.$store.commit('setErrorMessage', null)
+            }, 8000)
+          }
         }
       }
     },

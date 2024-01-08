@@ -39,6 +39,7 @@
 </template>
 
 <script>
+
 export default {
   name: 'EventsDetails.vue',
   inject: ['eventsService'],
@@ -48,7 +49,18 @@ export default {
     }
   },
   async created () {
-    await this.eventsService.asyncFindById(this.$route.params.id)
+    try {
+      await this.eventsService.asyncFindById(this.$route.params.id)
+    } catch (e) {
+      console.error(e.toJSON())
+      this.$store.commit('setError', true)
+      this.$store.commit('setErrorMessage', e.toJSON().error)
+      // setTimeout(() => {
+      //   this.$store.commit('setError', false)
+      //   this.$store.commit('setErrorMessage', null)
+      // }, 8000)
+      this.$router.push({ name: 'events', query: { sort: this.filter } })
+    }
   },
   methods: {
     formattedPrice (event) {
