@@ -31,14 +31,14 @@
             </div>
             <div class="step">
               <p class="p-sign-up-form">Birth</p>
-              <div class="bullet-sign-up-form" :class="{'check-green': currentForm >3,'check-yellow': currentForm ===3,'check-red': currentForm ===1}">
+              <div class="bullet-sign-up-form" :class="{'check-green': currentForm >3,'check-yellow': currentForm ===3,'check-red': currentForm === 1 || currentForm === 2}">
                 <span class="span-sign-up-form-check">3</span>
               </div>
               <div class="check-sign-up">&#10003;</div>
             </div>
             <div class="step">
               <p class="p-sign-up-form">Submit</p>
-              <div class="bullet-sign-up-form" :class="{'check-green': currentForm >4,'check-yellow': currentForm ===4,'check-red': currentForm ===1}">
+              <div class="bullet-sign-up-form" :class="{'check-green': currentForm >4,'check-yellow': currentForm ===4,'check-red': currentForm ===1 || currentForm ===2 || currentForm === 3}">
                 <span class="span-sign-up-form-check">4</span>
               </div>
               <div class="check-sign-up">&#10003;</div>
@@ -162,14 +162,14 @@
           </div>
           <div class="step">
             <p class="p-sign-up-form">Birth</p>
-            <div class="bullet-sign-up-form" :class="{'check-green': currentForm >3,'check-yellow': currentForm ===3,'check-red': currentForm ===1}">
+            <div class="bullet-sign-up-form" :class="{'check-green': currentForm >3,'check-yellow': currentForm ===3,'check-red': currentForm === 1 || currentForm === 2}">
               <span class="span-sign-up-form-check">3</span>
             </div>
             <div class="check-sign-up">&#10003;</div>
           </div>
           <div class="step">
             <p class="p-sign-up-form">Submit</p>
-            <div class="bullet-sign-up-form" :class="{'check-green': currentForm >4,'check-yellow': currentForm ===4,'check-red': currentForm ===1}">
+            <div class="bullet-sign-up-form" :class="{'check-yellow': currentForm ===4,'check-red': currentForm ===1 || currentForm ===2 || currentForm === 3}">
               <span class="span-sign-up-form-check">4</span>
             </div>
             <div class="check-sign-up">&#10003;</div>

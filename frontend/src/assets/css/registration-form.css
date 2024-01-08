@@ -8,6 +8,7 @@
 
 .sign-up-input.invalid-input {
     border: 1px solid red;
+    box-shadow: var(--shadow), 0 0 0 2px red;
 }
 
 .sign-up-input {
@@ -24,6 +25,7 @@
 }
 .sign-up-input.valid-input {
     border: 1px solid limegreen;
+    box-shadow: var(--shadow), 0 0 0 2px limegreen;
 }
 
 .sign-up-input.valid-input:focus-visible {
@@ -71,7 +73,7 @@
 }
 
 input:checked + .slider {
-    background-color: #2196F3;
+    background-color: #0992A4;
 }
 
 input:focus + .slider {
@@ -138,7 +140,7 @@ input:checked + .slider:before {
 
 .field-sign-up {
     height: 45px;
-    width: 330px;
+    width: 100%;
     margin: 45px 0;
     margin-bottom: 10px;
     display: flex;
@@ -453,4 +455,21 @@ form .button input:hover {
 
 .check-red {
     background-color: #ed3f3f;
+}
+
+@media only screen and (max-width: 1280px) {
+    .header-sign-up {
+        font-size: 25px;
+        font-weight: 600;
+        margin: 0 0 30px 0;
+    }
+    .container-sign-up {
+        width: 325px;
+        background: #fff;
+        border-radius: 5px;
+        text-align: center;
+        padding: 40px 15px 10px 15px;
+        box-shadow: 0px 3px 40px #000;
+        margin-top: 60px;
+    }
 }
