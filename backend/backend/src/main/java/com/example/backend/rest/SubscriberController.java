@@ -95,7 +95,7 @@ public class SubscriberController {
         try {
             subscriberRepository.save(subscriber);
 
-            sendNewsletterEmail(subscriber.getEmail());
+            sendSubscribeEmail(subscriber.getEmail());
 
 
             URI location = ServletUriComponentsBuilder
@@ -113,6 +113,32 @@ public class SubscriberController {
         } catch (Exception e) {
             Map<String, Object> errorResponse = new HashMap<>();
             errorResponse.put("message", "Error adding the subscriber");
+            errorResponse.put("error", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+        }
+    }
+
+    @PostMapping("/superuser/newsletter")
+    public ResponseEntity<Object> sendNewsletter(@RequestBody Subscriber subscriber) {
+        try {
+            sendNewsletterEmail(subscriber.getEmail());
+
+
+            URI location = ServletUriComponentsBuilder
+                    .fromCurrentRequest()
+                    .path("/{id}")
+                    .buildAndExpand(subscriber.getId())
+                    .toUri();
+
+
+            return ResponseEntity.created(location).body(Map.of(
+                    "message", "You have send and newsletter",
+                    "status", HttpStatus.OK.value(),
+                    "location", location.toString(),
+                    "entity", subscriber));
+        } catch (Exception e) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("message", "Error sending newsletter");
             errorResponse.put("error", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
@@ -145,12 +171,12 @@ public class SubscriberController {
         subscriberRepository.deleteById(id);
         return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "Subscriber deleted successfully", "status", HttpStatus.OK));
     }
-    private void sendNewsletterEmail(String toEmail) {
+    private void sendSubscribeEmail(String toEmail) {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(mimeMessage);
 
         try {
-            String htmlContent = buildHtmlContent();
+            String htmlContent = buildHtmlContent("newsletter-template.html");
             helper.setFrom("rickveerman4@gmail.com");
             helper.setTo(toEmail);
             helper.setSubject("Newsletter Subscription");
@@ -162,11 +188,29 @@ public class SubscriberController {
             e.printStackTrace();
         }
     }
-    private String buildHtmlContent() {
+
+    private void sendNewsletterEmail(String toEmail) {
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage);
+
+        try {
+            String htmlContent = buildHtmlContent("newsletter-template1.html");
+            helper.setFrom("rickveerman4@gmail.com");
+            helper.setTo(toEmail);
+            helper.setSubject("Newsletter Happy Hospitality");
+            helper.setText(htmlContent, true);
+
+            javaMailSender.send(mimeMessage);
+        } catch (MessagingException e) {
+            // Handle exception (log or rethrow)
+            e.printStackTrace();
+        }
+    }
+    private String buildHtmlContent(String template) {
         Context context = new Context();
         // You can add variables to the context if you want dynamic content in your email
 
         // Process Thymeleaf template to HTML
-        return templateEngine.process("newsletter-template.html", context);
+        return templateEngine.process(template, context);
     }
 }

@@ -49,6 +49,14 @@ export class CachedRESTAdaptorWithFetch extends RESTAdaptorWithFetch {
     }
   }
 
+  async asyncSendNewsletter (object) {
+    try {
+      return await super.asyncSendNewsletter(object)
+    } catch (error) {
+      throw new CustomError('Error in asyncSendNewsletter', error.toJSON().status || 500, error.toJSON().error)
+    }
+  }
+
   async asyncDeleteById (id) {
     // eslint-disable-next-line no-useless-catch
     try {

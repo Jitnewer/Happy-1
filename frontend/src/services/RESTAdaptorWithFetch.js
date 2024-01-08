@@ -143,6 +143,20 @@ export class RESTAdaptorWithFetch {
     }
   }
 
+  async asyncSendNewsletter (object) {
+    try {
+      return await this.fetchJson(`${this.resourceUrl}/newsletter`, {
+        method: 'POST',
+        body: JSON.stringify(object),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+    } catch (error) {
+      throw new CustomError('Error in asyncSendNewsletter', error.toJSON().status || 500, error.toJSON().error)
+    }
+  }
+
   async asyncDeleteById (id) {
     try {
       return await this.fetchJson(`${this.resourceUrl}/${id}`, {

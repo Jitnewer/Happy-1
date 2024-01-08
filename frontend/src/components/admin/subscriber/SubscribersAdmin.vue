@@ -9,6 +9,7 @@
       <div class="title-button">
         <h1>Subscribers</h1>
         <button @click="create()" class="admin-create">Create</button>
+        <button @click="sendNewsletter()" class="admin-create">Send Newsletter</button>
       </div>
       <table v-if="subscribers">
         <thead>
@@ -46,6 +47,28 @@ export default {
   methods: {
     create () {
       this.$router.push({ name: 'adminSubscriberCreate' })
+    },
+    async sendNewsletter () {
+      for (let i = 0; i < this.subscribers.length; i++) {
+        try {
+          const response = await this.subscriberServiceSuperuser.asyncSendNewsletter(this.subscribers[i])
+          this.$store.commit('setSuccess', true)
+          this.$store.commit('setSuccessMessage', response.message)
+          setTimeout(() => {
+            this.$store.commit('setSuccess', false)
+            this.$store.commit('setSuccessMessage', null)
+          }, 8000)
+        } catch (e) {
+          console.error(e.toJSON())
+          this.error = true
+          this.$store.commit('setError', true)
+          this.$store.commit('setErrorMessage', e.toJSON().error)
+          setTimeout(() => {
+            this.$store.commit('setError', false)
+            this.$store.commit('setErrorMessage', null)
+          }, 8000)
+        }
+      }
     },
     async remove (subscriber) {
       try {
