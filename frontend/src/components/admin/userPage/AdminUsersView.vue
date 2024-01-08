@@ -3,7 +3,7 @@ import { User } from '@/models/user'
 
 export default {
   name: 'AdminUsersView',
-  inject: ['usersService', 'fileUploadService'],
+  inject: ['usersServiceAdmin', 'fileUploadService'],
   data () {
     return {
       filter: {
@@ -42,7 +42,7 @@ export default {
     async unblockUser (user) {
       if (confirm('Are you sure you want to unblock this user')) {
         try {
-          await this.usersService.asyncSave(user)
+          await this.usersServiceAdmin.asyncSave(user)
 
           user.status = User.status.Unbanned
         } catch (e) {
@@ -53,7 +53,7 @@ export default {
     async blockUser (user) {
       if (confirm('Are you sure you want to block this user?')) {
         user.status = User.status.Banned
-        await this.usersService.asyncSave(user)
+        await this.usersServiceAdmin.asyncSave(user)
       }
     },
     editUser (user) {
@@ -84,7 +84,7 @@ export default {
     async deleteUser (user) {
       if (confirm('Are you sure you want to delete this user?')) {
         try {
-          await this.usersService.asyncDeleteById(user.id)
+          await this.usersServiceAdmin.asyncDeleteById(user.id)
           await this.fileUploadService.asyncDeleteImage(user.profilePic)
 
           const indexToUpdate = this.users.findIndex(oldUser => oldUser.id === user.id)
@@ -135,7 +135,7 @@ export default {
     }
   },
   async created () {
-    this.users = await this.usersService.asyncFindAll()
+    this.users = await this.usersServiceAdmin.asyncFindAll()
 
     this.selectUserByUrl(parseInt(this.$route.params.id))
 
