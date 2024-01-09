@@ -30,7 +30,7 @@
             <input type="file"  @change="handleFileChange" :class="{'invalid-input': image && !isImageValid,'valid-input': image && isImageValid}" @input="validateImage(image)">
             <p class="errorMessage" v-if="!isImageValid && image">{{ imageError }}</p>
           </div>
-          <button type="submit" :disabled="!carouselEdited && !validateForm()">Save</button>
+          <button type="submit" :disabled="!carouselEdited && !validateForm()" class="admin-create">Save</button>
         </form>
       </div>
     </div>
