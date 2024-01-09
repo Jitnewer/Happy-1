@@ -21,7 +21,7 @@
               <h2 class="blue-text"> {{ parseDate(slide.date) }} </h2>
               <h2 class="yellow-text"> {{ slide.title }}</h2>
               <button>
-                <router-link class="blue-text-router" to="/news">lees meer</router-link>
+                <router-link class="blue-text-router" to="/news">Read more</router-link>
               </button>
             </div>
             <img class="carouselImg" :src="`https://ik.imagekit.io/happy1hva${slide.image}`" alt="Image">
