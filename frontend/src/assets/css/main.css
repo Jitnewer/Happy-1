@@ -2202,3 +2202,11 @@ a.router-link-active:hover {
     height: 680px;
     width: 100%;
 }
+
+.profile-dashboard p {
+    color: white;
+}
+
+.profile-d {
+    color: white;
+}
