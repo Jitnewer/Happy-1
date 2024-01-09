@@ -46,7 +46,7 @@
           </div>
           <div class="event-right-bottom2">
             <button @click="selectEventMoreInfo(event)" >More Info</button>
-            <button v-if="!isEventSignedIn(event)" @click="toggleSignIn(event)">Sign In</button>
+            <button v-if="!isEventSignedIn(event)" @click="toggleSignIn(event)">Sign Up</button>
             <button :disabled="disableSignOut(event)" v-if="isEventSignedIn(event)" @click="toggleSignOut(event)">Sign Out</button>
 
           </div>
