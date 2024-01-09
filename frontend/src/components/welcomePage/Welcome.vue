@@ -21,7 +21,7 @@
               <h2 class="blue-text"> {{ parseDate(slide.date) }} </h2>
               <h2 class="yellow-text"> {{ slide.title }}</h2>
               <button>
-                <span class="blue-text"> > Lees meer </span>
+                <router-link class="blue-text-router" to="/news">lees meer</router-link>
               </button>
             </div>
             <img class="carouselImg" :src="require(`../../${slide.image}`)" alt="Image">
@@ -55,7 +55,7 @@
             <h1 class="welcomeH1">
               <span class="blue-text">Network</span>
             </h1>
-            <h3>
+            <h3 class="h3Theme">
               Discover the challenges and innovations shaping eco-friendly networking practices within the
               hospitality
               industry.

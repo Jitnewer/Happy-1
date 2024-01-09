@@ -244,6 +244,10 @@ span.carouselPagination.active {
 .blue-text {
     color: var(--main-color);
 }
+.blue-text-router {
+    text-decoration: none;
+    color: var(--main-color);
+}
 .white-text {
     color: var(--main-text-color);
 }
@@ -490,6 +494,10 @@ span.carouselPagination.active {
         width: 12px;
         height: 12px;
       }
+    span.carouselPagination {
+           width: 12px;
+           height: 12px;
+       }
     .welcomeMsg button {
         font-size: 12px;
     }
