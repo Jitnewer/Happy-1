@@ -1,4 +1,4 @@
 module.exports = {
-  BACKEND_URL: process.env.VUE_APP_API_URL,
+  BACKEND_URL: 'http://localhost:8085',
   JWT_STORAGE_ITEM: 'token'
 }
