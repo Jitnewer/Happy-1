@@ -2214,3 +2214,8 @@ a.router-link-active:hover {
 .profile-d {
     color: white;
 }
+
+
+.dropdown-profile-content a.router-link-active {
+    background-color: var(--main-color-hover-admin);
+}
