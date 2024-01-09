@@ -40,7 +40,7 @@
           <td class="adminTimeBegin" v-if="event.timeBegin">{{ event.timeBegin.slice(0, 5) }}</td>
           <td class="adminTimeEnd" v-if="event.timeEnd">{{ event.timeEnd.slice(0, 5) }}</td>
           <td class="adminSize">{{ event.size }}</td>
-          <td class="adminImage"><img :src="event.image ? require(`../../../${event.image}`) : ''" alt="Event Image"></td>
+          <td class="adminImage"><img :src="event.image ? `https://ik.imagekit.io/happy1hva${event.image}` : ''" alt="Event Image"></td>
           <td><button class="relation" @click="selecteUsers(event)">Check Users</button></td>
           <td>
             <div class="table-buttons">

@@ -25,7 +25,7 @@
           <td>{{ carousel.id }}</td>
           <td>{{ carousel.title}}</td>
           <td class="datetime">{{ parseDate(carousel.date) }}</td>
-          <td class="image"><img :src="carousel.image ? require(`../../../${carousel.image}`) : ''" alt="Carousel Image"></td>
+          <td class="image"><img :src="carousel.image ? `https://ik.imagekit.io/happy1hva${carousel.image}` : ''" alt="Carousel Image"></td>
           <td>
             <div class="table-buttons">
               <button class="edit" @click="edit(carousel.id)">Edit</button>
