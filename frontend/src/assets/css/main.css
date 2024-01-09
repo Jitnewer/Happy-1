@@ -2160,6 +2160,10 @@ a.router-link-active:hover {
 
 }
 
+.success-pop-up p {
+    color: white
+}
+
 .error-pop-up p {
     color: white
 }
