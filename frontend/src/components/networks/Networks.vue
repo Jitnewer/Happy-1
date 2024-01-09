@@ -46,7 +46,7 @@
     <div class="challenges">
       <div class="challenge" v-for="network in sortedNetworks" :key="network.id" @click="selectNetwork(network)">
         <div class="challenge-left">
-          <img :src="network.image ? require(`../../${network.image}`) : ''" alt="Challenge Image">
+          <img :src="network.image ? `https://ik.imagekit.io/happy1hva${network.image}` : ''" alt="Challenge Image">
         </div>
         <div class="challenge-right">
           <p class="challenge-time">{{ formattedDateTime(network.dateTime) }}</p>

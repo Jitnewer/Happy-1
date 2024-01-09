@@ -24,7 +24,7 @@
                 <router-link class="blue-text-router" to="/news">lees meer</router-link>
               </button>
             </div>
-            <img class="carouselImg" :src="require(`../../${slide.image}`)" alt="Image">
+            <img class="carouselImg" :src="`https://ik.imagekit.io/happy1hva${slide.image}`" alt="Image">
           </div>
         </Slide>
       </Carousel>

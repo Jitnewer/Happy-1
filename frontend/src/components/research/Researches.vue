@@ -46,7 +46,7 @@
     <div class="challenges">
       <div class="challenge" v-for="research in sortedResearch" :key="research.id" @click="selectResearch(research)">
         <div class="challenge-left">
-          <img :src="research.image ? require(`../../${research.image}`) : ''" alt="Research Image">
+          <img :src="research.image ? `https://ik.imagekit.io/happy1hva${research.image}` : ''" alt="Research Image">
         </div>
         <div class="challenge-right">
           <p class="challenge-time">{{ formattedDateTime(research.dateTime) }}</p>
