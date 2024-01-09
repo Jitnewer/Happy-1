@@ -100,7 +100,7 @@ export default {
     <div class="black"></div>
     <div class="user">
       <div class="user-info">
-        <img id="profile-image" :src="`https://ik.imagekit.io/happy1hva${selectedCopy.profilePic}`" alt="user image"/>
+        <img id="profile-image" :src="require(`../../../${selectedCopy.profilePic}`)" alt="user image"/>
         <form class="inputInfo">
           <h2 v-if="!create"> {{ selectedCopy.firstname }} {{ selectedCopy.lastname }} </h2>
           <h3 v-if="!create"> {{ selectedCopy.mail }} </h3>

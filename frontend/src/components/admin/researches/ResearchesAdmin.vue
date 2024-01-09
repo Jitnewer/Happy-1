@@ -30,7 +30,7 @@
           <td class="firstParagraph">{{ research.firstParagraph }}</td>
           <td v-if="research.dateTime" class="datetime">{{ formattedDateTime(research.dateTime) }}</td>
           <td class="theme_small">{{ research.theme }}</td>
-          <td class="image"><img :src="research.image ? `https://ik.imagekit.io/happy1hva${research.image}` : ''" alt="Research Image"></td>
+          <td class="image"><img :src="research.image ? require(`../../../${research.image}`) : ''" alt="Research Image"></td>
           <td><button class="relation" @click="paragraphs(research)">Check Paragraphs</button></td>
           <td>
             <div class="table-buttons">
@@ -42,7 +42,7 @@
         </tbody>
       </table>
       <div class="paragraphs paragraphs-admin" v-if="showParagraphs">
-        <div><button @click="back">Back</button>
+        <div><button @click="back" class="back-button">Back</button>
           <table>
             <thead>
             <tr>

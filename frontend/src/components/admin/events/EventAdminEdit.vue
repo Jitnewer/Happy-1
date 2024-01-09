@@ -164,7 +164,7 @@ export default {
 
       if (this.isTimeEndValid) {
         // If the time is not empty, compare timeEnd with timeBegin
-        const timeBegin = new Date(`2000-01-01 ${this.event.timeBegin}`)
+        const timeBegin = new Date(`2000-01-01 ${this.copiedEvent.timeBegin}`)
         const endTime = new Date(`2000-01-01 ${timeEnd}`)
 
         this.isTimeEndValid = endTime >= timeBegin

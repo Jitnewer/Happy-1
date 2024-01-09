@@ -46,7 +46,7 @@
     <div class="challenges">
       <div class="challenge" v-for="network in sortedNetworks" :key="network.id" @click="selectNetwork(network)">
         <div class="challenge-left">
-          <img :src="network.image ? `https://ik.imagekit.io/happy1hva${network.image}` : ''" alt="Challenge Image">
+          <img :src="network.image ? require(`../../${network.image}`) : ''" alt="Challenge Image">
         </div>
         <div class="challenge-right">
           <p class="challenge-time">{{ formattedDateTime(network.dateTime) }}</p>
@@ -66,7 +66,7 @@ export default {
   inject: ['networkService'],
   data () {
     return {
-      filter: this.$route.query.sort,
+      filter: null,
       showFilter: false
     }
   },
@@ -99,8 +99,8 @@ export default {
         if (this.filter == null) {
           await this.networkService.asyncFindAll()
         } else {
-          await this.networkService.asyncFindByProperty(this.filter, 'getByTheme')
           this.$router.push({ name: 'networks', query: { sort: this.filter } })
+          await this.networkService.asyncFindByProperty(this.filter, 'getByTheme')
         }
       } catch (e) {
         console.error(e.toJSON())
@@ -158,14 +158,11 @@ export default {
       return this.networkService.entities
     },
     sortedNetworks () {
-      if (Array.isArray(this.networks)) {
-        return this.networks.slice().sort((a, b) => {
-          const dateA = new Date(a.dateTime)
-          const dateB = new Date(b.dateTime)
-          return dateA - dateB
-        })
-      }
-      return null
+      return this.networks.slice().sort((a, b) => {
+        const dateA = new Date(a.dateTime)
+        const dateB = new Date(b.dateTime)
+        return dateA - dateB
+      })
     }
   }
 }

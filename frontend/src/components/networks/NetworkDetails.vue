@@ -91,13 +91,13 @@ export default {
       </div>
       <div class="detail-challenge">
         <div>
-          <img :src="network.image ? `https://ik.imagekit.io/happy1hva${network.image}` : ''" alt="Challenge Image">
+          <img :src="network.image ? require(`../../${network.image}`) : ''" alt="Challenge Image">
         </div>
         <div class="content">
           <div>
             <p class="challenge-time">{{ formattedDateTime(network.dateTime) }}</p>
             <h2>{{ network.title }}</h2>
-            <p>{{ network.firstParagraph}} </p>
+            <p>{{ network.firstParagraph }} </p>
           </div>
           <div v-for="paragraph in network.paragraphs" :key="paragraph.id">
             <h4>{{ paragraph.title }}</h4>

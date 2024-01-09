@@ -16,7 +16,7 @@
       </div>
       <div class="detail-challenge">
         <div>
-          <img :src="`https://ik.imagekit.io/happy1hva${research.image}`" alt="">
+          <img :src="require(`../../${research.image}`)" alt="">
         </div>
         <div class="content">
           <div>
