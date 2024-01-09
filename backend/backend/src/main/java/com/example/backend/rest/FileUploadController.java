@@ -126,7 +126,7 @@ public class FileUploadController {
             return ResponseEntity.status(HttpStatus.OK).body(
                     Map.of(
                             "message", "carousel image uploaded successfully",
-                            "filePath", "assets/carouselPic/" + customFileName
+                            "filePath", customFileName
                     )
             );
         } catch (Exception e) {
