@@ -53,6 +53,12 @@ export default {
 
           this.user = this.copyUser
           this.edit = false
+          this.$store.commit('setSuccess', true)
+          this.$store.commit('setSuccessMessage', response.message)
+          setTimeout(() => {
+            this.$store.commit('setSuccess', false)
+            this.$store.commit('setSuccessMessage', null)
+          }, 8000)
         } catch (e) {
           console.log(e.toJSON())
           this.$store.commit('setError', true)
