@@ -13,7 +13,7 @@ export class Carousel {
       carousel.id,
       carousel.title,
       carousel.image,
-      carousel.dateTime
+      carousel.date
     )
   }
 }

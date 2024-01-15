@@ -61,12 +61,10 @@ export default {
   },
   methods: {
     validateTitle (title) {
-      const titleRegex = /^[a-zA-Z0-9\s\-!\\?.$€&,:'"ëéèêàáâûüúöóôçīńł]+$/u
-
-      this.isTitleValid = titleRegex.test(title)
       this.charCount = title.length
+      this.isTitleValid = this.charCount <= 82
 
-      return this.isTitleValid && this.charCount <= 82
+      return this.isTitleValid
     },
     validateDateTime (dateTime) {
       const inputDate = new Date(dateTime)
@@ -93,24 +91,27 @@ export default {
       return this.isImageValid
     },
     async create () {
-      if (this.validateForm()) {
-        this.carousel.dateTime = new Date(this.carousel.dateTime).toISOString()
-        try {
-          const response = await this.carouselServiceSuperUser.asyncSave(this.carousel)
-          console.log('Eerste response:', response)
-          const carousel = response.carousel
-          console.log('Carousel:', carousel)
-          console.log('Image voor fileupload:', this.image)
-          console.log('Carousel ID voor fileupload:', carousel.id)
-          const file = await this.fileUploadService.asyncUploadCarouselPic(this.image, carousel.id)
-          console.log('File upload response:', file)
-          carousel.image = file.filePath
-          await this.carouselServiceSuperUser.asyncSave(carousel)
-          this.isSaved = true
-          this.$router.push({ name: 'adminCarousels' })
-        } catch (e) {
-          console.error('Fout bij het maken van de carousel:', e)
-        }
+      // Validate the form before proceeding
+      if (!this.validateForm()) {
+        return
+      }
+
+      this.carousel.dateTime = new Date(this.carousel.dateTime).toISOString()
+      try {
+        const response = await this.carouselServiceSuperUser.asyncSave(this.carousel)
+        console.log('Eerste response:', response)
+        const carousel = response.carousel
+        console.log('Carousel:', carousel)
+        console.log('Image voor fileupload:', this.image)
+        console.log('Carousel ID voor fileupload:', carousel.id)
+        const file = await this.fileUploadService.asyncUploadCarouselPic(this.image, carousel.id)
+        console.log('File upload response:', file)
+        carousel.image = file.filePath
+        await this.carouselServiceSuperUser.asyncSave(carousel)
+        this.isSaved = true
+        this.$router.push({ name: 'adminCarousels' })
+      } catch (e) {
+        console.error('Fout bij het maken van de carousel:', e)
       }
     },
     back () {
