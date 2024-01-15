@@ -179,19 +179,19 @@ public class User implements Identifiable{
         return password;
     }
 
-    public static User createSampleUser() {
+    public static User createSampleUser(int i) {
         Random random = new Random();
         String image = "profilepic.png";
 
         String[] firstnames = {"Tim", "Mylo", "Pim", "Eva"};
         String[] lastnames = {"Groot", "van Dijk", "de Jong", "de Graaf"};
-        int randomIndex = random.nextInt(firstnames.length);
-        String randomFirstname = firstnames[randomIndex];
-        String randomLastname = lastnames[randomIndex];
+//        int randomIndex = random.nextInt(firstnames.length);
+        String randomFirstname = firstnames[i];
+        String randomLastname = lastnames[i];
 
-        randomIndex = random.nextInt(firstnames.length);
+//        randomIndex = random.nextInt(firstnames.length);
         UserType[] userTypeValues = {UserType.ADMIN, UserType.ENTREPRENEUR, UserType.PARTNER, UserType.SUPERUSER};
-        UserType randomUserType = userTypeValues[randomIndex];
+        UserType randomUserType = userTypeValues[i];
 
         String mail = randomFirstname.toLowerCase() + randomLastname.replaceAll("\\s", "").toLowerCase() + "@gmail.com";
         String gender = "male";
@@ -204,9 +204,13 @@ public class User implements Identifiable{
         String postalCode = "1242 DA";
 
         String[] companyName = {"Uber", "Albert Heijn", "McDonalds", "Thuisbezorgd"};
-        String randomCompanyName = companyName[randomIndex];
+        String randomCompanyName = companyName[i];
 
         return new User(image, randomFirstname, randomLastname, mail, gender, age, companyType, tag, status, randomUserType, postalCode, "test", randomCompanyName);
+    }
+
+    public void setMail(String mail) {
+        this.mail = mail;
     }
 
     @Override

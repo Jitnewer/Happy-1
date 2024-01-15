@@ -53,23 +53,22 @@ export class User {
     )
   }
 
-  static createSampleUser () {
-    const id = Math.floor((Math.random() * 100) + 1)
-    const image = require('./../assets/img/profilepic.png')
+  static createSampleUser (userId) {
+    const id = userId
+    const image = 'assets/profilePic/profilepic.png'
 
     const firstname = ['Tim', 'Mylo', 'Pim', 'Eva']
     const lastname = ['Groot', 'Commandeur', 'Voortuin', 'Mase']
-    const names = ['Tim Groot', 'Mylo', 'Pim', 'Eva']
+    const names = ['TimGroot', 'Mylo', 'Pim', 'Eva']
     const randomIndex = Math.floor(Math.random() * names.length)
     const randomName = names[randomIndex]
 
-    const userTypeValues = Object.values(this.userTypes)
-    const randomUserType = userTypeValues[randomIndex]
+    const userTypeValues = User.userTypes.Admin
 
     const mail = randomName + '@gmail.com'
     const gender = 'male'
     let tag
-    if (randomUserType === 'PARTNER') {
+    if (userTypeValues === 'PARTNER') {
       tag = 'Chain-partner'
     } else {
       tag = 'N/A'
@@ -81,7 +80,7 @@ export class User {
     const companyType = 'Catering'
     const postalCode = '1242 DA'
 
-    return new User(id, image, firstname[randomIndex], lastname[randomIndex], mail, gender, age, companyType, tag, status, randomUserType, postalCode)
+    return new User(id, [], image, firstname[randomIndex], lastname[randomIndex], mail, gender, age, companyType, tag, status, userTypeValues, postalCode, 'password', companyType)
   }
 
   static generateId (usedIdList) {

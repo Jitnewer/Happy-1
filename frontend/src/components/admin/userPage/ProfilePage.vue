@@ -38,8 +38,18 @@ export default {
       this.infoView()
     },
     setSelected (newSelectedElementClass, oldSelectedElementClass) {
-      document.querySelector(oldSelectedElementClass).classList.remove('selected')
-      document.querySelector(newSelectedElementClass).classList.add('selected')
+      const oldElement = document.querySelector(oldSelectedElementClass)
+      const newElement = document.querySelector(newSelectedElementClass)
+
+      // Remove 'selected' class from the old element
+      if (oldElement) {
+        oldElement.classList.remove('selected')
+      }
+
+      // Add 'selected' class to the new element
+      if (newElement) {
+        newElement.classList?.add('selected')
+      }
     }
   },
   created () {

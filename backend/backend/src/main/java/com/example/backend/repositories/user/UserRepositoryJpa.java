@@ -4,12 +4,14 @@ import com.example.backend.models.User;
 import com.example.backend.repositories.AbstractEntityRepositoryJpa;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository("USER.JPA")
+@Qualifier("JPA")
 @Primary
 public class UserRepositoryJpa extends AbstractEntityRepositoryJpa<User> {
     public UserRepositoryJpa() {

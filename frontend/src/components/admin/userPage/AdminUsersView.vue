@@ -70,8 +70,6 @@ export default {
     },
     async saveUser (user) {
       try {
-        // const savedUser = await this.usersServiceAdmin.asyncSave(user)
-
         if (this.create) {
           this.users.push(user)
         } else {
@@ -215,7 +213,7 @@ export default {
       </table>
     </div>
   </div>
-  <router-view v-if="selectedUser" :selectedUser="selectedUser" @cancel-edit="cancelEdit" @save-edit="saveUser" :create="create"/>
+  <router-view :selectedUser="selectedUser" @cancel-edit="cancelEdit" @save-edit="saveUser" :create="create"/>
 </template>
 
 <style scoped>

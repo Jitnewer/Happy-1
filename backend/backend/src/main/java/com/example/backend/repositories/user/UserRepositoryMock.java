@@ -15,8 +15,8 @@ public class UserRepositoryMock implements UserRepository {
     private List<User> users = new ArrayList<>();
 
     public UserRepositoryMock() {
-        for (int i = 0; i < 6; i++) {
-            users.add(User.createSampleUser());
+        for (int i = 0; i < 3; i++) {
+            users.add(User.createSampleUser(i));
         }
     }
 
