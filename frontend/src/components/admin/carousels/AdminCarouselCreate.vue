@@ -99,13 +99,8 @@ export default {
       this.carousel.dateTime = new Date(this.carousel.dateTime).toISOString()
       try {
         const response = await this.carouselServiceSuperUser.asyncSave(this.carousel)
-        console.log('Eerste response:', response)
         const carousel = response.carousel
-        console.log('Carousel:', carousel)
-        console.log('Image voor fileupload:', this.image)
-        console.log('Carousel ID voor fileupload:', carousel.id)
         const file = await this.fileUploadService.asyncUploadCarouselPic(this.image, carousel.id)
-        console.log('File upload response:', file)
         carousel.image = file.filePath
         await this.carouselServiceSuperUser.asyncSave(carousel)
         this.isSaved = true

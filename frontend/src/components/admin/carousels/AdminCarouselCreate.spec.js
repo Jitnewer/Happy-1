@@ -20,7 +20,6 @@ describe('AdminCarouselCreate.vue', () => {
       global: {
         plugins: [router]
       }
-      // Provide your inject dependencies here as mocks if needed.
     })
 
     expect(wrapper.exists()).toBe(true)
@@ -31,7 +30,6 @@ describe('AdminCarouselCreate.vue', () => {
       global: {
         plugins: [router]
       }
-      // Provide your inject dependencies here as mocks if needed.
     })
 
     // Invalid title

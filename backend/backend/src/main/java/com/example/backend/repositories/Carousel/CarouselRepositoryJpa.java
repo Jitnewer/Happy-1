@@ -1,15 +1,10 @@
 package com.example.backend.repositories.Carousel;
 
 import com.example.backend.models.Carousel;
-import com.example.backend.models.Event;
-import com.example.backend.models.Research;
 import com.example.backend.repositories.AbstractEntityRepositoryJpa;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.TypedQuery;
-import jakarta.transaction.Transactional;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -43,6 +38,7 @@ public class CarouselRepositoryJpa extends AbstractEntityRepositoryJpa<Carousel>
     }
 
     @Override
+    @Transactional
     public boolean deleteById(Long id) {
         return super.deleteById(id);
     }

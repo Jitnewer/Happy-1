@@ -1,8 +1,6 @@
 package com.example.backend.repositories.Carousel;
 
 import com.example.backend.models.Carousel;
-import com.example.backend.models.Event;
-
 import java.util.List;
 
 public interface CarouselRepository {

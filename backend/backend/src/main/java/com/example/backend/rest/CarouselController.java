@@ -2,11 +2,6 @@ package com.example.backend.rest;
 
 import com.example.backend.exceptions.PreConditionFailedException;
 import com.example.backend.models.Carousel;
-import com.example.backend.models.Challenge;
-import com.example.backend.models.Event;
-import com.example.backend.models.Paragraph;
-import com.example.backend.repositories.Carousel.CarouselRepository;
-import com.example.backend.repositories.Carousel.CarouselRepositoryJpa;
 import com.example.backend.repositories.EntityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

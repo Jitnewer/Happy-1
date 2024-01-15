@@ -1,15 +1,6 @@
 package com.example.backend.models;
-
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
-
 @Entity
 @Table(name = "carousels")
 public class Carousel implements Identifiable {
@@ -30,18 +21,14 @@ public class Carousel implements Identifiable {
   public Carousel (String title) {
       this.title = title;
       this.dateTime = LocalDateTime.now();
-      this.image = "img.png";
+      this.image = "assets/carouselPic/carousel_63.jpg";
 
 
   }
-
-
-
   public Carousel() {
         this.dateTime = LocalDateTime.now();;
         this.image = "assets/carouselPic/imagePlaceholder.jpg";
   }
-
     public long getId() {
         return id;
     }
