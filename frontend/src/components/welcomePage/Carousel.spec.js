@@ -6,18 +6,18 @@ describe('Carousel.vue', () => {
     const wrapper = mount(Carousel, {
       props: {
         autoPlayEnabled: true,
-        slideCount: 3,
-      },
-    });
+        slideCount: 3
+      }
+    })
 
     // assertions
-    expect(wrapper.find('.carousel').exists()).toBe(true);
-    expect(wrapper.findAll('.carouselPagination')).toHaveLength(3);
+    expect(wrapper.find('.carousel').exists()).toBe(true)
+    expect(wrapper.findAll('.carouselPagination')).toHaveLength(3)
 
     // Wait for auto-play interval
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise(resolve => setTimeout(resolve, 1000))
 
     // Assert that the current slide has changed
-    expect(wrapper.vm.currentSlide.value).not.toBe(1);
-  });
-});
+    expect(wrapper.vm.currentSlide.value).not.toBe(1)
+  })
+})

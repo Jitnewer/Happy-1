@@ -12,6 +12,7 @@
         innovate from there for a sustainable catering industry.
       </p>
     </div>
+
     <div class="carouselHolder">
       <Carousel class="carousel" v-slot="{ currentSlide }" :slideCount="carouselSlides.length">
         <Slide v-for="(slide, index) in carouselSlides" :key="index" :slide-title="slide.title"
@@ -188,15 +189,18 @@ export default {
     }
   },
   async mounted () {
+    // Fetching carousel data on component mount
     await this.carouselService.asyncFindAll()
     console.log('carouselSlides:', this.carouselSlides)
   },
   created () {
+    // Redirecting if logged in as admin or superuser
     if (this.loggedInAsAdmin || this.loggedInAsSuperUser) {
       this.$router.push({ path: '/admin' })
     }
   },
   methods: {
+    // Function for formatting date
     formattedDateTime (dateTime) {
       const today = new Date()
       const challengeDate = new Date(dateTime)

@@ -33,6 +33,7 @@ public class CarouselRepositoryJpa extends AbstractEntityRepositoryJpa<Carousel>
     }
 
     @Override
+    @Transactional
     public Carousel save(Carousel entity) {
         return super.save(entity);
     }

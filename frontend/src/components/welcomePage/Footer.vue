@@ -100,6 +100,7 @@ export default {
 
       return this.isEmailValid
     },
+    // Creating new subscriber
     async create () {
       if (this.isEmailValid) {
         try {

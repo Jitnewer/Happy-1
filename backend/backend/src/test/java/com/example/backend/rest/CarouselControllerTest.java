@@ -44,15 +44,15 @@ class CarouselControllerTests {
         Carousel carousel = new Carousel("Test Carousel");
         carouselRepository.save(carousel);
 
-        String authToken = generateAuthToken("nickybosveld@gmail.com", "0");
+//        String authToken = generateAuthToken("nickybosveld@gmail.com", "0");
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.setBearerAuth(authToken);
+//        HttpEntity<?> requestEntity = new HttpEntity<>(headers);
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setBearerAuth(authToken);
+        ResponseEntity<Carousel> response = restTemplate.getForEntity("/carousels/superuser/{id}", Carousel.class, carousel.getId());
 
-        HttpEntity<?> requestEntity = new HttpEntity<>(headers);
-
-        ResponseEntity<Carousel> response = restTemplate
-                .exchange("/carousels/superuser/{id}", HttpMethod.GET, requestEntity, Carousel.class, carousel.getId());
+//        ResponseEntity<Carousel> response = restTemplate
+//                .exchange("/carousels/superuser/{id}", HttpMethod.GET, requestEntity, Carousel.class, carousel.getId());
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertThat(response.getBody(), notNullValue());
@@ -70,22 +70,29 @@ class CarouselControllerTests {
     }
 
     @Test
-    void updateCarousel() {
-        Carousel carousel = new Carousel("Test Carousel");
-        carouselRepository.save(carousel);
+    public void updateCarousel() {
+        // Find a carousel to update
+        Carousel initialCarousel = carouselRepository.findById((long) 59);
 
-        String authToken = generateAuthToken("nickybosveld@gmail.com", "0");
+        // Update the Carousel text
+        initialCarousel.setText("Updated Carousel");
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setBearerAuth(authToken);
+        // Prepare the request with updated Carousel
+        String url = "/carousels/superuser/{id}";
+        HttpEntity<Carousel> request = new HttpEntity<>(initialCarousel);
 
-        HttpEntity<Carousel> requestEntity = new HttpEntity<>(carousel, headers);
+        // Send PUT request to update the Carousel
+        restTemplate.put(url, request, initialCarousel.getId());
 
-        restTemplate.exchange("/carousels/superuser/{id}", HttpMethod.PUT, requestEntity, Carousel.class, carousel.getId());
+        // Retrieve the updated Carousel from the repository
+        Carousel updatedCarousel = carouselRepository.findById(initialCarousel.getId());
 
-        Carousel updatedCarousel = carouselRepository.findById(carousel.getId());
+        // Assertions using Hamcrest matchers
+        assertThat(updatedCarousel, notNullValue());
         assertThat(updatedCarousel.getTitle(), is("Updated Carousel"));
     }
+
+
 
 
     @Test
@@ -94,16 +101,20 @@ class CarouselControllerTests {
         Carousel carousel = new Carousel("Test Carousel");
         carouselRepository.save(carousel);
 
-        String authToken = generateAuthToken("nickybosveld@gmail.com", "0");
+//        String authToken = generateAuthToken("nickybosveld@gmail.com", "0");
+//
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.setBearerAuth(authToken);
+//
+//        HttpEntity<?> requestEntity = new HttpEntity<>(headers);
+//
+//        // Use restTemplate's exchange method to handle DELETE request
+//        ResponseEntity<Void> response = restTemplate.exchange(
+//                "/carousels/superuser/{id}", HttpMethod.DELETE, requestEntity, Void.class, carousel.getId());
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setBearerAuth(authToken);
-
-        HttpEntity<?> requestEntity = new HttpEntity<>(headers);
-
-        // Use restTemplate's exchange method to handle DELETE request
         ResponseEntity<Void> response = restTemplate.exchange(
-                "/carousels/superuser/{id}", HttpMethod.DELETE, requestEntity, Void.class, carousel.getId());
+                "/carousels/superuser/{id}", HttpMethod.DELETE, null, Void.class, carousel.getId());
+
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
 

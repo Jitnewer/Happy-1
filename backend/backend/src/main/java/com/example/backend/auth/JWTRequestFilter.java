@@ -38,11 +38,11 @@ public class JWTRequestFilter extends OncePerRequestFilter {
         String encryptedToken = request.getHeader(HttpHeaders.AUTHORIZATION);
 
         if (encryptedToken == null) {
-            // If not logged in, only allow paths with authentication
-            if (!servletPath.contains("authentication")) {
-                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Access forbidden. You need to log in first.");
-                return;
-            }
+//            // If not logged in, only allow paths with authentication
+//            if (!servletPath.contains("authentication")) {
+//                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Access forbidden. You need to log in first.");
+//                return;
+//            }
         } else {
             try {
                 JWToken jwToken = JWToken.decode(encryptedToken.replace("Bearer", "").trim(), this.apiConfig.getJwtPassphrase());

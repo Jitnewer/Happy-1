@@ -1,14 +1,21 @@
-//package com.example.backend;
-//
-//import org.junit.jupiter.api.Test;
-//import org.springframework.boot.test.context.SpringBootTest;
-//
-//@SpringBootTest
-//class BackendApplicationTests {
-//
-//    @Test
-//    void contextLoads() {
-//    }
-//
-//}
+package com.example.backend;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+
+import static org.testng.AssertJUnit.assertNotNull;
+
+@SpringBootTest
+class BackendApplicationTests {
+
+    @Autowired
+    BackendApplication application = null;
+    @Test
+    void contextLoads() {
+        assertNotNull(application);
+        System.out.println("Application auto-configuration has succeeded");
+    }
+
+}
 
