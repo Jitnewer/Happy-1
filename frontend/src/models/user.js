@@ -13,7 +13,7 @@ export class User {
     Unbanned: 'UNBANNED' // Adding the opposite status
   }
 
-  constructor (id, userEvents, profilePic, firstname, lastname, mail, gender, age, companyType, tag, status, userType, postalCode, password, companyName) {
+  constructor (id, profilePic, firstname, lastname, mail, gender, age, companyType, tag, status, userType, postalCode, password, companyName) {
     this.id = id
     this.profilePic = profilePic
     this.firstname = firstname

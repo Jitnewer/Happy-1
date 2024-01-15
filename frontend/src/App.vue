@@ -26,6 +26,7 @@ import { FileUploadAdapter } from '@/services/FileUploadAdapter'
 import { Subscriber } from '@/models/subscriber'
 import ErrorPopUp from '@/components/errorPopUp.vue'
 import SuccessPopUp from '@/components/successPopUp.vue'
+import { InMemoryEntitiesService } from '@/services/InMemoryEntitiesService'
 
 export default {
   name: 'App',
@@ -48,6 +49,7 @@ export default {
       eventsServiceSuperUser: reactive(new CachedRESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/events/superuser', Event.copyConstructor)),
       usersService: reactive(new CachedRESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/users', User.copyConstructor)),
       challengeService: reactive(new CachedRESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/challenges', Challenge.copyConstructor)),
+      challengeServiceMock: reactive(new InMemoryEntitiesService(1000, Challenge.createChallengeSample())),
       challengeServiceSuperUser: reactive(new CachedRESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/challenges/superuser', Challenge.copyConstructor)),
       userEventsService: reactive(new CachedRESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/userevents', UserEvent.copyConstructor)),
       usersServiceAdmin: reactive(new CachedRESTAdaptorWithFetch(CONFIG.BACKEND_URL + '/users/admin', User.copyConstructor)),

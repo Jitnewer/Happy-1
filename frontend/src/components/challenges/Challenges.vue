@@ -63,7 +63,7 @@ import ErrorPopUp from '@/components/errorPopUp.vue'
 
 export default {
   name: 'Challenges.vue',
-  inject: ['challengeService'],
+  inject: ['challengeService', 'challengeServiceMock'],
   data () {
     return {
       filter: this.$route.query.sort,
@@ -92,7 +92,7 @@ export default {
     async updateChallenges () {
       try {
         if (this.filter == null) {
-          await this.challengeService.asyncFindAll()
+          await this.challengeServiceMock.findAll()
         } else {
           await this.challengeService.asyncFindByProperty(this.filter, 'getByTheme')
           this.$router.push({ name: 'challenges', query: { sort: this.filter } })
@@ -156,7 +156,7 @@ export default {
   },
   computed: {
     challenges () {
-      return this.challengeService.entities
+      return this.challengeServiceMock.entities
     },
     sortedChallenges () {
       if (Array.isArray(this.challenges)) {

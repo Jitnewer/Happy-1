@@ -40,7 +40,7 @@ import ErrorPopUp from '@/components/errorPopUp.vue'
 
 export default {
   name: 'ChallengeDetails.vue',
-  inject: ['challengeService'],
+  inject: ['challengeService', 'challengeServiceMock'],
   data () {
     return {
       filter: this.$route.query.sort
@@ -88,7 +88,7 @@ export default {
   },
   async created () {
     try {
-      await this.challengeService.asyncFindById(this.$route.params.id)
+      await this.challengeServiceMock.findById(this.$route.params.id)
     } catch (e) {
       console.error(e.toJSON())
       this.$store.commit('setError', true)
@@ -101,7 +101,7 @@ export default {
   },
   computed: {
     challenge () {
-      return this.challengeService.entities
+      return this.challengeServiceMock.entities
     },
     sortedChallenges () {
       return this.challenges.slice().sort((a, b) => {

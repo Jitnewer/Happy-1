@@ -1,6 +1,24 @@
-
+/**
+ * Represents an event.
+ * @class
+ */
 export class Event {
-  constructor (id, userEvents, image, name, city, date, timeBegin, timeEnd, price, location, info, size) {
+  /**
+   * Constructor for creating an Event object.
+   * @constructor
+   * @param {number} id - The unique identifier of the event.
+   * @param {{}} image - The image URL or path of the event.
+   * @param {string} name - The name of the event.
+   * @param {string} city - The city where the event takes place.
+   * @param {string} date - The date of the event.
+   * @param {string} timeBegin - The starting time of the event.
+   * @param {string} timeEnd - The ending time of the event.
+   * @param {number|null} price - The price of the event (null if free).
+   * @param {string} location - The location or venue of the event.
+   * @param {string} info - Additional information about the event.
+   * @param {number} size - The size or capacity of the event.
+   */
+  constructor (id, image, name, city, date, timeBegin, timeEnd, price, location, info, size) {
     this.id = id
     this.image = image
     this.name = name
@@ -14,10 +32,20 @@ export class Event {
     this.size = size
   }
 
+  /**
+   * Gets the date of the event.
+   * @returns {string} The date of the event.
+   */
   getDate () {
     return this.date
   }
 
+  /**
+   * Creates a sample event based on the given index.
+   * @static
+   * @param {number} index - The index to select sample event details.
+   * @returns {Event} A new Event object with sample data.
+   */
   static createSampleEvents (index) {
     const id = Math.floor(Math.random() * 100) + 1
     const imageIndex = Math.floor(Math.random() * 2)
@@ -49,7 +77,7 @@ export class Event {
     return new Event(
       id,
       imageIndex === 0
-        ? require('../assets/eventPic/arnhem-event.jpg')
+        ? require('../assets/eventPic/rotterdam-event.webp')
         : require('../assets/eventPic/rotterdam-event.webp'),
       `Kroegpraat @ ${nameSuffix}`,
       nameSuffix,
@@ -63,45 +91,11 @@ export class Event {
     )
   }
 
-  static createSampleEvents2 (pId = 0) {
-    const images = [require('../assets/eventPic/arnhem-event.jpg'), require('../assets/eventPic/rotterdam-event.webp'), require('../assets/eventPic/restaurant-nederland.png'), require('../assets/eventPic/cafe-nederland.png')]
-    const names = ['Kroegpraat', 'Cafépraat', 'Lounge Borrel']
-    const cities = ['Amsterdam', 'Rotterdam', 'Arnhem', 'Zaandam', 'Utrecht', 'Edam', 'Purmerend', 'Brabant', 'Assen', 'Den Haag', 'Haarlem', 'Hilversum']
-    const locations = ['Amsterdam Dam Restaurant', 'Rotterdam Ahoy Lounge', 'Villa Sansbeek Bistro', 'Zaandam Delightful Diner', 'Utrecht Culinary Corner', 'Edam Cheese Haven', 'Purmerend Oasis Bar', 'Brabant Gastropub', 'Assen Retreat Cafe', 'Den Haag Coastal Eatery', 'Haarlem Vineyard Lounge', 'Hilversum Skyline Bistro']
-    const infos = [
-      'Are you a supporter of sustainability and a good time? Then we warmly invite you to the Green Gathering in Amsterdam! Alongside experts like Sarah Groenewoud from EcoEats, the Municipality of Utrecht, and various other businesses in the food sector and events industry, we will engage in discussions about how sustainability plays a pivotal role in their endeavors. Together, we will explore innovative solutions to comply with the latest environmental regulations and combat plastic pollution.',
-      "Do you share a passion for both sustainability and a good time? If so, we invite you to the Eco-Friendly Hangout in Rotterdam! Join us alongside environmental enthusiasts, including local eco-leaders, the City of Amsterdam, and fellow businesses in the hospitality and events sectors, as we delve into the importance of sustainability in our endeavors. Together, we'll embark on a quest to find innovative solutions to meet the latest Single Use Plastics regulations that came into force this year.",
-      'Do you consider sustainability as important as having a good time? Then join us at the Happy Hospitality Pub Talk in Arnhem! Together with Kees Bouwhof, owner of Villa Sonsbeek and the Palatijn, the Municipality of Arnhem, and several other entrepreneurs from the hospitality and events industry, we will discuss how sustainability is at the forefront of their concerns. We will also search for the holy grail of solutions to address the new Single Use Plastics legislation that came into effect earlier this year.',
-      "Do you believe in the importance of sustainability while enjoying a great atmosphere? Then don't miss out on the Sustainable Social Gathering in Arnhem! Together with industry leaders like Emily Greenfield from Green Eats, the Rotterdam City Council, and several other hospitality and event professionals, we will discuss the impact of sustainability on our businesses. Additionally, we'll be on the hunt for the ultimate solution to comply with the new Single Use Plastics legislation that has been in effect since the beginning of the year.",
-      'Are you a supporter of sustainability and a good time? Then we warmly invite you to the Green Gathering in Amsterdam! Alongside experts like Sarah Groenewoud from EcoEats, the Municipality of Utrecht, and various other businesses in the food sector and events industry, we will engage in discussions about how sustainability plays a pivotal role in their endeavors. Together, we will explore innovative solutions to comply with the latest environmental regulations and combat plastic pollution.'
-    ]
-
-    const cityName = cities[Math.floor(Math.random() * 12)]
-    let location
-
-    const matchingLocations = locations.filter(location => location.toLowerCase().includes(cityName.toLowerCase()))
-
-    if (matchingLocations.length > 0) {
-      location = matchingLocations[Math.floor(Math.random() * matchingLocations.length)]
-    } else {
-      location = locations[Math.floor(Math.random() * 12)]
-    }
-
-    return new Event(
-      pId,
-      images[Math.floor(Math.random() * 4)],
-      `${names[Math.floor(Math.random() * 3)]}`,
-      cityName,
-      this.getRandomDate(),
-      this.getRandomTimeBegin(),
-      this.getRandomTimeEnd(this.getRandomTimeBegin()),
-      this.getRandomPrice(),
-      location,
-      infos[Math.floor(Math.random() * 5)],
-      Math.floor(Math.random() * (40 - 10 + 1) + 10)
-    )
-  }
-
+  /**
+   * Generates a random beginning time for an event.
+   * @static
+   * @returns {string} The random starting time in HH:mm format.
+   */
   static getRandomTimeBegin () {
     const minHour = 11
     const maxHour = 20
@@ -112,6 +106,12 @@ export class Event {
     return `${String(randomHour).padStart(2, '0')}:${String(randomMinute).padStart(2, '0')}`
   }
 
+  /**
+   * Generates a random ending time for an event based on the starting time.
+   * @static
+   * @param {string} timeBegin - The starting time of the event.
+   * @returns {string} The random ending time in HH:mm format.
+   */
   static getRandomTimeEnd (timeBegin) {
     const timeBeginParts = timeBegin.split(':')
     const beginHour = parseInt(timeBeginParts[0])
@@ -129,6 +129,11 @@ export class Event {
     return `${String(randomHour).padStart(2, '0')}:${String(roundedMinute).padStart(2, '0')}`
   }
 
+  /**
+   * Generates a random date for an event within the next year.
+   * @static
+   * @returns {string} The random date in "dd-mm-yyyy" format.
+   */
   static getRandomDate () {
     const today = new Date()
     const nextYear = new Date(today)
@@ -144,6 +149,11 @@ export class Event {
     return `${day}-${month}-${year}`
   }
 
+  /**
+   * Generates a random price for an event.
+   * @static
+   * @returns {number|null} The random price or null for free events.
+   */
   static getRandomPrice () {
     const minPrice = 40
     const maxPrice = 80
@@ -172,6 +182,13 @@ export class Event {
     return randomPrice
   }
 
+  /**
+   * Checks if two events are equal by comparing their properties.
+   * @static
+   * @param {Event} event - The first event for comparison.
+   * @param {Event} eventCopy - The second event for comparison.
+   * @returns {boolean} True if the events are equal, false otherwise.
+   */
   static equals (event, eventCopy) {
     return (
       eventCopy.name === event.name &&
@@ -185,12 +202,17 @@ export class Event {
     )
   }
 
+  /**
+   * Creates a copy of an existing event using a copy constructor.
+   * @static
+   * @param {Event} event - The event to be copied.
+   * @returns {Event|null} A new Event object that is a copy of the input event.
+   */
   static copyConstructor (event) {
     if (!event) return null
 
     return new Event(
       event.id,
-      event.userEvents,
       event.image,
       event.name,
       event.city,
