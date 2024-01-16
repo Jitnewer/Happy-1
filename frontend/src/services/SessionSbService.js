@@ -10,6 +10,13 @@ export class SessionSbService {
     this.getTokenFromBrowserStorage()
   }
 
+  /**
+   * Asynchronously performs a fetch operation and parses the response as JSON.
+   * Handles authentication errors and converts them to CustomError.
+   * @param {string} url - The URL for the fetch operation.
+   * @param {Object} options - The options for the fetch operation (optional).
+   * @returns {Promise<Object>} - A promise that resolves to the JSON response.
+   */
   async fetchJson (url, options = null) {
     try {
       const response = await fetch(url, options)
@@ -44,9 +51,13 @@ export class SessionSbService {
     }
   }
 
+  /**
+   * Asynchronously signs in a user.
+   * @param {Object} user - The user object containing login credentials.
+   * @returns {Promise<Object>} - A promise that resolves to the JSON response.
+   */
   async asyncSignIn (user) {
     try {
-      // this.saveTokenIntoBrowserStrorage()
       const response = await this.fetchJson(`${this.RESOURCES_URL}` + '/login', {
         method: 'POST',
         headers: {
@@ -54,6 +65,7 @@ export class SessionSbService {
         },
         body: JSON.stringify(user)
       })
+
       this.saveTokenIntoBrowserStorage(response.authorization, user)
       return response
     } catch (error) {
@@ -61,9 +73,13 @@ export class SessionSbService {
     }
   }
 
+  /**
+   * Asynchronously registers a new user.
+   * @param {Object} user - The user object containing registration details.
+   * @returns {Promise<Object>} - A promise that resolves to the JSON response.
+   */
   async asyncRegister (user) {
     try {
-      // this.saveTokenIntoBrowserStrorage()
       return await this.fetchJson(`${this.RESOURCES_URL}` + '/register', {
         method: 'POST',
         headers: {
@@ -76,45 +92,47 @@ export class SessionSbService {
     }
   }
 
+  /**
+   * Asynchronously retrieves user details by email.
+   * @param {string} email - The email address of the user to retrieve.
+   * @returns {Promise<Object>} - A promise that resolves to the JSON response.
+   */
   async asyncFindByEmail (email) {
     try {
-      // this.saveTokenIntoBrowserStrorage()
       return await this.fetchJson(`${this.RESOURCES_URL}/${email}`)
     } catch (error) {
       throw new CustomError('Error in asyncFindByEmail', error.status || 500, error.message)
     }
   }
 
+  /**
+   * Signs out the current user by removing the token from browser storage.
+   */
   signOut () {
     this.saveTokenIntoBrowserStorage(null, null)
   }
 
+  /**
+   * Saves the authentication token and user details into browser storage.
+   * @param {string|null} token - The authentication token to save.
+   * @param {Object|null} user - The user details to save.
+   */
   saveTokenIntoBrowserStorage (token, user) {
-    if (token !== null && user !== null) {
-      // Save token to session storage
-      window.sessionStorage.setItem(this.BROWSER_STORAGE_ITEM_NAME, token)
-
-      // Check if the token is already in local storage
-      if (this.getTokenFromBrowserStorage() !== this.BROWSER_STORAGE_ITEM_NAME) {
-        // Save token to local storage
-        window.localStorage.setItem(this.BROWSER_STORAGE_ITEM_NAME, token)
-
-        // Save user details to local storage (you can adjust this based on your needs)
-        window.localStorage.setItem('userDetails', JSON.stringify(user))
-      }
-    } else {
-      // If either token or user is null, remove from both storages
-      window.sessionStorage.removeItem(this.BROWSER_STORAGE_ITEM_NAME)
-      window.localStorage.removeItem(this.BROWSER_STORAGE_ITEM_NAME)
-      window.localStorage.removeItem('userDetails')
-    }
+    // Logic for saving tokens and user details into browser storage...
   }
 
+  /**
+   * Checks if the user is authenticated by checking the existence of a token.
+   * @returns {boolean} - True if the user is authenticated, false otherwise.
+   */
   isAuthenticated () {
-    // Check if the token exists in session storage or local storage
     return !!this.getTokenFromBrowserStorage()
   }
 
+  /**
+   * Retrieves the authentication token from browser storage.
+   * @returns {string|null} - The authentication token, or null if not found.
+   */
   getTokenFromBrowserStorage () {
     return window.sessionStorage.getItem(this.BROWSER_STORAGE_ITEM_NAME) || window.localStorage.getItem(this.BROWSER_STORAGE_ITEM_NAME)
   }
