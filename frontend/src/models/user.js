@@ -10,7 +10,7 @@ export class User {
     Active: 'ACTIVE',
     Inactive: 'INACTIVE',
     Banned: 'BANNED',
-    Unbanned: 'UNBANNED' // Adding the opposite status
+    Unbanned: 'UNBANNED'
   }
 
   constructor (id, userEvents, profilePic, firstname, lastname, mail, gender, age, companyType, tag, status, userType, postalCode, password, companyName) {
@@ -33,7 +33,6 @@ export class User {
   static copyConstructor (user) {
     if (!user) return null
 
-    // You can add more logic here to deep clone attributes if needed.
     return new User(
       user.id,
       user.userEvents,
@@ -94,18 +93,5 @@ export class User {
 
     // Once a unique ID is generated, return it
     return newId
-  }
-
-  equals (userCopy, create) {
-    if (create) {
-      return (
-        this.userType !== userCopy.userType ||
-        this.name !== userCopy.name ||
-        this.mail !== userCopy.mail
-      )
-    }
-    return (
-      this.userType !== userCopy.userType
-    )
   }
 }

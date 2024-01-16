@@ -6,30 +6,40 @@ import { createMemoryHistory, createRouter } from 'vue-router'
 import { InMemmoryEntityService } from '@/services/InMemmoryEntityService'
 import welcomeAdmin from '@/components/admin/welcomeAdmin.vue'
 import AdminUsersDetail from '@/components/admin/userPage/AdminUsersDetail.vue'
+import Welcome from '@/components/welcomePage/Welcome.vue'
 
 let wrapper
 let validUser
 let theUserService
+const NO_DETAILS_CONTEXT = ''
 
 const myRoutes = [
   {
-    path: '/admin',
-    name: 'admin',
-    component: welcomeAdmin
+    path: '',
+    component: Welcome
   },
   {
-    path: '/admin/users',
-    component: AdminUsersView,
-    name: 'users',
-    children: [
-      {
-        path: ':id',
-        name: 'userDetail',
-        component: AdminUsersDetail,
-        params: 1
-      }
-    ]
+    path: '/:id',
+    component: AdminUsersDetail
   }
+  // {
+  //   path: '/admin',
+  //   name: 'admin',
+  //   component: welcomeAdmin
+  // },
+  // {
+  //   path: '/admin/users',
+  //   component: AdminUsersView,
+  //   name: 'users',
+  //   children: [
+  //     {
+  //       path: ':id',
+  //       name: 'userDetail',
+  //       component: AdminUsersDetail,
+  //       params: 1
+  //     }
+  //   ]
+  // }
 ]
 
 beforeEach(async function () {
@@ -46,7 +56,7 @@ beforeEach(async function () {
   wrapper = await mount(AdminUsersDetail, {
     props: {
       selectedUser: validUser,
-      create: true // or true based on your requirement
+      create: false
     },
     global: {
       provide: {
@@ -66,6 +76,7 @@ it('Can save User', async () => {
 
   // Setup create prop
   wrapper.setProps({
+    selectedUser: validUser,
     create: true
   })
 
@@ -80,11 +91,12 @@ it('Can save User', async () => {
   await wrapper.vm.$nextTick()
   await flushPromises()
 
-  expect(confirmMock).toHaveBeenCalledWith('Are you sure you want to change the access of this user?')
+  expect(confirmMock).toHaveBeenCalledWith('Are you sure you want to save changes of this user?')
   expect(confirmMock).toHaveBeenCalledTimes(1)
 
   const users = await theUserService.asyncFindAll()
   expect(users.length).toBe(nUsers + 1)
+  confirmMock.mockClear()
 })
 
 it('Can update user', async function () {
@@ -106,11 +118,14 @@ it('Can update user', async function () {
   await wrapper.vm.$nextTick()
   await flushPromises()
 
-  expect(confirmMock).toHaveBeenCalledWith('Are you sure you want to change the access of this user?')
+  expect(confirmMock).toHaveBeenCalledWith('Are you sure you want to save changes of this user?')
   expect(confirmMock,
     'Confirmation was shown multiple times').toHaveBeenCalledTimes(1)
 
   const users = await theUserService.asyncFindById(1)
   expect(users,
     'User was not updated properly').toEqual(nUser)
+
+  // Clear confirm mock to prevent multiple time called
+  confirmMock.mockClear()
 })

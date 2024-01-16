@@ -79,7 +79,7 @@ beforeEach(async function () {
   await wrapper.vm.$router.isReady()
 })
 
-it('can delete a User if confirmed', async function () {
+it('Can delete a User if confirmed', async function () {
   const confirmMock = jest.spyOn(window, 'confirm').mockReturnValue(true)
 
   // find the button to click
@@ -116,6 +116,9 @@ it('can delete a User if confirmed', async function () {
   expect(rows,
     'Deleting user does not refresh table rows')
     .toEqual(nRows - 2)
+
+  // Clear confirm mock to prevent multiple calls
+  confirmMock.mockClear()
 })
 
 it('cannot delete a User if not confirmed', async function () {
@@ -155,6 +158,9 @@ it('cannot delete a User if not confirmed', async function () {
   expect(rows,
     'not confirming refreshes table rows')
     .toEqual(nRows - 1)
+
+  // Clear confirm mock to prevent multiple calls
+  confirmMock.mockClear()
 })
 
 it('View button should redirect to profilePage route', async function () {
@@ -177,7 +183,7 @@ it('View button should redirect to profilePage route', async function () {
     await wrapper.vm.$nextTick()
     await flushPromises()
 
-    // Check whether the right param id is passed
+    // Check whether the right param id is passed through
     expect(wrapper.vm.$route.params.id,
       'route has incorrect :id parameter')
       .toBe(users[i].id.toString())
@@ -186,5 +192,8 @@ it('View button should redirect to profilePage route', async function () {
     expect(wrapper.vm.$route.path,
       'Button does not redirect to profile route')
       .toContain('/profile/' + users[i].id)
+
+    const profileComponent = wrapper.findComponent(ProfilePage)
+    expect(profileComponent.exists).toBeTruthy()
   }
 })

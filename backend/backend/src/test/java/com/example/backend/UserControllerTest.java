@@ -36,7 +36,7 @@ public class UserControllerTest {
 
     @Test
     public void getUserById() {
-        ResponseEntity<Object> response = this.getById(1);
+        ResponseEntity<Object> response = this.getById(2);
 
         // check status code, location header and response body of post request
         assertEquals(HttpStatus.OK, response.getStatusCode());

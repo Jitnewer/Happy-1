@@ -39,6 +39,9 @@ export default {
     }
   },
   methods: {
+    /**
+     * Initialize the users stats
+     */
     loadDataAndCreateChart () {
       this.totalUsers = this.users.length
       this.entrepreneurCount = this.users.filter(user => user.userType === User.userTypes.Entrepreneur).length
@@ -48,6 +51,9 @@ export default {
 
       this.createBarChart()
     },
+    /**
+     * Initialize BarChart with the users data
+     */
     createBarChart () {
       const chart = document.getElementById('chart').getContext('2d')
       // eslint-disable-next-line no-new

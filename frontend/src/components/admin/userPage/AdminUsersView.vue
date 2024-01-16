@@ -15,6 +15,9 @@ export default {
     }
   },
   methods: {
+    /**
+     * Initialize a new User
+     */
     createUser () {
       this.create = true
       this.selectedUser = new User(
@@ -70,6 +73,7 @@ export default {
     },
     async saveUser (user) {
       try {
+        // Update the users list
         if (this.create) {
           this.users.push(user)
         } else {
@@ -80,6 +84,7 @@ export default {
           }
         }
 
+        // Disable create/edit mode
         document.body.style.overflow = 'auto'
         this.create = false
         this.$router.push({ name: 'users' })
@@ -87,13 +92,22 @@ export default {
         console.log(e)
       }
     },
+    /**
+     * Delete user, and it's corresponding profilePic if profilePic does not equal image placeholder
+     * @param user
+     * @returns {Promise<void>}
+     */
     async deleteUser (user) {
       if (confirm('Are you sure you want to delete this user?')) {
         try {
           await this.usersServiceAdmin.asyncDeleteById(user.id)
+
+          // Prevent default profile picture placeholder from being deleted
           if (user.profilePic !== 'assets/profilePic/profilepic.png') {
             await this.fileUploadService.asyncDeleteImage(user.profilePic)
           }
+
+          // Update the users list
           const indexToUpdate = this.users.findIndex(oldUser => oldUser.id === user.id)
 
           if (indexToUpdate >= 0) {
@@ -104,6 +118,10 @@ export default {
         }
       }
     },
+    /**
+     * Redirect to selected user page
+     * @param user
+     */
     viewUser (user) {
       this.$router.push({ name: 'profileView', params: { id: user.id } })
     },
@@ -123,6 +141,10 @@ export default {
     }
   },
   computed: {
+    /**
+     * Filters out the current logged in user from the list
+     * @returns {[]|*[]}
+     */
     filterdUsers () {
       if (!this.filter.search && !this.filter.userType) {
         // If neither date nor search filter is set, return all events

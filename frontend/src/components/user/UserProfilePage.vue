@@ -14,10 +14,16 @@ export default {
     }
   },
   methods: {
+    /**
+     * Enable edit inputs
+     */
     editProfile () {
       this.edit = true
       this.copyUser = User.copyConstructor(this.user)
     },
+    /**
+     * Cancel editing profile
+     */
     cancel () {
       if (confirm('Are you sure you wan\'t to delete changes?')) {
         this.edit = false
@@ -30,26 +36,31 @@ export default {
       this.newProfilePic = URL.createObjectURL(file)
       this.pictureUpload = file
     },
+    /**
+     * Activate input when in edit mode
+     */
     activateInput () {
       if (this.edit) {
         document.querySelector('#file').click()
       }
     },
+    /**
+     * Redirect to profile info overview
+     */
     infoView () {
       this.$router.push({ name: 'profilePageInfo' })
     },
     async save () {
       if (confirm('Are you sure you wan\'t to save changes?')) {
         try {
+          // If new picture is selected upload it to image server
           if (this.pictureUpload) {
             const profilePicPath = await this.fileUploadService.asyncUploadProfilePic(this.pictureUpload, this.user)
             this.copyUser.profilePic = profilePicPath.filePath
           }
           this.newProfilePic = null
 
-          console.log(this.copyUser)
           const response = await this.usersService.asyncSave(this.copyUser)
-          console.log(response)
 
           this.user = this.copyUser
           this.edit = false

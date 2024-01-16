@@ -119,6 +119,11 @@ export default {
       this.showUsers = false
       this.users = null
     },
+    /**
+     * Remove Event
+     * @param event
+     * @returns {Promise<void>}
+     */
     async remove (event) {
       try {
         const response = await this.eventsServiceSuperUser.asyncDeleteById(event.id)
@@ -156,10 +161,20 @@ export default {
     edit (id) {
       this.$router.push({ name: 'adminEventEdit', params: { id: id } })
     },
+    /**
+     * Format the date from date input to Date object
+     * @param dateString
+     * @returns {string}
+     */
     getFormattedDate (dateString) {
       const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }
       return new Date(dateString).toLocaleDateString('nl-NL', options)
     },
+    /**
+     * Format Price to have only 2 decimals
+     * @param price
+     * @returns {string}
+     */
     formattedPrice (price) {
       if (price !== null) {
         return `€${price.toFixed(2).replace('.', ',')},-`
@@ -167,6 +182,11 @@ export default {
         return 'N/A'
       }
     },
+    /**
+     * Format the Date into a string format of dd-mm-yy
+     * @param dateString
+     * @returns {string}
+     */
     parseDate (dateString) {
       const dateObject = new Date(dateString)
       const day = dateObject.getDate()
@@ -191,6 +211,10 @@ export default {
     events () {
       return this.eventsService.entities
     },
+    /**
+     * Sort users based on id
+     * @returns {*|*[]}
+     */
     sortedUsers () {
       if (this.selectedEvent) {
         if (this.users) {

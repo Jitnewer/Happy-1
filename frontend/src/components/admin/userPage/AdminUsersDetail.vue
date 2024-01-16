@@ -23,7 +23,7 @@ export default {
     },
     async save () {
       if (this.validateFields) {
-        if (confirm('Are you sure you want to change the access of this user?')) {
+        if (confirm('Are you sure you want to save changes of this user?')) {
           try {
             const response = await this.usersServiceAdmin.asyncSave(this.selectedCopy)
 
@@ -50,6 +50,10 @@ export default {
     }
   },
   computed: {
+    /**
+     * Validate inputFields
+     * @returns {boolean}
+     */
     validateFields () {
       if (!this.validateFirstName) {
         this.setUpErrorMessage('#firstname', 'Firstname must be at least 3 characters and can\'t contain any numbers and symbols')

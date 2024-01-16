@@ -13,6 +13,11 @@ export default {
     }
   },
   methods: {
+    /**
+     * Parses the date from Date object to a string in format dd-mm-yy
+     * @param dateString
+     * @returns {string}
+     */
     parseDate (dateString) {
       const dateObject = new Date(dateString)
       const day = dateObject.getDate()
@@ -21,6 +26,11 @@ export default {
 
       return `${day}-${month}-${year}`
     },
+    /**
+     * format the price to have 2 decimals. If no price is present it will return 'N/A'
+     * @param event
+     * @returns {string}
+     */
     formattedPrice (event) {
       if (event.price !== null) {
         return `€${event.price.toFixed(2)},-`
@@ -28,6 +38,10 @@ export default {
         return 'N/A'
       }
     },
+    /**
+     * Shows the signOut popup for the signed in event
+     * @param event
+     */
     toggleSignOut (event) {
       this.showSignOut = !this.showSignOut
       if (this.selectedEventsSignOut !== null) {

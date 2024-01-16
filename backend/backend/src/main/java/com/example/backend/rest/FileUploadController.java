@@ -155,6 +155,11 @@ public class FileUploadController {
     }
 
 
+    /**
+     * Deletes image from designated loaction
+     * @param imagePath
+     * @return
+     */
     @DeleteMapping("/delete")
     public ResponseEntity<Object> deletePicture (@RequestPart("imagePath") String imagePath) {
         if (imagePath == null || imagePath.trim().isEmpty()) {
@@ -177,6 +182,14 @@ public class FileUploadController {
         }
     }
 
+    /**
+     * Uploads image files to the designated location
+     * @param file image file
+     * @param name the file name
+     * @param id entity id
+     * @param folder the location where to save image
+     * @return
+     */
     private String uploadFile(MultipartFile file, String name, String id, String folder) {
         try {
             String uploadFolderPath = ASSETS_FOLDER + "assets/" + folder;
@@ -195,6 +208,7 @@ public class FileUploadController {
             Path filePath = Paths.get(uploadFolderPath, customFileName);
             Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
 
+            // Return the new custom filename
             return customFileName;
         } catch (IOException e) {
             throw new RuntimeException(e);

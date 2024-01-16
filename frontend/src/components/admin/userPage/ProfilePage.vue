@@ -17,6 +17,9 @@ export default {
     adminEventsView () {
       this.$router.push({ name: 'profileEventsView' })
     },
+    /**
+     * Redirect to the previous visited page
+     */
     previousPage () {
       if (this.previousRoute.path === '/') {
         this.$router.push({ name: 'users' })
@@ -37,6 +40,11 @@ export default {
       }
       this.infoView()
     },
+    /**
+     * Highlight active route option
+     * @param newSelectedElementClass
+     * @param oldSelectedElementClass
+     */
     setSelected (newSelectedElementClass, oldSelectedElementClass) {
       const oldElement = document.querySelector(oldSelectedElementClass)
       const newElement = document.querySelector(newSelectedElementClass)
