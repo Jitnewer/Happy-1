@@ -65,7 +65,7 @@ describe('Challenges.vue', () => {
     const selectedChallenge = challengeElements[0]
 
     // Get the challenge data
-    const challengeData = challengeService.entities[0]
+    const challengeData = challengeServiceMock.entities[0]
 
     // Click on the selected challenge
     await selectedChallenge.trigger('click')

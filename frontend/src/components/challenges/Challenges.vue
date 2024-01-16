@@ -73,7 +73,7 @@ export default {
   methods: {
     async selectChallenge (challenge) {
       this.$router.push({ name: 'challenge', params: { id: challenge.id }, query: { sort: this.filter } })
-      await this.challengeService.asyncFindById(challenge.id)
+      await this.challengeServiceMock.findById(challenge.id)
     },
     toggleFilter () {
       this.showFilter = !this.showFilter

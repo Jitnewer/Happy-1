@@ -31,6 +31,7 @@ describe('Challenges.vue', () => {
       history: createMemoryHistory(),
       routes: myRoutes
     })
+
     await router.push({ name: 'challenge', params: { id: challengeServiceMock.entities[0].id } })
 
     wrapper = await mount(ChallengeDetails, {
