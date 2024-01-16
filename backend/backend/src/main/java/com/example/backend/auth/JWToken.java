@@ -10,31 +10,30 @@ import java.util.Date;
 
 @Component
 public class JWToken {
+    // Constants for JWT claims
     public static final String JWT_ATTRIBUTE_NAME = "attr";
     private static final String JWT_CALLNAME_CLAIM = "sub";
     private static final String JWT_USERID_CLAIM = "id";
     private static final String JWT_ROLE_CLAIM = "role";
     private static final String JWT_IPADDRESS = "ip";
 
-
+    // Instance variables representing JWT claims
     private String callName;
     private long userId;
     private String role;
     private String ipAddress;
 
-
+    // Constructors
     public JWToken(String callName, Long userId, String role) {
         this.callName = callName;
         this.userId = userId;
         this.role = role;
     }
-    public JWToken() {
 
+    public JWToken() {
     }
 
-
-
-
+    // Method to encode a JWT
     public String encode(String issuer, String passphrase, int expiration) {
         // Use Keys class to generate a secure key for HS512
         Key key = getKey(passphrase);
@@ -50,10 +49,10 @@ public class JWToken {
                 .compact();
     }
 
+    // Method to decode a JWT
     public static JWToken decode(String token, String passphrase) throws ExpiredJwtException, MalformedJwtException {
         Key key = getKey(passphrase);
-        Jws<Claims> jws = Jwts.parser().setSigningKey(key).build()
-                .parseClaimsJws(token);
+        Jws<Claims> jws = Jwts.parser().setSigningKey(key).build().parseClaimsJws(token);
 
         Claims claims = jws.getBody();
 
@@ -63,19 +62,17 @@ public class JWToken {
                 claims.get(JWT_ROLE_CLAIM).toString()
         );
 
-
-
         jwToken.setIpAddress((String) claims.get(JWT_IPADDRESS));
         return jwToken;
     }
 
-
-
+    // Private method to generate a key from a passphrase
     private static Key getKey(String passphrase) {
         byte[] keyBytes = passphrase.getBytes(StandardCharsets.UTF_8);
         return new SecretKeySpec(keyBytes, SignatureAlgorithm.HS512.getJcaName());
     }
 
+    // Getters and setters
     public void setCallName(String callName) {
         this.callName = callName;
     }

@@ -71,14 +71,17 @@ export default {
     }
   },
   methods: {
+    // Navigate to the selected research details
     async selectResearch (research) {
       this.$router.push({ name: 'research', params: { id: research.id }, query: { sort: this.filter } })
       await this.researchService.asyncFindById(research.id)
     },
+    // Shorten a paragraph to a maximum number of characters
     shortenParagraph (paragraph) {
-      const maxChars = 150 // Pas dit aan naar de gewenste lengte
+      const maxChars = 150
       return paragraph.length > maxChars ? paragraph.slice(0, maxChars) + '...' : paragraph
     },
+    // Toggle the display of the filter options
     toggleFilter () {
       this.showFilter = !this.showFilter
     },
@@ -124,6 +127,7 @@ export default {
         return `${this.getFormattedDate(dateTime)}, ${formattedTime}`
       }
     },
+    // Update the list of research articles based on the selected filter
     async updateResearches () {
       try {
         if (this.filter == null) {
@@ -142,6 +146,7 @@ export default {
         }, 8000)
       }
     },
+    // Reset the selected research when router view is updated
     updateSelectedResearch () {
       this.selectedResearch = null
     }
@@ -153,6 +158,7 @@ export default {
     await this.updateResearches()
   },
   watch: {
+    // Watch for changes in the route
     $route (to, from) {
       if (to.fullPath !== from.fullPath) {
         this.updateResearches()
@@ -161,8 +167,10 @@ export default {
   },
   computed: {
     researches () {
+      // Get the list of research articles from the service
       return this.researchService.entities
     },
+    // Sort the research articles by date
     sortedResearch () {
       if (Array.isArray(this.researches)) {
         console.log(this.researches)

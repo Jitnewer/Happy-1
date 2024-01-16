@@ -1,4 +1,5 @@
 <template>
+  <!-- Breadcrumb navigation -->
   <div class="breadcrum" v-if="research">
     <router-link :to="{ name: 'welcome' }">Home</router-link>
     <p>></p>
@@ -8,12 +9,14 @@
     <p>></p>
     <router-link :to="{ name: 'research', params: { id: research.id } , query: { sort: filter }  }">Research Article / {{ research.id }}</router-link>
   </div>
+  <!-- Research details container -->
   <div v-if="research" class="container">
     <div class="challenge-main">
       <div class="challenge-title">
         <button @click="back">Back</button>
         <h1>Research Article</h1>
       </div>
+      <!-- Research details content -->
       <div class="detail-challenge">
         <div>
           <img :src="require(`../../${research.image}`)" alt="">
@@ -51,6 +54,7 @@ export default {
       const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }
       return new Date(dateString).toLocaleDateString('nl-NL', options)
     },
+    // Format date and time for display
     formattedDateTime (dateTime) {
       const today = new Date()
       const researchDate = new Date(dateTime)
@@ -86,8 +90,10 @@ export default {
   },
   async created () {
     try {
+      // Fetch and set research data
       this.research = await this.researchService.asyncFindById(this.$route.params.id)
     } catch (e) {
+      // Handle errors
       console.error(e.toJSON())
       this.$store.commit('setError', true)
       this.$store.commit('setErrorMessage', e.toJSON().error)
@@ -98,9 +104,11 @@ export default {
     }
   },
   computed: {
+    // Get the 'researches' component
     researches () {
       return research
     },
+    // Sort the researches by date
     sortedResearch () {
       return this.researches.slice().sort((a, b) => {
         const dateA = new Date(a.dateTime)

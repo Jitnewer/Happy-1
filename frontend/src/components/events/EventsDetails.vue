@@ -50,8 +50,10 @@ export default {
   },
   async created () {
     try {
+      // Fetch event details by ID
       await this.eventsService.asyncFindById(this.$route.params.id)
     } catch (e) {
+      // Handle error
       console.error(e.toJSON())
       this.$store.commit('setError', true)
       this.$store.commit('setErrorMessage', e.toJSON().error)
@@ -59,10 +61,12 @@ export default {
       //   this.$store.commit('setError', false)
       //   this.$store.commit('setErrorMessage', null)
       // }, 8000)
+      // Redirect to events page with applied filter
       this.$router.push({ name: 'events', query: { sort: this.filter } })
     }
   },
   methods: {
+    // Format event price for display
     formattedPrice (event) {
       if (event.price !== null) {
         return `€${event.price.toFixed(2).replace('.', ',')},-`
@@ -70,6 +74,7 @@ export default {
         return 'N/A'
       }
     },
+    // Parse date string into a formatted date
     parseDate (dateString) {
       const dateObject = new Date(dateString)
       const day = dateObject.getDate()
@@ -78,6 +83,7 @@ export default {
 
       return `${day}-${month}-${year}`
     },
+    // Navigate back to events page with applied filter
     async back () {
       this.$router.push({ name: 'events', query: { sort: this.filter } })
     }

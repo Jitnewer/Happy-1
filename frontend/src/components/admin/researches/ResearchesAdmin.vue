@@ -1,15 +1,20 @@
 <template>
+  <!-- Container for the Research Articles Admin -->
   <div class="container-admin">
+    <!-- Breadcrumb navigation -->
     <div class="breadcrum-admin">
       <router-link :to="{ name: 'admin' }">Admin</router-link>
       <span>></span>
       <router-link :to="{ name: 'adminResearches' }">Research Articles</router-link>
     </div>
+    <!-- Main section for Research Articles Admin -->
     <div class="challenges-admin">
+      <!-- Title and create button -->
       <div class="title-button">
         <h1>Research Articles</h1>
         <button @click="create()" class="admin-create">Create</button>
       </div>
+      <!-- Research Articles table -->
       <table v-if="researches">
         <thead>
         <tr>
@@ -24,6 +29,7 @@
         </tr>
         </thead>
         <tbody>
+        <!-- Iterate over research articles -->
         <tr v-for="research in researches" :key="research.id">
           <td>{{ research.id }}</td>
           <td>{{ research.title }}</td>
@@ -33,6 +39,7 @@
           <td class="image"><img :src="research.image ? require(`../../../${research.image}`) : ''" alt="Research Image"></td>
           <td><button class="relation" @click="paragraphs(research)">Check Paragraphs</button></td>
           <td>
+            <!-- Buttons for edit and delete actions -->
             <div class="table-buttons">
               <button class="edit" @click="edit(research.id)">Edit</button>
               <button class="delete" @click="remove(research)">Delete</button>
@@ -41,8 +48,12 @@
         </tr>
         </tbody>
       </table>
+      <!-- Paragraphs section -->
       <div class="paragraphs paragraphs-admin" v-if="showParagraphs">
-        <div><button @click="back" class="back-button">Back</button>
+        <div>
+          <!-- Back button for Paragraphs section -->
+          <button @click="back" class="back-button">Back</button>
+          <!-- Table to display paragraphs -->
           <table>
             <thead>
             <tr>
@@ -52,6 +63,7 @@
             </tr>
             </thead>
             <tbody>
+            <!-- Iterate over sorted paragraphs -->
             <tr v-for="paragraph in sortedParagraphs" :key="paragraph.id">
               <td>{{ paragraph.id }}</td>
               <td>{{ paragraph.title }}</td>
@@ -89,14 +101,17 @@ export default {
     back () {
       this.showParagraphs = false
     },
+    // Remove a research article
     async remove (research) {
       try {
         const response = await this.researchServiceSuperUser.asyncDeleteById(research.id)
         await this.fileUploadService.asyncDeleteImage(research.image)
         await this.researchService.asyncFindAll()
+        // Display success message
         this.$store.commit('setSuccess', true)
         this.$store.commit('setSuccessMessage', response.message)
         setTimeout(() => {
+          // Hide success message after 8 seconds
           this.$store.commit('setSuccess', false)
           this.$store.commit('setSuccessMessage', null)
         }, 8000)
@@ -105,11 +120,13 @@ export default {
         this.$store.commit('setError', true)
         this.$store.commit('setErrorMessage', e.toJSON().error)
         setTimeout(() => {
+          // Hide error message after 8 seconds
           this.$store.commit('setError', false)
           this.$store.commit('setErrorMessage', null)
         }, 8000)
       }
     },
+    // Update the list of research articles
     async updateResearches () {
       try {
         await this.researchService.asyncFindAll()
@@ -123,13 +140,16 @@ export default {
         }, 8000)
       }
     },
+    // Navigate to the edit page
     edit (id) {
       this.$router.push({ name: 'adminResearchEdit', params: { id: id } })
     },
+    // Format a date/time string
     getFormattedDate (dateString) {
       const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }
       return new Date(dateString).toLocaleDateString('nl-NL', options)
     },
+    // Format a date/time string
     formattedDateTime (dateTime) {
       const today = new Date()
       const challengeDate = new Date(dateTime)
