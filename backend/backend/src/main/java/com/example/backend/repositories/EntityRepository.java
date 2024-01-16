@@ -7,6 +7,7 @@ import com.example.backend.models.User;
 import java.util.List;
 
 public interface EntityRepository<E extends Identifiable> {
+
     List<E> findAll();
     List <E> findByQuery(String jpqlName, Object... params);
     E findById(Long id);

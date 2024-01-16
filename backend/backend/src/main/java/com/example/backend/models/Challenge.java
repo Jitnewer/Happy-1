@@ -43,7 +43,7 @@ public class Challenge implements Identifiable{
     @Column(columnDefinition = "TEXT")
     private String firstParagraph;
 
-    @OneToMany(mappedBy = "challenge", orphanRemoval = true)
+    @OneToMany(mappedBy = "challenge", orphanRemoval = true, fetch = FetchType.EAGER)
     @JsonManagedReference(value = "challenge-paragraphs")
     private Set<Paragraph> paragraphs = new HashSet<>();
 

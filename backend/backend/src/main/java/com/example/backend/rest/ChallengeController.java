@@ -29,12 +29,14 @@ public class ChallengeController {
     @Autowired
     private EntityRepository<Paragraph> paragraphRepository;
 
-    @GetMapping
+    @GetMapping("/authentication")
     public List<Challenge> getAllChallenges() {
+
         return challengeRepository.findAll();
+
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/authentication/{id}")
     public ResponseEntity<Object> getChallengeById(@PathVariable long id) {
         try {
             Challenge challenge = challengeRepository.findById(id);
@@ -53,7 +55,7 @@ public class ChallengeController {
 
 
 
-    @GetMapping("/getByTheme/{theme}")
+    @GetMapping("/authentication/getByTheme/{theme}")
     public ResponseEntity<Object> getChallengesByTheme(@PathVariable String theme) {
         try {
             Challenge.Theme themeEnum = Challenge.Theme.valueOf(theme.toUpperCase());
@@ -71,7 +73,7 @@ public class ChallengeController {
         }
     }
 
-    @PostMapping("/superuser")
+    @PostMapping("/authentication")
     public ResponseEntity<Object> createChallenge(@RequestBody Challenge challenge) {
 
         if (challenge.getTitle() == null || challenge.getTitle().isEmpty()) {
@@ -81,11 +83,14 @@ public class ChallengeController {
         try {
             challengeRepository.save(challenge);
 
-            // Now you can save the paragraphs with the associated challenge
-            for (Paragraph paragraph : challenge.getParagraphs()) {
-                paragraph.setChallenge(challenge);
-                paragraphRepository.save(paragraph);
+            if (challenge.getParagraphs() != null) {
+                for (Paragraph paragraph : challenge.getParagraphs()) {
+                    paragraph.setChallenge(challenge);
+                    paragraphRepository.save(paragraph);
+                }
             }
+            // Now you can save the paragraphs with the associated challenge
+
 
             URI location = ServletUriComponentsBuilder
                     .fromCurrentRequest()
@@ -106,7 +111,7 @@ public class ChallengeController {
         }
     }
 
-    @PutMapping("/superuser/{id}")
+    @PutMapping("/authentication/{id}")
     public ResponseEntity<Object> updateChallenge(@RequestBody Challenge challenge, @PathVariable Long id) {
         try {
             if (!id.equals(challenge.getId())) {
@@ -133,7 +138,7 @@ public class ChallengeController {
 
 
 
-    @DeleteMapping("/superuser/{id}")
+    @DeleteMapping("/authentication/{id}")
     public ResponseEntity<Object> deleteChallenge(@PathVariable long id) {
         challengeRepository.deleteById(id);
         return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "Challenge deleted successfully", "status", HttpStatus.OK));

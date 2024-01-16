@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository("CHALLANGE.JPA")
+@Repository("CHALLENGE.JPA")
 @Primary
 public class ChallengeRepositoryJpa extends AbstractEntityRepositoryJpa<Challenge> {
 
