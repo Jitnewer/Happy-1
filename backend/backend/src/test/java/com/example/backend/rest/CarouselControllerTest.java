@@ -29,7 +29,8 @@ class CarouselControllerTests {
     private EntityRepository<Carousel> carouselRepository;
 
     private String generateAuthToken(String username, String role) {
-        JWToken jwtToken = new JWToken(username, 1L, role);
+
+        JWToken jwtToken = new JWToken("Nick", 100L, "0");
         return jwtToken.encode("my-app", "ThisIsMyVeryLongAndSuperSecurePassphraseWithNumbersAndSymbolsAndSpecialCharacters!!!", 3600);
     }
     @Test

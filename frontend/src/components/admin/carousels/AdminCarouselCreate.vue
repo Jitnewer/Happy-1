@@ -1,5 +1,6 @@
 <template>
   <div class="container-admin">
+    <!-- Breadcrumb navigation -->
     <div class="breadcrum-admin">
       <router-link :to="{ name: 'admin' }">Admin</router-link>
       <span> > </span>
@@ -7,29 +8,35 @@
       <span>></span>
       <router-link :to="{ name: 'adminCarouselCreate' }">Create</router-link>
     </div>
+    <!-- Create Carousel Slide -->
     <div class="challenge-create">
       <div class="title-button-create">
         <h1>Create Carousel Slide</h1>
         <button @click="back()" class="back-button">Back</button>
       </div>
       <div>
+        <!-- Carousel creation form -->
         <form @submit.prevent="create" class="challenge-create-form" v-if="carousel">
+          <!-- Title input -->
           <div class="form-label">
             <p>Title</p>
             <input type="text" v-model="carousel.title" :class="{'invalid-input': carousel.title && !isTitleValid,'valid-input': carousel.title && isTitleValid}" @input="validateTitle(carousel.title)">
             <p class="errorMessage" v-if="!isTitleValid && carousel.title">Invalid title, no special symbols allowed</p>
             <p class="charCounter">{{ charCount }} / 82 characters</p>
           </div>
+          <!-- DateTime input -->
           <div class="form-label">
             <p>DateTime</p>
             <input type="datetime-local" v-model="carousel.dateTime" :class="{'invalid-input': carousel.dateTime && !isDateTimeValid,'valid-input': carousel.dateTime && isDateTimeValid}" @input="validateDateTime(carousel.dateTime)">
             <p class="errorMessage" v-if="!isDateTimeValid && carousel.dateTime">Invalid datetime, needs te be now or in the future</p>
           </div>
+          <!-- Image upload -->
           <div class="form-label">
             <p>Image</p>
             <input type="file"  @change="handleFileChange" :class="{'invalid-input': image && !isImageValid,'valid-input': image && isImageValid}" @input="validateImage(image)">
             <p class="errorMessage" v-if="!isImageValid && image">{{ imageError }}</p>
           </div>
+          <!-- Submit button -->
           <button type="submit" :disabled="!carouselEdited && !validateForm()">Save</button>
         </form>
       </div>

@@ -3,8 +3,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import AdminCarouselCreate from '@/components/admin/carousels/AdminCarouselCreate.vue'
 import { FileUploadAdapter } from '@/services/FileUploadAdapter.js'
 
-// Mock your inject dependencies (carouselService, carouselServiceSuperUser, fileUploadService) here if needed.
-
+// Create a Vue Router instance
 const router = createRouter({
   history: createWebHistory(),
   routes: [
@@ -16,6 +15,7 @@ const router = createRouter({
 
 describe('AdminCarouselCreate.vue', () => {
   it('renders the component', () => {
+    // Mount the component with Vue Router as a plugin
     const wrapper = mount(AdminCarouselCreate, {
       global: {
         plugins: [router]
@@ -26,6 +26,7 @@ describe('AdminCarouselCreate.vue', () => {
   })
 
   it('validates title correctly', () => {
+    // Mount the component with Vue Router as a plugin
     const wrapper = mount(AdminCarouselCreate, {
       global: {
         plugins: [router]
@@ -40,6 +41,8 @@ describe('AdminCarouselCreate.vue', () => {
     wrapper.vm.validateTitle('valid title')
     expect(wrapper.vm.isTitleValid).toBe(true)
   })
+
+  // Nested test suite for FileUploadAdapter
   describe('FileUploadAdapter', () => {
     it('asyncUploadCarouselPic uploads carousel image successfully', async () => {
       // Mocking fetch function
@@ -49,18 +52,18 @@ describe('AdminCarouselCreate.vue', () => {
         })
       )
 
-      const fileUploadAdapter = new FileUploadAdapter('/your-resource-url')
-      const file = new File(['(⌐□_□)'], 'carousel-image.png', { type: 'image/png' })
+      // Create a FileUploadAdapter instance
+      const fileUploadAdapter = new FileUploadAdapter('/resource-url')
+      const file = new File(['file'], 'carousel-image.png', { type: 'image/png' })
       const carouselId = '123'
 
-      // Calling the method
       const response = await fileUploadAdapter.asyncUploadCarouselPic(file, carouselId)
 
       // Assertions
       expect(response).toEqual({ success: true })
 
       // Ensure fetch is called with the correct parameters
-      expect(global.fetch).toHaveBeenCalledWith('/your-resource-url/carouselPic', {
+      expect(global.fetch).toHaveBeenCalledWith('/resource-url/carouselPic', {
         method: 'POST',
         body: expect.any(FormData)
       })

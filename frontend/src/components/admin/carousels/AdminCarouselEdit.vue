@@ -7,12 +7,14 @@
       <span>></span>
       <router-link :to="{ name: 'adminCarouselEdit', query: { id: $route.params.id } }">Edit {{ copiedCarousel.id }}</router-link>
     </div>
+    <!-- Edit Carousel  -->
     <div class="challenge-create">
       <div class="title-button-create">
         <h1>Edit Carousel</h1>
         <button @click="back()" class="back-button">Back</button>
       </div>
       <div>
+        !-- Carousel edit form -->
         <form @submit.prevent="edit" class="challenge-create-form" v-if="copiedCarousel">
           <div class="form-label">
             <p>Title</p>
