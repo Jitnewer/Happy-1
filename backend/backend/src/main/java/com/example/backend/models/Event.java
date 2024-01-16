@@ -116,26 +116,35 @@ public class Event implements Identifiable {
     public int getSize() {
         return size;
     }
+    /**
+     * Generates a random sample Event for testing purposes.
+     * The event includes random values for image, name, city, date, time, location, price, info, and size.
+     *
+     * @return A randomly generated Event.
+     */
     public static Event createSampleEvent() {
         Random random = new Random();
 
+        // Randomly select a city name from the available cities
         String cityName = getCities()[random.nextInt(getCities().length)];
         String location;
 
+        // Create a list of locations that contain the selected city name
         List<String> matchingLocations = new ArrayList<>();
-
         for (String loc : getLocations()) {
             if (loc.toLowerCase().contains(cityName.toLowerCase())) {
                 matchingLocations.add(loc);
             }
         }
 
+        // Randomly select a location from matching locations, or choose a random location if none match
         if (!matchingLocations.isEmpty()) {
             location = matchingLocations.get(random.nextInt(matchingLocations.size()));
         } else {
             location = getLocations()[random.nextInt(getLocations().length)];
         }
 
+        // Create and return a new Event with random attributes
         return new Event(
                 getImages()[random.nextInt(getImages().length)],
                 getNames()[random.nextInt(getNames().length)],
@@ -149,6 +158,7 @@ public class Event implements Identifiable {
                 random.nextInt(31) + 10
         );
     }
+
 
     private static LocalTime getRandomTimeBegin() {
         int minHour = 11;
@@ -282,7 +292,11 @@ public class Event implements Identifiable {
                 "Are you a supporter of sustainability and a good time? Then we warmly invite you to the Green Gathering in Amsterdam! Alongside experts like Sarah Groenewoud from EcoEats, the Municipality of Utrecht, and various other businesses in the food sector and events industry, we will engage in discussions about how sustainability plays a pivotal role in their endeavors. Together, we will explore innovative solutions to comply with the latest environmental regulations and combat plastic pollution."
         };
     }
-
+    /**
+     * Copies the provided Event using a copy constructor.
+     * @param event The Event to be copied.
+     * @return A new Event object with the same attributes as the provided event.
+     */
     public static Event copyConstructor (Event event) {
         if (event == null) return null;
 
