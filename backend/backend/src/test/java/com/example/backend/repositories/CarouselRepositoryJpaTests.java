@@ -46,13 +46,10 @@ public class CarouselRepositoryJpaTests {
     @Test
     void findAllCarouselsReturnsAll() {
         assertFalse(this.carousels.isEmpty());
-
-        // Additional assertions based on your application logic
         Carousel firstCarousel = this.carousels.get(0);
         assertNotNull(firstCarousel.getId());
         assertNotNull(firstCarousel.getTitle());
         assertNotNull(firstCarousel.getTitle());
-        // Add more assertions as needed
     }
 
     @Test
@@ -70,13 +67,8 @@ public class CarouselRepositoryJpaTests {
 
     @Test
     void saveCarousel() {
-        // Create a new carousel
         Carousel newCarousel = new Carousel("New Carousel Title");
-
-        // Save the carousel
         Carousel savedCarousel = this.carouselRepository.save(newCarousel);
-
-        // Retrieve the saved carousel from the repository
         Carousel retrievedCarousel = this.carouselRepository.findById(savedCarousel.getId());
 
         // Assertions
@@ -88,19 +80,15 @@ public class CarouselRepositoryJpaTests {
     @Test
     void deleteCarousel() {
         // Choose an existing carousel ID from the initialized data
-        Long existingCarouselId = 60L;
+        Long existingCarouselId = 173L;
 
-        // Delete the carousel
         this.carouselRepository.deleteById(existingCarouselId);
 
-        // Attempt to find the deleted carousel
+        // Attempt to find the deleted carousel and check if its null
         Carousel deletedCarousel = this.carouselRepository.findById(existingCarouselId);
-
-        // Assert that the deleted carousel is null
         assertNull(deletedCarousel);
     }
 
-    // Add more tests as needed for other repository operations
 
 }
 

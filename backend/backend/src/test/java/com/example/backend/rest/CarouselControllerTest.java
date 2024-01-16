@@ -72,10 +72,7 @@ class CarouselControllerTests {
 
     @Test
     public void updateCarousel() {
-        // Find a carousel to update
         Carousel initialCarousel = carouselRepository.findById((long) 59);
-
-        // Update the Carousel text
         initialCarousel.setText("Updated Carousel");
 
         // Prepare the request with updated Carousel
@@ -88,7 +85,7 @@ class CarouselControllerTests {
         // Retrieve the updated Carousel from the repository
         Carousel updatedCarousel = carouselRepository.findById(initialCarousel.getId());
 
-        // Assertions using Hamcrest matchers
+        // Assertions
         assertThat(updatedCarousel, notNullValue());
         assertThat(updatedCarousel.getTitle(), is("Updated Carousel"));
     }
@@ -98,7 +95,6 @@ class CarouselControllerTests {
 
     @Test
     void deleteCarousel() {
-        // Save the carousel in the database
         Carousel carousel = new Carousel("Test Carousel");
         carouselRepository.save(carousel);
 
