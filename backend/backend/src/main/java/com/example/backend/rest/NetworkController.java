@@ -26,12 +26,12 @@ public class NetworkController {
     @Autowired
     private EntityRepository<Paragraph> paragraphRepository;
 
-    @GetMapping
+    @GetMapping("/authentication")
     List<Network> getAllNetworks() {
         return networkRepository.findAll();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/authentication/{id}")
     ResponseEntity<Object> getNetworkById(@PathVariable long id) {
         try {
             Network network = networkRepository.findById(id);
@@ -45,7 +45,7 @@ public class NetworkController {
         }
     }
 
-    @GetMapping("/getByTheme/{theme}")
+    @GetMapping("/authentication/getByTheme/{theme}")
     ResponseEntity<Object> getNetworksByTheme(@PathVariable String theme) {
         try {
             Network.Theme themeEnum = Network.Theme.valueOf(theme.toUpperCase());
@@ -61,7 +61,7 @@ public class NetworkController {
         }
     }
 
-    @PostMapping("/superuser")
+    @PostMapping("/authentication")
     ResponseEntity<Object> createNetwork(@RequestBody Network network) {
         if (network.getTitle() == null || network.getTitle().isEmpty()) {
             return ResponseEntity.badRequest().body(Map.of("message", "Title is required"));
@@ -93,7 +93,7 @@ public class NetworkController {
         }
     }
 
-    @PutMapping("/superuser/{id}")
+    @PutMapping("/authentication/{id}")
     public ResponseEntity<Object> updateNetwork(@RequestBody Network network, @PathVariable Long id) {
         try {
             if (!id.equals(network.getId())) {
@@ -117,7 +117,7 @@ public class NetworkController {
         }
     }
 
-    @DeleteMapping("/superuser/{id}")
+    @DeleteMapping("/authentication/{id}")
     public ResponseEntity<Map<String, Serializable>> deleteNetwork(@PathVariable long id) {
         networkRepository.deleteById(id);
         return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "Network deleted successfully", "status", HttpStatus.OK));

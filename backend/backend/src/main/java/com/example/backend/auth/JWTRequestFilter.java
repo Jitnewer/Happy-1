@@ -24,7 +24,7 @@ public class JWTRequestFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         if (request.getMethod().equals(HttpMethod.OPTIONS.name())) {
             // Handle preflight requests
-            response.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "https://ewa-frontend-2hlf.onrender.com"); // .allowedOrigins("http://localhost:8080", "http://localhost:8085", "https://ewa-frontend-2hlf.onrender.com", "https://ewa-backend-ianp.onrender.com")
+            response.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "http://localhost:8080"); // .allowedOrigins("http://localhost:8080", "http://localhost:8085", "https://ewa-frontend-2hlf.onrender.com", "https://ewa-backend-ianp.onrender.com")
             response.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_METHODS, "GET, POST, PUT, DELETE");
             response.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_HEADERS, "Content-Type, Authorization, " + HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN);
             response.setHeader(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, "Authorization");

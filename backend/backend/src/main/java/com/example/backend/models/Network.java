@@ -44,6 +44,15 @@ public class Network implements Identifiable {
     @Column(nullable = false)
     private Theme theme;
 
+    public Network(String title, String firstParagraph, Set<Paragraph> paragraphs, Network.Theme theme) {
+        this.title = title;
+        this.dateTime = LocalDateTime.now();
+        this.image = "img.png";
+        this.firstParagraph = firstParagraph;
+        this.paragraphs = paragraphs;
+        this.theme = theme;
+    }
+
     public Network() {
         this.dateTime = LocalDateTime.now();
         this.image = "img.png";

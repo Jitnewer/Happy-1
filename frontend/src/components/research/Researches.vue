@@ -56,7 +56,6 @@
       </div>
     </div>
   </div>
-  <router-view @update-selected-challenge="updateSelectedResearch"></router-view>
 </template>
 
 <script>
@@ -133,9 +132,9 @@ export default {
           await this.researchService.asyncFindByProperty(this.filter, 'getByTheme')
         }
       } catch (e) {
-        console.error(e.toJSON())
+        console.error(e)
         this.$store.commit('setError', true)
-        this.$store.commit('setErrorMessage', e.toJSON().error)
+        this.$store.commit('setErrorMessage', e.error)
         setTimeout(() => {
           this.$store.commit('setError', false)
           this.$store.commit('setErrorMessage', null)
@@ -147,10 +146,10 @@ export default {
     }
   },
   async created () {
-    if (this.$route.query) {
+    await this.updateResearches()
+    if (this.$route.query?.sort) {
       this.filter = this.$route.query.sort
     }
-    await this.updateResearches()
   },
   watch: {
     $route (to, from) {
@@ -164,8 +163,8 @@ export default {
       return this.researchService.entities
     },
     sortedResearch () {
+      // console.log(this.researches)
       if (Array.isArray(this.researches)) {
-        console.log(this.researches)
         return this.researches.slice().sort((a, b) => {
           const dateA = new Date(a.dateTime)
           const dateB = new Date(b.dateTime)

@@ -179,25 +179,18 @@ public class FileUploadController {
         try {
             String uploadFolderPath = "assets/" + folder;
 
-//            File uploadFolder = new File(uploadFolderPath);
-//            if (!uploadFolder.exists()) {
-//                uploadFolder.mkdirs();
-//            }
-
             String fileExtension = getFileExtension(file.getOriginalFilename());
 
             // Generate a custom filename using user's first name and ID
             String customFileName = name + "_" + id + fileExtension;
 
-            // Save the file to the upload folder
-//            Path filePath = Paths.get(uploadFolderPath, customFileName);
-//            Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-
+            // create the request file, it will contain the file itself and the filename
             FileCreateRequest fileCreateRequest = new FileCreateRequest(
                     file.getBytes(),
                     customFileName
             );
             fileCreateRequest.setFolder(uploadFolderPath);
+            // Request to imagekit api and get the returned filepath for later use
             String result = ImageKit.getInstance().upload(fileCreateRequest).getFilePath();
 
             return result;

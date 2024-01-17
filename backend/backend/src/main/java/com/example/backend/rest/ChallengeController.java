@@ -51,8 +51,6 @@ public class ChallengeController {
     }
 
 
-
-
     @GetMapping("/getByTheme/{theme}")
     public ResponseEntity<Object> getChallengesByTheme(@PathVariable String theme) {
         try {

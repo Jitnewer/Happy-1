@@ -20,6 +20,7 @@ export class CachedRESTAdaptorWithFetch extends RESTAdaptorWithFetch {
     }
   }
 
+  // Why is this the way it is, why don't we just use the entities array and filter it? And why do we reassign the entities array to just 1 entity?
   async asyncFindById (id) {
     try {
       const entity = await super.asyncFindById(id)

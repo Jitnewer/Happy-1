@@ -28,12 +28,12 @@ public class ResearchController {
     @Autowired
     private EntityRepository<Paragraph> paragraphRepository;
 
-    @GetMapping
+    @GetMapping("/authentication")
     public List<Research> getAllResearches() {
         return researchRepository.findAll();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/authentication/{id}")
     public ResponseEntity<Object> getResearchById(@PathVariable long id) {
         try {
             Research research = researchRepository.findById(id);
@@ -49,7 +49,7 @@ public class ResearchController {
         }
     }
 
-    @GetMapping("/getByTheme/{theme}")
+    @GetMapping("/authentication/getByTheme/{theme}")
     public ResponseEntity<Object> getResearchesByTheme(@PathVariable String theme) {
         try {
             Research.Theme themeEnum = Research.Theme.valueOf(theme.toUpperCase());
@@ -66,7 +66,7 @@ public class ResearchController {
                     "error", e.getMessage()));
         }
     }
-    @PostMapping("/superuser")
+    @PostMapping("/authentication")
     public ResponseEntity<Object> createResearch(@RequestBody Research research) {
         if (research.getTitle() == null || research.getTitle().isEmpty()) {
             return ResponseEntity.badRequest().body(Map.of("message", "Title is required"));
@@ -102,7 +102,7 @@ public class ResearchController {
         }
     }
 
-    @PutMapping("/superuser/{id}")
+    @PutMapping("/authentication/{id}")
     public ResponseEntity<Object> updateResearch(@RequestBody Research research, @PathVariable Long id) {
         try {
             if (!id.equals(research.getId())) {
@@ -126,7 +126,7 @@ public class ResearchController {
         }
     }
 
-    @DeleteMapping("/superuser/{id}")
+    @DeleteMapping("/authentication/{id}")
     public ResponseEntity<Object> deleteResearch(@PathVariable long id) {
         researchRepository.deleteById(id);
         return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "Research deleted successfully", "status", HttpStatus.OK));

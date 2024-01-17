@@ -16,17 +16,17 @@
       </div>
       <div class="detail-challenge">
         <div>
-          <img :src="`https://ik.imagekit.io/happy1hva${research.image}`" alt="">
+          <img class="research-image" :src="`https://ik.imagekit.io/happy1hva${research.image}`" alt="">
         </div>
         <div class="content">
           <div>
             <p class="challenge-time">{{ formattedDateTime(research.dateTime) }}</p>
-            <h2>{{ research.title }}</h2>
-            <p>{{ research.firstParagraph}} </p>
+            <h2 class="research-title">{{ research.title }}</h2>
+            <p class="research-firstp">{{ research.firstParagraph}} </p>
           </div>
           <div v-for="paragraph in research.paragraphs" :key="paragraph.id">
-            <h4>{{ paragraph.title }}</h4>
-            <p>{{ paragraph.content }}</p>
+            <h4 class="research-ptitle">{{ paragraph.title }}</h4>
+            <p class="research-p">{{ paragraph.content }}</p>
           </div>
         </div>
       </div>
@@ -88,9 +88,9 @@ export default {
     try {
       this.research = await this.researchService.asyncFindById(this.$route.params.id)
     } catch (e) {
-      console.error(e.toJSON())
+      console.error(e)
       this.$store.commit('setError', true)
-      this.$store.commit('setErrorMessage', e.toJSON().error)
+      this.$store.commit('setErrorMessage', e.error)
       setTimeout(() => {
         this.$store.commit('setError', false)
         this.$store.commit('setErrorMessage', null)
@@ -99,7 +99,7 @@ export default {
   },
   computed: {
     researches () {
-      return research
+      return this.researchService.entities
     },
     sortedResearch () {
       return this.researches.slice().sort((a, b) => {
